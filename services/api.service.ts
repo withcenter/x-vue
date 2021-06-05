@@ -1,0 +1,392 @@
+import axios from "axios";
+
+import store from "@/store";
+import {
+  RequestData,
+  UserModel,
+  PostModel,
+  CommentModel,
+  ResponseData,
+  FileModel,
+  CafeModel,
+  Obj,
+} from "./interfaces";
+
+import Cookies from "js-cookie";
+import { Keys } from "@/x-vue/services/defines";
+
+export class ApiService {
+  private static _instance: ApiService;
+
+  private constructor() {
+    console.log("ApiService::contructor()");
+
+    this.initUserAuth();
+  }
+
+  public static get instance(): ApiService {
+    if (!ApiService._instance) {
+      ApiService._instance = new ApiService();
+    }
+
+    return ApiService._instance;
+  }
+
+  private sessionId: string | undefined;
+
+  /**
+   * Sets `user` in store.
+   */
+  set user(user: undefined | UserModel) {
+    store.state.user = user;
+  }
+
+  /**
+   * Get `user` from store if existing.
+   *
+   * @returns null | UserModel
+   */
+  get user(): undefined | UserModel {
+    return store.state.user;
+  }
+
+  /**
+   * returns true if the user is logged in, false if not.
+   * It will check if `this.user` is not null.
+   *
+   * @returns boolean
+   */
+  get loggedIn(): boolean {
+    return !!this.user && !!this.user.idx;
+  }
+
+  /**
+   * return true if user is not logged in, false if logged in.
+   *
+   * @returns boolean
+   */
+  get notLoggedIn(): boolean {
+    return !this.loggedIn;
+  }
+
+  /**
+   * Initialize Auth
+   * It will call `getUserSessionId()` to check if `sessionId` is saved in cookie,
+   * then it will `refreshLoginUserProfile()` to refresh the user instance in store.
+   */
+  async initUserAuth(): Promise<void> {
+    this.sessionId = this.getUserSessionId();
+    await this.refreshLoginUserProfile();
+  }
+
+  /**
+   * It will refresh the `user` instance in store base on the current `sessionId` saved in the cookie
+   *
+   * @returns UserModel
+   */
+  async refreshLoginUserProfile(): Promise<UserModel | void> {
+    if (this.sessionId === null) return;
+    const res = await this.request("user.profile");
+    this.user = new UserModel().fromJson(res);
+    this.setUserSessionId(this.user.sessionId);
+    return this.user;
+  }
+
+  /**
+   * Saves `sessionId` in cookie.
+   *
+   * @param sessionId string
+   */
+  setUserSessionId(sessionId: string): void {
+    this.setCookie(Keys.sessionId, sessionId);
+    this.sessionId = sessionId;
+  }
+
+  /**
+   * removes `sessionId` in cookie.
+   */
+  deleteUserSessionId(): void {
+    this.removeCookie(Keys.sessionId);
+  }
+
+  /**
+   * gets string `sessionId` from cookie, will return `null` if none is saved.
+   *
+   * @returns string | undefined
+   */
+  getUserSessionId(): string | undefined {
+    this.sessionId = Cookies.get(Keys.sessionId);
+    return this.sessionId;
+  }
+
+  /**
+   * Register.
+   *
+   * @param data
+   * @returns UserModel
+   */
+  async register(data: RequestData): Promise<UserModel> {
+    const res = await this.request("user.register", data);
+    this.user = new UserModel().fromJson(res);
+    this.setUserSessionId(this.user.sessionId);
+    return this.user;
+  }
+
+  /**
+   * Login.
+   *
+   * @param data
+   * @returns UserModel
+   */
+  async login(data: RequestData): Promise<UserModel> {
+    const res = await this.request("user.login", data);
+    this.user = new UserModel().fromJson(res);
+    this.setUserSessionId(this.user.sessionId);
+    return this.user;
+  }
+
+  /**
+   * Logouts user.
+   *
+   * It deletes the saved `sessionId` from `localStorage`.
+   */
+  logout(): void {
+    // console.log("AppService::logout()", this);
+    this.deleteUserSessionId();
+    this.sessionId = undefined;
+    this.user = undefined;
+  }
+
+  /**
+   * Http Request handler using axios.
+   *
+   * @param route string - Api call route.
+   * @param data additional data to be passed to request.
+   * @returns any
+   */
+  async request(route: string, data: RequestData = {}): Promise<ResponseData> {
+    data.route = route;
+    if (this.sessionId) data.sessionId = this.sessionId;
+    const res = await axios.post("https://cherry.philov.com/index.php", data);
+    if (typeof res.data === "string") {
+      console.error(res);
+      throw "error_error_string_from_php_backend";
+    } else if (!res.data.response) {
+      throw "error_malformed_response_from_php_backend";
+    } else if (
+      typeof res.data.response === "string" &&
+      res.data.response.indexOf("error_") === 0
+    ) {
+      throw res.data.response;
+    }
+    return res.data.response;
+  }
+
+  /**
+   * Api call to get App Version.
+   *
+   * @returns VersionData
+   */
+  async version(): Promise<string> {
+    const res = await this.request("app.version");
+    return res.version;
+  }
+
+  /**
+   * Forum Related
+   */
+  async postGet(data: RequestData): Promise<PostModel> {
+    const res = await this.request("post.get", data);
+    return new PostModel().fromJson(res);
+  }
+
+  async postSearch(data: RequestData): Promise<Array<PostModel>> {
+    const res = await this.request("post.search", data);
+    return res.map((post: JSON) => new PostModel().fromJson(post));
+  }
+
+  async postEdit(data: RequestData): Promise<PostModel> {
+    let route = "post.create";
+    if (data.idx) {
+      route = "post.update";
+    }
+    const res = await this.request(route, data);
+    return new PostModel().fromJson(res);
+  }
+
+  async postDelete(idx: string): Promise<PostModel> {
+    return new PostModel().fromJson(
+      await this.request("post.delete", { idx: idx })
+    );
+  }
+
+  async commentSearch(data: RequestData): Promise<Array<CommentModel>> {
+    if (data.userIdx) {
+      data.where = `userIdx=${data.userIdx}`;
+    }
+    const res = await this.request("comment.search", data);
+    return res.map((comment: JSON) => new CommentModel().fromJson(comment));
+  }
+
+  async commentEdit(data: RequestData): Promise<CommentModel> {
+    let route = "comment.create";
+    if (data.idx) {
+      route = "comment.update";
+    }
+    const res = await this.request(route, data);
+    return new CommentModel().fromJson(res);
+  }
+
+  async commentDelete(idx: string): Promise<CommentModel> {
+    const res = await this.request("comment.delete", { idx: idx });
+    return new CommentModel().fromJson(res);
+  }
+
+  async vote(data: RequestData): Promise<ResponseData> {
+    const res = await this.request("post.vote", data);
+    return res;
+  }
+
+  fileUpload(
+    file: File,
+    params: RequestData,
+    successCallback: (file: FileModel) => void,
+    errorCallback: (e: string) => void,
+    progressCallback: (progress: number) => void
+  ): void {
+    const form = new FormData();
+    form.append("route", "file.upload");
+    if (this.sessionId) form.append("sessionId", this.sessionId);
+
+    for (const key in params) {
+      form.append(key, params[key]);
+    }
+
+    form.append("userfile", file);
+
+    const options = {
+      onUploadProgress: (progressEvent: ProgressEvent) => {
+        const p = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total
+        );
+        if (progressCallback) {
+          progressCallback(p);
+        }
+      },
+    };
+
+    axios
+      .post("https://cherry.philov.com/index.php", form, options)
+      .then((res) => {
+        if (
+          typeof res.data.response === "string" &&
+          res.data.response.indexOf("error_") === 0
+        ) {
+          errorCallback(res.data.response);
+        } else {
+          const _file = new FileModel().fromJson(res.data.response);
+          successCallback(_file);
+        }
+      })
+      .catch(errorCallback);
+  }
+
+  /**
+   * Deletes the file with the given `idx`.
+   * it will return `idx` when successful.
+   *
+   * @param idx file idx
+   * @returns string - file idx
+   */
+  async fileDelete(idx: string): Promise<ResponseData> {
+    const deletedFile = await this.request("file.delete", { idx });
+    return deletedFile.idx;
+  }
+
+  /**
+   * Checks if entity/object belongs to the current logged in user.
+   *
+   * @todo compatibility with Comment
+   * @param obj PostModel
+   * @returns boolean
+   */
+  isMine(obj: PostModel): boolean {
+    if (this.notLoggedIn) return false;
+    return obj.userIdx === this.user?.idx;
+  }
+
+  async countryAll(): Promise<ResponseData> {
+    store.state.countries = await this.request("country.all", {
+      ln: this.userLanguage,
+    });
+    return store.state.countries;
+  }
+
+  get userLanguage(): string {
+    let language: string;
+    const v = Cookies.get("language");
+    if (v) {
+      language = v;
+    } else {
+      language = navigator.languages
+        ? navigator.languages[0]
+        : navigator.language;
+    }
+    return language.substring(0, 2);
+  }
+
+  get domain(): string {
+    return location.hostname;
+  }
+  get rootDomain(): string {
+    const hostname: string = this.domain;
+    if (hostname.split(".").length === 1) return hostname;
+    else {
+      const arr = hostname.split(".");
+      return arr[1] + "." + arr[2];
+    }
+  }
+
+  get cookieDomain(): string | undefined {
+    let domain;
+    if (this.rootDomain != "localhost") {
+      domain = "." + this.rootDomain;
+    }
+    return domain;
+  }
+
+  setCookie(k: string, v: string | Obj): void {
+    Cookies.set(k, v, {
+      expires: 365,
+      domain: this.cookieDomain,
+      path: "/",
+    });
+  }
+  removeCookie(k: string): void {
+    Cookies.remove(k, {
+      expires: 365,
+      domain: this.cookieDomain,
+      path: "/",
+    });
+  }
+
+  async cafeCreate(data: {
+    countryCode: string;
+    domain: string;
+    rootDomain: string;
+  }): Promise<CafeModel> {
+    const res = await this.request("cafe.create", data);
+    return new CafeModel().fromJson(res);
+  }
+
+  async loadCafe(): Promise<CafeModel> {
+    const res = await this.request("cafe.get", { domain: this.domain });
+    store.state.cafe = new CafeModel().fromJson(res);
+    return store.state.cafe;
+  }
+
+  async userList(data: RequestData): Promise<Array<UserModel>> {
+    const res = await this.request("user.search", data);
+    return res.map((post: JSON) => new UserModel().fromJson(post));
+  }
+}
