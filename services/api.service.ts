@@ -85,7 +85,7 @@ export class ApiService {
    * @returns UserModel
    */
   async refreshLoginUserProfile(): Promise<UserModel | void> {
-    if (this.sessionId === null) return;
+    if (!this.sessionId) return;
     const res = await this.request("user.profile");
     this.user = new UserModel().fromJson(res);
     this.setUserSessionId(this.user.sessionId);

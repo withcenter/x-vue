@@ -1,8 +1,15 @@
-export type Obj = Record<string, unknown>;
-
 export interface MapStringAny {
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   [index: string]: any;
 }
+export interface ApiState {
+  user: undefined | UserModel;
+  countries: ResponseData | undefined;
+  cafe: CafeModel | undefined;
+  texts: MapStringAny;
+}
+
+export type Obj = Record<string, unknown>;
 
 export interface RequestData {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -14,13 +21,6 @@ export interface RequestData {
 export interface ResponseData {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   [index: string]: any;
-}
-
-export interface ApiState {
-  user: undefined | UserModel;
-  countries: ResponseData | undefined;
-  cafe: CafeModel | undefined;
-  texts: MapStringAny;
 }
 
 export class UserModel {
@@ -104,6 +104,7 @@ export class PostModel {
     this.shortDate = map.shortDate;
     this.noOfComments = map.noOfComments;
     this.noOfViews = map.noOfViews;
+    this.categoryIdx = map.categoryIdx;
     this.Y = map.Y;
     this.N = map.N;
     if (map.files) {
