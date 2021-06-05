@@ -10,10 +10,12 @@ import {
   FileModel,
   CafeModel,
   Obj,
+  CafeSettings,
 } from "./interfaces";
 
 import Cookies from "js-cookie";
 import { Keys } from "@/x-vue/services/defines";
+import { extractRootDomain } from "./functions";
 
 export class ApiService {
   private static _instance: ApiService;
@@ -339,12 +341,7 @@ export class ApiService {
     return location.hostname;
   }
   get rootDomain(): string {
-    const hostname: string = this.domain;
-    if (hostname.split(".").length === 1) return hostname;
-    else {
-      const arr = hostname.split(".");
-      return arr[1] + "." + arr[2];
-    }
+    return extractRootDomain(this.domain);
   }
 
   get cookieDomain(): string | undefined {
@@ -370,6 +367,14 @@ export class ApiService {
     });
   }
 
+  async userList(data: RequestData): Promise<Array<UserModel>> {
+    const res = await this.request("user.search", data);
+    return res.map((post: JSON) => new UserModel().fromJson(post));
+  }
+
+  ///
+  /// cafe
+  ///
   async cafeCreate(data: {
     countryCode: string;
     domain: string;
@@ -385,8 +390,57 @@ export class ApiService {
     return store.state.cafe;
   }
 
-  async userList(data: RequestData): Promise<Array<UserModel>> {
-    const res = await this.request("user.search", data);
-    return res.map((post: JSON) => new UserModel().fromJson(post));
+  /**
+   * Saves `v` as JSON string.
+   *
+   * @param k
+   * @param v
+   */
+  setStorage(k: string, v: unknown): void {
+    localStorage.setItem(k, JSON.stringify(v));
+  }
+
+  /**
+   * Returns the data from localStorage after parsnig into JSON object.
+   *
+   * It returns null if there is no data.
+   *
+   * @param k
+   * @returns null | string
+   *
+   *
+   */
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  getStorage(k: string): any {
+    const re = localStorage.getItem(k);
+    if (!re) return re;
+    return JSON.parse(re);
+  }
+
+  async loadCafeSettings(): Promise<CafeSettings> {
+    // 캐시된 데이터가 있으면 리턴
+    const json = this.getStorage("cafeSettings");
+    if (json) {
+      store.state.cafeSettings = json as CafeSettings;
+    }
+    // 서버로 부터 데이터를 가져와 캐시
+    const res = await this.request("cafe.settings", { domain: this.domain });
+    store.state.cafeSettings = res as CafeSettings;
+    this.setStorage("cafeSettings", store.state.cafeSettings);
+    return store.state.cafeSettings;
+  }
+
+  /**
+   * 현재 카페 설정을 리턴한다.
+   * @returns
+   */
+  currentCafeSettings(): Obj | undefined {
+    if (
+      store.state.cafeSettings &&
+      store.state.cafeSettings["rootDomainSettings"] &&
+      store.state.cafeSettings["rootDomainSettings"][this.rootDomain]
+    ) {
+      return store.state.cafeSettings["rootDomainSettings"][this.rootDomain];
+    }
   }
 }

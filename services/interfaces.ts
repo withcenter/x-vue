@@ -2,14 +2,12 @@ export interface MapStringAny {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   [index: string]: any;
 }
-export interface ApiState {
-  user: undefined | UserModel;
-  countries: ResponseData | undefined;
-  cafe: CafeModel | undefined;
-  texts: MapStringAny;
+export interface MapStringString {
+  [index: string]: string;
 }
 
-export type Obj = Record<string, unknown>;
+// eslint-disable-next-line  @typescript-eslint/no-explicit-any
+export type Obj = Record<string, any>;
 
 export interface RequestData {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -21,6 +19,24 @@ export interface RequestData {
 export interface ResponseData {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   [index: string]: any;
+}
+
+export interface CafeSettings {
+  mainDomains: string[];
+  countryDomains: string[];
+  rootDomainSettings: MapStringAny;
+  mainMenus: MapStringAny;
+  sitemap: MapStringAny;
+}
+
+export interface ApiState {
+  user: undefined | UserModel;
+  countries: ResponseData | undefined;
+  // cafe category model(record) data.
+  cafe: CafeModel | undefined;
+  texts: MapStringAny;
+  // cafe settings only
+  cafeSettings: CafeSettings | undefined;
 }
 
 export class UserModel {
@@ -114,7 +130,6 @@ export class PostModel {
     if (map.user) {
       this.user = new UserModel().fromJson(map.user);
     }
-    console.log("map.comments; ", map);
     this.comments = map.comments
       .filter((c: Obj) => {
         return c.deletedAt == "0";
