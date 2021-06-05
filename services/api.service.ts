@@ -21,8 +21,6 @@ export class ApiService {
   private static _instance: ApiService;
 
   private constructor() {
-    console.log("ApiService::contructor()");
-
     this.initUserAuth();
   }
 
