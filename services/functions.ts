@@ -9,7 +9,7 @@
 import store from "@/store";
 import { ApiService } from "./api.service";
 
-export function tr(code: string) {
+export function tr(code: string): string {
   if (!code) return "";
   if (!store.state.texts[code]) return code;
   return store.state.texts[code][ApiService.instance.userLanguage];

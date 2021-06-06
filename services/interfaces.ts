@@ -1,9 +1,21 @@
+/**
+ * @see README 참고
+ */
+
+//
 export interface MapStringAny {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   [index: string]: any;
 }
 export interface MapStringString {
   [index: string]: string;
+}
+export interface MapStringStringArray {
+  [index: string]: string[];
+}
+
+export interface MapStringStringAny {
+  [index: string]: MapStringAny;
 }
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -21,12 +33,23 @@ export interface ResponseData {
   [index: string]: any;
 }
 
-export class CafeSettings {
-  mainDomains: string[] = [];
-  countryDomains: string[] = [];
-  rootDomainSettings: MapStringAny = {};
-  mainMenus: MapStringAny = {};
-  sitemap: MapStringAny = {};
+export interface RootDomainSettings {
+  [index: string]: {
+    name: string;
+    countryCode: string;
+    logo: string;
+  };
+}
+
+/**
+ *
+ */
+export interface CafeSettings {
+  mainDomains: string[];
+  countryDomains: string[];
+  rootDomainSettings: RootDomainSettings;
+  mainMenus: string[];
+  sitemap: MapStringStringArray;
 }
 
 export interface ApiState {
