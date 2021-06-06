@@ -167,7 +167,10 @@ export class ApiService {
   async request(route: string, data: RequestData = {}): Promise<ResponseData> {
     data.route = route;
     if (this.sessionId) data.sessionId = this.sessionId;
-    const res = await axios.post("https://cherry.philov.com/index.php", data);
+    const host = location.hostname;
+    const endpoint = `https://${host}/index.php`;
+    console.log("endpoint; ", endpoint);
+    const res = await axios.post(endpoint, data);
     if (typeof res.data === "string") {
       console.error(res);
       throw "error_error_string_from_php_backend";
