@@ -146,6 +146,18 @@ export class ApiService {
   }
 
   /**
+   * Login with Kakao
+   * @param data Kakao login data
+   * @returns UserModel
+   */
+  async kakaoLogin(data: RequestData): Promise<UserModel> {
+    const res = await this.request("user.kakaoLogin", data);
+    this.user = new UserModel().fromJson(res);
+    this.setUserSessionId(this.user.sessionId);
+    return this.user;
+  }
+
+  /**
    * Logouts user.
    *
    * It deletes the saved `sessionId` from `localStorage`.

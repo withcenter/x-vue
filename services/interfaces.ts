@@ -62,6 +62,24 @@ export interface ApiState {
   cafeSettings: CafeSettings;
 }
 
+export interface KakaoUserMe {
+  id: number;
+  kakao_account: {
+    profile: {
+      nickname: string;
+      profile_image_url: string;
+      thumbnail_image_url: string;
+    };
+    account_email: string;
+    age_range: string;
+    birthday: string; // MMDD 형식. 월/일
+    birthyear: string; // YYYY 태어난 해.
+    gender: "male" | "female";
+    phone_number: string;
+    account_ci: string;
+  };
+}
+
 export class UserModel {
   idx = "";
   sessionId = "";
