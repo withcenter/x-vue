@@ -21,12 +21,12 @@ export interface ResponseData {
   [index: string]: any;
 }
 
-export interface CafeSettings {
-  mainDomains: string[];
-  countryDomains: string[];
-  rootDomainSettings: MapStringAny;
-  mainMenus: MapStringAny;
-  sitemap: MapStringAny;
+export class CafeSettings {
+  mainDomains: string[] = [];
+  countryDomains: string[] = [];
+  rootDomainSettings: MapStringAny = {};
+  mainMenus: MapStringAny = {};
+  sitemap: MapStringAny = {};
 }
 
 export interface ApiState {
@@ -36,7 +36,7 @@ export interface ApiState {
   cafe: CafeModel | undefined;
   texts: MapStringAny;
   // cafe settings only
-  cafeSettings: CafeSettings | undefined;
+  cafeSettings: CafeSettings;
 }
 
 export class UserModel {

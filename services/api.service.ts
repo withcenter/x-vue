@@ -419,6 +419,7 @@ export class ApiService {
   }
 
   async loadCafeSettings(): Promise<CafeSettings> {
+    // return {} as CafeSettings;
     // 캐시된 데이터가 있으면 리턴
     const json = this.getStorage("cafeSettings");
     if (json) {
