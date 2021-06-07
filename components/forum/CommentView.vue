@@ -39,7 +39,7 @@
         <!-- mine buttons -->
         <mine-buttons-component
           :parent="comment"
-          v-if="app.api.isMine(comment)"
+          v-if="api.isMine(comment)"
           @on-click-edit="comment.inEdit = !comment.inEdit"
           @on-click-delete="onClickDelete"
         ></mine-buttons-component>
