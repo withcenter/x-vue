@@ -87,9 +87,8 @@ export class ApiService {
   async refreshLoginUserProfile(): Promise<UserModel | void> {
     if (!this.sessionId) return;
     const res = await this.request("user.profile");
-    this.user = new UserModel().fromJson(res);
-    this.setUserSessionId(this.user.sessionId);
-    return this.user;
+
+    return this.setUserSessionId(res);
   }
 
   /**
@@ -97,9 +96,13 @@ export class ApiService {
    *
    * @param sessionId string
    */
-  setUserSessionId(sessionId: string): void {
-    this.setCookie(Keys.sessionId, sessionId);
-    this.sessionId = sessionId;
+  setUserSessionId(res: ResponseData): UserModel {
+    console.log(res);
+    this.user = new UserModel().fromJson(res);
+    console.log(this.user);
+    this.setCookie(Keys.sessionId, this.user.sessionId);
+    this.sessionId = this.user.sessionId;
+    return this.user;
   }
 
   /**
@@ -127,9 +130,8 @@ export class ApiService {
    */
   async register(data: RequestData): Promise<UserModel> {
     const res = await this.request("user.register", data);
-    this.user = new UserModel().fromJson(res);
-    this.setUserSessionId(this.user.sessionId);
-    return this.user;
+
+    return this.setUserSessionId(res);
   }
 
   /**
@@ -140,9 +142,8 @@ export class ApiService {
    */
   async login(data: RequestData): Promise<UserModel> {
     const res = await this.request("user.login", data);
-    this.user = new UserModel().fromJson(res);
-    this.setUserSessionId(this.user.sessionId);
-    return this.user;
+
+    return this.setUserSessionId(res);
   }
 
   /**
@@ -152,9 +153,8 @@ export class ApiService {
    */
   async kakaoLogin(data: RequestData): Promise<UserModel> {
     const res = await this.request("user.kakaoLogin", data);
-    this.user = new UserModel().fromJson(res);
-    this.setUserSessionId(this.user.sessionId);
-    return this.user;
+
+    return this.setUserSessionId(res);
   }
 
   /**
