@@ -9,6 +9,7 @@
         ></upload-button>
       </div>
       <textarea
+        data-cy="comment-input"
         class="w-100 form-control"
         type="text"
         name="content"
@@ -28,7 +29,11 @@
           </button>
         </div>
         <div v-if="!submitted && canSubmit">
-          <button class="w-100 ml-2 btn btn-sm btn-success h-100" type="submit">
+          <button
+            data-cy="comment-submit-button"
+            class="w-100 ml-2 btn btn-sm btn-success h-100"
+            type="submit"
+          >
             Submit
           </button>
         </div>

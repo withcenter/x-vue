@@ -34,6 +34,7 @@
       <span class="flex-grow-1"></span>
       <!-- mine buttons -->
       <mine-buttons-component
+        data-cy="post-mine-button"
         :parent="post"
         v-if="api.isMine(post)"
         @on-click-edit="onClickEdit()"
@@ -42,6 +43,7 @@
     </div>
     <!-- comment form -->
     <comment-form-component
+      data-cy="post-comment-form"
       class="mt-2"
       :parent="post"
       :root="post"
@@ -54,11 +56,12 @@
       </div>
       <div
         class="mt-2"
-        v-for="comment of post.comments"
+        v-for="(comment, index) of post.comments"
         :key="comment.idx"
         :style="{ 'margin-left': comment.depth * 8 + 'px' }"
       >
         <comment-view-component
+          :data-cy="'comment-' + index"
           :post="post"
           :comment="comment"
         ></comment-view-component>

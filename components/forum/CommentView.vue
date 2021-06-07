@@ -1,6 +1,6 @@
 <template>
-  <section>
-    <div class="comment-view p-3 rounded" style="background-color: #f0f0f0">
+  <section class="comment-view">
+    <div class="p-3 rounded" style="background-color: #f0f0f0">
       <div class="d-flex">
         <user-avatar :parent="comment" :size="2.8"></user-avatar>
         <div class="ml-2 text-truncate">
@@ -13,12 +13,13 @@
       </div>
       <div class="w-100" v-if="!comment.inEdit">
         <!-- comment content -->
-        <div class="mt-2">{{ comment.content }}</div>
+        <div class="mt-2" data-cy="comment-content">{{ comment.content }}</div>
         <!-- comment files -->
         <file-display :files="comment.files"></file-display>
         <!-- comment edit mode -->
       </div>
       <comment-form-component
+        data-cy="comment-edit-form"
         v-if="comment.inEdit"
         :root="post"
         :comment="comment"
@@ -38,6 +39,7 @@
         <span class="flex-grow-1"></span>
         <!-- mine buttons -->
         <mine-buttons-component
+          data-cy="comment-mine-button"
           :parent="comment"
           v-if="api.isMine(comment)"
           @on-click-edit="comment.inEdit = !comment.inEdit"
@@ -48,6 +50,7 @@
 
     <!-- comment reply form -->
     <comment-form-component
+      data-cy="comment-reply-form"
       :root="post"
       :parent="comment"
       v-if="comment.inReply"

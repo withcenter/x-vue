@@ -1,7 +1,7 @@
 <template>
   <div class="mine-buttons">
     <button
-      data-cy="post-mine-button"
+      data-cy="menu-button"
       :id="'mine-button-popover-' + parent.idx"
       class="btn btn-sm"
     >
@@ -15,14 +15,14 @@
       triggers="click blur"
     >
       <button
-        data-cy="post-mine-edit-button"
+        data-cy="mine-edit-button"
         class="btn btn-sm btn-success"
         @click="onClickEmit('on-click-edit')"
       >
         Edit
       </button>
       <button
-        data-cy="post-mine-delete-button"
+        data-cy="mine-delete-button"
         class="ml-2 btn btn-sm btn-danger"
         @click="onClickEmit('on-click-delete')"
       >
