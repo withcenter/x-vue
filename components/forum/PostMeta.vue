@@ -1,22 +1,22 @@
 <template>
-  <div class="post-meta d-flex text-truncate">
+  <div class="post-meta text-truncate">
     <user-displayname
       class="mr-2 font-weight-bold"
       :parent="post"
       v-if="showName"
     ></user-displayname>
     <span class="mr-2" v-if="!showName">No. {{ post.idx }}</span>
-    <span class="text-muted mr-2" v-if="post.categoryIdx">
+    <!-- <span class="text-muted mr-2" v-if="post.categoryIdx">
       • Category {{ post.categoryIdx }}
-    </span>
-    <span class="text-muted mr-2" v-if="post.noOfComments">
+    </span> -->
+    <!-- <span class="text-muted mr-2" v-if="post.noOfComments">
       • Comments {{ post.noOfComments }}
+    </span> -->
+    <span class="text-muted" v-if="post.shortDate">
+      {{ post.shortDate }}
     </span>
     <span class="text-muted mr-2" v-if="post.noOfViews">
-      • Views {{ post.noOfViews }}
-    </span>
-    <span class="text-muted" v-if="post.shortDate">
-      • Date: {{ post.shortDate }}
+      Views {{ post.noOfViews }}
     </span>
   </div>
 </template>
