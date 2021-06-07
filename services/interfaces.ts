@@ -127,55 +127,80 @@ export class CommentEditModel {
   files = "";
 }
 
-export class PostRootModel {}
-
-export class PostModel {
+export class PostRootModel {
   idx = "";
-  url = "";
-  relativeUrl = "";
-  path = "";
-  title = "";
-  content = "";
-  categoryIdx = "";
   userIdx = "";
-  user: UserModel = {} as UserModel;
-  comments: Array<CommentModel> = [];
 
+  content = "";
   shortDate = "";
-  noOfComments = "";
-  noOfViews = "";
-
-  files: Array<FileModel> = [];
 
   Y = 0;
   N = 0;
 
-  fromJson(map: ResponseData): PostModel {
+  files: Array<FileModel> = [];
+
+  user: UserModel = {} as UserModel;
+
+  fromJson(map: ResponseData): PostRootModel {
     this.idx = map.idx;
-    this.url = map.url;
-    this.relativeUrl = map.relativeUrl;
-    this.path = map.path;
-    this.title = map.title;
-    this.content = map.content;
     this.userIdx = map.userIdx;
+    this.content = map.content;
     this.shortDate = map.shortDate;
-    this.noOfComments = map.noOfComments;
-    this.noOfViews = map.noOfViews;
-    this.categoryIdx = map.categoryIdx;
     this.Y = map.Y;
     this.N = map.N;
+
+    // user
+    if (map.user) {
+      this.user = new UserModel().fromJson(map.user);
+    }
+
+    // files
     if (map.files) {
       this.files = map.files.map((f: JSON) => new FileModel().fromJson(f));
     }
 
-    if (map.user) {
-      this.user = new UserModel().fromJson(map.user);
-    }
+    return this;
+  }
+
+  updateVoteCount(map: ResponseData) {
+    this.N = map.N;
+    this.Y = map.Y;
+  }
+}
+
+export class PostModel extends PostRootModel {
+  url = "";
+  path = "";
+  relativeUrl = "";
+
+  title = "";
+  categoryIdx = "";
+
+  noOfViews = "";
+
+  comments: Array<CommentModel> = [];
+
+  get noOfComments(): number {
+    return this.comments.length;
+  }
+
+  fromJson(map: ResponseData): PostModel {
+    this.url = map.url;
+    this.path = map.path;
+    this.relativeUrl = map.relativeUrl;
+
+    this.title = map.title;
+    this.categoryIdx = map.categoryIdx;
+
+    this.noOfViews = map.noOfViews;
+
     this.comments = map.comments
       .filter((c: Obj) => {
         return c.deletedAt == "0";
       })
       .map((c: JSON) => new CommentModel().fromJson(c));
+
+    super.fromJson(map);
     return this;
   }
 
@@ -194,22 +219,11 @@ export class PostModel {
   }
 }
 
-export class CommentModel {
-  idx = "";
-  content = "";
-  userIdx = "";
+export class CommentModel extends PostRootModel {
   rootIdx = "";
   parentIdx = "";
   deletedAt = "";
   depth = "";
-  user?: UserModel;
-
-  shortDate = "";
-
-  Y = 0;
-  N = 0;
-
-  files: Array<FileModel> = [];
 
   /**
    * client side use only
@@ -218,19 +232,12 @@ export class CommentModel {
   inReply = false;
 
   fromJson(map: ResponseData): CommentModel {
-    this.idx = map.idx;
-    this.content = map.content;
-    this.userIdx = map.userIdx;
     this.rootIdx = map.rootIdx;
     this.parentIdx = map.parentIdx;
-    this.depth = map.depth;
     this.deletedAt = map.deletedAt;
-    this.shortDate = map.shortDate;
-    this.Y = map.Y;
-    this.N = map.N;
-    this.files = map.files.map((f: JSON) => new FileModel().fromJson(f));
+    this.depth = map.depth;
 
-    this.user = new UserModel().fromJson(map.user);
+    super.fromJson(map);
     return this;
   }
 }
