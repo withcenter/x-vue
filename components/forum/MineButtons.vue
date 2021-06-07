@@ -1,6 +1,10 @@
 <template>
   <div class="mine-buttons">
-    <button :id="'mine-button-popover-' + parent.idx" class="btn btn-sm">
+    <button
+      data-cy="post-mine-button"
+      :id="'mine-button-popover-' + parent.idx"
+      class="btn btn-sm"
+    >
       <img class="icon-v grey" src="@/assets/svg/ellipsis-v.svg" />
     </button>
 
@@ -11,12 +15,14 @@
       triggers="click blur"
     >
       <button
+        data-cy="post-mine-edit-button"
         class="btn btn-sm btn-success"
         @click="onClickEmit('on-click-edit')"
       >
         Edit
       </button>
       <button
+        data-cy="post-mine-delete-button"
         class="ml-2 btn btn-sm btn-danger"
         @click="onClickEmit('on-click-delete')"
       >

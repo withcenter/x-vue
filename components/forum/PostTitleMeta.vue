@@ -5,18 +5,21 @@
     <div class="ml-2 d-flex w-100">
       <div class="w-100">
         <router-link :to="post.relativeUrl || `/${post.idx}`">
-          No. {{ post.idx }} - {{ post.title || "no title" }}
+          <span>No. {{ post.idx }} - </span>
+          <span data-cy="post-title">{{ post.title || "no title" }}</span>
           <span class="ml-1" v-if="post.noOfComments">
             ({{ post.noOfComments }})
           </span>
         </router-link>
-        <div class="text-muted" v-if="post.comments.length">
-          {{ post.comments[0].user.displayName }}: "{{
-            post.comments[0].content
-          }}"
-        </div>
-        <div class="text-muted" v-if="!post.comments.length">
-          No comments yet ..
+        <div>
+          <i class="text-muted" v-if="post.comments.length">
+            {{ post.comments[0].user.displayName }}: "{{
+              post.comments[0].content
+            }}"
+          </i>
+          <i class="text-muted" v-if="!post.comments.length">
+            No comments yet ..
+          </i>
         </div>
       </div>
       <post-meta-component
