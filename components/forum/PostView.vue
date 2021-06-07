@@ -1,7 +1,7 @@
 <template>
-  <article class="post-view px-2 py-4">
+  <article data-cy="post-view-page" class="post-view px-2 py-4">
     <!-- title -->
-    <h3>{{ post.title }}</h3>
+    <h3 data-cy="post-view-title">{{ post.title }}</h3>
     <!-- avatar + meta -->
     <div class="d-flex">
       <user-avatar :parent="post"></user-avatar>
@@ -10,11 +10,15 @@
           class="font-weight-bold"
           :parent="post"
         ></user-display-name>
-        <post-meta-component :post="post"></post-meta-component>
+        <post-meta-component
+          data-cy="post-view-meta"
+          :post="post"
+        ></post-meta-component>
       </div>
     </div>
     <!-- content - TODO move css to global -->
     <div
+      data-cy="post-view-content"
       class="mt-3 p-2 rounded"
       style="background-color: #f1f1f1; white-space: break-space"
     >
