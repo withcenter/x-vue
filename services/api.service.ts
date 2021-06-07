@@ -386,7 +386,13 @@ export class ApiService {
 
   async userList(data: RequestData): Promise<Array<UserModel>> {
     const res = await this.request("user.search", data);
-    return res.map((post: JSON) => new UserModel().fromJson(post));
+    return res.map((user: JSON) => new UserModel().fromJson(user));
+  }
+
+  async userCount(data: RequestData): Promise<number> {
+    const res = await this.request("user.count", data);
+    console.log(res);
+    return res && res.count ? res.count : 0;
   }
 
   ///
