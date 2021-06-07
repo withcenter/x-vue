@@ -177,12 +177,13 @@ export class PostModel extends PostRootModel {
   categoryIdx = "";
 
   noOfViews = "";
+  noOfComments = "0";
 
   comments: Array<CommentModel> = [];
 
-  get noOfComments(): number {
-    return this.comments.length;
-  }
+  // get noOfComments(): number {
+  //   return this.comments.length;
+  // }
 
   fromJson(map: ResponseData): PostModel {
     this.url = map.url;
@@ -199,6 +200,8 @@ export class PostModel extends PostRootModel {
         return c.deletedAt == "0";
       })
       .map((c: JSON) => new CommentModel().fromJson(c));
+
+    this.noOfComments = map.noOfComments;
 
     super.fromJson(map);
     return this;

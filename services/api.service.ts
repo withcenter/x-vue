@@ -15,7 +15,7 @@ import {
 
 import Cookies from "js-cookie";
 import { Keys } from "@/x-vue/services/defines";
-import { extractRootDomain } from "./functions";
+import { extractRootDomain, tr } from "./functions";
 
 export class ApiService {
   private static _instance: ApiService;
@@ -218,6 +218,10 @@ export class ApiService {
   async postSearch(data: RequestData): Promise<Array<PostModel>> {
     const res = await this.request("post.search", data);
     return res.map((post: JSON) => new PostModel().fromJson(post));
+  }
+  async postCount(data: RequestData): Promise<number> {
+    const res = await this.request("post.count", data);
+    return res.count;
   }
 
   async postEdit(data: RequestData): Promise<PostModel> {
@@ -457,7 +461,70 @@ export class ApiService {
     }
   }
 
-  error(error: string): void {
-    alert("error :" + error);
+  /**
+   * Display error alert box
+   *
+   * Note, use this method from the app.
+   *
+   * @param code Error code from PHP backend
+   * @returns true after the alert dialog closed
+   */
+  error(code: string): Promise<boolean> {
+    if (typeof code === "string" && code.indexOf("error_") === 0) {
+      // This is a PHP backend erorr
+      return this.alert(tr("error"), tr(code));
+    } else {
+      return this.alert(tr("error"), "Unknown error: " + code);
+    }
+  }
+
+  /**
+   * Returns true when the confirm box has closed.
+   *
+   * Note, use this method from the app.
+   *
+   * @param title title
+   * @param content content
+   * @returns boolean
+   */
+  async alert(title: string, content: string): Promise<boolean> {
+    return await store.state.vm.$bvModal.msgBoxOk(content, {
+      title: title,
+      size: "sm",
+      buttonSize: "sm",
+      okVariant: "success",
+      headerClass: "p-2 border-bottom-0",
+      footerClass: "p-2 border-top-0",
+    });
+  }
+
+  /**
+   * Ask user for confirmation
+   *
+   * Note, use this method from the app.
+   *
+   * @param title title
+   * @param content content
+   * @returns boolean|null
+   *  - true on yes
+   *  - false on no
+   *  - null if close without confirmation
+   * @example
+   * ```
+   *  console.log("confirm; ", await this.app.confirm("title", "content"));
+   * ```
+   */
+  async confirm(title: string, content: string): Promise<boolean | null> {
+    return await store.state.vm.$bvModal.msgBoxConfirm(content, {
+      title: title,
+      size: "sm",
+      buttonSize: "sm",
+      okVariant: "danger",
+      okTitle: tr("yes"),
+      cancelTitle: tr("no"),
+      footerClass: "p-2",
+      hideHeaderClose: false,
+      centered: true,
+    });
   }
 }

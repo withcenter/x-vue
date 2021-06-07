@@ -18,7 +18,7 @@
       :to="`/${comment.rootIdx}`"
     >
       Open Post
-      <img src="@/assets/svg/external-link.svg" />
+      <img class="icon-md" src="@/assets/svg/external-link.svg" />
     </router-link>
   </div>
 </template>

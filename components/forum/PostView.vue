@@ -31,7 +31,7 @@
       <!-- mine buttons -->
       <mine-buttons-component
         :parent="post"
-        v-if="app.api.isMine(post)"
+        v-if="api.isMine(post)"
         @on-click-edit="onClickEdit()"
         @on-click-delete="onClickDelete(post.idx)"
       ></mine-buttons-component>
