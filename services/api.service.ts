@@ -384,7 +384,12 @@ export class ApiService {
     });
   }
 
-  async userList(data: RequestData): Promise<Array<UserModel>> {
+  /**
+   * Searches user
+   * @param data search options
+   * @returns array of UserModel
+   */
+  async userSearch(data: RequestData): Promise<Array<UserModel>> {
     const res = await this.request("user.search", data);
     return res.map((user: JSON) => new UserModel().fromJson(user));
   }
