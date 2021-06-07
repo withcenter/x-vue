@@ -25,7 +25,7 @@
 import { PostModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
-import UserDisplayname from "@/components/forum/UserDisplayName.vue";
+import UserDisplayname from "@/x-vue/components/forum/UserDisplayName.vue";
 
 @Component({
   props: ["post", "showName"],

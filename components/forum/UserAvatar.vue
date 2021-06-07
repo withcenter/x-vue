@@ -24,7 +24,7 @@
 import { CommentModel, PostModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
-import UserMenu from "@/x-vue/components/user/forum/UserMenu.vue";
+import UserMenu from "@/x-vue/components/forum/UserMenu.vue";
 
 @Component({
   props: ["parent", "size"],

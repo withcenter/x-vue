@@ -56,7 +56,6 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { AppService } from "@/service/app.service";
 import {
   CommentEditModel,
   CommentModel,
@@ -64,7 +63,9 @@ import {
   PostModel,
 } from "@/x-vue/services/interfaces";
 import UploadButton from "@/components/UploadButton.vue";
-import FileDisplay from "@/x-vue/components/user/forum/FileDisplay.vue";
+import FileDisplay from "@/x-vue/components/forum/FileDisplay.vue";
+import { ApiService } from "@/x-vue/services/api.service";
+import { addByComma, deleteByComma } from "../../services/functions";
 
 @Component({
   props: ["root", "parent", "comment"],
@@ -78,7 +79,7 @@ export default class CommentForm extends Vue {
   parent!: PostModel & CommentModel;
   comment!: CommentModel;
   form: CommentEditModel = new CommentEditModel();
-  app = AppService.instance;
+  api = ApiService.instance;
 
   submitted = false;
   uploadProgress = 0;
@@ -112,7 +113,7 @@ export default class CommentForm extends Vue {
       : this.parent.idx;
     // console.log(this.form);
     try {
-      const res = await this.app.api.commentEdit(this.form);
+      const res = await this.api.commentEdit(this.form);
       if (this.comment) {
         // comment update
         Object.assign(this.comment, res);
@@ -126,7 +127,7 @@ export default class CommentForm extends Vue {
       this.uploadedFiles = [];
       this.submitted = false;
     } catch (e) {
-      this.app.error(e);
+      this.api.error(e);
       this.submitted = false;
     }
   }
@@ -140,13 +141,13 @@ export default class CommentForm extends Vue {
   }
 
   onFileUploaded(file: FileModel): void {
-    this.form.files = this.app.addByComma(this.form.files, file.idx);
+    this.form.files = addByComma(this.form.files, file.idx);
     this.uploadedFiles.push(file);
     this.uploadProgress = 0;
   }
 
   onFileDeleted(idx: string): void {
-    this.form.files = this.app.deleteByComma(this.form.files, idx);
+    this.form.files = deleteByComma(this.form.files, idx);
   }
 }
 </script>

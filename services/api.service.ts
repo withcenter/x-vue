@@ -456,4 +456,8 @@ export class ApiService {
       return store.state.cafeSettings["rootDomainSettings"][this.rootDomain];
     }
   }
+
+  error(error: string): void {
+    alert("error :" + error);
+  }
 }

@@ -22,3 +22,27 @@ export function extractRootDomain(hostname: string): string {
     return arr[1] + "." + arr[2];
   }
 }
+
+export function addByComma(orgValue: string, newValue: string): string {
+  const arr = orgValue.split(",");
+  if (arr.indexOf(newValue) >= 0) return orgValue; // already exists.
+  arr.push(newValue);
+  return arr
+    .filter((v) => {
+      return !!v;
+    })
+    .join(",");
+}
+
+export function deleteByComma(orgValue: string, val: string): string {
+  const arr = orgValue.split(",");
+  const i = arr.indexOf(val); // fix, since `num` is not same as `string` it will return `-1`.
+  if (i >= 0) {
+    arr.splice(i, 1);
+  }
+  return arr
+    .filter((v) => {
+      return !!v;
+    })
+    .join(",");
+}

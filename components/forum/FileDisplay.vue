@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { AppService } from "@/service/app.service";
+import { ApiService } from "@/x-vue/services/api.service";
 import { FileModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
@@ -33,19 +33,19 @@ export default class FileDisplay extends Vue {
   files!: Array<FileModel>;
   showDelete!: boolean;
 
-  app = AppService.instance;
+  api = ApiService.instance;
 
   async onClickDelete(idx: string): Promise<void> {
     const conf = confirm("Are you sure you want to delete this file?");
     if (!conf) return;
 
     try {
-      await this.app.api.fileDelete(idx);
+      await this.api.fileDelete(idx);
       const index = this.files.findIndex((file) => file.idx == idx);
       this.files.splice(index, 1);
       this.$emit("file-deleted", idx);
     } catch (e) {
-      this.app.error(e);
+      this.api.error(e);
     }
   }
 }

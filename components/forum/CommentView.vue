@@ -58,7 +58,6 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { AppService } from "@/service/app.service";
 import { CommentModel, PostModel } from "@/x-vue/services/interfaces";
 import CommentFormComponent from "./CommentForm.vue";
 import VoteButtonsComponent from "./VoteButtons.vue";
@@ -66,6 +65,7 @@ import MineButtonsComponent from "./MineButtons.vue";
 import UserDisplayName from "./UserDisplayName.vue";
 import UserAvatar from "./UserAvatar.vue";
 import FileDisplay from "./FileDisplay.vue";
+import { ApiService } from "@/x-vue/services/api.service";
 
 @Component({
   props: ["post", "comment"],
@@ -82,7 +82,7 @@ export default class CommentView extends Vue {
   post!: PostModel;
   comment!: CommentModel;
 
-  app = AppService.instance;
+  api = ApiService.instance;
 
   async onClickDelete(): Promise<void> {
     const conf = confirm(
@@ -90,10 +90,10 @@ export default class CommentView extends Vue {
     );
     if (!conf) return;
     try {
-      await this.app.api.commentDelete(this.comment?.idx);
+      await this.api.commentDelete(this.comment?.idx);
       this.post.deleteComment(this.comment.idx);
     } catch (e) {
-      this.app.error(e);
+      this.api.error(e);
     }
   }
 }

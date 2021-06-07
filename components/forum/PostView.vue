@@ -67,15 +67,15 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { PostModel } from "@/x-vue/services/interfaces";
-import { AppService } from "@/service/app.service";
-import CommentFormComponent from "@/x-vue/components/user/forum/CommentForm.vue";
-import CommentViewComponent from "@/x-vue/components/user/forum/CommentView.vue";
-import PostMetaComponent from "@/x-vue/components/user/forum/PostMeta.vue";
-import VoteButtonsComponent from "@/x-vue/components/user/forum/VoteButtons.vue";
-import MineButtonsComponent from "@/x-vue/components/user/forum/MineButtons.vue";
-import UserDisplayName from "@/x-vue/components/user/forum/UserDisplayName.vue";
-import UserAvatar from "@/x-vue/components/user/forum/UserAvatar.vue";
-import FileDisplay from "@/x-vue/components/user/forum/FileDisplay.vue";
+import CommentFormComponent from "@/x-vue/components/forum/CommentForm.vue";
+import CommentViewComponent from "@/x-vue/components/forum/CommentView.vue";
+import PostMetaComponent from "@/x-vue/components/forum/PostMeta.vue";
+import VoteButtonsComponent from "@/x-vue/components/forum/VoteButtons.vue";
+import MineButtonsComponent from "@/x-vue/components/forum/MineButtons.vue";
+import UserDisplayName from "@/x-vue/components/forum/UserDisplayName.vue";
+import UserAvatar from "@/x-vue/components/forum/UserAvatar.vue";
+import FileDisplay from "@/x-vue/components/forum/FileDisplay.vue";
+import { ApiService } from "@/x-vue/services/api.service";
 
 @Component({
   props: ["post"],
@@ -93,7 +93,7 @@ import FileDisplay from "@/x-vue/components/user/forum/FileDisplay.vue";
 export default class PostViewComponent extends Vue {
   post!: PostModel;
 
-  app = AppService.instance;
+  api = ApiService.instance;
 
   async onClickDelete(): Promise<void> {
     const conf = confirm(
@@ -101,10 +101,10 @@ export default class PostViewComponent extends Vue {
     );
     if (!conf) return;
     try {
-      await this.app.api.postDelete(this.post?.idx);
+      await this.api.postDelete(this.post?.idx);
       this.$emit("post-deleted", this.post?.idx);
     } catch (e) {
-      this.app.error(e);
+      this.api.error(e);
     }
   }
 

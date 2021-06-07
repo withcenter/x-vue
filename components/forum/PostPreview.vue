@@ -15,8 +15,8 @@
 import { PostModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
-import PostMetaComponent from "@/components/forum/PostMeta.vue";
-import UserAvatar from "@/components/forum/UserAvatar.vue";
+import PostMetaComponent from "@/x-vue/components/forum/PostMeta.vue";
+import UserAvatar from "@/x-vue/components/forum/UserAvatar.vue";
 
 @Component({
   props: ["post"],

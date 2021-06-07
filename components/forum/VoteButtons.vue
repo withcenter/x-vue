@@ -23,27 +23,27 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { AppService } from "@/service/app.service";
 import { CommentModel, PostModel } from "@/x-vue/services/interfaces";
+import { ApiService } from "@/x-vue/services/api.service";
 
 @Component({
   props: ["parent"],
 })
 export default class VoteButtonsComponent extends Vue {
   parent!: PostModel & CommentModel;
-  app = AppService.instance;
+  api = ApiService.instance;
 
   async onClickVote(choice: string): Promise<void> {
     // console.log(choice);
     try {
-      const res = await this.app.api.vote({
+      const res = await this.api.vote({
         idx: this.parent.idx,
         choice: choice,
       });
       // console.log(res);
       this.parent.updateVoteCount(res);
     } catch (e) {
-      this.app.error(e);
+      this.api.error(e);
     }
   }
 }
