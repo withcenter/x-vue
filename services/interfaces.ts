@@ -162,7 +162,7 @@ export class PostRootModel {
     return this;
   }
 
-  updateVoteCount(map: ResponseData) {
+  updateVoteCount(map: ResponseData): void {
     this.N = map.N;
     this.Y = map.Y;
   }
