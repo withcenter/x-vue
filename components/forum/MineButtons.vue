@@ -1,7 +1,7 @@
 <template>
   <div class="mine-buttons">
     <button
-      data-cy="menu-button"
+      data-cy="mine-button"
       :id="'mine-button-popover-' + parent.idx"
       class="btn btn-sm"
     >

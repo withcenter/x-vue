@@ -1,7 +1,7 @@
 <template>
-  <article data-cy="post-view-page" class="post-view px-2 py-4">
+  <article data-cy="post-view" class="post-view px-2 py-4">
     <!-- title -->
-    <h3 data-cy="post-view-title">{{ post.title }}</h3>
+    <h3 id="post-title">{{ post.title }}</h3>
     <!-- avatar + meta -->
     <div class="d-flex">
       <user-avatar :parent="post"></user-avatar>
@@ -18,7 +18,7 @@
     </div>
     <!-- content - TODO move css to global -->
     <div
-      data-cy="post-view-content"
+      id="post-content"
       class="mt-3 p-2 rounded"
       style="background-color: #f1f1f1; white-space: break-space"
     >
@@ -34,7 +34,6 @@
       <span class="flex-grow-1"></span>
       <!-- mine buttons -->
       <mine-buttons-component
-        data-cy="post-mine-button"
         :parent="post"
         v-if="api.isMine(post)"
         @on-click-edit="onClickEdit()"
