@@ -160,15 +160,13 @@
 </template>
 
 <script lang="ts">
-import { AppService } from "@/service/app.service";
+import { ApiService } from "@/x-vue/services/api.service";
 import { UserModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
 
 @Component({})
 export default class AdminUserList extends Vue {
-  app = AppService.instance;
-
   users: Array<UserModel> = [];
   total = 0;
 
@@ -212,7 +210,7 @@ export default class AdminUserList extends Vue {
   async onSubmitSearch(): Promise<void> {
     console.log("page changed", this.currentPage);
     try {
-      this.users = await this.app.api.userSearch({
+      this.users = await ApiService.instance.userSearch({
         searchKey: this.searchKey,
         limit: this.limit,
         page: this.currentPage ?? "1",
@@ -220,12 +218,12 @@ export default class AdminUserList extends Vue {
       });
       console.log(this.users);
 
-      this.total = await this.app.api.userCount({
+      this.total = await ApiService.instance.userCount({
         searchKey: this.searchKey,
       });
       this.noOfPages = Math.ceil(this.total / this.limit);
     } catch (e) {
-      this.app.error(e);
+      ApiService.instance.error(e);
     }
   }
 }
