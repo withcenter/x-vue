@@ -157,6 +157,11 @@ export class ApiService {
     return this.setUserSessionId(res);
   }
 
+  async otherUserProfile(idx: string): Promise<UserModel> {
+    const res = await this.request("user.otherUserProfile", { idx });
+    return new UserModel().fromJson(res);
+  }
+
   /**
    * Logouts user.
    *
