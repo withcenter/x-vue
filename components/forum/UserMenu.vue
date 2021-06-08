@@ -1,9 +1,6 @@
 <template>
   <div class="user-menu">
-    <router-link
-      class="btn d-block text-left"
-      :to="`/user/profile/${user.idx}`"
-    >
+    <router-link class="btn d-block text-left" :to="`/profile/${user.idx}`">
       @Todo: See user profile
     </router-link>
     <router-link class="btn d-block text-left" :to="`/user/posts/${user.idx}`">

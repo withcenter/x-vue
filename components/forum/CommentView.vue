@@ -19,7 +19,6 @@
         <!-- comment edit mode -->
       </div>
       <comment-form-component
-        data-cy="comment-edit-form"
         v-if="comment.inEdit"
         :root="post"
         :comment="comment"
