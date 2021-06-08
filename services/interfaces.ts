@@ -89,6 +89,20 @@ export class UserModel {
   photoUrl = "";
   admin = false;
 
+  //extra user info
+  point = 0;
+  firebaseUid = "";
+  phoneNo = "";
+  gender = "";
+  birthdate = 0;
+  countryCode = "";
+  province = "";
+  city = "";
+  address = "";
+  zipcode = "";
+  block = false;
+  // domain = "";
+
   // Returns name or nickname or email.
   get displayName(): string {
     if (this.name) return this.name;
@@ -99,6 +113,7 @@ export class UserModel {
     const first = account.substring(0, account.length - 3);
     return first + "xxx";
   }
+
   fromJson(map: ResponseData): UserModel {
     this.idx = map.idx;
     this.email = map.email;
@@ -107,6 +122,19 @@ export class UserModel {
     this.nickname = map.nickname;
     this.photoUrl = map.photoUrl;
     this.admin = map.admin == "Y" ? true : false;
+
+    this.point = map.point;
+    this.firebaseUid = map.firebaseUid;
+    this.phoneNo = map.phoneNo;
+    this.gender = map.gender;
+    this.birthdate = map.birthdate;
+    this.countryCode = map.countryCode;
+    this.province = map.province;
+    this.city = map.city;
+    this.address = map.address;
+    this.zipcode = map.zipcode;
+    this.block = map.block == "Y" ? true : false;
+
     return this;
   }
 }

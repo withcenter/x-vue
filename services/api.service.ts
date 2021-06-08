@@ -99,7 +99,6 @@ export class ApiService {
   setUserSessionId(res: ResponseData): UserModel {
     console.log(res);
     this.user = new UserModel().fromJson(res);
-    console.log(this.user);
     this.setCookie(Keys.sessionId, this.user.sessionId);
     this.sessionId = this.user.sessionId;
     return this.user;
@@ -391,13 +390,16 @@ export class ApiService {
    */
   async userSearch(data: RequestData): Promise<Array<UserModel>> {
     const res = await this.request("user.search", data);
-
-    console.log(res);
     return res.map((user: JSON) => new UserModel().fromJson(user));
   }
 
   async userGet(data: RequestData): Promise<UserModel> {
     const user = await this.request("user.get", data);
+    return new UserModel().fromJson(user);
+  }
+
+  async userUpdate(data: RequestData): Promise<UserModel> {
+    const user = await this.request("user.update", data);
     return new UserModel().fromJson(user);
   }
 
