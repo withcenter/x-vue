@@ -209,10 +209,6 @@ export class PostModel extends PostRootModel {
 
   comments: Array<CommentModel> = [];
 
-  // get noOfComments(): number {
-  //   return this.comments.length;
-  // }
-
   fromJson(map: ResponseData): PostModel {
     this.url = map.url;
     this.path = map.path;
