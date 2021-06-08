@@ -200,6 +200,9 @@ export class PostModel extends PostRootModel {
   url = "";
   path = "";
   relativeUrl = "";
+  name = "";
+  companyName = "";
+  phoneNo = "";
 
   title = "";
   categoryIdx = "";
@@ -229,6 +232,21 @@ export class PostModel extends PostRootModel {
 
     super.fromJson(map);
     return this;
+  }
+
+  /**
+   * Return properties in JSON for submitting to backend.
+   */
+  get toJson(): MapStringAny {
+    return {
+      idx: this.idx,
+      userIdx: this.userIdx,
+      title: this.title,
+      content: this.content,
+      name: this.name,
+      companyName: this.companyName,
+      phoneNo: this.phoneNo,
+    };
   }
 
   insertComment(comment: CommentModel): void {
