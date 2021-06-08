@@ -186,7 +186,7 @@ export class ApiService {
     if (this.sessionId) data.sessionId = this.sessionId;
     const host = location.hostname;
     const endpoint = `https://${host}/index.php`;
-    console.log("endpoint; ", endpoint);
+    // console.log("endpoint; ", endpoint);
     const res = await axios.post(endpoint, data);
     if (typeof res.data === "string") {
       console.error(res);
