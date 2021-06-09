@@ -152,6 +152,7 @@ export class UserModel {
   }
 }
 
+// TODO: Remove this, instead we use PostModel.
 export class PostEditModel {
   idx = "";
   title = "";
@@ -213,9 +214,6 @@ export class PostModel extends PostRootModel {
   url = "";
   path = "";
   relativeUrl = "";
-  name = "";
-  companyName = "";
-  phoneNo = "";
 
   title = "";
   categoryIdx = "";
@@ -224,6 +222,15 @@ export class PostModel extends PostRootModel {
   noOfComments = "0";
 
   comments: Array<CommentModel> = [];
+
+  // Advertisement properties
+  name = "";
+  companyName = "";
+  phoneNo = "";
+  code = "";
+  countryCode = "";
+  beginAt = "";
+  endAt = "";
 
   fromJson(map: ResponseData): PostModel {
     this.url = map.url;
@@ -243,6 +250,15 @@ export class PostModel extends PostRootModel {
 
     this.noOfComments = map.noOfComments;
 
+    // Advertisement properties
+    this.name = map.name;
+    this.companyName = map.companyName;
+    this.phoneNo = map.phoneNo;
+    this.code = map.code;
+    this.countryCode = map.countryCode;
+    this.beginAt = map.beginAt;
+    this.endAt = map.endAt;
+
     super.fromJson(map);
     return this;
   }
@@ -256,9 +272,14 @@ export class PostModel extends PostRootModel {
       userIdx: this.userIdx,
       title: this.title,
       content: this.content,
+      // Advertisement properties
       name: this.name,
       companyName: this.companyName,
       phoneNo: this.phoneNo,
+      code: this.code,
+      countryCode: this.countryCode,
+      beginAt: this.beginAt,
+      endAt: this.endAt,
     };
   }
 

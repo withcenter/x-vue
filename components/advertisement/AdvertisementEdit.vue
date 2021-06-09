@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="settings">
     <form @submit.prevent="onSubmit">
       <div>
         @todo If there is no advertisement, guide the user how to create first
@@ -32,12 +32,12 @@
 
       <div class="form-group">
         <label>Banner Type</label>
-        <input
-          class="mt-3 form-control"
-          placeholder="Select banner type"
-          type="text"
-          v-model="post.code"
-        />
+        <select class="form-control" v-model="post.code">
+          <option disabled>Select Type</option>
+          <option v-for="type in settings.types" :key="type" :value="type">
+            {{ type }}
+          </option>
+        </select>
         <small class="form-text text-muted">
           Select where you want to display your banner.
         </small>
@@ -45,25 +45,26 @@
 
       <div class="form-group">
         <label>Banner Place</label>
-        <input
-          class="mt-3 form-control"
-          placeholder="Select banner type"
-          type="text"
-          v-model="post.code"
-        />
+        <select class="form-control">
+          <option disabled>Select Place</option>
+          <option v-for="type in settings.types" :key="type" :value="type">
+            {{ type }}
+          </option>
+        </select>
         <small class="form-text text-muted">
-          Select where you want to display your banner.
+          Select where you want to display your banner. @todo: add property to
+          PostModel for banner placement.
         </small>
       </div>
 
-      <div class="form-group">
+      <div class="form-group" v-if="countries">
         <label>Cafe Country</label>
-        <input
-          class="mt-3 form-control"
-          placeholder="Select banner type"
-          type="text"
-          v-model="post.code"
-        />
+        <select class="form-control" v-model="post.countryCode">
+          <option disabled>Select Place</option>
+          <option v-for="(value, name) in countries" :key="name" :value="name">
+            {{ value }}
+          </option>
+        </select>
         <small class="form-text text-muted">
           Select the country. 어느 국가의 교민 카페들에게 광고 표시를 할지
           선택해 주세요.
@@ -135,7 +136,11 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { AdvertisementSettings, PostModel } from "@/x-vue/services/interfaces";
+import {
+  AdvertisementSettings,
+  PostModel,
+  ResponseData,
+} from "@/x-vue/services/interfaces";
 
 @Component({})
 export default class Advertisement extends Vue {
@@ -145,9 +150,13 @@ export default class Advertisement extends Vue {
     return this.$store.state.advertisementSettings;
   }
 
-  mounted(): void {
-    console.log("mounted");
+  get countries(): ResponseData {
+    return this.$store.state.countries;
   }
+
+  // mounted(): void {
+  //   console.log("mounted");
+  // }
   onSubmit(): void {
     console.log(this.post);
     console.log(this.post.toJson);
