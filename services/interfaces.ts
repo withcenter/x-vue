@@ -52,6 +52,15 @@ export interface CafeSettings {
   sitemap: MapStringStringArray;
 }
 
+export interface AdvertisementSettings {
+  types: string[];
+  point: {
+    default: { [index: string]: number };
+    [index: string]: { [index: string]: number };
+  };
+  categories: string[];
+}
+
 export interface ApiState {
   user: undefined | UserModel;
   countries: ResponseData | undefined;
@@ -60,6 +69,7 @@ export interface ApiState {
   texts: MapStringAny;
   // cafe settings only
   cafeSettings: CafeSettings;
+  advertisementSettings: AdvertisementSettings | undefined;
 }
 
 export interface KakaoUserMe {
