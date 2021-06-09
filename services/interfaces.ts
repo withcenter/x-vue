@@ -61,7 +61,7 @@ export interface AdvertisementSettings {
   categories: string[];
 }
 
-export interface ApiState {
+export interface ApiStore {
   user: undefined | UserModel;
   countries: ResponseData | undefined;
   // cafe category model(record) data.
@@ -70,6 +70,9 @@ export interface ApiState {
   // cafe settings only
   cafeSettings: CafeSettings;
   advertisementSettings: AdvertisementSettings | undefined;
+  // Vue vm must be added here.
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  vm: any;
 }
 
 export interface KakaoUserMe {

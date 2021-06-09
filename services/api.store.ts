@@ -1,4 +1,4 @@
-import { ApiState, CafeSettings } from "./interfaces";
+import { ApiStore, CafeSettings } from "./interfaces";
 
 export default {
   user: undefined,
@@ -6,4 +6,6 @@ export default {
   cafe: undefined,
   cafeSettings: {} as CafeSettings,
   texts: {},
-} as ApiState;
+  advertisementSettings: undefined,
+  vm: {},
+} as ApiStore;
