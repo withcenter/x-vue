@@ -11,6 +11,7 @@ import {
   CafeModel,
   Obj,
   CafeSettings,
+  CategoryModel,
 } from "./interfaces";
 
 import Cookies from "js-cookie";
@@ -97,7 +98,7 @@ export class ApiService {
    * @param sessionId string
    */
   setUserSessionId(res: ResponseData): UserModel {
-    console.log(res);
+    // console.log(res);
     this.user = new UserModel().fromJson(res);
     this.setCookie(Keys.sessionId, this.user.sessionId);
     this.sessionId = this.user.sessionId;
@@ -185,7 +186,7 @@ export class ApiService {
     if (this.sessionId) data.sessionId = this.sessionId;
     const host = location.hostname;
     const endpoint = `https://${host}/index.php`;
-    console.log("endpoint; ", endpoint);
+    // console.log("endpoint; ", endpoint);
     const res = await axios.post(endpoint, data);
     if (typeof res.data === "string") {
       console.error(res);
@@ -412,6 +413,29 @@ export class ApiService {
     const res = await this.request("user.count", data);
     console.log(res);
     return res && res.count ? res.count : 0;
+  }
+
+  ///
+  /// Category
+  ///
+  async categorySearch(data: RequestData): Promise<Array<CategoryModel>> {
+    const res = await this.request("category.search", data);
+    return res.map((category: JSON) => new CategoryModel().fromJson(category));
+  }
+
+  async categoryGet(data: RequestData): Promise<CategoryModel> {
+    const category = await this.request("category.get", data);
+    return new CategoryModel().fromJson(category);
+  }
+
+  async categoryUpdate(data: RequestData): Promise<CategoryModel> {
+    const category = await this.request("category.update", data);
+    return new CategoryModel().fromJson(category);
+  }
+
+  async categoryDelete(data: RequestData): Promise<CategoryModel> {
+    const category = await this.request("category.delete", data);
+    return new CategoryModel().fromJson(category);
   }
 
   ///
