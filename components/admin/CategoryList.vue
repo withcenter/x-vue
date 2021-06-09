@@ -1,29 +1,10 @@
 <template>
-  <section data-cy="admin-category-list-page">
+  <section>
     <h4>Category list</h4>
     <div class="container">
       <div class="row">
         <section class="w-100">
-          <form>
-            <input type="hidden" name="p" value="admin.index" />
-            <input
-              type="hidden"
-              name="w"
-              value="category/admin-category-list"
-            />
-            <input type="hidden" name="mode" value="create" />
-            <div class="d-flex">
-              <input
-                class="form-control mb-2"
-                type="text"
-                name="id"
-                placeholder="enter_category_id"
-              />
-              <button class="btn btn-primary ml-3 mb-2 w-50" type="submit">
-                {{ "create" | t }}
-              </button>
-            </div>
-          </form>
+          <admin-category-create></admin-category-create>
         </section>
 
         <table class="table table-striped mt-2">
@@ -49,11 +30,11 @@
                 </router-link>
               </td>
               <td>
-                <span>{{ category.title }} </span>
+                <span>{{ category.title }}</span>
               </td>
               <td>
-                <span data-cy="category-<?= $category->id ?>-description"
-                  >{{ category.description }}
+                <span>
+                  {{ category.description }}
                 </span>
               </td>
               <td class="justify-content-center">
@@ -75,14 +56,20 @@
 <script lang="ts">
 import { ApiService } from "@/x-vue/services/api.service";
 import { CategoryModel } from "@/x-vue/services/interfaces";
+import AdminCategoryCreate from "@/x-vue/components/admin/CategoryCreate.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
 
-@Component({})
+@Component({
+  components: {
+    AdminCategoryCreate,
+  },
+})
 export default class AdminCategoryList extends Vue {
   categories: Array<CategoryModel> = [];
 
   searchKey = "";
+  limit = 200;
 
   mounted(): void {
     this.onSubmitSearch();
@@ -92,6 +79,7 @@ export default class AdminCategoryList extends Vue {
     try {
       this.categories = await ApiService.instance.categorySearch({
         searchKey: this.searchKey,
+        limit: this.limit,
       });
       console.log(this.categories);
     } catch (e) {
@@ -101,10 +89,22 @@ export default class AdminCategoryList extends Vue {
 
   async onClickDelete(category: CategoryModel): Promise<void> {
     console.log(category);
+
+    const re = confirm("Delete the category?");
+    if (!re) return;
+    console.log(re);
     try {
       const cat = await ApiService.instance.categoryDelete({
-        id: category.id,
+        idx: category.idx,
       });
+
+      const index = this.categories.findIndex((c) => {
+        return c.idx == cat.idx;
+      });
+
+      if (index != -1) {
+        this.categories.splice(index, 1);
+      }
       console.log(cat);
     } catch (e) {
       ApiService.instance.error(e);

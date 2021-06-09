@@ -423,6 +423,11 @@ export class ApiService {
     return res.map((category: JSON) => new CategoryModel().fromJson(category));
   }
 
+  async categoryCreate(data: RequestData): Promise<CategoryModel> {
+    const category = await this.request("category.create", data);
+    return new CategoryModel().fromJson(category);
+  }
+
   async categoryGet(data: RequestData): Promise<CategoryModel> {
     const category = await this.request("category.get", data);
     return new CategoryModel().fromJson(category);

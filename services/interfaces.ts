@@ -328,6 +328,28 @@ export class CategoryModel {
   id = "";
   title = "";
   description = "";
+  subcategories = "";
+  createPost = "";
+  deletePost = "";
+  createComment = "";
+  deleteComment = "";
+  createHourLimit = "";
+  createHourLimitCount = "";
+  createDailyLimitCount = "";
+  banCreateOnLimit = "";
+  postCreateLimit = "";
+  commentCreateLimit = "";
+  readLimit = "";
+  returnToAfterPostEdit = "";
+  postEditWidget = "";
+  postEditWidgetOption = "";
+  postViewWidget = "";
+  postListHeaderWidget = "";
+  postListWidget = "";
+  paginationWidget = "";
+  listOnView = "";
+  noOfPostsPerPage = "";
+  noOfPagesOnNav = "";
 
   // This domain is a root domain. Not subdomain. For cafe, the subdomain(complete domain) is the id.
   domain = "";
@@ -338,6 +360,29 @@ export class CategoryModel {
     this.id = map.id;
     this.title = map.title;
     this.description = map.description;
+    this.subcategories = map.subcategories;
+    this.createPost = map.createPost;
+    this.deletePost = map.deletePost;
+    this.createComment = map.createComment;
+    this.deleteComment = map.deleteComment;
+    this.createHourLimit = map.createHourLimit;
+    this.createHourLimitCount = map.createHourLimitCount;
+    this.createDailyLimitCount = map.createDailyLimitCount;
+    this.banCreateOnLimit = map.banCreateOnLimit;
+    this.postCreateLimit = map.postCreateLimit;
+    this.commentCreateLimit = map.commentCreateLimit;
+    this.readLimit = map.readLimit;
+    this.returnToAfterPostEdit = map.returnToAfterPostEdit;
+    this.postEditWidget = map.postEditWidget;
+    this.postEditWidgetOption = map.postEditWidgetOption;
+    this.postViewWidget = map.postViewWidget;
+    this.postListHeaderWidget = map.postListHeaderWidget;
+    this.postListWidget = map.postListWidget;
+    this.paginationWidget = map.paginationWidget;
+    this.listOnView = map.listOnView;
+    this.noOfPostsPerPage = map.noOfPostsPerPage;
+    this.noOfPagesOnNav = map.noOfPagesOnNav;
+
     this.domain = map.domain;
     return this;
   }
