@@ -1,6 +1,6 @@
 import axios from "axios";
-
 import store from "@/store";
+
 import {
   RequestData,
   UserModel,
@@ -12,6 +12,7 @@ import {
   Obj,
   CafeSettings,
   CategoryModel,
+  AdvertisementSettings,
 } from "./interfaces";
 
 import Cookies from "js-cookie";
@@ -36,7 +37,7 @@ export class ApiService {
   private sessionId: string | undefined;
 
   /**
-   * Sets `user` in store.
+   * Sets `user` in store.state.
    */
   set user(user: undefined | UserModel) {
     store.state.user = user;
@@ -73,7 +74,7 @@ export class ApiService {
   /**
    * Initialize Auth
    * It will call `getUserSessionId()` to check if `sessionId` is saved in cookie,
-   * then it will `refreshLoginUserProfile()` to refresh the user instance in store.
+   * then it will `refreshLoginUserProfile()` to refresh the user instance in store.state.
    */
   async initUserAuth(): Promise<void> {
     this.sessionId = this.getUserSessionId();
@@ -339,7 +340,13 @@ export class ApiService {
     return obj.userIdx === this.user?.idx;
   }
 
+  /**
+   * Returns country data
+   * @attention it does memory cache. So, it will return the previous data on second call.
+   * @returns Promise<ResponseData>
+   */
   async countryAll(): Promise<ResponseData> {
+    if (store.state.countries) return store.state.countries;
     store.state.countries = await this.request("country.all", {
       ln: this.userLanguage,
     });
@@ -580,5 +587,25 @@ export class ApiService {
       hideHeaderClose: false,
       centered: true,
     });
+  }
+
+  /**
+   * Returns country data
+   * @attention it does memory cache. So, it will return the previous data on second call.
+   * @returns Promise<ResponseData>
+   */
+  async advertisementSettings(): Promise<AdvertisementSettings> {
+    if (store.state.advertisementSettings?.point)
+      return store.state.advertisementSettings;
+    const res = (await this.request(
+      "app.advertisementSettings"
+    )) as AdvertisementSettings;
+    // console.log("$store.state.advertisementSettings;", res);
+    store.state.advertisementSettings = Object.assign(
+      {},
+      store.state.advertisementSettings,
+      res
+    );
+    return store.state.advertisementSettings;
   }
 }

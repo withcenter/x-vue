@@ -1,9 +1,11 @@
-import { ApiState, CafeSettings } from "./interfaces";
+import { ApiStore, CafeSettings } from "./interfaces";
 
-export const apiState: ApiState = {
+export default {
   user: undefined,
   countries: undefined,
   cafe: undefined,
   cafeSettings: {} as CafeSettings,
   texts: {},
-};
+  advertisementSettings: undefined,
+  vm: {},
+} as ApiStore;

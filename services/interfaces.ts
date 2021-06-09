@@ -52,7 +52,16 @@ export interface CafeSettings {
   sitemap: MapStringStringArray;
 }
 
-export interface ApiState {
+export interface AdvertisementSettings {
+  types: string[];
+  point: {
+    default: { [index: string]: number };
+    [index: string]: { [index: string]: number };
+  };
+  categories: string[];
+}
+
+export interface ApiStore {
   user: undefined | UserModel;
   countries: ResponseData | undefined;
   // cafe category model(record) data.
@@ -60,6 +69,10 @@ export interface ApiState {
   texts: MapStringAny;
   // cafe settings only
   cafeSettings: CafeSettings;
+  advertisementSettings: AdvertisementSettings | undefined;
+  // Vue vm must be added here.
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  vm: any;
 }
 
 export interface KakaoUserMe {
@@ -139,6 +152,7 @@ export class UserModel {
   }
 }
 
+// TODO: Remove this, instead we use PostModel.
 export class PostEditModel {
   idx = "";
   title = "";
@@ -200,9 +214,6 @@ export class PostModel extends PostRootModel {
   url = "";
   path = "";
   relativeUrl = "";
-  name = "";
-  companyName = "";
-  phoneNo = "";
 
   title = "";
   categoryIdx = "";
@@ -212,9 +223,14 @@ export class PostModel extends PostRootModel {
 
   comments: Array<CommentModel> = [];
 
-  // get noOfComments(): number {
-  //   return this.comments.length;
-  // }
+  // Advertisement properties
+  name = "";
+  companyName = "";
+  phoneNo = "";
+  code = "";
+  countryCode = "";
+  beginAt = "";
+  endAt = "";
 
   fromJson(map: ResponseData): PostModel {
     this.url = map.url;
@@ -234,6 +250,15 @@ export class PostModel extends PostRootModel {
 
     this.noOfComments = map.noOfComments;
 
+    // Advertisement properties
+    this.name = map.name;
+    this.companyName = map.companyName;
+    this.phoneNo = map.phoneNo;
+    this.code = map.code;
+    this.countryCode = map.countryCode;
+    this.beginAt = map.beginAt;
+    this.endAt = map.endAt;
+
     super.fromJson(map);
     return this;
   }
@@ -247,9 +272,14 @@ export class PostModel extends PostRootModel {
       userIdx: this.userIdx,
       title: this.title,
       content: this.content,
+      // Advertisement properties
       name: this.name,
       companyName: this.companyName,
       phoneNo: this.phoneNo,
+      code: this.code,
+      countryCode: this.countryCode,
+      beginAt: this.beginAt,
+      endAt: this.endAt,
     };
   }
 

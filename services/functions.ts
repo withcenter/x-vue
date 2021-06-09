@@ -6,13 +6,15 @@
 //   return app.translation.texts[code][app.userLanguage];
 // }
 
-import store from "@/store";
 import { ApiService } from "./api.service";
+import apiStore from "./api.store";
 
 export function tr(code: string): string {
   if (!code) return "";
-  if (!store.state.texts[code]) return code;
-  return store.state.texts[code][ApiService.instance.userLanguage];
+  if (!apiStore.texts) return code;
+  if (!apiStore.texts[code]) return code;
+  if (!apiStore.texts[code][ApiService.instance.userLanguage]) return code;
+  return apiStore.texts[code][ApiService.instance.userLanguage];
 }
 
 export function extractRootDomain(hostname: string): string {
