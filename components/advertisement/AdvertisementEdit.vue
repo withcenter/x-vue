@@ -1,18 +1,5 @@
 <template>
   <div>
-    {{ $store.state.advertisementSettings ? "Y" : "N" }}
-    <div v-if="settings">{{ settings }}</div>
-    <hr />
-    {{ settings }}
-    <hr />
-
-    appStore?
-    {{ appStore }}
-    <hr />
-    {{ appStore.name }}
-    <hr />
-    <button @click="appStore.count++">{{ appStore.count }}</button>
-
     <form @submit.prevent="onSubmit">
       <div>
         @todo If there is no advertisement, guide the user how to create first
@@ -149,8 +136,6 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { AdvertisementSettings, PostModel } from "@/x-vue/services/interfaces";
-import { ApiService } from "@/x-vue/services/api.service";
-import appStore from "@/service/app.store";
 
 @Component({})
 export default class Advertisement extends Vue {
@@ -158,10 +143,6 @@ export default class Advertisement extends Vue {
 
   get settings(): AdvertisementSettings {
     return this.$store.state.advertisementSettings;
-  }
-
-  get appStore() {
-    return appStore;
   }
 
   mounted(): void {

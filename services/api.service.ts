@@ -1,6 +1,6 @@
 import axios from "axios";
+import store from "@/store";
 
-import store from "@/service/app.store";
 import {
   RequestData,
   UserModel,
@@ -37,10 +37,10 @@ export class ApiService {
   private sessionId: string | undefined;
 
   /**
-   * Sets `user` in store.
+   * Sets `user` in store.state.
    */
   set user(user: undefined | UserModel) {
-    store.user = user;
+    store.state.user = user;
   }
 
   /**
@@ -49,7 +49,7 @@ export class ApiService {
    * @returns null | UserModel
    */
   get user(): undefined | UserModel {
-    return store.user;
+    return store.state.user;
   }
 
   /**
@@ -74,7 +74,7 @@ export class ApiService {
   /**
    * Initialize Auth
    * It will call `getUserSessionId()` to check if `sessionId` is saved in cookie,
-   * then it will `refreshLoginUserProfile()` to refresh the user instance in store.
+   * then it will `refreshLoginUserProfile()` to refresh the user instance in store.state.
    */
   async initUserAuth(): Promise<void> {
     this.sessionId = this.getUserSessionId();
@@ -346,11 +346,11 @@ export class ApiService {
    * @returns Promise<ResponseData>
    */
   async countryAll(): Promise<ResponseData> {
-    if (store.countries) return store.countries;
-    store.countries = await this.request("country.all", {
+    if (store.state.countries) return store.state.countries;
+    store.state.countries = await this.request("country.all", {
       ln: this.userLanguage,
     });
-    return store.countries;
+    return store.state.countries;
   }
 
   get userLanguage(): string {
@@ -459,8 +459,8 @@ export class ApiService {
 
   async loadCafe(): Promise<CafeModel> {
     const res = await this.request("cafe.get", { domain: this.domain });
-    store.cafe = new CafeModel().fromJson(res);
-    return store.cafe;
+    store.state.cafe = new CafeModel().fromJson(res);
+    return store.state.cafe;
   }
 
   /**
@@ -494,13 +494,13 @@ export class ApiService {
     // 캐시된 데이터가 있으면 리턴
     const json = this.getStorage("cafeSettings");
     if (json) {
-      store.cafeSettings = json as CafeSettings;
+      store.state.cafeSettings = json as CafeSettings;
     }
     // 서버로 부터 데이터를 가져와 캐시
     const res = await this.request("cafe.settings", { domain: this.domain });
-    store.cafeSettings = res as CafeSettings;
-    this.setStorage("cafeSettings", store.cafeSettings);
-    return store.cafeSettings;
+    store.state.cafeSettings = res as CafeSettings;
+    this.setStorage("cafeSettings", store.state.cafeSettings);
+    return store.state.cafeSettings;
   }
 
   /**
@@ -509,11 +509,11 @@ export class ApiService {
    */
   currentCafeSettings(): Obj | undefined {
     if (
-      store.cafeSettings &&
-      store.cafeSettings["rootDomainSettings"] &&
-      store.cafeSettings["rootDomainSettings"][this.rootDomain]
+      store.state.cafeSettings &&
+      store.state.cafeSettings["rootDomainSettings"] &&
+      store.state.cafeSettings["rootDomainSettings"][this.rootDomain]
     ) {
-      return store.cafeSettings["rootDomainSettings"][this.rootDomain];
+      return store.state.cafeSettings["rootDomainSettings"][this.rootDomain];
     }
   }
 
@@ -544,7 +544,7 @@ export class ApiService {
    * @returns boolean
    */
   async alert(title: string, content: string): Promise<boolean> {
-    return await store.vm.$bvModal.msgBoxOk(content, {
+    return await store.state.vm.$bvModal.msgBoxOk(content, {
       title: title,
       size: "sm",
       buttonSize: "sm",
@@ -571,7 +571,7 @@ export class ApiService {
    * ```
    */
   async confirm(title: string, content: string): Promise<boolean | null> {
-    return await store.vm.$bvModal.msgBoxConfirm(content, {
+    return await store.state.vm.$bvModal.msgBoxConfirm(content, {
       title: title,
       size: "sm",
       buttonSize: "sm",
@@ -590,11 +590,17 @@ export class ApiService {
    * @returns Promise<ResponseData>
    */
   async advertisementSettings(): Promise<AdvertisementSettings> {
-    if (store.advertisementSettings) return store.advertisementSettings;
-    store.advertisementSettings = (await this.request(
+    if (store.state.advertisementSettings?.point)
+      return store.state.advertisementSettings;
+    const res = (await this.request(
       "app.advertisementSettings"
     )) as AdvertisementSettings;
-    console.log("$store.advertisementSettings;", store.advertisementSettings);
-    return store.advertisementSettings;
+    console.log("$store.state.advertisementSettings;", res);
+    store.state.advertisementSettings = Object.assign(
+      {},
+      store.state.advertisementSettings,
+      res
+    );
+    return store.state.advertisementSettings;
   }
 }
