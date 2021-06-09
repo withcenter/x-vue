@@ -102,10 +102,10 @@ export default class AdminCategoryList extends Vue {
   async onClickDelete(category: CategoryModel): Promise<void> {
     console.log(category);
     try {
-      await ApiService.instance.categoryDelete({
+      const cat = await ApiService.instance.categoryDelete({
         id: category.id,
       });
-      console.log(this.categories);
+      console.log(cat);
     } catch (e) {
       ApiService.instance.error(e);
     }
