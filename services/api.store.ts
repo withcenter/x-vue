@@ -1,9 +1,9 @@
 import { ApiState, CafeSettings } from "./interfaces";
 
-export const apiState: ApiState = {
+export default {
   user: undefined,
   countries: undefined,
   cafe: undefined,
   cafeSettings: {} as CafeSettings,
   texts: {},
-};
+} as ApiState;
