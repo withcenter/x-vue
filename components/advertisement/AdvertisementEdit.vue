@@ -31,10 +31,10 @@
       </div>
 
       <div class="form-group">
-        <label>Banner Type</label>
+        <label>Banner Type/Position</label>
         <select class="form-control" v-model="post.code">
           <option disabled>Select Type</option>
-          <option v-for="type in settings.types" :key="type" :value="type">
+          <option v-for="type in settings.types" :key="type">
             {{ type }}
           </option>
         </select>
@@ -44,11 +44,11 @@
       </div>
 
       <div class="form-group">
-        <label>Banner Place</label>
-        <select class="form-control">
-          <option disabled>Select Place</option>
-          <option v-for="type in settings.types" :key="type" :value="type">
-            {{ type }}
+        <label>Category(or global)</label>
+        <select class="form-control" v-model="post.subcategory">
+          <option disabled>Select category or global</option>
+          <option v-for="category in settings.categories" :key="category">
+            {{ category }}
           </option>
         </select>
         <small class="form-text text-muted">
@@ -81,7 +81,9 @@
           <input type="date" name="endAt" value="" />
         </div>
 
-        <small class="form-text text-muted">남은 광고 일 수: ??</small>
+        <small class="form-text text-muted"
+          >{{ "advertisement_serving_days" | t }}: ?? {{ "days" | t }}</small
+        >
         <small class="form-text text-muted"
           >광고비 시작 날짜와 끝 날짜를 선택해주세요.</small
         >
@@ -96,20 +98,18 @@
         >
       </div>
 
-      <div class="form-group">
-        <label>Advertisement Period</label>
-        <input
-          class="mt-3 form-control"
-          placeholder="Select banner type"
-          type="text"
-          v-model="post.code"
-        />
-        <small class="form-text text-muted">
-          Select from date and end date. from date must be within 12 days.
-        </small>
-      </div>
+      <div class="alert alert-info">Point xxx.xxx.xxx</div>
 
-      <button class="btn btn-link" type="submit">Save</button>
+      @todo when user change dates, display the price (point).<br />
+      @todo If the user is lack of point, display warning.<br />
+      @todo When the user press save button, deduct the point from user. And the
+      date is no loger changable.<br />
+
+      @todo After save, display one of "cancel" or "refund" button.<br />
+      @todo after cancel or refund, display "resume the advertisement" or
+      "delete" button.<br />
+
+      <button class="btn btn-link" type="submit">Save the advertisement</button>
 
       <hr />
 
