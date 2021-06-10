@@ -227,6 +227,8 @@ export class PostModel extends PostRootModel {
   privateTitle = "";
   privateContent = "";
 
+  subcategory = "";
+
   // Advertisement properties
   name = "";
   companyName = "";
@@ -257,6 +259,8 @@ export class PostModel extends PostRootModel {
     this.privateTitle = map.privateTitle;
     this.privateContent = map.privateContent;
 
+    this.subcategory = map.subcategory;
+
     // Advertisement properties
     this.name = map.name;
     this.companyName = map.companyName;
@@ -283,6 +287,7 @@ export class PostModel extends PostRootModel {
       content: this.content,
       privateTitle: this.privateTitle,
       privateContent: this.privateContent,
+      subcategory: this.subcategory,
 
       // Advertisement properties
       name: this.name,

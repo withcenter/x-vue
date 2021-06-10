@@ -6,33 +6,35 @@
         advertisement esialy.
       </div>
 
-      <div class="box">
-        <div v-if="!post.files.length">No banner chosen ..</div>
-        <file-display :files="post.files" :showDelete="true"></file-display>
+      <div class="box d-flex mt-2">
+        <upload-button
+          :size="30"
+          @success="onFileUploaded"
+          @progress="uploadProgress = $event"
+        ></upload-button>
+        <div>
+          <div class="p-1" v-if="!post.files.length">No banner chosen ..</div>
+          <file-display :files="post.files" :showDelete="true"></file-display>
+        </div>
       </div>
-      <upload-button
-        class="mt-2"
-        @success="onFileUploaded"
-        @progress="uploadProgress = $event"
-      ></upload-button>
 
-      <div class="form-group">
-        <label>Name</label>
+      <div class="form-group mt-2">
+        <label> Name </label>
         <input
-          class="mt-3 form-control"
+          class="form-control"
           placeholder="Name"
           type="text"
           v-model="post.name"
         />
-        <small class="form-text text-muted"
-          >Input name of the advertisement</small
-        >
+        <small class="form-text text-muted">
+          Input name of the advertisement
+        </small>
       </div>
 
-      <div class="form-group">
+      <div class="form-group mt-2">
         <label>Contact No.</label>
         <input
-          class="mt-3 form-control"
+          class="form-control"
           placeholder="Contact number"
           type="text"
           v-model="post.phoneNo"
@@ -40,7 +42,7 @@
         <small class="form-text text-muted"> Input your phone number. </small>
       </div>
 
-      <div class="form-group">
+      <div class="form-group mt-2">
         <label>Banner Type/Position</label>
         <select class="form-control" v-model="post.code">
           <option value="" disabled selected>Select Type</option>
@@ -53,24 +55,26 @@
         </small>
       </div>
 
-      <div class="form-group">
+      <div class="form-group mt-2">
         <label>Category(or global)</label>
         <select class="form-control" v-model="post.subcategory">
-          <option value="" disabled selected>Select category or global</option>
+          <option value="" disabled selected>
+            Select category or global(default)
+          </option>
           <option v-for="category in settings.categories" :key="category">
             {{ category }}
           </option>
         </select>
         <small class="form-text text-muted">
-          Select where you want to display your banner. @todo: add property to
-          PostModel for banner placement.
+          Select which category you want to display your advertisement, if you
+          don't choose category, it will default to global.
         </small>
       </div>
 
-      <div class="form-group" v-if="countries">
+      <div class="form-group mt-2" v-if="countries">
         <label>Cafe Country</label>
-        <select class="form-control" v-model="post.countryCode">
-          <option value="default" disabled selected>Select Country</option>
+        <select value="" class="form-control" v-model="post.countryCode">
+          <option disabled selected>Select Country</option>
           <option v-for="(value, name) in countries" :key="name" :value="name">
             {{ value }}
           </option>
@@ -81,29 +85,58 @@
         </small>
       </div>
 
-      @todo display point per day after user input banner type, place, cafe
-      country.
+      <div class="box" v-if="post.code && post.countryCode">
+        Points Per Day: {{ countryPointListing[post.code] }} <br />
+        <!-- <table class="w-100 mt-2 table table-striped">
+          <thead>
+            <tr class="table-header">
+              <th scope="col">Banner Type</th>
+              <th scope="col">Points(per day)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(value, name) in countryPointListing" :key="name">
+              <td>{{ name }}</td>
+              <td>{{ value }}</td>
+            </tr>
+          </tbody>
+        </table> -->
+        <small class="text-info">
+          Note: Point per day may vary depending on the banner type and country
+          chosen.
+        </small>
+        <br />
+        @todo display point per day after user input banner type, place, cafe
+        country.
+      </div>
 
-      <div class="form-group bg-light p-3">
+      <div class="form-group bg-light p-3 mt-2">
         <label>{{ "advertisement_begin_end_date" | t }}</label>
-        <div>
-          <input
-            v-model="post.beginAt"
-            type="date"
-            name="beginAt"
-            :min="beginAtMin"
-            :max="beginAtMax"
-          />
-          <input
-            v-model="post.endAt"
-            type="date"
-            name="endAt"
-            :min="endAtMin"
-          />
+        <div class="d-flex justify-content-between">
+          <label
+            >Begin Date
+            <input
+              v-model="post.beginAt"
+              type="date"
+              name="beginAt"
+              :min="beginAtMin"
+              :max="beginAtMax"
+            />
+          </label>
+          <label>
+            End Date
+            <input
+              v-model="post.endAt"
+              type="date"
+              name="endAt"
+              :min="endAtMin"
+            />
+          </label>
         </div>
 
-        <small class="form-text text-muted">
-          {{ "advertisement_serving_days" | t }}: ?? {{ "days" | t }}
+        <small class="form-text text-muted mb-2">
+          {{ "advertisement_serving_days" | t }}: {{ servingDaysLeft }}
+          {{ "days" | t }}
         </small>
         <small class="form-text text-muted">
           광고비 시작 날짜와 끝 날짜를 선택해주세요.
@@ -121,12 +154,20 @@
 
       <!-- Total Advertisement price in points -->
       <div class="alert alert-info">
-        Point {{ priceInPoint }} xxx.xxx.xxx
+        Total Points required: {{ priceInPoint }}
         <div class="text-danger" v-if="isPointInsufficient">
           Insufficient point! You don't have enough point for this kind of
           advertisement.
         </div>
       </div>
+
+      <button
+        class="w-100 btn btn-outline-primary"
+        type="submit"
+        :disabled="!isPointInsufficient"
+      >
+        Save the advertisement
+      </button>
 
       [/] @todo when user change dates, display the price (point).<br />
       @todo If the user is lack of point, display warning.<br />
@@ -137,39 +178,7 @@
       @todo after cancel or refund, display "resume the advertisement" or
       "delete" button.<br />
 
-      <button
-        class="btn btn-outline-primary"
-        type="submit"
-        :disabled="!isPointInsufficient"
-      >
-        Save the advertisement
-      </button>
-
       <hr />
-
-      <div class="box">
-        <span class="p-2"> Point Listing: {{ post.countryCode }} </span>
-        <table class="w-100 table table-striped">
-          <thead>
-            <tr class="table-header">
-              <th scope="col">Banner Type</th>
-              <th scope="col">Point</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="(value, name) in pointList[post.countryCode]"
-              :key="name"
-            >
-              <td>{{ name }}</td>
-              <td>{{ value }}</td>
-            </tr>
-          </tbody>
-        </table>
-        <small class="text-info">
-          Note: Banner type points may vary depending on the chosen country.
-        </small>
-      </div>
 
       @todo banner price computation. The price list is comming from the admin
       settings. and the price is difference based on country and banner place.
@@ -231,8 +240,11 @@ export default class Advertisement extends Vue {
     return this.$store.state.countries;
   }
 
-  get pointList(): ResponseData {
-    return this.$store.state.advertisementSettings.point;
+  get countryPointListing(): ResponseData {
+    const c = this.post.countryCode;
+    const setting = this.settings.point[c];
+    if (!setting || setting == undefined) return this.settings.point["default"];
+    return setting;
   }
 
   get priceInPoint(): number {
@@ -240,19 +252,16 @@ export default class Advertisement extends Vue {
     if (!this.post.code) return 0;
     if (!this.noOfDays) return 0;
 
-    return (
-      this.pointList[this.post.countryCode][this.post.code] * this.noOfDays
-    );
+    return this.countryPointListing[this.post.code] * this.noOfDays;
   }
 
   get endAtMin(): string {
+    let d = this.now;
     if (this.post.beginAt) {
-      const d = new Date(this.post.beginAt);
-      d.setDate(d.getDate() + 1);
-      return d.toISOString().split("T")[0];
-    } else {
-      return "";
+      d = new Date(this.post.beginAt);
     }
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().split("T")[0];
   }
 
   get beginAtMax(): string {
@@ -271,6 +280,17 @@ export default class Advertisement extends Vue {
     return dateRange(new Date(this.post.beginAt), new Date(this.post.endAt));
   }
 
+  get servingDaysLeft(): number {
+    if (!this.post.endAt) return 0;
+    if (
+      this.post.beginAt &&
+      new Date(this.post.beginAt).getMilliseconds() < this.now.getMilliseconds()
+    ) {
+      return this.noOfDays;
+    }
+    return dateRange(this.now, new Date(this.post.endAt));
+  }
+
   get isPointInsufficient(): boolean {
     if (!this.api.user) return false;
     if (this.api.user.point == 0) return false;
@@ -279,7 +299,6 @@ export default class Advertisement extends Vue {
 
   mounted(): void {
     console.log("mounted");
-    this.post.countryCode = "default";
     this.post.categoryId = "advertisement";
 
     this.beginAtMin = this.now.toISOString().split("T")[0];
