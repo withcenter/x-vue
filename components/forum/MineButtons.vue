@@ -17,7 +17,7 @@
       <button
         data-cy="mine-edit-button"
         class="btn btn-sm btn-success"
-        @click="onClickEmit('on-click-edit')"
+        @click="onClickEdit"
       >
         Edit
       </button>
@@ -33,9 +33,10 @@
 </template>
 
 <script lang="ts">
-import { CommentModel, PostModel } from "@/x-vue/services/interfaces";
+import { CommentModel, PostModel } from "../../services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
+import store from "@/store";
 
 @Component({
   props: ["parent"],
@@ -49,6 +50,17 @@ export default class MineButtonsComponent extends Vue {
       "bv::hide::popover",
       "mine-button-popover-" + this.parent.idx
     );
+  }
+
+  hidePopup(): void {
+    this.$root.$emit(
+      "bv::hide::popover",
+      "mine-button-popover-" + this.parent.idx
+    );
+  }
+  onClickEdit(): void {
+    this.hidePopup();
+    store.commit("postEdit", this.parent);
   }
 }
 </script>
