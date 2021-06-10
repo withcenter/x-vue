@@ -121,8 +121,13 @@ export class ApiService {
    * then it will `refreshLoginUserProfile()` to refresh the user instance in store.state.
    */
   async initUserAuth(): Promise<void> {
+    console.log("==> ApiService::initUserAuth()");
     this.sessionId = this.getUserSessionId();
+    console.log("==> ApiService::initUserAuth() ==> sessionId has set.");
     await this.refreshLoginUserProfile();
+    console.log(
+      "==> ApiService::initUserAuth() ==> refreshLoginUserProfile has done."
+    );
   }
 
   /**
@@ -628,5 +633,17 @@ export class ApiService {
       res
     );
     return store.state.advertisementSettings;
+  }
+
+  async myCafe(): Promise<CafeModel[]> {
+    if (this.notLoggedIn) {
+      store.state.myCafe = [];
+    } else {
+      const res = await this.request("cafe.mine");
+      store.state.myCafe = res.map((cafe: JSON) =>
+        new CafeModel().fromJson(cafe)
+      );
+    }
+    return store.state.myCafe;
   }
 }

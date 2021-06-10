@@ -8,6 +8,7 @@ export default {
   user: new UserModel(),
   countries: {},
   cafe: new CafeModel(),
+  myCafe: [] as CafeModel[],
   cafeSettings: {} as CafeSettings,
   texts: {},
   advertisementSettings: {},

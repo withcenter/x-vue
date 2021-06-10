@@ -66,6 +66,7 @@ export interface ApiStore {
   countries: ResponseData;
   // cafe category model(record) data.
   cafe: CafeModel;
+  myCafe: CafeModel[];
   texts: MapStringAny;
   // cafe settings only
   cafeSettings: CafeSettings;
