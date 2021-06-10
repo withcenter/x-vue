@@ -1,4 +1,3 @@
-import VueRouter from "vue-router";
 import { ApiStore, CafeSettings, UserModel, CafeModel } from "./interfaces";
 
 /**

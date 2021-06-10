@@ -333,10 +333,10 @@ export class PostModel extends PostRootModel {
 
   // We don't delete post or comment. We only mark it as deleted.
   // @todo so, don't delete.
-  deleteComment(idx: string): void {
-    // const index = this.comments.findIndex((c) => c.idx == idx);
-    // this.comments.splice(index, 1);
-  }
+  // deleteComment(idx: string): void {
+  // const index = this.comments.findIndex((c) => c.idx == idx);
+  // this.comments.splice(index, 1);
+  // }
 }
 
 export class CommentModel extends PostRootModel {
