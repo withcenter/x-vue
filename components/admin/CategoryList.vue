@@ -48,6 +48,16 @@
             </tr>
           </tbody>
         </table>
+
+        <div class="overflow-auto">
+          <b-pagination-nav
+            :link-gen="linkGen"
+            :number-of-pages="noOfPages"
+            v-model="currentPage"
+            v-on:change="onPageChanged"
+            use-router
+          ></b-pagination-nav>
+        </div>
       </div>
     </div>
   </section>
@@ -68,8 +78,19 @@ import Component from "vue-class-component";
 export default class AdminCategoryList extends Vue {
   categories: Array<CategoryModel> = [];
 
-  searchKey = "";
-  limit = 200;
+  limit = 5;
+  noOfPages = 10;
+  currentPage = "1";
+  total = 0;
+
+  linkGen(pageNum: number): string {
+    return pageNum === 1 ? "?" : `?page=${pageNum}`;
+  }
+
+  onPageChanged(page: number): void {
+    console.log("page; ", page);
+    this.onSubmitSearch();
+  }
 
   mounted(): void {
     this.onSubmitSearch();
@@ -78,10 +99,11 @@ export default class AdminCategoryList extends Vue {
   async onSubmitSearch(): Promise<void> {
     try {
       this.categories = await ApiService.instance.categorySearch({
-        searchKey: this.searchKey,
         limit: this.limit,
+        page: this.currentPage ?? "1",
       });
-      console.log(this.categories);
+      this.total = await ApiService.instance.categoryCount({});
+      this.noOfPages = Math.ceil(this.total / this.limit);
     } catch (e) {
       ApiService.instance.error(e);
     }
