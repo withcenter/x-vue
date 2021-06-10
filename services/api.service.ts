@@ -18,6 +18,7 @@ import {
 import Cookies from "js-cookie";
 import { Keys, Err } from "./defines";
 import { getRootDomain, tr } from "./functions";
+import { RawLocation, Route } from "vue-router";
 
 export class ApiService {
   private static _instance: ApiService;
@@ -40,6 +41,10 @@ export class ApiService {
     const host = location.hostname;
     const endpoint = `https://${host}/index.php`;
     return endpoint;
+  }
+
+  open(location: RawLocation): Promise<Route> {
+    return store.state.router.push(location);
   }
 
   /**
