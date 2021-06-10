@@ -70,7 +70,7 @@ export class ApiService {
    * @returns boolean
    */
   get loggedIn(): boolean {
-    return !!this.user && !!this.user.idx;
+    return !!this.sessionId;
   }
 
   /**
