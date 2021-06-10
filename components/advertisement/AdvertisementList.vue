@@ -1,15 +1,5 @@
 <template>
   <section data-cy="advertisement-list-page" class="advertisement-list-page">
-    <div class="d-flex align-items-center">
-      <span class="flex-grow-1"></span>
-      <router-link
-        data-cy="post-create-button"
-        class="btn btn-success"
-        to="/advertisement/edit"
-      >
-        {{ "Create" | t }}
-      </router-link>
-    </div>
     <div class="mt-3" v-if="posts.length">
       <div v-for="post of posts" :key="post.idx">
         <router-link :to="`/advertisement/edit/${post.idx}`">
