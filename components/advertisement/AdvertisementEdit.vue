@@ -161,7 +161,7 @@
         <button
           class="w-100 btn btn-outline-primary"
           type="submit"
-          :disabled="isPointInsufficient"
+          :disabled="!isPointInsufficient"
         >
           Save the advertisement
         </button>
@@ -197,7 +197,6 @@
         <hr />
       </div>
 
-      <hr />
       <div class="box">
         <p>
           Advertisement Points Listing:
@@ -310,9 +309,11 @@ export default class Advertisement extends Vue {
    */
   get priceInPoint(): number {
     if (!this.settings) return 0;
-    if (!this.post.code) return 0;
     if (!this.noOfDays) return 0;
 
+    if (!this.post.code) {
+      return this.countryPointListing["default"] * this.noOfDays;
+    }
     return this.countryPointListing[this.post.code] * this.noOfDays;
   }
 
@@ -416,11 +417,12 @@ export default class Advertisement extends Vue {
   async onSubmit(): Promise<void> {
     // console.log(this.post);
     console.log(this.post.toJson);
-    // try {
-    // this.api.postEdit(this.post.toJson);
-    // } catch (e) {
-    //   this.api.error(e);
-    // }
+    try {
+      const res = await this.api.postEdit(this.post.toJson);
+      this.post = res;
+    } catch (e) {
+      this.api.error(e);
+    }
   }
 
   onFileUploaded(file: FileModel): void {

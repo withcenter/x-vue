@@ -11,13 +11,11 @@
       </router-link>
     </div>
     <div class="mt-3" v-if="posts.length">
-      <router-link
-        :to="`/advertisement/edit/${post.idx}`"
-        v-for="post of posts"
-        :key="post.idx"
-      >
-        No. {{ post.idx }} - {{ post.name }}
-      </router-link>
+      <div v-for="post of posts" :key="post.idx">
+        <router-link :to="`/advertisement/edit/${post.idx}`">
+          No. {{ post.idx }} - {{ post.name }}
+        </router-link>
+      </div>
     </div>
     <div class="mt-3 p-2 text-center" v-if="!posts.length && !loadingPosts">
       No Advertisements ..
