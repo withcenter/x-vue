@@ -33,13 +33,19 @@ export default class AdminCategoryCreate extends Vue {
   async onSubmit(): Promise<void> {
     console.log("categoryUpdate:: create");
     try {
+      this;
+
       this.category = await ApiService.instance.categoryCreate({
         id: this.id,
       });
       console.log(this.category);
       router.push({ path: `/admin/category/edit/${this.category.id}` });
     } catch (e) {
-      ApiService.instance.error(e);
+      if (e == "error_category_exists") {
+        router.push({ path: `/admin/category/edit/${this.id}` });
+      } else {
+        ApiService.instance.error(e);
+      }
     }
   }
 }

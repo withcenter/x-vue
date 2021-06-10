@@ -16,7 +16,7 @@ import {
 } from "./interfaces";
 
 import Cookies from "js-cookie";
-import { Keys } from "@/x-vue/services/defines";
+import { Keys, Err } from "./defines";
 import { extractRootDomain, tr } from "./functions";
 
 export class ApiService {
@@ -35,6 +35,12 @@ export class ApiService {
   }
 
   private sessionId: string | undefined;
+
+  get endpoint(): string {
+    const host = location.hostname;
+    const endpoint = `https://${host}/index.php`;
+    return endpoint;
+  }
 
   /**
    * Sets `user` in store.state.
@@ -69,6 +75,39 @@ export class ApiService {
    */
   get notLoggedIn(): boolean {
     return !this.loggedIn;
+  }
+
+  /**
+   * Http Request handler using axios.
+   *
+   * @param route string - Api call route.
+   * @param data additional data to be passed to request.
+   * @returns any
+   */
+  async request(route: string, data: RequestData = {}): Promise<ResponseData> {
+    data.route = route;
+    if (this.sessionId) data.sessionId = this.sessionId;
+    // console.log("endpoint; ", endpoint);
+    const res = await axios.post(this.endpoint, data);
+    if (typeof res.data === "string") {
+      console.error(res);
+      throw "error_error_string_from_php_backend";
+    } else if (!res.data.response) {
+      throw "error_malformed_response_from_php_backend";
+    } else if (
+      typeof res.data.response === "string" &&
+      res.data.response.indexOf("error_") === 0
+    ) {
+      // Backend error code
+      if (res.data.response === Err.user_not_found_by_that_session_id) {
+        console.log(
+          "User has wrong session id: This may happen on development."
+        );
+        this.logout();
+      }
+      throw res.data.response;
+    }
+    return res.data.response;
   }
 
   /**
@@ -173,34 +212,6 @@ export class ApiService {
     this.deleteUserSessionId();
     this.sessionId = undefined;
     this.user = undefined;
-  }
-
-  /**
-   * Http Request handler using axios.
-   *
-   * @param route string - Api call route.
-   * @param data additional data to be passed to request.
-   * @returns any
-   */
-  async request(route: string, data: RequestData = {}): Promise<ResponseData> {
-    data.route = route;
-    if (this.sessionId) data.sessionId = this.sessionId;
-    const host = location.hostname;
-    const endpoint = `https://${host}/index.php`;
-    // console.log("endpoint; ", endpoint);
-    const res = await axios.post(endpoint, data);
-    if (typeof res.data === "string") {
-      console.error(res);
-      throw "error_error_string_from_php_backend";
-    } else if (!res.data.response) {
-      throw "error_malformed_response_from_php_backend";
-    } else if (
-      typeof res.data.response === "string" &&
-      res.data.response.indexOf("error_") === 0
-    ) {
-      throw res.data.response;
-    }
-    return res.data.response;
   }
 
   /**
