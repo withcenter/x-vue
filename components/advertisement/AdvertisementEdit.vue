@@ -157,7 +157,7 @@
         @todo If the user is lack of point, display warning.<br />
       </div>
 
-      <div v-if="!isNotEdittable">
+      <div>
         <button
           class="w-100 btn btn-outline-primary"
           type="submit"
