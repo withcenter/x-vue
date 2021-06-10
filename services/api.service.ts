@@ -600,7 +600,7 @@ export class ApiService {
     const res = (await this.request(
       "app.advertisementSettings"
     )) as AdvertisementSettings;
-    // console.log("$store.state.advertisementSettings;", res);
+    console.log("$store.state.advertisementSettings;", res);
     store.state.advertisementSettings = Object.assign(
       {},
       store.state.advertisementSettings,

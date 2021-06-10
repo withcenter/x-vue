@@ -67,7 +67,7 @@ import {
   FileModel,
   PostModel,
 } from "@/x-vue/services/interfaces";
-import UploadButton from "@/components/UploadButton.vue";
+import UploadButton from "@/x-vue/components/UploadButton.vue";
 import FileDisplay from "@/x-vue/components/forum/FileDisplay.vue";
 import { ApiService } from "@/x-vue/services/api.service";
 import { addByComma, deleteByComma } from "../../services/functions";
