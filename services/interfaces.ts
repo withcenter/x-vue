@@ -216,12 +216,16 @@ export class PostModel extends PostRootModel {
   relativeUrl = "";
 
   title = "";
+  categoryId = "";
   categoryIdx = "";
 
   noOfViews = "";
   noOfComments = "0";
 
   comments: Array<CommentModel> = [];
+
+  privateTitle = "";
+  privateContent = "";
 
   // Advertisement properties
   name = "";
@@ -250,6 +254,9 @@ export class PostModel extends PostRootModel {
 
     this.noOfComments = map.noOfComments;
 
+    this.privateTitle = map.privateTitle;
+    this.privateContent = map.privateContent;
+
     // Advertisement properties
     this.name = map.name;
     this.companyName = map.companyName;
@@ -270,8 +277,13 @@ export class PostModel extends PostRootModel {
     return {
       idx: this.idx,
       userIdx: this.userIdx,
+      categoryId: this.categoryId,
+      categoryIdx: this.categoryIdx,
       title: this.title,
       content: this.content,
+      privateTitle: this.privateTitle,
+      privateContent: this.privateContent,
+
       // Advertisement properties
       name: this.name,
       companyName: this.companyName,
@@ -280,6 +292,7 @@ export class PostModel extends PostRootModel {
       countryCode: this.countryCode,
       beginAt: this.beginAt,
       endAt: this.endAt,
+      files: this.files.map((file) => `${file.idx}`).join(","),
     };
   }
 

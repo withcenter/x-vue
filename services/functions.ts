@@ -48,3 +48,17 @@ export function deleteByComma(orgValue: string, val: string): string {
     })
     .join(",");
 }
+
+/**
+ *
+ * @param d1 Date - Begin date
+ * @param d2 Date - End date
+ * @returns number - number of days starting `d1` to `d2`
+ * @attention It counts the Begin date to the total range of days.
+ * for instance, if we put 2021-11-10 as Begin date and 2021-11-13, it will return 4.
+ */
+export function dateRange(d1: Date, d2: Date): number {
+  const date1utc = Date.UTC(d1.getFullYear(), d1.getMonth(), d1.getDate());
+  const date2utc = Date.UTC(d2.getFullYear(), d2.getMonth(), d2.getDate());
+  return (date2utc - date1utc) / (1000 * 60 * 60 * 24) + 1;
+}
