@@ -2,6 +2,8 @@
  * @see README 참고
  */
 
+import VueRouter from "vue-router";
+
 //
 export interface MapStringAny {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -60,17 +62,18 @@ export interface AdvertisementSettings {
 }
 
 export interface ApiStore {
-  user: undefined | UserModel;
-  countries: ResponseData | undefined;
+  user: UserModel;
+  countries: ResponseData;
   // cafe category model(record) data.
-  cafe: CafeModel | undefined;
+  cafe: CafeModel;
   texts: MapStringAny;
   // cafe settings only
   cafeSettings: CafeSettings;
-  advertisementSettings: AdvertisementSettings | undefined;
+  advertisementSettings: AdvertisementSettings;
   // Vue vm must be added here.
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   vm: any;
+  router: VueRouter;
 }
 
 export interface KakaoUserMe {

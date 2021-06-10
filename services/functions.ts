@@ -17,11 +17,26 @@ export function tr(code: string): string {
   return apiStore.texts[code][ApiService.instance.userLanguage];
 }
 
-export function extractRootDomain(hostname: string): string {
+/**
+ * Returns root domain(top level domain) from the domain that may have subdomain.
+ *
+ * @attention it only support domains that has single country code like .com, .net, .kr
+ *  It does not support double country code like ".co.kr"
+ *
+ * @param hostname hostname or domain
+ * @returns root domain
+ *
+ * @example
+ *  domain.com => domain.com
+ *  abc.domain.com => domain.com
+ */
+export function getRootDomain(hostname: string): string {
   if (hostname.split(".").length === 1) return hostname;
   else {
     const arr = hostname.split(".");
-    return arr[1] + "." + arr[2];
+    const country = arr.pop();
+    const company = arr.pop();
+    return company + "." + country;
   }
 }
 
