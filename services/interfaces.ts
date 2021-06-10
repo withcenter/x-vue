@@ -34,11 +34,9 @@ export interface ResponseData {
 }
 
 export interface RootDomainSettings {
-  [index: string]: {
-    name: string;
-    countryCode: string;
-    logo: string;
-  };
+  name: string;
+  countryCode: string;
+  logo: string;
 }
 
 /**
@@ -47,7 +45,7 @@ export interface RootDomainSettings {
 export interface CafeSettings {
   mainDomains: string[];
   countryDomains: string[];
-  rootDomainSettings: RootDomainSettings;
+  rootDomainSettings: { [index: string]: RootDomainSettings };
   mainMenus: string[];
   sitemap: MapStringStringArray;
 }
