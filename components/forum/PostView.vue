@@ -17,10 +17,14 @@
       </div>
     </div>
     <!-- content - TODO move css to global -->
+    <div class="mt-2" v-if="post.deletedAt">
+      {{ "post_deleted" | t }}
+    </div>
     <div
       id="post-content"
       class="mt-3 p-2 rounded"
       style="background-color: #f1f1f1; white-space: break-space"
+      v-if="!post.deletedAt"
     >
       {{ post.content }}
     </div>
@@ -33,12 +37,7 @@
       <vote-buttons-component :parent="post"></vote-buttons-component>
       <span class="flex-grow-1"></span>
       <!-- mine buttons -->
-      <mine-buttons-component
-        :parent="post"
-        v-if="api.isMine(post)"
-        @on-click-edit="onClickEdit()"
-        @on-click-delete="onClickDelete(post.idx)"
-      ></mine-buttons-component>
+      <mine-buttons-component :parent="post"></mine-buttons-component>
     </div>
     <!-- comment form -->
     <comment-form-component
@@ -100,23 +99,5 @@ export default class PostViewComponent extends Vue {
   post!: PostModel;
 
   api = ApiService.instance;
-
-  async onClickDelete(): Promise<void> {
-    const conf = confirm(
-      `Are you sure you want to delete this post? [IDX]: ${this.post.idx}`
-    );
-    if (!conf) return;
-    try {
-      await this.api.postDelete(this.post?.idx);
-      this.$emit("post-deleted", this.post?.idx);
-    } catch (e) {
-      this.api.error(e);
-    }
-  }
-
-  onClickEdit(): void {
-    // console.log("onEdit", `/edit/${this.post.idx}`);
-    this.$router.push(`/edit/${this.post.idx}`).catch(() => null);
-  }
 }
 </script>

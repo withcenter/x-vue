@@ -171,47 +171,10 @@ export class CommentEditModel {
 }
 
 export class PostRootModel {
-  idx = "";
-  userIdx = "";
+  parentIdx = "";
 
-  content = "";
-  shortDate = "";
+  rootIdx = "";
 
-  Y = 0;
-  N = 0;
-
-  files: Array<FileModel> = [];
-
-  user: UserModel = {} as UserModel;
-
-  fromJson(map: ResponseData): PostRootModel {
-    this.idx = map.idx;
-    this.userIdx = map.userIdx;
-    this.content = map.content;
-    this.shortDate = map.shortDate;
-    this.Y = map.Y;
-    this.N = map.N;
-
-    // user
-    if (map.user) {
-      this.user = new UserModel().fromJson(map.user);
-    }
-
-    // files
-    if (map.files) {
-      this.files = map.files.map((f: JSON) => new FileModel().fromJson(f));
-    }
-
-    return this;
-  }
-
-  updateVoteCount(map: ResponseData): void {
-    this.N = map.N;
-    this.Y = map.Y;
-  }
-}
-
-export class PostModel extends PostRootModel {
   url = "";
   path = "";
   relativeUrl = "";
@@ -237,6 +200,70 @@ export class PostModel extends PostRootModel {
   beginAt = "";
   endAt = "";
 
+  idx = "";
+  userIdx = "";
+
+  content = "";
+  shortDate = "";
+
+  Y = 0;
+  N = 0;
+  deletedAt = "";
+  depth = "";
+
+  /**
+   * client side use only
+   */
+  inEdit = false;
+  inReply = false;
+
+  files: Array<FileModel> = [];
+
+  user: UserModel = {} as UserModel;
+
+  get isPost(): boolean {
+    return !this.parentIdx;
+  }
+  get isComment(): boolean {
+    return !this.isPost;
+  }
+
+  fromJson(map: ResponseData): PostRootModel {
+    this.idx = map.idx;
+    this.userIdx = map.userIdx;
+    this.content = map.content;
+    this.shortDate = map.shortDate;
+    this.Y = map.Y;
+    this.N = map.N;
+
+    this.rootIdx = map.rootIdx;
+    this.parentIdx = map.parentIdx;
+    this.deletedAt = map.deletedAt;
+    this.depth = map.depth;
+
+    this.name = map.name;
+    this.phoneNo = map.phoneNo;
+
+    // user
+    if (map.user) {
+      this.user = new UserModel().fromJson(map.user);
+    }
+
+    // files
+    if (map.files) {
+      this.files = map.files.map((f: JSON) => new FileModel().fromJson(f));
+    }
+
+    return this;
+  }
+
+  updateVoteCount(map: ResponseData): void {
+    this.N = map.N;
+    this.Y = map.Y;
+  }
+}
+
+export class PostModel extends PostRootModel {
   fromJson(map: ResponseData): PostModel {
     this.url = map.url;
     this.path = map.path;
@@ -248,9 +275,9 @@ export class PostModel extends PostRootModel {
     this.noOfViews = map.noOfViews;
 
     this.comments = map.comments
-      .filter((c: Obj) => {
-        return c.deletedAt == "0";
-      })
+      // .filter((c: Obj) => {
+      //   return c.deletedAt == "0";
+      // })
       .map((c: JSON) => new CommentModel().fromJson(c));
 
     this.noOfComments = map.noOfComments;
@@ -259,9 +286,7 @@ export class PostModel extends PostRootModel {
     this.privateContent = map.privateContent;
 
     // Advertisement properties
-    this.name = map.name;
     this.companyName = map.companyName;
-    this.phoneNo = map.phoneNo;
     this.code = map.code;
     this.countryCode = map.countryCode;
     this.beginAt = map.beginAt;
@@ -306,30 +331,16 @@ export class PostModel extends PostRootModel {
     }
   }
 
+  // We don't delete post or comment. We only mark it as deleted.
+  // @todo so, don't delete.
   deleteComment(idx: string): void {
-    const index = this.comments.findIndex((c) => c.idx == idx);
-    this.comments.splice(index, 1);
+    // const index = this.comments.findIndex((c) => c.idx == idx);
+    // this.comments.splice(index, 1);
   }
 }
 
 export class CommentModel extends PostRootModel {
-  rootIdx = "";
-  parentIdx = "";
-  deletedAt = "";
-  depth = "";
-
-  /**
-   * client side use only
-   */
-  inEdit = false;
-  inReply = false;
-
   fromJson(map: ResponseData): CommentModel {
-    this.rootIdx = map.rootIdx;
-    this.parentIdx = map.parentIdx;
-    this.deletedAt = map.deletedAt;
-    this.depth = map.depth;
-
     super.fromJson(map);
     return this;
   }
