@@ -1,5 +1,5 @@
 <template>
-  <div class="mine-buttons">
+  <div class="mine-buttons" v-if="api.isMine(parent)">
     <button
       data-cy="mine-button"
       :id="'mine-button-popover-' + parent.idx"
@@ -17,14 +17,14 @@
       <button
         data-cy="mine-edit-button"
         class="btn btn-sm btn-success"
-        @click="onClickEmit('on-click-edit')"
+        @click="onClickEdit"
       >
         Edit
       </button>
       <button
         data-cy="mine-delete-button"
         class="ml-2 btn btn-sm btn-danger"
-        @click="onClickEmit('on-click-delete')"
+        @click="onClickDelete"
       >
         Delete
       </button>
@@ -33,22 +33,32 @@
 </template>
 
 <script lang="ts">
-import { CommentModel, PostModel } from "@/x-vue/services/interfaces";
+import { CommentModel, PostModel } from "../../services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
+import store from "@/store";
+import { ApiService } from "@/x-vue/services/api.service";
 
 @Component({
   props: ["parent"],
 })
 export default class MineButtonsComponent extends Vue {
   parent!: PostModel & CommentModel;
+  api = ApiService.instance;
 
-  onClickEmit(a: string): void {
-    this.$emit(a);
+  hidePopup(): void {
     this.$root.$emit(
       "bv::hide::popover",
       "mine-button-popover-" + this.parent.idx
     );
+  }
+  onClickEdit(): void {
+    this.hidePopup();
+    store.commit("edit", this.parent);
+  }
+  onClickDelete(): void {
+    this.hidePopup();
+    store.commit("delete", this.parent);
   }
 }
 </script>

@@ -256,6 +256,7 @@ import UploadButton from "@/x-vue/components/UploadButton.vue";
 import FileDisplay from "@/x-vue/components/forum/FileDisplay.vue";
 import { ApiService } from "@/x-vue/services/api.service";
 import { dateRange } from "@/x-vue/services/functions";
+import store from "@/store";
 
 @Component({
   components: {
@@ -278,7 +279,7 @@ export default class Advertisement extends Vue {
    * @returns AdvertisementSettings from store state.
    */
   get settings(): AdvertisementSettings {
-    return this.$store.state.advertisementSettings;
+    return store.state.advertisementSettings;
   }
 
   /**
@@ -286,7 +287,7 @@ export default class Advertisement extends Vue {
    * @returns ResponseData - gets country list from store state.
    */
   get countries(): ResponseData {
-    return this.$store.state.countries;
+    return store.state.countries;
   }
 
   /**
@@ -296,9 +297,10 @@ export default class Advertisement extends Vue {
    */
   get countryPointListing(): ResponseData {
     const c = this.post.countryCode;
-    const setting = this.settings.point[c];
-    if (!setting || setting == undefined) return this.settings.point["default"];
-    return setting;
+    if (!this.settings.point) return {};
+    const listing = this.settings.point[c];
+    if (!listing || listing == undefined) return this.settings.point["default"];
+    return listing;
   }
 
   /**

@@ -16,7 +16,6 @@
   </section>
 </template>
 <script lang="ts">
-import router from "@/router";
 import { ApiService } from "@/x-vue/services/api.service";
 import { CategoryModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
@@ -25,6 +24,7 @@ import Component from "vue-class-component";
 @Component({})
 export default class AdminCategoryCreate extends Vue {
   category: CategoryModel = {} as CategoryModel;
+  api = ApiService.instance;
 
   id = "";
   title = "";
@@ -39,12 +39,12 @@ export default class AdminCategoryCreate extends Vue {
         id: this.id,
       });
       console.log(this.category);
-      router.push({ path: `/admin/category/edit/${this.category.id}` });
+      this.api.open({ path: `/admin/category/edit/${this.category.id}` });
     } catch (e) {
       if (e == "error_category_exists") {
-        router.push({ path: `/admin/category/edit/${this.id}` });
+        this.api.open({ path: `/admin/category/edit/${this.id}` });
       } else {
-        ApiService.instance.error(e);
+        this.api.error(e);
       }
     }
   }

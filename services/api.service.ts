@@ -17,7 +17,8 @@ import {
 
 import Cookies from "js-cookie";
 import { Keys, Err } from "./defines";
-import { extractRootDomain, tr } from "./functions";
+import { getRootDomain, tr } from "./functions";
+import { RawLocation, Route } from "vue-router";
 
 export class ApiService {
   private static _instance: ApiService;
@@ -42,10 +43,14 @@ export class ApiService {
     return endpoint;
   }
 
+  open(location: RawLocation): Promise<Route> {
+    return store.state.router.push(location);
+  }
+
   /**
    * Sets `user` in store.state.
    */
-  set user(user: undefined | UserModel) {
+  set user(user: UserModel) {
     store.state.user = user;
   }
 
@@ -54,7 +59,7 @@ export class ApiService {
    *
    * @returns null | UserModel
    */
-  get user(): undefined | UserModel {
+  get user(): UserModel {
     return store.state.user;
   }
 
@@ -211,7 +216,7 @@ export class ApiService {
     // console.log("AppService::logout()", this);
     this.deleteUserSessionId();
     this.sessionId = undefined;
-    this.user = undefined;
+    this.user = new UserModel();
   }
 
   /**
@@ -357,7 +362,7 @@ export class ApiService {
    * @returns Promise<ResponseData>
    */
   async countryAll(): Promise<ResponseData> {
-    if (store.state.countries) return store.state.countries;
+    if (store.state.countries["default"]) return store.state.countries;
     store.state.countries = await this.request("country.all", {
       ln: this.userLanguage,
     });
@@ -381,7 +386,7 @@ export class ApiService {
     return location.hostname;
   }
   get rootDomain(): string {
-    return extractRootDomain(this.domain);
+    return getRootDomain(this.domain);
   }
 
   get cookieDomain(): string | undefined {
@@ -439,6 +444,11 @@ export class ApiService {
   async categorySearch(data: RequestData): Promise<Array<CategoryModel>> {
     const res = await this.request("category.search", data);
     return res.map((category: JSON) => new CategoryModel().fromJson(category));
+  }
+
+  async categoryCount(data: RequestData): Promise<number> {
+    const res = await this.request("category.count", data);
+    return res && res.count ? res.count : 0;
   }
 
   async categoryCreate(data: RequestData): Promise<CategoryModel> {

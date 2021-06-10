@@ -2,6 +2,8 @@
  * @see README 참고
  */
 
+import VueRouter from "vue-router";
+
 //
 export interface MapStringAny {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -60,17 +62,18 @@ export interface AdvertisementSettings {
 }
 
 export interface ApiStore {
-  user: undefined | UserModel;
-  countries: ResponseData | undefined;
+  user: UserModel;
+  countries: ResponseData;
   // cafe category model(record) data.
-  cafe: CafeModel | undefined;
+  cafe: CafeModel;
   texts: MapStringAny;
   // cafe settings only
   cafeSettings: CafeSettings;
-  advertisementSettings: AdvertisementSettings | undefined;
+  advertisementSettings: AdvertisementSettings;
   // Vue vm must be added here.
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   vm: any;
+  router: VueRouter;
 }
 
 export interface KakaoUserMe {
@@ -168,6 +171,37 @@ export class CommentEditModel {
 }
 
 export class PostRootModel {
+  parentIdx = "";
+
+  rootIdx = "";
+
+  url = "";
+  path = "";
+  relativeUrl = "";
+
+  title = "";
+  categoryId = "";
+  categoryIdx = "";
+
+  subcategory = "";
+
+  noOfViews = "";
+  noOfComments = "0";
+
+  comments: Array<CommentModel> = [];
+
+  privateTitle = "";
+  privateContent = "";
+
+  // Advertisement properties
+  name = "";
+  companyName = "";
+  phoneNo = "";
+  code = "";
+  countryCode = "";
+  beginAt = "";
+  endAt = "";
+
   idx = "";
   userIdx = "";
 
@@ -176,10 +210,25 @@ export class PostRootModel {
 
   Y = 0;
   N = 0;
+  deletedAt = "";
+  depth = "";
+
+  /**
+   * client side use only
+   */
+  inEdit = false;
+  inReply = false;
 
   files: Array<FileModel> = [];
 
   user: UserModel = {} as UserModel;
+
+  get isPost(): boolean {
+    return !this.parentIdx;
+  }
+  get isComment(): boolean {
+    return !this.isPost;
+  }
 
   fromJson(map: ResponseData): PostRootModel {
     this.idx = map.idx;
@@ -188,6 +237,14 @@ export class PostRootModel {
     this.shortDate = map.shortDate;
     this.Y = map.Y;
     this.N = map.N;
+
+    this.rootIdx = map.rootIdx;
+    this.parentIdx = map.parentIdx;
+    this.deletedAt = map.deletedAt;
+    this.depth = map.depth;
+
+    this.name = map.name;
+    this.phoneNo = map.phoneNo;
 
     // user
     if (map.user) {
@@ -209,33 +266,6 @@ export class PostRootModel {
 }
 
 export class PostModel extends PostRootModel {
-  url = "";
-  path = "";
-  relativeUrl = "";
-
-  title = "";
-  categoryId = "";
-  categoryIdx = "";
-
-  noOfViews = "";
-  noOfComments = "0";
-
-  comments: Array<CommentModel> = [];
-
-  privateTitle = "";
-  privateContent = "";
-
-  subcategory = "";
-
-  // Advertisement properties
-  name = "";
-  companyName = "";
-  phoneNo = "";
-  code = "";
-  countryCode = "";
-  beginAt = "";
-  endAt = "";
-
   fromJson(map: ResponseData): PostModel {
     this.url = map.url;
     this.path = map.path;
@@ -247,9 +277,9 @@ export class PostModel extends PostRootModel {
     this.noOfViews = map.noOfViews;
 
     this.comments = map.comments
-      .filter((c: Obj) => {
-        return c.deletedAt == "0";
-      })
+      // .filter((c: Obj) => {
+      //   return c.deletedAt == "0";
+      // })
       .map((c: JSON) => new CommentModel().fromJson(c));
 
     this.noOfComments = map.noOfComments;
@@ -260,9 +290,7 @@ export class PostModel extends PostRootModel {
     this.subcategory = map.subcategory;
 
     // Advertisement properties
-    this.name = map.name;
     this.companyName = map.companyName;
-    this.phoneNo = map.phoneNo;
     this.code = map.code;
     this.countryCode = map.countryCode;
     if (map.beginAt) {
@@ -312,30 +340,16 @@ export class PostModel extends PostRootModel {
     }
   }
 
-  deleteComment(idx: string): void {
-    const index = this.comments.findIndex((c) => c.idx == idx);
-    this.comments.splice(index, 1);
-  }
+  // We don't delete post or comment. We only mark it as deleted.
+  // @todo so, don't delete.
+  // deleteComment(idx: string): void {
+  // const index = this.comments.findIndex((c) => c.idx == idx);
+  // this.comments.splice(index, 1);
+  // }
 }
 
 export class CommentModel extends PostRootModel {
-  rootIdx = "";
-  parentIdx = "";
-  deletedAt = "";
-  depth = "";
-
-  /**
-   * client side use only
-   */
-  inEdit = false;
-  inReply = false;
-
   fromJson(map: ResponseData): CommentModel {
-    this.rootIdx = map.rootIdx;
-    this.parentIdx = map.parentIdx;
-    this.deletedAt = map.deletedAt;
-    this.depth = map.depth;
-
     super.fromJson(map);
     return this;
   }

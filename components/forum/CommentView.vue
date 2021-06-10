@@ -13,7 +13,12 @@
       </div>
       <div class="w-100" v-if="!comment.inEdit">
         <!-- comment content -->
-        <div class="mt-2" data-cy="comment-content">{{ comment.content }}</div>
+        <div class="mt-2" v-if="comment.deletedAt">
+          {{ "comment_deleted" | t }}
+        </div>
+        <div class="mt-2" data-cy="comment-content" v-if="!comment.deletedAt">
+          {{ comment.content }}
+        </div>
         <!-- comment files -->
         <file-display :files="comment.files"></file-display>
         <!-- comment edit mode -->
@@ -40,9 +45,6 @@
         <mine-buttons-component
           data-cy="comment-mine-button"
           :parent="comment"
-          v-if="api.isMine(comment)"
-          @on-click-edit="comment.inEdit = !comment.inEdit"
-          @on-click-delete="onClickDelete"
         ></mine-buttons-component>
       </div>
     </div>
@@ -67,7 +69,6 @@ import MineButtonsComponent from "./MineButtons.vue";
 import UserDisplayName from "./UserDisplayName.vue";
 import UserAvatar from "./UserAvatar.vue";
 import FileDisplay from "./FileDisplay.vue";
-import { ApiService } from "@/x-vue/services/api.service";
 
 @Component({
   props: ["post", "comment"],
@@ -83,20 +84,5 @@ import { ApiService } from "@/x-vue/services/api.service";
 export default class CommentView extends Vue {
   post!: PostModel;
   comment!: CommentModel;
-
-  api = ApiService.instance;
-
-  async onClickDelete(): Promise<void> {
-    const conf = confirm(
-      `Are you sure you want to delete this comment? [IDX]: ${this.post.idx}`
-    );
-    if (!conf) return;
-    try {
-      await this.api.commentDelete(this.comment?.idx);
-      this.post.deleteComment(this.comment.idx);
-    } catch (e) {
-      this.api.error(e);
-    }
-  }
 }
 </script>
