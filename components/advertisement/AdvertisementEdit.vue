@@ -12,7 +12,7 @@
           @success="onFileUploaded"
           @progress="uploadProgress = $event"
         ></upload-button>
-        <div>
+        <div class="ml-3">
           <div class="p-1" v-if="!post.files.length">No banner chosen ..</div>
           <file-display :files="post.files" :showDelete="true"></file-display>
         </div>
@@ -86,28 +86,11 @@
       </div>
 
       <div class="box" v-if="post.code && post.countryCode">
-        Points Per Day: {{ countryPointListing[post.code] }} <br />
-        <!-- <table class="w-100 mt-2 table table-striped">
-          <thead>
-            <tr class="table-header">
-              <th scope="col">Banner Type</th>
-              <th scope="col">Points(per day)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(value, name) in countryPointListing" :key="name">
-              <td>{{ name }}</td>
-              <td>{{ value }}</td>
-            </tr>
-          </tbody>
-        </table> -->
+        Points Per Day: <b>{{ countryPointListing[post.code] }}</b> <br />
         <small class="text-info">
-          Note: Point per day may vary depending on the banner type and country
-          chosen.
+          Note: Point per day may vary depending on the banner type and chosen
+          country.
         </small>
-        <br />
-        @todo display point per day after user input banner type, place, cafe
-        country.
       </div>
 
       <div class="form-group bg-light p-3 mt-2">
@@ -121,6 +104,7 @@
               name="beginAt"
               :min="beginAtMin"
               :max="beginAtMax"
+              :disabled="isNotEdittable"
             />
           </label>
           <label>
@@ -130,12 +114,13 @@
               type="date"
               name="endAt"
               :min="endAtMin"
+              :disabled="isNotEdittable"
             />
           </label>
         </div>
 
         <small class="form-text text-muted mb-2">
-          {{ "advertisement_serving_days" | t }}: {{ servingDaysLeft }}
+          {{ "advertisement_serving_days" | t }}: <b>{{ servingDaysLeft }}</b>
           {{ "days" | t }}
         </small>
         <small class="form-text text-muted">
@@ -154,32 +139,95 @@
 
       <!-- Total Advertisement price in points -->
       <div class="alert alert-info">
-        Total Points required: {{ priceInPoint }}
-        <div class="text-danger" v-if="isPointInsufficient">
-          Insufficient point! You don't have enough point for this kind of
+        Total Points required: <b v-if="priceInPoint">{{ priceInPoint }}</b>
+        <br />
+        <small class="text-info">
+          To get total points, points per day is multiplied to the total number
+          of days beginning from "Begin date" to "End date".
+        </small>
+        <br />
+        <br />
+        My Points: <b v-if="api.user">{{ api.user.point }}</b> <br />
+        <small class="text-danger" v-if="isPointInsufficient">
+          Insufficient point! You don't have enough point to create this kind of
           advertisement.
-        </div>
+        </small>
+        <br />
+        @todo when user change dates, display the price (point).<br />
+        @todo If the user is lack of point, display warning.<br />
       </div>
 
-      <button
-        class="w-100 btn btn-outline-primary"
-        type="submit"
-        :disabled="!isPointInsufficient"
-      >
-        Save the advertisement
-      </button>
+      <div v-if="!isNotEdittable">
+        <button
+          class="w-100 btn btn-outline-primary"
+          type="submit"
+          :disabled="isPointInsufficient"
+        >
+          Save the advertisement
+        </button>
+        @todo After save, display one of "cancel" or "refund" button.<br />
+        @todo When the user press save button, deduct the point from user. And
+        the date is no loger changable.<br />
+        @todo Delete button will be shown if the banner has no point. Meaning 1)
+        the user may not have paid the point yet. 2) the banner was cancelled,
+        or refunded. In which case, the banner can be deleted without point
+        refund computation, then "delete button" will be displayed.
+      </div>
 
-      [/] @todo when user change dates, display the price (point).<br />
-      @todo If the user is lack of point, display warning.<br />
-      @todo When the user press save button, deduct the point from user. And the
-      date is no loger changable.<br />
+      <div v-if="isNotEdittable">
+        <button
+          class="w-100 btn btn-outline-success"
+          type="button"
+          v-if="isRefundable"
+        >
+          Refund
+        </button>
+        <button
+          class="w-100 btn btn-outline-danger"
+          type="button"
+          v-if="!isRefundable"
+        >
+          Cancel
+        </button>
 
-      @todo After save, display one of "cancel" or "refund" button.<br />
-      @todo after cancel or refund, display "resume the advertisement" or
-      "delete" button.<br />
+        @todo Cancel button will be shown if the banner has not begin yet.<br />
+        @todo Refund button will be shown if the banner has begun.<br />
+        @todo after cancel or refund, display "resume the advertisement" or
+        "delete" button.<br />
+        <hr />
+      </div>
 
       <hr />
-
+      <div class="box">
+        <p>
+          Advertisement Points Listing:
+          <span v-if="post.countryCode">{{ post.countryCode }}</span>
+          <span v-if="!post.countryCode">Default</span> <br />
+          <small class="text-info">
+            Note: Points listing vary depending on the chosen country.
+          </small>
+        </p>
+        <table class="w-100 mt-2 table table-striped">
+          <thead>
+            <tr class="table-header">
+              <th scope="col">Banner Type</th>
+              <th scope="col">Points(per day)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(value, name) in countryPointListing" :key="name">
+              <td>{{ name }}</td>
+              <td>{{ value }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <small class="text-info">
+          To get <b>Total Points Required</b> to create an advertisement,
+          <b>Points Per Day</b> from chosen <b>Banner Type</b> is multiplied to
+          the total number of days beginning from <b>"Begin date"</b> to
+          <b>"End date"</b>.
+        </small>
+      </div>
       @todo banner price computation. The price list is comming from the admin
       settings. and the price is difference based on country and banner place.
 
@@ -190,13 +238,6 @@
       하지만, 직접 활동하여 얻는 포인트(예, 포인트가 많은 다른 사용자의 계정으로
       광고 등록)하면, 광고 해지 및 포인트 0점 처리, 그리고 영구 차단이 되므로
       주의하시기 바랍니다.
-      <br />@todo Cancel button will be shown if the banner has not begin
-      yet.<br />
-      @todo Refund button will be shown if the banner has begun.<br />
-      @todo Delete button will be shown if the banner has no point. Meaning 1)
-      the user may not have paid the point yet. 2) the banner was cancelled, or
-      refunded. In which case, the banner can be deleted without point refund
-      computation, then "delete button" will be displayed.
     </form>
     {{ noOfDays }}
   </div>
@@ -232,14 +273,27 @@ export default class Advertisement extends Vue {
   now = new Date();
   beginAtMin = "";
 
+  /**
+   * Advertisement settings getter.
+   * @returns AdvertisementSettings from store state.
+   */
   get settings(): AdvertisementSettings {
     return this.$store.state.advertisementSettings;
   }
 
+  /**
+   * Country data list getter.
+   * @returns ResponseData - gets country list from store state.
+   */
   get countries(): ResponseData {
     return this.$store.state.countries;
   }
 
+  /**
+   * @returns ResponseData - If a user selected a country for advertisement,
+   * it will return the corresponding point listing for each banner type for that country.
+   * If the user did not choose or the selected country doesn't have data, it will return the "default" listing.
+   */
   get countryPointListing(): ResponseData {
     const c = this.post.countryCode;
     const setting = this.settings.point[c];
@@ -247,6 +301,11 @@ export default class Advertisement extends Vue {
     return setting;
   }
 
+  /**
+   * Total price in point calculation.
+   *
+   * @returns number - returns the total point required to create the advertisement.
+   */
   get priceInPoint(): number {
     if (!this.settings) return 0;
     if (!this.post.code) return 0;
@@ -255,6 +314,9 @@ export default class Advertisement extends Vue {
     return this.countryPointListing[this.post.code] * this.noOfDays;
   }
 
+  /**
+   * @returns string - returns the minimum selectable date for the "endAt" input.
+   */
   get endAtMin(): string {
     let d = this.now;
     if (this.post.beginAt) {
@@ -264,6 +326,9 @@ export default class Advertisement extends Vue {
     return d.toISOString().split("T")[0];
   }
 
+  /**
+   * @returns string - returns the maximum selectable date for the "beginAt" input.
+   */
   get beginAtMax(): string {
     if (this.post.endAt) {
       const d = new Date(this.post.endAt);
@@ -274,12 +339,19 @@ export default class Advertisement extends Vue {
     }
   }
 
+  /**
+   * @returns number - returns the total range of days the user selected from beginAt to endAt dates.
+   */
   get noOfDays(): number {
     if (!this.post.beginAt) return 0;
     if (!this.post.endAt) return 0;
     return dateRange(new Date(this.post.beginAt), new Date(this.post.endAt));
   }
 
+  /**
+   * @returns number - returns the total number left for the advertisement to be served.
+   * If it is not begun yet, it will return the `noOfDays` the advertisement will be served.
+   */
   get servingDaysLeft(): number {
     if (!this.post.endAt) return 0;
     if (
@@ -291,18 +363,52 @@ export default class Advertisement extends Vue {
     return dateRange(this.now, new Date(this.post.endAt));
   }
 
+  /**
+   * @returns boolean - it returns wether or not the user's point is insufficient to create an advertisement.
+   */
   get isPointInsufficient(): boolean {
-    if (!this.api.user) return false;
-    if (this.api.user.point == 0) return false;
+    if (!this.api.user) return true;
+    if (this.api.user.point == 0) return true;
     return this.api.user.point < this.priceInPoint;
   }
 
-  mounted(): void {
-    console.log("mounted");
-    this.post.categoryId = "advertisement";
+  /**
+   * @returns boolean - returns if some field for the Advertisement form is edittable.
+   * Once the advertisement is created, it will be true, and some parts of the form will be either disabled or hidden.
+   */
+  get isNotEdittable(): boolean {
+    return !!this.post.idx;
+  }
 
-    this.beginAtMin = this.now.toISOString().split("T")[0];
+  /**
+   * @returns boolean - Returns wether the advertisement can be refunded or not.
+   * If the Advertisement is saved but has begun to be served, it will return true.
+   * If it is not begun yet, it will return false.
+   */
+  get isRefundable(): boolean {
+    return dateRange(this.now, new Date(this.post.beginAt)) <= 0;
+  }
+
+  mounted(): void {
+    // console.log("mounted");
     // console.log(this.post.toJson);
+    const idx = this.$route.params.idx;
+    if (idx) {
+      this.post.idx = idx;
+      this.loadAdvertisement();
+    }
+
+    this.post.categoryId = "advertisement";
+    this.beginAtMin = this.now.toISOString().split("T")[0];
+  }
+
+  async loadAdvertisement(): Promise<void> {
+    try {
+      const res = await this.api.postGet({ idx: this.post.idx });
+      this.post = res;
+    } catch (e) {
+      this.api.error(e);
+    }
   }
 
   async onSubmit(): Promise<void> {

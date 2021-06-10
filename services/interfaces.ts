@@ -265,8 +265,12 @@ export class PostModel extends PostRootModel {
     this.phoneNo = map.phoneNo;
     this.code = map.code;
     this.countryCode = map.countryCode;
-    this.beginAt = map.beginAt;
-    this.endAt = map.endAt;
+    if (map.beginAt) {
+      this.beginAt = new Date(map.beginAt * 1000).toISOString().split("T")[0];
+    }
+    if (map.endAt) {
+      this.endAt = new Date(map.endAt * 1000).toISOString().split("T")[0];
+    }
 
     super.fromJson(map);
     return this;
