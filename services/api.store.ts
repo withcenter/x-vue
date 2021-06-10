@@ -1,11 +1,11 @@
-import { ApiStore, CafeSettings } from "./interfaces";
+import { ApiStore, CafeSettings, UserModel, CafeModel } from "./interfaces";
 
 export default {
-  user: undefined,
-  countries: undefined,
-  cafe: undefined,
+  user: new UserModel(),
+  countries: {},
+  cafe: new CafeModel(),
   cafeSettings: {} as CafeSettings,
   texts: {},
-  advertisementSettings: undefined,
+  advertisementSettings: {},
   vm: {},
 } as ApiStore;

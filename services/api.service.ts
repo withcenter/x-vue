@@ -17,7 +17,7 @@ import {
 
 import Cookies from "js-cookie";
 import { Keys, Err } from "./defines";
-import { extractRootDomain, tr } from "./functions";
+import { getRootDomain, tr } from "./functions";
 
 export class ApiService {
   private static _instance: ApiService;
@@ -45,7 +45,7 @@ export class ApiService {
   /**
    * Sets `user` in store.state.
    */
-  set user(user: undefined | UserModel) {
+  set user(user: UserModel) {
     store.state.user = user;
   }
 
@@ -54,7 +54,7 @@ export class ApiService {
    *
    * @returns null | UserModel
    */
-  get user(): undefined | UserModel {
+  get user(): UserModel {
     return store.state.user;
   }
 
@@ -211,7 +211,7 @@ export class ApiService {
     // console.log("AppService::logout()", this);
     this.deleteUserSessionId();
     this.sessionId = undefined;
-    this.user = undefined;
+    this.user = new UserModel();
   }
 
   /**
@@ -381,7 +381,7 @@ export class ApiService {
     return location.hostname;
   }
   get rootDomain(): string {
-    return extractRootDomain(this.domain);
+    return getRootDomain(this.domain);
   }
 
   get cookieDomain(): string | undefined {
