@@ -635,6 +635,11 @@ export class ApiService {
     return store.state.advertisementSettings;
   }
 
+  async advertisementEdit(data: RequestData): Promise<PostModel> {
+    const res = await this.request("advertisement.edit", data);
+    return new PostModel().fromJson(res);
+  }
+
   async myCafe(): Promise<CafeModel[]> {
     if (this.notLoggedIn) {
       store.state.myCafe = [];

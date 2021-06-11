@@ -200,8 +200,11 @@ export class PostRootModel {
   phoneNo = "";
   code = "";
   countryCode = "";
+
   beginAt = "";
+  beginAtStamp = 0;
   endAt = "";
+  endAtStamp = 0;
 
   idx = "";
   userIdx = "";
@@ -295,9 +298,11 @@ export class PostModel extends PostRootModel {
     this.code = map.code;
     this.countryCode = map.countryCode;
     if (map.beginAt) {
+      this.beginAtStamp = map.beginAt;
       this.beginAt = new Date(map.beginAt * 1000).toISOString().split("T")[0];
     }
     if (map.endAt) {
+      this.endAtStamp = map.endAt;
       this.endAt = new Date(map.endAt * 1000).toISOString().split("T")[0];
     }
 

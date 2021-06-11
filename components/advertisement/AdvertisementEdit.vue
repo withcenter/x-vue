@@ -19,7 +19,7 @@
       </div>
 
       <div class="form-group mt-2">
-        <label> Name </label>
+        <label>{{ "name" | t }}</label>
         <input
           class="form-control"
           placeholder="Name"
@@ -27,31 +27,20 @@
           v-model="post.name"
         />
         <small class="form-text text-muted">
-          Input name of the advertisement
+          {{ "adv_name_hint" | t }}
         </small>
       </div>
 
       <div class="form-group mt-2">
-        <label>Contact No.</label>
+        <label>{{ "contact_no" | t }}</label>
         <input
           class="form-control"
           placeholder="Contact number"
           type="text"
           v-model="post.phoneNo"
         />
-        <small class="form-text text-muted"> Input your phone number. </small>
-      </div>
-
-      <div class="form-group mt-2">
-        <label>Banner Type/Position</label>
-        <select class="form-control" v-model="post.code">
-          <option value="" disabled selected>Select Type</option>
-          <option v-for="type in settings.types" :key="type">
-            {{ type }}
-          </option>
-        </select>
         <small class="form-text text-muted">
-          Select where you want to display your banner.
+          {{ "adv_contact_no_hint" | t }}
         </small>
       </div>
 
@@ -71,9 +60,31 @@
         </small>
       </div>
 
+      <div class="form-group mt-2">
+        <label>Banner Type/Position</label>
+        <select
+          class="form-control"
+          v-model="post.code"
+          :disabled="isNotEdittable"
+        >
+          <option value="" disabled selected>Select Type</option>
+          <option v-for="type in settings.types" :key="type">
+            {{ type }}
+          </option>
+        </select>
+        <small class="form-text text-muted">
+          Select where you want to display your banner.
+        </small>
+      </div>
+
       <div class="form-group mt-2" v-if="countries">
         <label>Cafe Country</label>
-        <select value="" class="form-control" v-model="post.countryCode">
+        <select
+          value=""
+          class="form-control"
+          v-model="post.countryCode"
+          :disabled="isNotEdittable"
+        >
           <option disabled selected>Select Country</option>
           <option v-for="(value, name) in countries" :key="name" :value="name">
             {{ value }}
@@ -141,16 +152,13 @@
       <div class="alert alert-info">
         Total Points required: <b v-if="priceInPoint">{{ priceInPoint }}</b>
         <br />
-        <small class="text-info">
-          To get total points, points per day is multiplied to the total number
-          of days beginning from "Begin date" to "End date".
-        </small>
-        <br />
-        <br />
-        My Points: <b v-if="api.user">{{ api.user.point }}</b> <br />
         <small class="text-danger" v-if="isPointInsufficient">
           Insufficient point! You don't have enough point to create this kind of
           advertisement.
+        </small>
+        <small class="text-info">
+          To get total points, points per day is multiplied to the total number
+          of days beginning from "Begin date" to "End date".
         </small>
         <br />
         @todo when user change dates, display the price (point).<br />
@@ -161,7 +169,7 @@
         <button
           class="w-100 btn btn-outline-primary"
           type="submit"
-          :disabled="!isPointInsufficient"
+          :disabled="isPointInsufficient"
         >
           Save the advertisement
         </button>
@@ -254,7 +262,7 @@ import {
 import UploadButton from "@/x-vue/components/UploadButton.vue";
 import FileDisplay from "@/x-vue/components/forum/FileDisplay.vue";
 import { ApiService } from "@/x-vue/services/api.service";
-import { dateRange } from "@/x-vue/services/functions";
+import { dateRange, getStringDate, utcDate } from "@/x-vue/services/functions";
 import store from "@/store";
 
 @Component({
@@ -322,11 +330,9 @@ export default class Advertisement extends Vue {
    */
   get endAtMin(): string {
     let d = this.now;
-    if (this.post.beginAt) {
-      d = new Date(this.post.beginAt);
-    }
+    if (this.post.beginAt) d = new Date(this.post.beginAt);
     d.setDate(d.getDate() + 1);
-    return d.toISOString().split("T")[0];
+    return getStringDate(d);
   }
 
   /**
@@ -335,8 +341,8 @@ export default class Advertisement extends Vue {
   get beginAtMax(): string {
     if (this.post.endAt) {
       const d = new Date(this.post.endAt);
-      d.setDate(d.getDate() - 1);
-      return d.toISOString().split("T")[0];
+      d.setDate(d.getDate());
+      return getStringDate(d);
     } else {
       return "";
     }
@@ -359,7 +365,7 @@ export default class Advertisement extends Vue {
     if (!this.post.endAt) return 0;
     if (
       this.post.beginAt &&
-      new Date(this.post.beginAt).getMilliseconds() < this.now.getMilliseconds()
+      dateRange(new Date(this.post.beginAt), this.now) < 0
     ) {
       return this.noOfDays;
     }
@@ -394,7 +400,7 @@ export default class Advertisement extends Vue {
 
   mounted(): void {
     // console.log("mounted");
-    // console.log(this.post.toJson);
+    console.log(this.post);
     const idx = this.$route.params.idx;
     if (idx) {
       this.post.idx = idx;
@@ -402,27 +408,43 @@ export default class Advertisement extends Vue {
     }
 
     this.post.categoryId = "advertisement";
-    this.beginAtMin = this.now.toISOString().split("T")[0];
+    this.beginAtMin = getStringDate(this.now);
   }
 
   async loadAdvertisement(): Promise<void> {
     try {
-      const res = await this.api.postGet({ idx: this.post.idx });
-      this.post = res;
+      this.post = await this.api.postGet({ idx: this.post.idx });
+      console.log("advertisement: ", this.post);
     } catch (e) {
       this.api.error(e);
     }
   }
 
   async onSubmit(): Promise<void> {
-    // console.log(this.post);
-    console.log(this.post.toJson);
     try {
-      const res = await this.api.postEdit(this.post.toJson);
-      this.post = res;
+      if (!this.post.idx) {
+        store.commit("updateUserPoint", -this.priceInPoint);
+      }
+      this.post = await this.api.advertisementEdit(this.post.toJson);
     } catch (e) {
       this.api.error(e);
     }
+  }
+
+  async onClickRefund(): Promise<void> {
+    const conf = await this.api.confirm("Are you sure you want to refund?", "");
+    if (!conf) return;
+    console.log("TODO: Refund advertisement");
+  }
+
+  async onClickCancel(): Promise<void> {
+    const conf = await this.api.confirm(
+      "Are you sure you want to cancel the advertisement?",
+      ""
+    );
+
+    if (!conf) return;
+    console.log("TODO: Cancel advertisement");
   }
 
   onFileUploaded(file: FileModel): void {

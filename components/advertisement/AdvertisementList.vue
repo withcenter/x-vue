@@ -33,8 +33,8 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { PostModel, RequestData } from "@/x-vue/services/interfaces";
-import { AppService } from "@/service/app.service";
 import PostTitleMeta from "@/x-vue/components/forum/PostTitleMeta.vue";
+import { ApiService } from "@/x-vue/services/api.service";
 
 @Component({
   components: {
@@ -43,7 +43,7 @@ import PostTitleMeta from "@/x-vue/components/forum/PostTitleMeta.vue";
 })
 export default class PostList extends Vue {
   posts: Array<PostModel> = [];
-  app = AppService.instance;
+  api = ApiService.instance;
 
   loadingPosts = false;
 
@@ -63,7 +63,6 @@ export default class PostList extends Vue {
   }
 
   onPageChanged(page: number): void {
-    console.log("page changed", page);
     this.options.page = page;
     this.loadPosts();
   }
@@ -71,28 +70,28 @@ export default class PostList extends Vue {
   async mounted(): Promise<void> {
     this.options.limit = this.limit;
     this.options.page = 1;
-    this.options.comments = 1;
+    this.options.userIdx = this.api.user.idx;
     this.loadPosts();
 
     this.currentPage = this.$route.query.page as string;
 
     try {
-      this.total = await this.app.api.postCount(this.options);
+      this.total = await this.api.postCount(this.options);
       this.noOfPages = Math.ceil(this.total / this.limit);
     } catch (e) {
-      this.app.error(e);
+      this.api.error(e);
     }
   }
 
   async loadPosts(): Promise<void> {
-    console.log(this.options);
+    // console.log(this.options);
     this.loadingPosts = true;
     try {
-      this.posts = await this.app.api.postSearch(this.options);
-      console.log(this.posts);
+      this.posts = await this.api.postSearch(this.options);
+      // console.log(this.posts);
       this.loadingPosts = false;
     } catch (error) {
-      this.app.error(error);
+      this.api.error(error);
       this.loadingPosts = false;
     }
   }

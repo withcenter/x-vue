@@ -73,7 +73,17 @@ export function deleteByComma(orgValue: string, val: string): string {
  * for instance, if we put 2021-11-10 as Begin date and 2021-11-13, it will return 4.
  */
 export function dateRange(d1: Date, d2: Date): number {
-  const date1utc = Date.UTC(d1.getFullYear(), d1.getMonth(), d1.getDate());
-  const date2utc = Date.UTC(d2.getFullYear(), d2.getMonth(), d2.getDate());
+  const date1utc = utcDate(d1);
+  const date2utc = utcDate(d2);
   return (date2utc - date1utc) / (1000 * 60 * 60 * 24) + 1;
+}
+
+export function utcDate(date: Date): number {
+  return Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+export function getStringDate(date: Date): string {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate())
+    .toISOString()
+    .split("T")[0];
 }
