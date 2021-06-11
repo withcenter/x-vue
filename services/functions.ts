@@ -76,7 +76,7 @@ export function daysBetween(date1: string, date2: string): number {
   if (!date1 || !date2) return 0;
   const d1 = new Date(date1).getTime() / 1000;
   const d2 = new Date(date2).getTime() / 1000;
-  return Math.ceil((d2 - d1) / (60 * 60 * 24)) + 1;
+  return Math.floor((d2 - d1) / (60 * 60 * 24)) + 1;
 }
 
 /**

@@ -96,7 +96,7 @@
         </small>
       </div>
 
-      <div class="box" v-if="post.code && post.countryCode">
+      <div class="box" v-if="post.code">
         Points Per Day: <b>{{ countryPointListing[post.code] }}</b> <br />
         <small class="text-info">
           Note: Point per day may vary depending on the banner type and chosen
@@ -154,14 +154,13 @@
       <!-- Total Advertisement price in points -->
       <div class="alert alert-info">
         Total Points required: <b v-if="priceInPoint">{{ priceInPoint }}</b>
-        <br />
         <small class="text-danger" v-if="isPointInsufficient">
           Insufficient point! You don't have enough point to create this kind of
           advertisement. </small
         ><br />
         <small class="text-info">
-          To get total points, points per day is multiplied to the total number
-          of days beginning from "Begin date" to "End date".
+          To get total required points, points per day is multiplied to the
+          total number of days beginning from "Begin date" to "End date".
         </small>
         <br />
         @todo when user change dates, display the price (point).<br />
@@ -186,13 +185,19 @@
       </div>
 
       <div v-if="isNotEdittable">
+        <div
+          class="alert alert-info"
+          v-if="isRefundable && servingDaysLeft > 2"
+        >
+          Refundable Points: <b>{{ refundablePoints }}</b>
+        </div>
         <button
           class="w-100 btn btn-outline-success"
           type="button"
-          v-if="isRefundable"
+          v-if="isRefundable && servingDaysLeft > 2"
           @click="onClickRefund"
         >
-          Refund Remaining Days
+          Refund ({{ servingDaysLeft }}) Remaining Days
         </button>
         <button
           class="w-100 btn btn-outline-danger"
@@ -357,10 +362,6 @@ export default class Advertisement extends Vue {
   get priceInPoint(): number {
     if (!this.settings) return 0;
     if (!this.noOfDays) return 0;
-
-    if (!this.post.code) {
-      return this.countryPointListing["default"] * this.noOfDays;
-    }
     return this.countryPointListing[this.post.code] * this.noOfDays;
   }
 
@@ -421,6 +422,13 @@ export default class Advertisement extends Vue {
    */
   get isRefundable(): boolean {
     return isPast(this.post.beginDate);
+  }
+
+  get refundablePoints(): number {
+    const refundable =
+      this.servingDaysLeft * this.countryPointListing[this.post.code];
+    const penalty = refundable * 0.05;
+    return refundable - penalty;
   }
 
   get isDeletable(): boolean {
