@@ -3,7 +3,9 @@
     <div class="mt-3" v-if="posts.length">
       <div v-for="post of posts" :key="post.idx">
         <router-link :to="`/advertisement/edit/${post.idx}`">
-          No. {{ post.idx }} - {{ post.name }}
+          No. {{ post.idx }} -
+          <span v-if="!post.deletedAt">{{ post.name }}</span>
+          <span v-if="post.deletedAt">{{ "deleted" | t }}</span>
         </router-link>
       </div>
     </div>

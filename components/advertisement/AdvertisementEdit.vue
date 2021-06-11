@@ -157,8 +157,8 @@
         <br />
         <small class="text-danger" v-if="isPointInsufficient">
           Insufficient point! You don't have enough point to create this kind of
-          advertisement.
-        </small>
+          advertisement. </small
+        ><br />
         <small class="text-info">
           To get total points, points per day is multiplied to the total number
           of days beginning from "Begin date" to "End date".
@@ -208,7 +208,11 @@
       </div>
 
       <div v-if="isDeletable">
-        <button class="w-100 mt-2 btn btn-outline-danger" type="button">
+        <button
+          class="w-100 mt-2 btn btn-outline-danger"
+          type="button"
+          @click="onClickDelete"
+        >
           Delete Advertisement
         </button>
         @todo after cancel or refund, display "resume the advertisement" or
@@ -407,7 +411,7 @@ export default class Advertisement extends Vue {
    * Once the advertisement is created, it will be true, and some parts of the form will be either disabled or hidden.
    */
   get isNotEdittable(): boolean {
-    return !!this.post.idx && !!this.post.beginDate && !!this.post.endDate;
+    return !!this.post.idx && !!this.post.beginAt && !!this.post.endAt;
   }
 
   /**
@@ -420,7 +424,7 @@ export default class Advertisement extends Vue {
   }
 
   get isDeletable(): boolean {
-    return !!this.post.idx && !this.post.endDate && !this.post.beginDate;
+    return !!this.post.idx && !this.post.beginAt && !this.post.endAt;
   }
 
   async loadAdvertisement(): Promise<void> {
@@ -438,8 +442,10 @@ export default class Advertisement extends Vue {
 
     try {
       const post = await this.api.advertisementEdit(this.post.toJson);
-      if (isCreate) store.commit("refreshProfile");
-      ApiService.instance.open(`/advertisement/edit/${post.idx}`);
+      if (isCreate) {
+        store.commit("refreshProfile");
+        ApiService.instance.open(`/advertisement/edit/${post.idx}`);
+      }
     } catch (e) {
       this.api.error(e);
     }
@@ -486,7 +492,7 @@ export default class Advertisement extends Vue {
     const conf = confirm("Are you sure you want to delete the advertisement?");
     if (!conf) return;
     try {
-      this.post = await this.api.advertisementRefund(this.post.idx);
+      this.post = await this.api.advertisementDelete(this.post.idx);
       store.state.router.push("/advertisement");
     } catch (e) {
       this.api.error(e);
