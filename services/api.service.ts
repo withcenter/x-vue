@@ -124,19 +124,22 @@ export class ApiService {
     console.log("==> ApiService::initUserAuth()");
     this.sessionId = this.getUserSessionId();
     console.log("==> ApiService::initUserAuth() ==> sessionId has set.");
-    await this.refreshLoginUserProfile();
-    console.log(
-      "==> ApiService::initUserAuth() ==> refreshLoginUserProfile has done."
-    );
+    if (this.sessionId) {
+      await this.refreshLoginUserProfile();
+      console.log(
+        "==> ApiService::initUserAuth() ==> refreshLoginUserProfile has done."
+      );
+    }
   }
 
   /**
    * It will refresh the `user` instance in store base on the current `sessionId` saved in the cookie
    *
+   * @note it only returns UserModel. It does not return void, or undefined. But it throws an error if there is an error.
+   *
    * @returns UserModel
    */
-  async refreshLoginUserProfile(): Promise<UserModel | void> {
-    if (!this.sessionId) return;
+  async refreshLoginUserProfile(): Promise<UserModel> {
     const res = await this.request("user.profile");
     console.log("userprofile, :", res);
     return this.setUserSessionId(res);

@@ -202,9 +202,9 @@ export class PostRootModel {
   countryCode = "";
 
   beginAt = "";
-  beginAtStamp = 0;
   endAt = "";
-  endAtStamp = 0;
+  beginDate = "";
+  endDate = "";
 
   idx = "";
   userIdx = "";
@@ -298,12 +298,12 @@ export class PostModel extends PostRootModel {
     this.code = map.code;
     this.countryCode = map.countryCode;
     if (map.beginAt) {
-      this.beginAtStamp = map.beginAt;
-      this.beginAt = new Date(map.beginAt * 1000).toISOString().split("T")[0];
+      this.beginAt = map.beginAt;
+      this.beginDate = map.beginDate;
     }
     if (map.endAt) {
-      this.endAtStamp = map.endAt;
-      this.endAt = new Date(map.endAt * 1000).toISOString().split("T")[0];
+      this.endAt = map.endAt;
+      this.endDate = map.endDate;
     }
 
     super.fromJson(map);
@@ -333,6 +333,8 @@ export class PostModel extends PostRootModel {
       countryCode: this.countryCode,
       beginAt: this.beginAt,
       endAt: this.endAt,
+      beginDate: this.beginDate,
+      endDate: this.endDate,
       files: this.files.map((file) => `${file.idx}`).join(","),
     };
   }

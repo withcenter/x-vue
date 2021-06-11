@@ -110,7 +110,7 @@
           <label
             >Begin Date
             <input
-              v-model="post.beginAt"
+              v-model="post.beginDate"
               type="date"
               name="beginAt"
               :min="beginAtMin"
@@ -121,7 +121,7 @@
           <label>
             End Date
             <input
-              v-model="post.endAt"
+              v-model="post.endDate"
               type="date"
               name="endAt"
               :min="endAtMin"
@@ -133,6 +133,9 @@
         <small class="form-text text-muted mb-2">
           {{ "advertisement_serving_days" | t }}: <b>{{ servingDaysLeft }}</b>
           {{ "days" | t }}
+        </small>
+        <small class="form-text text-muted mb-2">
+          No of advertisement days: {{ noOfDays }}
         </small>
         <small class="form-text text-muted">
           광고비 시작 날짜와 끝 날짜를 선택해주세요.
@@ -246,7 +249,6 @@
       광고 등록)하면, 광고 해지 및 포인트 0점 처리, 그리고 영구 차단이 되므로
       주의하시기 바랍니다.
     </form>
-    {{ noOfDays }}
   </div>
 </template>
 
@@ -262,7 +264,11 @@ import {
 import UploadButton from "@/x-vue/components/UploadButton.vue";
 import FileDisplay from "@/x-vue/components/forum/FileDisplay.vue";
 import { ApiService } from "@/x-vue/services/api.service";
-import { dateRange, getStringDate, utcDate } from "@/x-vue/services/functions";
+import {
+  daysBetween,
+  getStringDate,
+  isFuture,
+} from "@/x-vue/services/functions";
 import store from "@/store";
 
 @Component({
@@ -278,8 +284,29 @@ export default class Advertisement extends Vue {
 
   uploadProgress = 0;
 
-  now = new Date();
   beginAtMin = "";
+
+  mounted(): void {
+    // console.log("mounted;");
+    // console.log(this.post);
+    const idx = this.$route.params.idx;
+    if (idx) {
+      this.post.idx = idx;
+      this.loadAdvertisement();
+    } else {
+      this.post.categoryId = "advertisement";
+    }
+
+    this.beginAtMin = getStringDate(this.now);
+  }
+
+  get now(): Date {
+    return new Date();
+  }
+  get today(): string {
+    const n = this.now;
+    return n.getFullYear() + "-" + (n.getMonth() + 1) + "-" + n.getDate();
+  }
 
   /**
    * Advertisement settings getter.
@@ -352,9 +379,7 @@ export default class Advertisement extends Vue {
    * @returns number - returns the total range of days the user selected from beginAt to endAt dates.
    */
   get noOfDays(): number {
-    if (!this.post.beginAt) return 0;
-    if (!this.post.endAt) return 0;
-    return dateRange(new Date(this.post.beginAt), new Date(this.post.endAt));
+    return daysBetween(this.post.beginDate, this.post.endDate);
   }
 
   /**
@@ -362,14 +387,8 @@ export default class Advertisement extends Vue {
    * If it is not begun yet, it will return the `noOfDays` the advertisement will be served.
    */
   get servingDaysLeft(): number {
-    if (!this.post.endAt) return 0;
-    if (
-      this.post.beginAt &&
-      dateRange(new Date(this.post.beginAt), this.now) < 0
-    ) {
-      return this.noOfDays;
-    }
-    return dateRange(this.now, new Date(this.post.endAt));
+    if (isFuture(this.post.beginDate)) return this.noOfDays;
+    else return daysBetween(this.today, this.post.endDate);
   }
 
   /**
@@ -395,26 +414,13 @@ export default class Advertisement extends Vue {
    * If it is not begun yet, it will return false.
    */
   get isRefundable(): boolean {
-    return dateRange(this.now, new Date(this.post.beginAt)) <= 0;
-  }
-
-  mounted(): void {
-    // console.log("mounted");
-    console.log(this.post);
-    const idx = this.$route.params.idx;
-    if (idx) {
-      this.post.idx = idx;
-      this.loadAdvertisement();
-    }
-
-    this.post.categoryId = "advertisement";
-    this.beginAtMin = getStringDate(this.now);
+    return daysBetween(this.today, this.post.beginDate) <= 0;
   }
 
   async loadAdvertisement(): Promise<void> {
     try {
       this.post = await this.api.postGet({ idx: this.post.idx });
-      console.log("advertisement: ", this.post);
+      // console.log("advertisement: ", this.post);
     } catch (e) {
       this.api.error(e);
     }
@@ -423,9 +429,10 @@ export default class Advertisement extends Vue {
   async onSubmit(): Promise<void> {
     try {
       if (!this.post.idx) {
-        store.commit("updateUserPoint", -this.priceInPoint);
+        store.commit("refreshProfile");
       }
-      this.post = await this.api.advertisementEdit(this.post.toJson);
+      const post = await this.api.advertisementEdit(this.post.toJson);
+      ApiService.instance.open(`/advertisement/edit/${post.idx}`);
     } catch (e) {
       this.api.error(e);
     }
