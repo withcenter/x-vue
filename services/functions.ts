@@ -72,8 +72,44 @@ export function deleteByComma(orgValue: string, val: string): string {
  * @attention It counts the Begin date to the total range of days.
  * for instance, if we put 2021-11-10 as Begin date and 2021-11-13, it will return 4.
  */
-export function dateRange(d1: Date, d2: Date): number {
-  const date1utc = Date.UTC(d1.getFullYear(), d1.getMonth(), d1.getDate());
-  const date2utc = Date.UTC(d2.getFullYear(), d2.getMonth(), d2.getDate());
-  return (date2utc - date1utc) / (1000 * 60 * 60 * 24) + 1;
+export function daysBetween(date1: string, date2: string): number {
+  if (!date1 || !date2) return 0;
+  const d1 = new Date(date1).getTime() / 1000;
+  const d2 = new Date(date2).getTime() / 1000;
+  return Math.floor((d2 - d1) / (60 * 60 * 24)) + 1;
+}
+
+/**
+ * Return true if the date is future. If the date is today, it returns false.
+ * @param date date - YYYY-MM-DD
+ */
+export function isFuture(date: string): boolean {
+  if (!date) return false;
+  const d = new Date(date);
+  const n = new Date();
+
+  // if the date is today, return false.
+  if (
+    d.getFullYear() === n.getFullYear() &&
+    d.getMonth() === n.getMonth() &&
+    d.getDate() === n.getDate()
+  ) {
+    return false;
+  }
+  // if the date is past, return false.
+  if (d.getTime() < n.getTime()) return false;
+
+  return true;
+}
+
+export function isPast(date: string): boolean {
+  if (!date) return false;
+  if (isFuture(date)) return false;
+  return true;
+}
+
+export function getStringDate(date: Date): string {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate())
+    .toISOString()
+    .split("T")[0];
 }
