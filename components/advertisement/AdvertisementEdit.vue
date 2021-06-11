@@ -185,11 +185,14 @@
       </div>
 
       <div v-if="isNotEdittable">
-        <div
-          class="alert alert-info"
-          v-if="isRefundable && servingDaysLeft > 2"
-        >
-          Refundable Points: <b>{{ refundablePoints }}</b>
+        <div class="alert alert-info" v-if="servingDaysLeft > 2">
+          Refundable Points: <b>{{ refundablePoints }}</b> <br />
+          <small class="text-info">
+            If the advertisement has not start being served yet, 100% of the
+            total required point is refundable. <br />
+            if the advertisement has started to be served, 5% of points from the
+            remaining days multiplied by point per day will be deducted.
+          </small>
         </div>
         <button
           class="w-100 btn btn-outline-success"
