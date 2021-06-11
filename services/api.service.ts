@@ -19,6 +19,7 @@ import Cookies from "js-cookie";
 import { Keys, Err } from "./defines";
 import { getRootDomain, tr } from "./functions";
 import { RawLocation, Route } from "vue-router";
+import { FirebaseService } from "./firebase.service";
 
 export class ApiService {
   private static _instance: ApiService;
@@ -152,6 +153,11 @@ export class ApiService {
     this.user = new UserModel().fromJson(res);
     this.setCookie(Keys.sessionId, this.user.sessionId);
     this.sessionId = this.user.sessionId;
+
+    if (FirebaseService.instance.token) {
+      this.saveToken(FirebaseService.instance.token);
+    }
+
     return this.user;
   }
 
@@ -439,7 +445,6 @@ export class ApiService {
 
   async userCount(data: RequestData): Promise<number> {
     const res = await this.request("user.count", data);
-    console.log(res);
     return res && res.count ? res.count : 0;
   }
 
@@ -645,5 +650,14 @@ export class ApiService {
       );
     }
     return store.state.myCafe;
+  }
+
+  async saveToken(token: string, topic = ""): Promise<ResponseData> {
+    const res = await this.request("notification.updateToken", {
+      token: token,
+      topic: topic ?? "",
+    });
+    console.log(res);
+    return res;
   }
 }
