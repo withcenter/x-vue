@@ -190,22 +190,29 @@
           class="w-100 btn btn-outline-success"
           type="button"
           v-if="isRefundable"
+          @click="onClickRefund"
         >
-          Refund
+          Refund Remaining Days
         </button>
         <button
           class="w-100 btn btn-outline-danger"
           type="button"
           v-if="!isRefundable"
+          @click="onClickCancel"
         >
-          Cancel
+          Cancel Advertisement
         </button>
-
         @todo Cancel button will be shown if the banner has not begin yet.<br />
         @todo Refund button will be shown if the banner has begun.<br />
-        @todo after cancel or refund, display "resume the advertisement" or
-        "delete" button.<br />
         <hr />
+      </div>
+
+      <div v-if="isDeletable">
+        <button class="w-100 mt-2 btn btn-outline-danger" type="button">
+          Delete Advertisement
+        </button>
+        @todo after cancel or refund, display "resume the advertisement" or
+        "delete" button.
       </div>
 
       <div class="box">
@@ -268,6 +275,7 @@ import {
   daysBetween,
   getStringDate,
   isFuture,
+  isPast,
 } from "@/x-vue/services/functions";
 import store from "@/store";
 
@@ -356,8 +364,7 @@ export default class Advertisement extends Vue {
    * @returns string - returns the minimum selectable date for the "endAt" input.
    */
   get endAtMin(): string {
-    let d = this.now;
-    if (this.post.beginAt) d = new Date(this.post.beginAt);
+    const d = this.post.beginDate ? new Date(this.post.beginDate) : this.now;
     d.setDate(d.getDate() + 1);
     return getStringDate(d);
   }
@@ -366,13 +373,8 @@ export default class Advertisement extends Vue {
    * @returns string - returns the maximum selectable date for the "beginAt" input.
    */
   get beginAtMax(): string {
-    if (this.post.endAt) {
-      const d = new Date(this.post.endAt);
-      d.setDate(d.getDate());
-      return getStringDate(d);
-    } else {
-      return "";
-    }
+    if (!this.post.endDate) return "";
+    return this.endAtMin;
   }
 
   /**
@@ -405,7 +407,7 @@ export default class Advertisement extends Vue {
    * Once the advertisement is created, it will be true, and some parts of the form will be either disabled or hidden.
    */
   get isNotEdittable(): boolean {
-    return !!this.post.idx;
+    return !!this.post.idx && !!this.post.beginDate && !!this.post.endDate;
   }
 
   /**
@@ -414,7 +416,11 @@ export default class Advertisement extends Vue {
    * If it is not begun yet, it will return false.
    */
   get isRefundable(): boolean {
-    return daysBetween(this.today, this.post.beginDate) <= 0;
+    return isPast(this.post.beginDate);
+  }
+
+  get isDeletable(): boolean {
+    return !!this.post.idx && !this.post.endDate && !this.post.beginDate;
   }
 
   async loadAdvertisement(): Promise<void> {
@@ -427,31 +433,64 @@ export default class Advertisement extends Vue {
   }
 
   async onSubmit(): Promise<void> {
+    let isCreate = true;
+    if (this.post.idx) isCreate = false;
+
     try {
-      if (!this.post.idx) {
-        store.commit("refreshProfile");
-      }
       const post = await this.api.advertisementEdit(this.post.toJson);
+      if (isCreate) store.commit("refreshProfile");
       ApiService.instance.open(`/advertisement/edit/${post.idx}`);
     } catch (e) {
       this.api.error(e);
     }
   }
 
-  async onClickRefund(): Promise<void> {
-    const conf = await this.api.confirm("Are you sure you want to refund?", "");
+  async onClickCancel(): Promise<void> {
+    // !TODO: why it's not working?
+    // const conf = await this.api.confirm(
+    //   "Are you sure you want to cancel the advertisement?",
+    //   ""
+    // );
+    const conf = confirm("Are you sure you want to cancel the advertisement?");
     if (!conf) return;
-    console.log("TODO: Refund advertisement");
+    try {
+      this.post = await this.api.advertisementCancel(this.post.idx);
+      store.commit("refreshProfile");
+    } catch (e) {
+      this.api.error(e);
+    }
   }
 
-  async onClickCancel(): Promise<void> {
-    const conf = await this.api.confirm(
-      "Are you sure you want to cancel the advertisement?",
-      ""
-    );
-
+  async onClickRefund(): Promise<void> {
+    // !TODO: why it's not working?
+    // const conf = await this.api.confirm(
+    //   "Are you sure you want to refund the advertisement?",
+    //   ""
+    // );
+    const conf = confirm("Are you sure you want to refund the advertisement?");
     if (!conf) return;
-    console.log("TODO: Cancel advertisement");
+    try {
+      this.post = await this.api.advertisementRefund(this.post.idx);
+      store.commit("refreshProfile");
+    } catch (e) {
+      this.api.error(e);
+    }
+  }
+
+  async onClickDelete(): Promise<void> {
+    // !TODO: why it's not working?
+    // const conf = await this.api.confirm(
+    //  "Are you sure you want to delete the advertisement?",
+    //   ""
+    // );
+    const conf = confirm("Are you sure you want to delete the advertisement?");
+    if (!conf) return;
+    try {
+      this.post = await this.api.advertisementRefund(this.post.idx);
+      store.state.router.push("/advertisement");
+    } catch (e) {
+      this.api.error(e);
+    }
   }
 
   onFileUploaded(file: FileModel): void {

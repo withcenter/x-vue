@@ -102,6 +102,12 @@ export function isFuture(date: string): boolean {
   return true;
 }
 
+export function isPast(date: string): boolean {
+  if (!date) return false;
+  if (isFuture(date)) return false;
+  return true;
+}
+
 export function getStringDate(date: Date): string {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate())
     .toISOString()

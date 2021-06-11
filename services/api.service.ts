@@ -643,6 +643,21 @@ export class ApiService {
     return new PostModel().fromJson(res);
   }
 
+  async advertisementCancel(idx: string): Promise<PostModel> {
+    const res = await this.request("advertisement.cancel", { idx: idx });
+    return new PostModel().fromJson(res);
+  }
+
+  async advertisementRefund(idx: string): Promise<PostModel> {
+    const res = await this.request("advertisement.refund", { idx: idx });
+    return new PostModel().fromJson(res);
+  }
+
+  async advertisementDelete(idx: string): Promise<PostModel> {
+    const res = await this.request("advertisement.delete", { idx: idx });
+    return new PostModel().fromJson(res);
+  }
+
   async myCafe(): Promise<CafeModel[]> {
     if (this.notLoggedIn) {
       store.state.myCafe = [];
