@@ -6,16 +6,20 @@
         advertisement esialy.
       </div>
 
-      <div class="box d-flex mt-2">
-        <upload-button
-          :size="30"
-          @success="onFileUploaded"
-          @progress="uploadProgress = $event"
-        ></upload-button>
-        <div class="ml-3">
-          <div class="p-1" v-if="!post.files.length">No banner chosen ..</div>
-          <file-display :files="post.files" :showDelete="true"></file-display>
-        </div>
+      <div class="box mt-2">
+        <label>{{ "advertisement_banner" | t }}</label>
+
+        <upload-image
+          taxonomy="posts"
+          :entity="post.idx"
+          code="banner"
+          @uploaded="onFileUpload"
+          v-if="isMounted"
+        ></upload-image>
+
+        <small class="form-text text-muted">
+          {{ "advertisement_banner_description" | t }}
+        </small>
       </div>
 
       <div class="form-group mt-2">
@@ -287,25 +291,23 @@ import {
   PostModel,
   ResponseData,
 } from "@/x-vue/services/interfaces";
-import UploadButton from "@/x-vue/components/UploadButton.vue";
-import FileDisplay from "@/x-vue/components/forum/FileDisplay.vue";
 import { ApiService } from "@/x-vue/services/api.service";
 import {
+  addByComma,
   daysBetween,
   getStringDate,
   isFuture,
   isPast,
 } from "@/x-vue/services/functions";
 import store from "@/store";
+import UploadImage from "@/x-vue/components/file/UploadImage.vue";
 
 @Component({
-  components: {
-    UploadButton,
-    FileDisplay,
-  },
+  components: { UploadImage },
 })
 export default class Advertisement extends Vue {
   api = ApiService.instance;
+  isMounted = false;
 
   post = new PostModel();
 
@@ -313,18 +315,19 @@ export default class Advertisement extends Vue {
 
   beginAtMin = "";
 
-  mounted(): void {
+  async mounted(): Promise<void> {
     // console.log("mounted;");
     // console.log(this.post);
-    const idx = this.$route.params.idx;
+    const idx = parseInt(this.$route.params.idx);
     if (idx) {
       this.post.idx = idx;
-      this.loadAdvertisement();
+      await this.loadAdvertisement();
     } else {
       this.post.categoryId = "advertisement";
     }
 
     this.beginAtMin = getStringDate(this.now);
+    this.isMounted = true;
   }
 
   get now(): Date {
@@ -457,9 +460,9 @@ export default class Advertisement extends Vue {
   async onSubmit(): Promise<void> {
     let isCreate = true;
     if (this.post.idx) isCreate = false;
-
     try {
       const post = await this.api.advertisementEdit(this.post.toJson);
+
       if (isCreate) {
         store.commit("refreshProfile");
         ApiService.instance.open(`/advertisement/edit/${post.idx}`);
@@ -517,9 +520,14 @@ export default class Advertisement extends Vue {
     }
   }
 
-  onFileUploaded(file: FileModel): void {
-    this.post.files.push(file);
-    this.uploadProgress = 0;
+  onFileUpload(file: FileModel): void {
+    console.log("onFileUpload; ");
+    this.post.fileIdxes = addByComma(this.post.fileIdxes, file.idx);
   }
+
+  // onFileUploaded(file: FileModel): void {
+  //   this.post.files.push(file);
+  //   this.uploadProgress = 0;
+  // }
 }
 </script>

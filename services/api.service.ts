@@ -269,7 +269,7 @@ export class ApiService {
     return new PostModel().fromJson(res);
   }
 
-  async postDelete(idx: string): Promise<PostModel> {
+  async postDelete(idx: number): Promise<PostModel> {
     return new PostModel().fromJson(
       await this.request("post.delete", { idx: idx })
     );
@@ -292,7 +292,7 @@ export class ApiService {
     return new CommentModel().fromJson(res);
   }
 
-  async commentDelete(idx: string): Promise<CommentModel> {
+  async commentDelete(idx: number): Promise<CommentModel> {
     const res = await this.request("comment.delete", { idx: idx });
     return new CommentModel().fromJson(res);
   }
@@ -302,13 +302,11 @@ export class ApiService {
     return res;
   }
 
-  fileUpload(
+  async fileUpload(
     file: File,
     params: RequestData,
-    successCallback: (file: FileModel) => void,
-    errorCallback: (e: string) => void,
     progressCallback: (progress: number) => void
-  ): void {
+  ): Promise<FileModel> {
     const form = new FormData();
     form.append("route", "file.upload");
     if (this.sessionId) form.append("sessionId", this.sessionId);
@@ -330,20 +328,24 @@ export class ApiService {
       },
     };
 
-    axios
-      .post("https://cherry.philov.com/index.php", form, options)
-      .then((res) => {
-        if (
-          typeof res.data.response === "string" &&
-          res.data.response.indexOf("error_") === 0
-        ) {
-          errorCallback(res.data.response);
-        } else {
-          const _file = new FileModel().fromJson(res.data.response);
-          successCallback(_file);
-        }
-      })
-      .catch(errorCallback);
+    const res = await axios.post(
+      "https://cherry.philov.com/index.php",
+      form,
+      options
+    );
+
+    if (typeof res.data === "string") {
+      console.error(res);
+      throw "error_error_string_from_php_backend";
+    } else if (!res.data.response) {
+      throw "error_malformed_response_from_php_backend";
+    } else if (
+      typeof res.data.response === "string" &&
+      res.data.response.indexOf("error_") === 0
+    ) {
+      throw res.data.response;
+    }
+    return new FileModel().fromJson(res.data.response);
   }
 
   /**
@@ -353,7 +355,7 @@ export class ApiService {
    * @param idx file idx
    * @returns string - file idx
    */
-  async fileDelete(idx: string): Promise<ResponseData> {
+  async fileDelete(idx: string): Promise<string> {
     const deletedFile = await this.request("file.delete", { idx });
     return deletedFile.idx;
   }
@@ -658,17 +660,17 @@ export class ApiService {
     return new PostModel().fromJson(res);
   }
 
-  async advertisementCancel(idx: string): Promise<PostModel> {
+  async advertisementCancel(idx: number): Promise<PostModel> {
     const res = await this.request("advertisement.cancel", { idx: idx });
     return new PostModel().fromJson(res);
   }
 
-  async advertisementRefund(idx: string): Promise<PostModel> {
+  async advertisementRefund(idx: number): Promise<PostModel> {
     const res = await this.request("advertisement.refund", { idx: idx });
     return new PostModel().fromJson(res);
   }
 
-  async advertisementDelete(idx: string): Promise<PostModel> {
+  async advertisementDelete(idx: number): Promise<PostModel> {
     const res = await this.request("advertisement.delete", { idx: idx });
     return new PostModel().fromJson(res);
   }
@@ -704,5 +706,10 @@ export class ApiService {
     const res = await this.request("notification.sendMessageToTokens", data);
     // console.log(res);
     return res;
+  }
+
+  async fileGet(data: RequestData): Promise<FileModel> {
+    const res = await this.request("file.get", data);
+    return new FileModel().fromJson(res);
   }
 }

@@ -24,9 +24,7 @@ export class FirebaseService {
   }
 
   pushMessageInit(): void {
-    console.log("messagingInit(): void {");
     if ("Notification" in window) {
-      console.log("Notification in::; ", "Notification" in window);
       // const messaging = this.$messaging;
       const messaging = firebase.messaging();
 

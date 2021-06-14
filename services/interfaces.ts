@@ -155,8 +155,9 @@ export class UserModel {
 }
 
 // TODO: Remove this, instead we use PostModel.
+// @deprecated
 export class PostEditModel {
-  idx = "";
+  idx = 0;
   title = "";
   content = "";
   categoryId = "";
@@ -164,15 +165,15 @@ export class PostEditModel {
 }
 
 export class CommentEditModel {
-  idx = "";
+  idx = 0;
   content = "";
-  rootIdx = "";
-  parentIdx = "";
+  rootIdx = 0;
+  parentIdx = 0;
   files = "";
 }
 
 export class PostRootModel {
-  parentIdx = "";
+  parentIdx = 0;
 
   rootIdx = "";
 
@@ -206,7 +207,7 @@ export class PostRootModel {
   beginDate = "";
   endDate = "";
 
-  idx = "";
+  idx = 0;
   userIdx = "";
 
   content = "";
@@ -223,7 +224,10 @@ export class PostRootModel {
   inEdit = false;
   inReply = false;
 
+  // `files` is an FileModel object array
   files: Array<FileModel> = [];
+  // `fileIndexes` is a string of uploaded file idexes.
+  fileIdxes = "";
 
   user: UserModel = {} as UserModel;
 
@@ -335,7 +339,7 @@ export class PostModel extends PostRootModel {
       endAt: this.endAt,
       beginDate: this.beginDate,
       endDate: this.endDate,
-      files: this.files.map((file) => `${file.idx}`).join(","),
+      files: this.fileIdxes,
     };
   }
 

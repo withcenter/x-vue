@@ -51,13 +51,13 @@ export default class UploadButton extends Vue {
       return;
     }
     const file = event.target.files[0];
-    this.app.api.fileUpload(
-      file,
-      {},
-      this.onUploaded,
-      this.app.error,
-      this.onProgress
-    );
+    // this.app.api.fileUpload(
+    //   file,
+    //   {},
+    //   this.onUploaded,
+    //   this.app.error,
+    //   this.onProgress
+    // );
   }
 
   onUploaded(file: FileModel): void {
