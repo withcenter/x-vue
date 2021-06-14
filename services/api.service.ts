@@ -683,4 +683,16 @@ export class ApiService {
     console.log(res);
     return res;
   }
+
+  async sendMessageToTopic(data: RequestData): Promise<ResponseData> {
+    const res = await this.request("notification.sendMessageToTopic", data);
+    console.log(res);
+    return res;
+  }
+
+  async sendMessageToTokens(data: RequestData): Promise<ResponseData> {
+    const res = await this.request("notification.sendMessageToTokens", data);
+    console.log(res);
+    return res;
+  }
 }
