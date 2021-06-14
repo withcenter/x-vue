@@ -426,7 +426,7 @@ export class CategoryModel {
   // This domain is a root domain. Not subdomain. For cafe, the subdomain(complete domain) is the id.
   domain = "";
 
-  fromJson(map: ResponseData): this {
+  fromJson(map: ResponseData): CategoryModel {
     this.idx = map.idx;
     this.userIdx = map.userIdx;
     this.id = map.id;
@@ -460,4 +460,20 @@ export class CategoryModel {
   }
 }
 
-export class CafeModel extends CategoryModel {}
+export class CafeModel extends CategoryModel {
+  // cafe
+  app_name = "";
+  app_background_color = "";
+  app_icon = "";
+  title_image = "";
+
+  fromJson(map: ResponseData): CafeModel {
+    this.app_name = map.app_name;
+    this.app_background_color = map.app_background_color ?? "";
+    this.app_icon = map.app_icon;
+    this.title_image = map.title_image;
+
+    super.fromJson(map);
+    return this;
+  }
+}

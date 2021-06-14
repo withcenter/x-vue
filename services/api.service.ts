@@ -496,6 +496,16 @@ export class ApiService {
     return new CafeModel().fromJson(res);
   }
 
+  async cafeGet(data: RequestData): Promise<CafeModel> {
+    const res = await this.request("cafe.get", data);
+    return new CafeModel().fromJson(res);
+  }
+
+  async cafeUpdate(data: RequestData): Promise<CafeModel> {
+    const res = await this.request("cafe.update", data);
+    return new CafeModel().fromJson(res);
+  }
+
   async loadCafe(): Promise<CafeModel> {
     const res = await this.request("cafe.get", { domain: this.domain });
     store.state.cafe = new CafeModel().fromJson(res);
@@ -680,19 +690,19 @@ export class ApiService {
       token: token,
       topic: topic ?? "",
     });
-    console.log(res);
+    // console.log(res);
     return res;
   }
 
   async sendMessageToTopic(data: RequestData): Promise<ResponseData> {
     const res = await this.request("notification.sendMessageToTopic", data);
-    console.log(res);
+    // console.log(res);
     return res;
   }
 
   async sendMessageToTokens(data: RequestData): Promise<ResponseData> {
     const res = await this.request("notification.sendMessageToTokens", data);
-    console.log(res);
+    // console.log(res);
     return res;
   }
 }
