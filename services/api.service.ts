@@ -697,6 +697,19 @@ export class ApiService {
     // console.log(res);
     return res;
   }
+  /**
+   *
+   * @param data
+   * accepts [users] || [emails]
+   * - users is an array of idx or string separated by comma
+   * - emails is an array of email or string separated by comma
+   * @returns
+   */
+  async sendMessageToUsers(data: RequestData): Promise<ResponseData> {
+    const res = await this.request("notification.sendMessageToUsers", data);
+    // console.log(res);
+    return res;
+  }
 
   async fileGet(data: RequestData): Promise<FileModel> {
     const res = await this.request("file.get", data);

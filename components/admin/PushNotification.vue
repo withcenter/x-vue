@@ -1,6 +1,6 @@
 <template>
   <section data-cy="push-notification-create-page">
-    <h4>Push Notification</h4>
+    <h4>{{ "push notification" | t }}</h4>
     <form>
       <div class="form-group">
         <label for="status">{{ "sending option" | t }}</label>
@@ -13,11 +13,11 @@
           <option value="all">{{ "all" | t }}</option>
           <option value="topic">{{ "topic" | t }}</option>
           <option value="tokens">{{ "token" | t }}</option>
-          <option value="email">{{ "email" | t }}</option>
+          <option value="emails">{{ "emails" | t }}</option>
         </select>
       </div>
       <div class="form-group" v-if="options.notify == 'topic'">
-        <label for="idx">{{ "topic" | t }}</label>
+        <label for="topic">{{ "topic" | t }}</label>
         <input
           type="text"
           class="form-control"
@@ -28,7 +28,7 @@
         />
       </div>
       <div class="form-group" v-if="options.notify == 'tokens'">
-        <label for="idx">{{ "token" | t }}</label>
+        <label for="tokens">{{ "tokens" | t }}</label>
         <input
           type="text"
           class="form-control"
@@ -38,16 +38,33 @@
           v-model="options.tokens"
         />
       </div>
-      <div class="form-group" v-if="options.notify == 'email'">
-        <label for="idx">{{ "email" | t }}</label>
+      <div class="form-group" v-if="options.notify == 'emails'">
+        <label for="emails">{{ "emails" | t }}</label>
         <input
           type="text"
           class="form-control"
-          :placeholder="'email' | t"
-          name="email"
-          id="email"
-          v-model="options.email"
+          :placeholder="'emails' | t"
+          name="emails"
+          id="emails"
+          v-model="options.emails"
         />
+        <div class="text-muted">
+          Input user email. Send to many emails. Separated them by comma.
+        </div>
+      </div>
+      <div class="form-group" v-if="options.notify == 'emails'">
+        <label for="users">{{ "users" | t }}</label>
+        <input
+          type="text"
+          class="form-control"
+          :placeholder="'users' | t"
+          name="users"
+          id="users"
+          v-model="options.users"
+        />
+        <div class="text-muted">
+          Input user idx. Send to many Users. Separated them by comma.
+        </div>
       </div>
       <div class="form-group">
         <label for="idx">{{ "landing post idx" | t }}</label>
@@ -73,7 +90,7 @@
       </div>
 
       <div class="form-group">
-        <label for="idx">{{ "title" | t }}</label>
+        <label for="title">{{ "title" | t }}</label>
         <input
           type="text"
           class="form-control"
@@ -95,7 +112,7 @@
         />
       </div>
       <div class="form-group">
-        <label for="idx">{{ "click url" | t }}</label>
+        <label for="click_action">{{ "click url" | t }}</label>
         <input
           type="text"
           class="form-control"
@@ -106,7 +123,7 @@
         />
       </div>
       <div class="form-group">
-        <label for="idx">{{ "Icon Url" | t }}</label>
+        <label for="imageUrl">{{ "Icon Url" | t }}</label>
         <input
           type="text"
           class="form-control"
@@ -121,7 +138,7 @@
         </small>
       </div>
       <div class="form-group">
-        <label for="idx">{{ "sound" | t }}</label>
+        <label for="sound">{{ "sound" | t }}</label>
         <input
           type="text"
           class="form-control"
@@ -136,7 +153,7 @@
         </div>
       </div>
       <div class="form-group">
-        <label for="idx">{{ "channel id" | t }}</label>
+        <label for="channel">{{ "channel id" | t }}</label>
         <input
           type="text"
           class="form-control"
@@ -179,7 +196,8 @@ export default class AdminPushNotification extends Vue {
     notify: "all",
     topic: "",
     tokens: "",
-    email: "",
+    emails: "",
+    users: "",
     title: "",
     body: "",
     click_action: "",
@@ -216,11 +234,11 @@ export default class AdminPushNotification extends Vue {
       this.app.error(e);
     }
   }
+
   async sendPushNotification(): Promise<void> {
     if (this.loading) return;
     this.loading = true;
     const data: RequestData = {
-      route: "notification.sendMessageToTopic",
       title: this.options.title,
       body: this.options.body,
       click_action: this.options.click_action,
@@ -237,6 +255,14 @@ export default class AdminPushNotification extends Vue {
 
     try {
       let res: ResponseData = {};
+
+      /**
+       * Base on sending option it will request from the server
+       * All = send notification to default topic
+       * Topic = send notification to the givent topic
+       * Tokens = send notification to given tokens
+       * UserIDX/Emails = send notification to existing idx/email with their registed tokens
+       */
       if (this.options.notify === "all") {
         data["topic"] = DEFAULT_TOPIC;
         res = await this.app.api.sendMessageToTopic(data);
@@ -246,22 +272,26 @@ export default class AdminPushNotification extends Vue {
       } else if (this.options.notify === "tokens") {
         data["tokens"] = this.options.tokens;
         res = await this.app.api.sendMessageToTokens(data);
-      } else if (this.options.notify === "email") {
-        data["tokens"] = this.options.tokens;
-        res = await this.app.api.sendMessageToTokens(data);
+      } else if (this.options.notify === "emails") {
+        data["emails"] = this.options.emails;
+        data["users"] = this.options.users;
+        res = await this.app.api.sendMessageToUsers(data);
       }
+
       this.loading = false;
-      console.log(res);
+
       if (this.options.notify === "tokens") {
-        if (res.success.length > 0) {
-          alert("Success Sending push notification to tokens.");
-        } else if (res.error.length > 0) {
-          alert("Error Sending push notification to tokens. " + res.error[0]);
-        } else {
-          alert("Api Error on sending to tokens.");
-        }
+        const s = res.success.length;
+        const f = res.error.length;
+        this.app.api.alert(
+          "Send Push Message to tokens",
+          "${s} Success, ${f} Fail."
+        );
       } else {
-        alert("Success Sending push notification to topic.");
+        this.app.api.alert(
+          "Send Push Message to tokens",
+          "Success Sending push notification to topic."
+        );
       }
     } catch (e) {
       this.loading = false;
