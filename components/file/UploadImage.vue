@@ -83,7 +83,7 @@ export default class UploadImage extends Vue {
   async deleteImage(): Promise<void> {
     if (!this.file.idx) return;
     try {
-      const idx = await this.api.fileDelete(this.file.idx);
+      await this.api.fileDelete(this.file.idx);
       this.$emit("deleted", this.file.idx);
       this.file = {} as FileModel;
     } catch (e) {

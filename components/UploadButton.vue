@@ -50,7 +50,7 @@ export default class UploadButton extends Vue {
       // console.log("User cancelled upload");
       return;
     }
-    const file = event.target.files[0];
+    // const file = event.target.files[0];
     // this.app.api.fileUpload(
     //   file,
     //   {},

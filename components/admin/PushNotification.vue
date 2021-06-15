@@ -183,7 +183,7 @@
 <script lang="ts">
 import { AppService } from "@/service/app.service";
 import { DEFAULT_TOPIC } from "@/x-vue/services/defines";
-import { RequestData, ResponseData } from "@/x-vue/services/interfaces";
+import { RequestData } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
 
@@ -254,7 +254,7 @@ export default class AdminPushNotification extends Vue {
     }
 
     try {
-      let res: ResponseData = {};
+      // let res: ResponseData = {};
 
       /**
        * Base on sending option it will request from the server
@@ -265,24 +265,24 @@ export default class AdminPushNotification extends Vue {
        */
       if (this.options.notify === "all") {
         data["topic"] = DEFAULT_TOPIC;
-        res = await this.app.api.sendMessageToTopic(data);
+        await this.app.api.sendMessageToTopic(data);
       } else if (this.options.notify === "topic") {
         data["topic"] = this.options.topic;
-        res = await this.app.api.sendMessageToTopic(data);
+        await this.app.api.sendMessageToTopic(data);
       } else if (this.options.notify === "tokens") {
         data["tokens"] = this.options.tokens;
-        res = await this.app.api.sendMessageToTokens(data);
+        await this.app.api.sendMessageToTokens(data);
       } else if (this.options.notify === "emails") {
         data["emails"] = this.options.emails;
         data["users"] = this.options.users;
-        res = await this.app.api.sendMessageToUsers(data);
+        await this.app.api.sendMessageToUsers(data);
       }
 
       this.loading = false;
 
       if (this.options.notify === "tokens") {
-        const s = res.success.length;
-        const f = res.error.length;
+        // const s = res.success.length;
+        // const f = res.error.length;
         this.app.api.alert(
           "Send Push Message to tokens",
           "${s} Success, ${f} Fail."
