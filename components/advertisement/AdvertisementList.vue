@@ -8,6 +8,9 @@
           <br />
           <div class="badge badge-success" v-if="post.isActive">Active</div>
           <div class="badge badge-warning" v-if="!post.isActive">Inactive</div>
+          <div class="ml-2 badge badge-warning" v-if="!post.fileIdxes">
+            No photo
+          </div>
         </router-link>
       </div>
     </div>
@@ -74,6 +77,7 @@ export default class PostList extends Vue {
   async mounted(): Promise<void> {
     this.options.limit = this.limit;
     this.options.page = 1;
+    this.options.categoryId = "advertisement";
     this.options.userIdx = this.api.user.idx;
     this.loadPosts();
 
