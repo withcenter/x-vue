@@ -655,23 +655,13 @@ export class ApiService {
     return store.state.advertisementSettings;
   }
 
-  async advertisementEdit(data: RequestData): Promise<PostModel> {
-    const res = await this.request("advertisement.edit", data);
+  async advertisementStart(data: RequestData): Promise<PostModel> {
+    const res = await this.request("advertisement.start", data);
     return new PostModel().fromJson(res);
   }
 
-  async advertisementCancel(idx: number): Promise<PostModel> {
-    const res = await this.request("advertisement.cancel", { idx: idx });
-    return new PostModel().fromJson(res);
-  }
-
-  async advertisementRefund(idx: number): Promise<PostModel> {
-    const res = await this.request("advertisement.refund", { idx: idx });
-    return new PostModel().fromJson(res);
-  }
-
-  async advertisementDelete(idx: number): Promise<PostModel> {
-    const res = await this.request("advertisement.delete", { idx: idx });
+  async advertisementStop(idx: number): Promise<PostModel> {
+    const res = await this.request("advertisement.stop", { idx: idx });
     return new PostModel().fromJson(res);
   }
 

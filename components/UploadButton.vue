@@ -15,7 +15,6 @@
 
 <script lang="ts">
 import { AppService } from "@/service/app.service";
-import { FileModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
 
@@ -40,7 +39,7 @@ export default class UploadButton extends Vue {
     if (this.size) this.defaultSize = this.size;
   }
 
-  onFileChange(event: HTMLInputEvent): void {
+  async onFileChange(event: HTMLInputEvent): Promise<void> {
     if (this.app.notLoggedIn) {
       this.app.error("error_login_first");
       return;
@@ -51,6 +50,7 @@ export default class UploadButton extends Vue {
       return;
     }
     const file = event.target.files[0];
+    // const file = event.target.files[0];
     // this.app.api.fileUpload(
     //   file,
     //   {},
@@ -58,11 +58,14 @@ export default class UploadButton extends Vue {
     //   this.app.error,
     //   this.onProgress
     // );
-  }
+    // }
 
-  onUploaded(file: FileModel): void {
-    // console.log(file);
-    this.$emit("success", file);
+    try {
+      const res = await this.app.api.fileUpload(file, {}, this.onProgress);
+      this.$emit("success", res);
+    } catch (e) {
+      this.app.error(e);
+    }
   }
 
   onProgress(progress: number): void {

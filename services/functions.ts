@@ -108,8 +108,11 @@ export function isPast(date: string): boolean {
   return true;
 }
 
-export function getStringDate(date: Date): string {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate())
-    .toISOString()
-    .split("T")[0];
-}
+// export function getStringDate(date: Date): string {
+//   const re = new Date(date.getFullYear(), date.getMonth(), date.getDate())
+//     .toISOString()
+//     .split("T")[0];
+
+//   // console.log("re; ", re);
+//   return re;
+// }
