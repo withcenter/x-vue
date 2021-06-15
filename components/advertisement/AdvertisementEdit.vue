@@ -1,11 +1,6 @@
 <template>
   <div v-if="settings">
     <form @submit.prevent="onSubmit">
-      <!-- <div>
-        @todo If there is no advertisement, guide the user how to create first
-        advertisement esialy.
-      </div> -->
-
       <div class="box mt-2">
         <label>{{ "advertisement_banner" | t }}</label>
 
@@ -45,6 +40,19 @@
         />
         <small class="form-text text-muted">
           {{ "adv_contact_no_hint" | t }}
+        </small>
+      </div>
+
+      <div class="form-group mt-2">
+        <label>{{ "click_url" | t }}</label>
+        <input
+          class="form-control"
+          placeholder="Click URL"
+          type="text"
+          v-model="post.clickURL"
+        />
+        <small class="form-text text-muted">
+          Add redirect when user click your advertisement
         </small>
       </div>
 
@@ -108,7 +116,7 @@
         </small>
       </div>
 
-      <div class="form-group bg-light p-3 mt-2">
+      <div class="form-group bg-light p-3 mt-3">
         <label>{{ "advertisement_begin_end_date" | t }}</label>
         <div class="d-flex justify-content-between">
           <label
@@ -159,24 +167,19 @@
       </div>
 
       <!-- Total Advertisement price in points -->
-      <div class="alert alert-info">
-        Total Points required: <b v-if="priceInPoint">{{ priceInPoint }}</b>
-        <small class="text-danger" v-if="isPointInsufficient">
-          Insufficient point! You don't have enough point to create this kind of
-          advertisement. </small
+      <div class="alert alert-info" v-if="priceInPoint">
+        Total Points required: <b>{{ priceInPoint }}</b
         ><br />
-
         <small class="text-info">
           To get <b>Total Points Required</b> to create an advertisement,
           <b>Points Per Day</b> from chosen <b>Banner Type</b> is multiplied to
           the total number of days beginning from <b>"Begin date"</b> to
           <b>"End date"</b>.
         </small>
-        <!-- @todo when user change dates, display the price (point).
-        @todo If the user is lack of point, display warning. -->
       </div>
 
-      <div>
+      <!-- Save -->
+      <div class="mt-2">
         <button
           class="w-100 btn btn-outline-primary"
           type="submit"
@@ -184,15 +187,13 @@
         >
           Save the advertisement
         </button>
-        <!-- @todo After save, display one of "cancel" or "refund" button.<br />
-        @todo When the user press save button, deduct the point from user. And
-        the date is no loger changable.<br />
-        @todo Delete button will be shown if the banner has no point. Meaning 1)
-        the user may not have paid the point yet. 2) the banner was cancelled,
-        or refunded. In which case, the banner can be deleted without point
-        refund computation, then "delete button" will be displayed. -->
+        <small class="text-danger" v-if="isPointInsufficient">
+          <b>Insufficient point!</b> You don't have enough point to create
+          advertisement. </small
+        ><br />
       </div>
 
+      <!-- Cancel, Refund, Delete -->
       <div class="mt-3" v-if="isNotEdittable">
         <div class="alert alert-info" v-if="servingDaysLeft > 2">
           Refundable Points: <b>{{ refundablePoints }}</b> <br />
@@ -219,8 +220,6 @@
         >
           Cancel Advertisement
         </button>
-        <!-- @todo Cancel button will be shown if the banner has not begin yet.<br />
-        @todo Refund button will be shown if the banner has begun.<br /> -->
         <hr />
       </div>
 
@@ -232,11 +231,10 @@
         >
           Delete Advertisement
         </button>
-        <!-- @todo after cancel or refund, display "resume the advertisement" or
-        "delete" button. -->
       </div>
 
-      <div class="box">
+      <!-- Banner points country listing table -->
+      <div class="mt-3 box">
         <p>
           Advertisement Points Listing:
           <span v-if="post.countryCode">
@@ -262,21 +260,42 @@
           Note: Points listing vary depending on the chosen country.
         </small>
       </div>
-      <!-- @todo banner price computation. The price list is comming from the admin
-      settings. and the price is difference based on country and banner place.
+    </form>
 
-      <br />
+    <!-- TODOS:
+        
+      @todo If there is no advertisement, guide the user how to create first
+      advertisement esialy.
+
+      @todo when user change dates, display the price (point).
+      @todo If the user is lack of point, display warning.  
+
+      @todo After save, display one of "cancel" or "refund" button.
+      @todo When the user press save button, deduct the point from user. And
+      the date is no loger changable.
+      
+      @todo Delete button will be shown if the banner has no point. Meaning 
+      1) the user may not have paid the point yet.
+      2) the banner was cancelled, or refunded.
+      In which case, the banner can be deleted without point
+      refund computation, then "delete button" will be displayed.
+
+      @todo Cancel button will be shown if the banner has not begin yet.
+      @todo Refund button will be shown if the banner has begun.
+      @todo add stop button when advertisement is due or neither refundable nor cancellable
+      @todo after cancel or refund, display "resume the advertisement" or "delete" button.
+
       @todo 무통장 입금 표시. 세금을 포함해서 계산한다.
-      <hr />
+    
       @todo 경고. 회원 활동으로 획득한 포인트를 광고에 이용 할 수 있습니다.
       하지만, 직접 활동하여 얻는 포인트(예, 포인트가 많은 다른 사용자의 계정으로
       광고 등록)하면, 광고 해지 및 포인트 0점 처리, 그리고 영구 차단이 되므로
       주의하시기 바랍니다.
-      <hr />
+
       @doc 광고가 진행되면, 날짜, 국가, 광고 위치는 변경 불가하다. 이 세 가지를
       변경하면 광고비 설정이 달라지기 때문에, 취소 또는 환불 후 다시 설정해야
-      한다. 다만, 게시판이나 글로벌의 위치는 변경 할 수 있다. -->
-    </form>
+      한다. 다만, 게시판이나 글로벌의 위치는 변경 할 수 있다.
+     -->
   </div>
 </template>
 
@@ -463,9 +482,8 @@ export default class Advertisement extends Vue {
     if (this.post.idx) isCreate = false;
     try {
       this.post = await this.api.advertisementEdit(this.post.toJson);
-
+      store.commit("refreshProfile");
       if (isCreate) {
-        store.commit("refreshProfile");
         ApiService.instance.open(`/advertisement/edit/${this.post.idx}`);
       }
     } catch (e) {
