@@ -6,7 +6,7 @@
           class="form-control mb-2"
           type="text"
           v-model="id"
-          placeholder="enter_category_id"
+          :placeholder="'enter_category_id' | t"
         />
         <button class="btn btn-primary ml-3 mb-2 w-50" type="submit">
           {{ "create" | t }}
