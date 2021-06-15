@@ -231,6 +231,9 @@ export class PostRootModel {
 
   user: UserModel = {} as UserModel;
 
+  pointPerDay = 0;
+  advertisementPoint = 0;
+
   get isPost(): boolean {
     return !this.parentIdx;
   }
@@ -242,8 +245,8 @@ export class PostRootModel {
     return this.deletedAt > 0;
   }
 
-  get isActive(): boolean {
-    return this.endAt > 0;
+  get isAdvertisementActive(): boolean {
+    return this.advertisementPoint > 0;
   }
 
   fromJson(map: ResponseData): PostRootModel {
@@ -284,6 +287,9 @@ export class PostRootModel {
 
 export class PostModel extends PostRootModel {
   fromJson(map: ResponseData): PostModel {
+    this.pointPerDay = map.pointPerDay;
+    this.advertisementPoint = map.advertisementPoint;
+
     this.url = map.url;
     this.path = map.path;
     this.relativeUrl = map.relativeUrl;

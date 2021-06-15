@@ -1,51 +1,189 @@
 <template>
   <div v-if="settings">
     <form @submit.prevent="onSubmit">
-      <div class="box mt-2">
-        <label>{{ "advertisement_banner" | t }}</label>
+      <div class="box" v-if="post.isAdvertisementActive">
+        <div>
+          {{ "adv_banner_type" | t }}
+          <h2>{{ post.code }}</h2>
+        </div>
+        <div>
+          {{ "country" | t }}
+          <h2>{{ countries[post.countryCode] }}</h2>
+        </div>
+        <div>
+          {{ "adv_banner_dates" | t }}
+          <h2>{{ post.beginDate }} ~ {{ post.endDate }}</h2>
+        </div>
 
-        <upload-image
-          taxonomy="posts"
-          :entity="post.idx"
-          code="banner"
-          @uploaded="onFileUpload"
-          v-if="isMounted"
-        ></upload-image>
-
-        <small class="form-text text-muted">
-          {{ "advertisement_banner_description" | t }}
-        </small>
+        <!-- TODO: Cancel, Refund, Delete -->
+        <div class="mt-3">
+          <div class="alert alert-info" v-if="servingDaysLeft">
+            {{ "adv_refundable_points" | t }}: <b>{{ refundablePoints }}</b>
+            <br />
+            <small class="text-info">
+              {{ "adv_refundable_points_hint" | t }}
+            </small>
+          </div>
+          <button
+            class="w-100 btn btn-outline-danger"
+            type="button"
+            v-if="isCancellable"
+            @click="onAdvertisementStop"
+          >
+            Cancel Advertisement
+          </button>
+          <button
+            class="w-100 mt-2 btn btn-outline-info"
+            type="button"
+            v-if="isRefundable"
+            @click="onAdvertisementStop"
+          >
+            Stop Advertisement
+          </button>
+        </div>
       </div>
 
-      <div class="box mt-2">
-        <label>{{ "advertisement_content_banner" | t }}</label>
+      <div class="mb" v-if="post.idx && !post.isAdvertisementActive">
+        <!-- banner type -->
+        <div class="form-group mt-2">
+          <label>Banner Type/Position</label>
+          <select
+            class="form-control"
+            v-model="post.code"
+            :disabled="post.isAdvertisementActive"
+          >
+            <option value="" disabled selected>Select Type</option>
+            <option v-for="type in settings.types" :key="type">
+              {{ type }}
+            </option>
+          </select>
+          <small class="form-text text-muted">
+            Select where you want to display your banner.
+          </small>
+        </div>
 
-        <upload-image
-          taxonomy="posts"
-          :entity="post.idx"
-          code="banner"
-          @uploaded="onFileUpload"
-          v-if="isMounted"
-        ></upload-image>
+        <!-- Banner country -->
+        <div class="form-group mt-2" v-if="countries">
+          <label>Cafe Country</label>
+          <select
+            value=""
+            class="form-control"
+            v-model="post.countryCode"
+            :disabled="post.isAdvertisementActive"
+          >
+            <option disabled selected>Select Country</option>
+            <option
+              v-for="(value, name) in countries"
+              :key="name"
+              :value="name"
+            >
+              {{ value }}
+            </option>
+          </select>
+          <small class="form-text text-muted">
+            Select the country. 어느 국가의 교민 카페들에게 광고 표시를 할지
+            선택해 주세요.
+          </small>
+        </div>
 
-        <small class="form-text text-muted">
-          {{ "advertisement_banner_description" | t }}
-        </small>
+        <div class="box" v-if="post.code">
+          Points Per Day: <b>{{ countryPointListing[post.code] }}</b> <br />
+          <small class="text-info">
+            Note: Point per day may vary depending on the banner type and chosen
+            country.
+          </small>
+        </div>
+
+        <!-- banner start and end date -->
+        <div class="form-group bg-light p-3 mt-3">
+          <label>{{ "advertisement_begin_end_date" | t }}</label>
+          <div class="d-flex justify-content-between">
+            <label
+              >Begin Date
+              <input
+                v-model="post.beginDate"
+                type="date"
+                :min="beginAtMin"
+                :max="beginAtMax"
+                :disabled="post.isAdvertisementActive"
+              />
+            </label>
+            <label>
+              End Date
+              <input
+                v-model="post.endDate"
+                type="date"
+                :min="endAtMin"
+                :disabled="post.isAdvertisementActive"
+              />
+            </label>
+          </div>
+
+          <small class="form-text text-muted mb-2">
+            {{ "advertisement_serving_days" | t }}: <b>{{ servingDaysLeft }}</b>
+            {{ "days" | t }}
+          </small>
+          <small class="form-text text-muted mb-2">
+            No of advertisement days: {{ noOfDays }}
+          </small>
+          <small class="form-text text-muted">
+            광고비 시작 날짜와 끝 날짜를 선택해주세요.
+          </small>
+          <small class="form-text text-muted">
+            참고: 날짜 입력은 직접 입력하지 않고, Input 태그의 달력에서 날짜를
+            선택한다. type=date 의 표시는 YYYY/MM/DD 이지만, PHP 로 전달은
+            YYYY-MM-DD 이다.
+          </small>
+          <small class="form-text text-muted">
+            참고: 광고가 23일 까지이면, 밤 23일까지 표시된다. 즉, 광고가 0일
+            남아도, 마지막 날 밤까지 광고가 표시된다. 이에 따라, 오늘 부터 7일간
+            광고를 진행하면, 오늘은 이미 광고 진행된 것으로 계산해서, 오늘을
+            제외하고 6일이 남는 것이다. 정확히 7일동안 광고를 하려면, 광고 시작
+            날짜를 내일로 해야 한다.
+          </small>
+        </div>
+
+        <!-- Total Advertisement price in points -->
+        <div class="alert alert-info" v-if="priceInPoint">
+          Total Points required: <b>{{ priceInPoint }}</b
+          ><br />
+          <small class="text-info">
+            To get <b>Total Points Required</b> to create an advertisement,
+            <b>Points Per Day</b> from chosen <b>Banner Type</b> is multiplied
+            to the total number of days beginning from <b>"Begin date"</b> to
+            <b>"End date"</b>.
+          </small>
+        </div>
+
+        <!-- Save Advertisement -->
+        <div class="mt-2">
+          <button
+            class="w-100 btn btn-outline-primary"
+            type="button"
+            :disabled="isPointInsufficient"
+            @click="onAdvertisementStart"
+          >
+            Save the advertisement
+          </button>
+          <small class="text-danger" v-if="isPointInsufficient">
+            <b>Insufficient point!</b> You don't have enough point to create
+            advertisement. </small
+          ><br />
+        </div>
       </div>
 
-      <div class="form-group mt-2">
-        <label>{{ "click_url" | t }}</label>
+      <!-- title -->
+      <div class="form-group mt-5">
+        <label>{{ "title" | t }}</label>
         <input
           class="form-control"
-          placeholder="Click URL"
+          :placeholder="'title' | t"
           type="text"
-          v-model="post.clickURL"
+          v-model="post.title"
         />
-        <small class="form-text text-muted">
-          Add redirect when user click your advertisement
-        </small>
       </div>
 
+      <!-- subcategory -->
       <div class="form-group mt-2">
         <label>Category(or global)</label>
         <select class="form-control" v-model="post.subcategory">
@@ -62,7 +200,50 @@
         </small>
       </div>
 
-      <div class="form-group mt-2">
+      <!-- banner -->
+      <div class="box mt-4">
+        <label>{{ "advertisement_banner" | t }}</label>
+        <upload-image
+          taxonomy="posts"
+          :entity="post.idx"
+          code="banner"
+          @uploaded="onFileUpload"
+          v-if="isMounted"
+        ></upload-image>
+        <small class="form-text text-muted">
+          {{ "advertisement_banner_description" | t }}
+        </small>
+      </div>
+
+      <!-- content banner -->
+      <div class="box mt-2">
+        <label>{{ "advertisement_content_banner" | t }}</label>
+        <upload-image
+          taxonomy="posts"
+          :entity="post.idx"
+          code="banner"
+          @uploaded="onFileUpload"
+          v-if="isMounted"
+        ></upload-image>
+        <small class="form-text text-muted">
+          {{ "advertisement_banner_description" | t }}
+        </small>
+      </div>
+
+      <!-- content -->
+      <div class="form-group mt-4">
+        <label>{{ "content" | t }}</label>
+        <textarea
+          class="form-control"
+          :placeholder="'content' | t"
+          type="text"
+          v-model="post.content"
+          rows="5"
+        ></textarea>
+      </div>
+
+      <!-- memo -->
+      <div class="form-group mt-2" v-if="!post.idx">
         <label>{{ "adv_memo" | t }}</label>
         <input
           class="form-control"
@@ -75,171 +256,29 @@
         </small>
       </div>
 
-      <div class="form-group mt-2">
-        <label>Banner Type/Position</label>
-        <select
-          class="form-control"
-          v-model="post.code"
-          :disabled="isNotEdittable"
-        >
-          <option value="" disabled selected>Select Type</option>
-          <option v-for="type in settings.types" :key="type">
-            {{ type }}
-          </option>
-        </select>
-        <small class="form-text text-muted">
-          Select where you want to display your banner.
-        </small>
-      </div>
-
-      <div class="form-group mt-2" v-if="countries">
-        <label>Cafe Country</label>
-        <select
-          value=""
-          class="form-control"
-          v-model="post.countryCode"
-          :disabled="isNotEdittable"
-        >
-          <option disabled selected>Select Country</option>
-          <option v-for="(value, name) in countries" :key="name" :value="name">
-            {{ value }}
-          </option>
-        </select>
-        <small class="form-text text-muted">
-          Select the country. 어느 국가의 교민 카페들에게 광고 표시를 할지
-          선택해 주세요.
-        </small>
-      </div>
-
-      <div class="box" v-if="post.code">
-        Points Per Day: <b>{{ countryPointListing[post.code] }}</b> <br />
-        <small class="text-info">
-          Note: Point per day may vary depending on the banner type and chosen
-          country.
-        </small>
-      </div>
-
-      <div class="form-group bg-light p-3 mt-3">
-        <label>{{ "advertisement_begin_end_date" | t }}</label>
-        <div class="d-flex justify-content-between">
-          <label
-            >Begin Date
-            <input
-              v-model="post.beginDate"
-              type="date"
-              name="beginAt"
-              :min="beginAtMin"
-              :max="beginAtMax"
-              :disabled="isNotEdittable"
-            />
-          </label>
-          <label>
-            End Date
-            <input
-              v-model="post.endDate"
-              type="date"
-              name="endAt"
-              :min="endAtMin"
-              :disabled="isNotEdittable"
-            />
-          </label>
-        </div>
-
-        <small class="form-text text-muted mb-2">
-          {{ "advertisement_serving_days" | t }}: <b>{{ servingDaysLeft }}</b>
-          {{ "days" | t }}
-        </small>
-        <small class="form-text text-muted mb-2">
-          No of advertisement days: {{ noOfDays }}
-        </small>
-        <small class="form-text text-muted">
-          광고비 시작 날짜와 끝 날짜를 선택해주세요.
-        </small>
-        <small class="form-text text-muted">
-          참고: 날짜 입력은 직접 입력하지 않고, Input 태그의 달력에서 날짜를
-          선택한다. type=date 의 표시는 YYYY/MM/DD 이지만, PHP 로 전달은
-          YYYY-MM-DD 이다.
-        </small>
-        <small class="form-text text-muted">
-          참고: 광고가 23일 까지이면, 밤 23일까지 표시된다. 즉, 광고가 0일
-          남아도, 마지막 날 밤까지 광고가 표시된다. 이에 따라, 오늘 부터 7일간
-          광고를 진행하면, 오늘은 이미 광고 진행된 것으로 계산해서, 오늘을
-          제외하고 6일이 남는 것이다. 정확히 7일동안 광고를 하려면, 광고 시작
-          날짜를 내일로 해야 한다.
-        </small>
-      </div>
-
-      <!-- Total Advertisement price in points -->
-      <div class="alert alert-info" v-if="priceInPoint">
-        Total Points required: <b>{{ priceInPoint }}</b
-        ><br />
-        <small class="text-info">
-          To get <b>Total Points Required</b> to create an advertisement,
-          <b>Points Per Day</b> from chosen <b>Banner Type</b> is multiplied to
-          the total number of days beginning from <b>"Begin date"</b> to
-          <b>"End date"</b>.
-        </small>
-      </div>
-
-      <!-- Save -->
-      <div class="mt-2">
+      <div class="d-flex">
+        <!-- delete -->
         <button
-          class="w-100 btn btn-outline-primary"
-          type="submit"
-          :disabled="isPointInsufficient"
-        >
-          Save the advertisement
-        </button>
-        <small class="text-danger" v-if="isPointInsufficient">
-          <b>Insufficient point!</b> You don't have enough point to create
-          advertisement. </small
-        ><br />
-      </div>
-
-      <!-- Cancel, Refund, Delete -->
-      <div class="mt-3" v-if="isNotEdittable">
-        <div class="alert alert-info" v-if="servingDaysLeft > 2">
-          Refundable Points: <b>{{ refundablePoints }}</b> <br />
-          <small class="text-info">
-            If the advertisement has not start being served yet, 100% of the
-            total required point is refundable. <br />
-            If the advertisement has started to be served, 5% of points from the
-            remaining days multiplied by point per day will be deducted.
-          </small>
-        </div>
-        <button
-          class="w-100 btn btn-outline-success"
-          type="button"
-          v-if="isRefundable && servingDaysLeft > 2"
-          @click="onClickRefund"
-        >
-          Refund ({{ servingDaysLeft }}) Remaining Days
-        </button>
-        <button
-          class="w-100 btn btn-outline-danger"
-          type="button"
-          v-if="!isRefundable"
-          @click="onClickCancel"
-        >
-          Cancel Advertisement
-        </button>
-        <hr />
-      </div>
-
-      <div v-if="isDeletable">
-        <button
-          class="w-100 mt-2 btn btn-outline-danger"
+          class="mt-2 btn btn-outline-danger"
           type="button"
           @click="onClickDelete"
+          v-if="post.idx"
+          :disabled="post.isAdvertisementActive"
         >
-          Delete Advertisement
+          {{ "delete" | t }}
+        </button>
+        <span class="flex-grow-1"></span>
+        <!-- save / update -->
+        <button class="mt-2 btn btn-outline-success" type="submit">
+          <span v-if="post.idx">{{ "update" | t }}</span>
+          <span v-if="!post.idx">{{ "save" | t }}</span>
         </button>
       </div>
 
       <!-- Banner points country listing table -->
-      <div class="mt-3 box">
+      <div class="mt-3 box" v-if="post.idx">
         <p>
-          Advertisement Points Listing:
+          {{ "adv_point_listing" | t }}:
           <span v-if="post.countryCode">
             {{ post.countryCode }} - {{ countries[post.countryCode] }}
           </span>
@@ -248,7 +287,7 @@
         <table class="w-100 mt-2 table table-striped">
           <thead>
             <tr class="table-header">
-              <th scope="col">Banner Type</th>
+              <th scope="col">{{ "adv_banner_type" | t }}</th>
               <th scope="col">Points(per day)</th>
             </tr>
           </thead>
@@ -402,7 +441,8 @@ export default class Advertisement extends Vue {
    * @returns string - returns the minimum selectable date for the "endAt" input.
    */
   get endAtMin(): string {
-    const d = this.post.beginDate ? new Date(this.post.beginDate) : this.now;
+    let d = this.now;
+    if (this.post.beginDate) d = new Date(this.post.beginDate);
     d.setDate(d.getDate() + 1);
     return getStringDate(d);
   }
@@ -411,8 +451,8 @@ export default class Advertisement extends Vue {
    * @returns string - returns the maximum selectable date for the "beginAt" input.
    */
   get beginAtMax(): string {
-    if (!this.post.endDate) return "";
-    return this.endAtMin;
+    if (this.post.endDate) return getStringDate(new Date(this.post.endDate));
+    return "";
   }
 
   /**
@@ -441,14 +481,6 @@ export default class Advertisement extends Vue {
   }
 
   /**
-   * @returns boolean - returns if some field for the Advertisement form is edittable.
-   * Once the advertisement is created, it will be true, and some parts of the form will be either disabled or hidden.
-   */
-  get isNotEdittable(): boolean {
-    return !!this.post.idx && !!this.post.beginAt && !!this.post.endAt;
-  }
-
-  /**
    * @returns boolean - Returns wether the advertisement can be refunded or not.
    * If the Advertisement is saved but has begun to be served, it will return true.
    * If it is not begun yet, it will return false.
@@ -457,35 +489,31 @@ export default class Advertisement extends Vue {
     return isPast(this.post.beginDate);
   }
 
-  get refundablePoints(): number {
-    let refundable =
-      this.servingDaysLeft * this.countryPointListing[this.post.code];
-    if (this.servingDaysLeft < this.noOfDays) {
-      const penalty = refundable * 0.05;
-      refundable -= penalty;
-    }
-    return refundable;
+  get isCancellable(): boolean {
+    return isFuture(this.post.beginDate);
   }
 
-  get isDeletable(): boolean {
-    return !!this.post.idx && !this.post.beginAt && !this.post.endAt;
+  get refundablePoints(): number {
+    if (this.servingDaysLeft < 1) return 0;
+    return this.servingDaysLeft * this.countryPointListing[this.post.code];
   }
 
   async loadAdvertisement(): Promise<void> {
     try {
       this.post = await this.api.postGet({ idx: this.post.idx });
-      // console.log("advertisement: ", this.post);
+      console.log("advertisement: ", this.post);
     } catch (e) {
       this.api.error(e);
     }
   }
 
+  // TODO advertisement create/update
   async onSubmit(): Promise<void> {
+    console.log(this.post.toJson);
     let isCreate = true;
     if (this.post.idx) isCreate = false;
     try {
-      this.post = await this.api.advertisementEdit(this.post.toJson);
-      store.commit("refreshProfile");
+      this.post = await this.api.postEdit(this.post.toJson);
       if (isCreate) {
         ApiService.instance.open(`/advertisement/edit/${this.post.idx}`);
       }
@@ -494,32 +522,24 @@ export default class Advertisement extends Vue {
     }
   }
 
-  async onClickCancel(): Promise<void> {
-    // !TODO: why it's not working?
-    // const conf = await this.api.confirm(
-    //   "Are you sure you want to cancel the advertisement?",
-    //   ""
-    // );
-    const conf = confirm("Are you sure you want to cancel the advertisement?");
-    if (!conf) return;
+  /**
+   * Starts the advertisement.
+   */
+  async onAdvertisementStart(): Promise<void> {
     try {
-      this.post = await this.api.advertisementCancel(this.post.idx);
+      this.post = await this.api.advertisementStart(this.post.toJson);
       store.commit("refreshProfile");
     } catch (e) {
       this.api.error(e);
     }
   }
 
-  async onClickRefund(): Promise<void> {
-    // !TODO: why it's not working?
-    // const conf = await this.api.confirm(
-    //   "Are you sure you want to refund the advertisement?",
-    //   ""
-    // );
-    const conf = confirm("Are you sure you want to refund the advertisement?");
+  async onAdvertisementStop(): Promise<void> {
+    // !TODO: use ApiService confirm.
+    const conf = confirm("Are you sure you want to cancel the advertisement?");
     if (!conf) return;
     try {
-      this.post = await this.api.advertisementRefund(this.post.idx);
+      this.post = await this.api.advertisementStop(this.post.idx);
       store.commit("refreshProfile");
     } catch (e) {
       this.api.error(e);
@@ -527,15 +547,11 @@ export default class Advertisement extends Vue {
   }
 
   async onClickDelete(): Promise<void> {
-    // !TODO: why it's not working?
-    // const conf = await this.api.confirm(
-    //  "Are you sure you want to delete the advertisement?",
-    //   ""
-    // );
+    // !TODO: use ApiService confirm.
     const conf = confirm("Are you sure you want to delete the advertisement?");
     if (!conf) return;
     try {
-      this.post = await this.api.advertisementDelete(this.post.idx);
+      this.post = await this.api.postDelete(this.post.idx);
       store.state.router.push("/advertisement");
     } catch (e) {
       this.api.error(e);
@@ -543,13 +559,7 @@ export default class Advertisement extends Vue {
   }
 
   onFileUpload(file: FileModel): void {
-    console.log("onFileUpload; ");
     this.post.fileIdxes = addByComma(this.post.fileIdxes, file.idx);
   }
-
-  // onFileUploaded(file: FileModel): void {
-  //   this.post.files.push(file);
-  //   this.uploadProgress = 0;
-  // }
 }
 </script>

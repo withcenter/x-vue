@@ -4,13 +4,17 @@
       <div class="p-2" v-for="post of posts" :key="post.idx">
         <router-link :to="`/advertisement/edit/${post.idx}`">
           No. {{ post.idx }} -
-          <span class="mr-2" v-if="!post.deletedAt">{{ post.name }}</span>
-          <br />
-          <div class="badge badge-success" v-if="post.isActive">Active</div>
-          <div class="badge badge-warning" v-if="!post.isActive">Inactive</div>
-          <div class="ml-2 badge badge-warning" v-if="!post.fileIdxes">
+          <span class="mr-2" v-if="!post.deletedAt">{{ post.title }}</span>
+          <span class="badge badge-success" v-if="post.isAdvertisementActive">
+            Active
+          </span>
+          <span class="badge badge-warning" v-if="!post.isAdvertisementActive">
+            Inactive
+          </span>
+          <span class="ml-2 badge badge-warning" v-if="!post.fileIdxes">
             No photo
-          </div>
+          </span>
+          <div>{{ post.content }}</div>
         </router-link>
       </div>
     </div>
