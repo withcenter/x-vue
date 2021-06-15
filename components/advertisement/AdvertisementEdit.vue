@@ -221,7 +221,7 @@
         <upload-image
           taxonomy="posts"
           :entity="post.idx"
-          code="banner"
+          code="content"
           @uploaded="onFileUpload"
           v-if="isMounted"
         ></upload-image>
@@ -243,7 +243,7 @@
       </div>
 
       <!-- memo -->
-      <div class="form-group mt-2" v-if="!post.idx">
+      <div class="form-group mt-2">
         <label>{{ "adv_memo" | t }}</label>
         <input
           class="form-control"
@@ -354,12 +354,12 @@ import { ApiService } from "@/x-vue/services/api.service";
 import {
   addByComma,
   daysBetween,
-  getStringDate,
   isFuture,
   isPast,
 } from "@/x-vue/services/functions";
 import store from "@/store";
 import UploadImage from "@/x-vue/components/file/UploadImage.vue";
+import dayjs from "dayjs";
 
 @Component({
   components: { UploadImage },
@@ -377,6 +377,7 @@ export default class Advertisement extends Vue {
   async mounted(): Promise<void> {
     // console.log("mounted;");
     // console.log(this.post);
+    // console.log();
     const idx = parseInt(this.$route.params.idx);
     if (idx) {
       this.post.idx = idx;
@@ -385,16 +386,13 @@ export default class Advertisement extends Vue {
       this.post.categoryId = "advertisement";
     }
 
-    this.beginAtMin = getStringDate(this.now);
+    this.beginAtMin = this.today;
+    // console.log("this.beginAtMin;", this.beginAtMin);
     this.isMounted = true;
   }
 
-  get now(): Date {
-    return new Date();
-  }
   get today(): string {
-    const n = this.now;
-    return n.getFullYear() + "-" + (n.getMonth() + 1) + "-" + n.getDate();
+    return dayjs().format("YYYY-MM-DD");
   }
 
   /**
@@ -441,17 +439,17 @@ export default class Advertisement extends Vue {
    * @returns string - returns the minimum selectable date for the "endAt" input.
    */
   get endAtMin(): string {
-    let d = this.now;
+    let d = new Date();
     if (this.post.beginDate) d = new Date(this.post.beginDate);
-    d.setDate(d.getDate() + 1);
-    return getStringDate(d);
+
+    return dayjs(d).format("YYYY-MM-DD");
   }
 
   /**
    * @returns string - returns the maximum selectable date for the "beginAt" input.
    */
   get beginAtMax(): string {
-    if (this.post.endDate) return getStringDate(new Date(this.post.endDate));
+    if (this.post.endDate) return dayjs(this.post.endDate).format("YYYY-MM-DD");
     return "";
   }
 
