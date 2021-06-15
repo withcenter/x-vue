@@ -1,11 +1,13 @@
 <template>
   <section data-cy="advertisement-list-page" class="advertisement-list-page">
     <div class="mt-3" v-if="posts.length">
-      <div v-for="post of posts" :key="post.idx">
+      <div class="p-2" v-for="post of posts" :key="post.idx">
         <router-link :to="`/advertisement/edit/${post.idx}`">
           No. {{ post.idx }} -
-          <span v-if="!post.deletedAt">{{ post.name }}</span>
-          <span v-if="post.deletedAt">{{ "deleted" | t }}</span>
+          <span class="mr-2" v-if="!post.deletedAt">{{ post.name }}</span>
+          <br />
+          <div class="badge badge-success" v-if="post.isActive">Active</div>
+          <div class="badge badge-warning" v-if="!post.isActive">Inactive</div>
         </router-link>
       </div>
     </div>

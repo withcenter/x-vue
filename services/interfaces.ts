@@ -156,13 +156,13 @@ export class UserModel {
 
 // TODO: Remove this, instead we use PostModel.
 // @deprecated
-export class PostEditModel {
-  idx = 0;
-  title = "";
-  content = "";
-  categoryId = "";
-  files = "";
-}
+// export class PostEditModel {
+//   idx = 0;
+//   title = "";
+//   content = "";
+//   categoryId = "";
+//   files = "";
+// }
 
 export class CommentEditModel {
   idx = 0;
@@ -202,8 +202,8 @@ export class PostRootModel {
   code = "";
   countryCode = "";
 
-  beginAt = "";
-  endAt = "";
+  beginAt = 0;
+  endAt = 0;
   beginDate = "";
   endDate = "";
 
@@ -215,7 +215,7 @@ export class PostRootModel {
 
   Y = 0;
   N = 0;
-  deletedAt = "";
+  deletedAt = 0;
   depth = "";
 
   /**
@@ -236,6 +236,14 @@ export class PostRootModel {
   }
   get isComment(): boolean {
     return !this.isPost;
+  }
+
+  get isDeleted(): boolean {
+    return this.deletedAt > 0;
+  }
+
+  get isActive(): boolean {
+    return this.endAt > 0;
   }
 
   fromJson(map: ResponseData): PostRootModel {
@@ -262,6 +270,7 @@ export class PostRootModel {
     // files
     if (map.files) {
       this.files = map.files.map((f: JSON) => new FileModel().fromJson(f));
+      this.fileIdxes = this.files.map((file) => `${file.idx}`).join(",");
     }
 
     return this;
