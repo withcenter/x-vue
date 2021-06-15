@@ -22,29 +22,19 @@
         </small>
       </div>
 
-      <div class="form-group mt-2">
-        <label>{{ "name" | t }}</label>
-        <input
-          class="form-control"
-          placeholder="Name"
-          type="text"
-          v-model="post.name"
-        />
-        <small class="form-text text-muted">
-          {{ "adv_name_hint" | t }}
-        </small>
-      </div>
+      <div class="box mt-2">
+        <label>{{ "advertisement_content_banner" | t }}</label>
 
-      <div class="form-group mt-2">
-        <label>{{ "contact_no" | t }}</label>
-        <input
-          class="form-control"
-          placeholder="Contact number"
-          type="text"
-          v-model="post.phoneNo"
-        />
+        <upload-image
+          taxonomy="posts"
+          :entity="post.idx"
+          code="banner"
+          @uploaded="onFileUpload"
+          v-if="isMounted"
+        ></upload-image>
+
         <small class="form-text text-muted">
-          {{ "adv_contact_no_hint" | t }}
+          {{ "advertisement_banner_description" | t }}
         </small>
       </div>
 
@@ -61,6 +51,19 @@
         <small class="form-text text-muted">
           Select which category you want to display your advertisement, if you
           don't choose category, it will default to global.
+        </small>
+      </div>
+
+      <div class="form-group mt-2">
+        <label>{{ "adv_memo" | t }}</label>
+        <input
+          class="form-control"
+          placeholder="Memo"
+          type="text"
+          v-model="post.privateContent"
+        />
+        <small class="form-text text-muted">
+          {{ "adv_memo_hint" | t }}
         </small>
       </div>
 
