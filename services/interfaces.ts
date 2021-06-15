@@ -468,10 +468,12 @@ export class CafeModel extends CategoryModel {
   // cafe
   app_name = "";
   app_background_color = "";
+  tokenCount = 0;
 
   fromJson(map: ResponseData): CafeModel {
     this.app_name = map.app_name;
     this.app_background_color = map.app_background_color ?? "";
+    this.tokenCount = map.tokenCount ?? 0;
     super.fromJson(map);
     return this;
   }
