@@ -122,6 +122,7 @@
               <input
                 v-model="post.beginDate"
                 type="date"
+                :min="beginAtMin"
                 :max="beginAtMax"
                 :disabled="post.isAdvertisementActive"
               />
@@ -463,7 +464,9 @@ export default class Advertisement extends Vue {
    * @returns number - returns the total range of days the user selected from beginAt to endAt dates.
    */
   get noOfDays(): number {
-    return daysBetween(this.post.beginDate, this.post.endDate) + 1;
+    const days = daysBetween(this.post.beginDate, this.post.endDate);
+    if (!days) return 0;
+    return days + 1;
   }
 
   /**
