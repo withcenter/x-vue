@@ -122,7 +122,6 @@
               <input
                 v-model="post.beginDate"
                 type="date"
-                :min="beginAtMin"
                 :max="beginAtMax"
                 :disabled="post.isAdvertisementActive"
               />
@@ -158,10 +157,10 @@
 
         <!-- Total Advertisement price in points -->
         <div class="alert alert-info" v-if="priceInPoint">
-          {{ "total_points_required" | t }}: <b>{{ priceInPoint }}</b
+          {{ "adv_total_points_required" | t }}: <b>{{ priceInPoint }}</b
           ><br />
           <small class="text-info">
-            {{ "total_points_required_hint" | t }}
+            {{ "adv_total_points_required_hint" | t }}
           </small>
         </div>
 
@@ -212,7 +211,7 @@
 
         <!-- banner -->
         <div class="box mt-4">
-          <label>{{ "advertisement_banner" | t }}</label>
+          <label>{{ "adv_banner" | t }}</label>
           <upload-image
             taxonomy="posts"
             :entity="post.idx"
@@ -221,13 +220,13 @@
             v-if="isMounted"
           ></upload-image>
           <small class="form-text text-muted">
-            {{ "advertisement_banner_description" | t }}
+            {{ "adv_banner_description" | t }}
           </small>
         </div>
 
         <!-- content banner -->
         <div class="box mt-2">
-          <label>{{ "advertisement_content_banner" | t }}</label>
+          <label>{{ "adv_content_banner" | t }}</label>
           <upload-image
             taxonomy="posts"
             :entity="post.idx"
@@ -236,7 +235,7 @@
             v-if="isMounted"
           ></upload-image>
           <small class="form-text text-muted">
-            {{ "advertisement_banner_description" | t }}
+            {{ "adv_banner_description" | t }}
           </small>
         </div>
 
@@ -472,9 +471,7 @@ export default class Advertisement extends Vue {
    * If it is not begun yet, it will return the `noOfDays` the advertisement will be served.
    */
   get servingDaysLeft(): number {
-    const isAfter = dayjs().isAfter(this.post.beginDate, "day");
-    // console.log("isAfter --", isAfter);
-    if (isAfter) return this.noOfDays;
+    if (!this.isRefundable) return this.noOfDays;
     else return daysBetween(this.today, this.post.endDate);
   }
 
@@ -502,7 +499,7 @@ export default class Advertisement extends Vue {
   }
 
   get refundablePoints(): number {
-    if (this.servingDaysLeft < 1) return 0;
+    if (this.servingDaysLeft < 0) return 0;
     return this.servingDaysLeft * this.countryPointListing[this.post.code];
   }
 
