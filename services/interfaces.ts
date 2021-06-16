@@ -234,6 +234,8 @@ export class PostRootModel {
   pointPerDay = 0;
   advertisementPoint = 0;
 
+  click_url = "";
+
   get isPost(): boolean {
     return !this.parentIdx;
   }
@@ -287,6 +289,7 @@ export class PostRootModel {
 
 export class PostModel extends PostRootModel {
   fromJson(map: ResponseData): PostModel {
+    this.click_url = map.click_url;
     this.pointPerDay = map.pointPerDay;
     this.advertisementPoint = map.advertisementPoint;
 
@@ -350,11 +353,10 @@ export class PostModel extends PostRootModel {
       phoneNo: this.phoneNo,
       code: this.code,
       countryCode: this.countryCode,
-      beginAt: this.beginAt,
-      endAt: this.endAt,
       beginDate: this.beginDate,
       endDate: this.endDate,
       files: this.fileIdxes,
+      click_url: this.click_url,
     };
   }
 
