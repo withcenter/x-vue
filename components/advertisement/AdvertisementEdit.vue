@@ -286,7 +286,7 @@
           <button
             class="mt-2 btn btn-outline-danger"
             type="button"
-            @click="onClickDelete"
+            @click="advertisementDelete"
             v-if="post.idx && !post.isAdvertisementActive"
           >
             {{ "delete" | t }}
@@ -639,14 +639,14 @@ export default class Advertisement extends Vue {
     }
   }
 
-  async onClickDelete(): Promise<void> {
+  async advertisementDelete(): Promise<void> {
     const conf = await this.api.confirm(
       "Confirm",
       "Are you sure you want to delete the advertisement?"
     );
     if (!conf) return;
     try {
-      this.post = await this.api.postDelete(this.post.idx);
+      this.post = await this.api.advertisementDelete(this.post.idx);
       store.state.router.push("/advertisement");
     } catch (e) {
       this.api.error(e);

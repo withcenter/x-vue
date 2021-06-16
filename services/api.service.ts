@@ -700,6 +700,11 @@ export class ApiService {
     return new PostModel().fromJson(res);
   }
 
+  async advertisementDelete(idx: number): Promise<PostModel> {
+    const res = await this.request("advertisement.delete", { idx: idx });
+    return new PostModel().fromJson(res);
+  }
+
   async myCafe(): Promise<CafeModel[]> {
     if (this.notLoggedIn) {
       store.state.myCafe = [];
