@@ -3,18 +3,23 @@
     <div class="mt-3" v-if="posts.length">
       <div class="p-2" v-for="post of posts" :key="post.idx">
         <router-link :to="`/advertisement/edit/${post.idx}`">
-          No. {{ post.idx }} -
-          <span class="mr-2" v-if="!post.deletedAt">{{ post.title }}</span>
-          <span class="badge badge-success" v-if="post.isAdvertisementActive">
-            Active
-          </span>
-          <span class="badge badge-warning" v-if="!post.isAdvertisementActive">
-            Inactive
-          </span>
-          <span class="ml-2 badge badge-warning" v-if="!post.fileIdxes">
-            No photo
-          </span>
-          <div>{{ post.content }}</div>
+          <div>
+            No. {{ post.idx }} -
+            <span class="mr-2" v-if="!post.deletedAt">{{ post.title }}</span>
+            <span class="badge badge-success" v-if="post.isAdvertisementActive">
+              Active
+            </span>
+            <span
+              class="badge badge-warning"
+              v-if="!post.isAdvertisementActive"
+            >
+              Inactive
+            </span>
+            <span class="ml-2 badge badge-warning" v-if="!post.fileIdxes">
+              No photo
+            </span>
+            <div>{{ post.content }}</div>
+          </div>
         </router-link>
       </div>
     </div>

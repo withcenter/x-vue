@@ -45,19 +45,20 @@
           <button
             class="w-100 btn btn-outline-danger"
             type="button"
-            v-if="isCancellable"
+            v-if="isCancellable || isRefundable"
             @click="onAdvertisementStop"
           >
-            {{ "cancel_advertisement" | t }}
+            {{
+              (isCancellable ? "cancel_advertisement" : "stop_advertisement")
+                | t
+            }}
           </button>
-          <button
-            class="w-100 mt-2 btn btn-outline-info"
-            type="button"
-            v-if="isRefundable"
-            @click="onAdvertisementStop"
-          >
-            {{ "stop_advertisement" | t }}
-          </button>
+          <small class="text-info" v-if="isDue">
+            This advertisement is already expired, you can stop it if you want
+            to reset the dates and to start it again. <br />
+            Stopping this advertisement will not cost anything, you will not
+            also get a refund since it is already expired.
+          </small>
         </div>
       </div>
 
