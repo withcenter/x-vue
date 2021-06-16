@@ -285,7 +285,7 @@ export default class AdminPushNotification extends Vue {
         // const f = res.error.length;
         this.app.api.alert(
           "Send Push Message to tokens",
-          "${s} Success, ${f} Fail."
+          `${s} Success, ${f} Fail.`
         );
       } else {
         this.app.api.alert(
