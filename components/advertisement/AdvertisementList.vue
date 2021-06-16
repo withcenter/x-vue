@@ -1,26 +1,8 @@
 <template>
   <section data-cy="advertisement-list-page" class="advertisement-list-page">
     <div class="mt-3" v-if="posts.length">
-      <div class="p-2" v-for="post of posts" :key="post.idx">
-        <router-link :to="`/advertisement/edit/${post.idx}`">
-          <div>
-            No. {{ post.idx }} -
-            <span class="mr-2" v-if="!post.deletedAt">{{ post.title }}</span>
-            <span class="badge badge-success" v-if="post.isAdvertisementActive">
-              Active
-            </span>
-            <span
-              class="badge badge-warning"
-              v-if="!post.isAdvertisementActive"
-            >
-              Inactive
-            </span>
-            <span class="ml-2 badge badge-warning" v-if="!post.fileIdxes">
-              No photo
-            </span>
-            <div>{{ post.content }}</div>
-          </div>
-        </router-link>
+      <div class="box p-2 mb-2" v-for="post of posts" :key="post.idx">
+        <advertisement-preview :post="post"></advertisement-preview>
       </div>
     </div>
     <div class="mt-3 p-2 text-center" v-if="!posts.length && !loadingPosts">
@@ -49,12 +31,12 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { PostModel, RequestData } from "@/x-vue/services/interfaces";
-import PostTitleMeta from "@/x-vue/components/forum/PostTitleMeta.vue";
 import { ApiService } from "@/x-vue/services/api.service";
+import AdvertisementPreview from "./AdvertisementPreview.vue";
 
 @Component({
   components: {
-    PostTitleMeta,
+    AdvertisementPreview,
   },
 })
 export default class PostList extends Vue {
