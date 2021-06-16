@@ -17,7 +17,6 @@
           <h2>{{ post.beginDate }} ~ {{ post.endDate }}</h2>
         </div>
 
-        <!-- TODO: Cancel, Refund -->
         <div class="mt-3">
           <div class="alert alert-info">
             <div class="d-flex">
@@ -167,7 +166,7 @@
           </small>
         </div>
 
-        <!-- Save Advertisement -->
+        <!-- Start Advertisement -->
         <div class="mt-2">
           <button
             class="w-100 btn btn-outline-success"
@@ -293,10 +292,20 @@
           </button>
           <span class="flex-grow-1"></span>
           <!-- save / update -->
-          <button class="mt-2 btn btn-outline-success" type="submit">
+          <button
+            class="mt-2 btn btn-outline-success"
+            type="submit"
+            v-if="!isSubmitted"
+          >
             <span v-if="post.idx">{{ "update" | t }}</span>
             <span v-if="!post.idx">{{ "save" | t }}</span>
           </button>
+          <b-spinner
+            class="m-2"
+            type="grow"
+            variant="success"
+            v-if="isSubmitted"
+          ></b-spinner>
         </div>
 
         <!-- Banner points country listing table -->
@@ -394,6 +403,8 @@ export default class Advertisement extends Vue {
   uploadProgress = 0;
 
   beginAtMin = "";
+
+  isSubmitted = false;
 
   async mounted(): Promise<void> {
     // console.log("mounted;");
@@ -576,6 +587,8 @@ export default class Advertisement extends Vue {
   }
 
   async onSubmit(): Promise<void> {
+    if (this.isSubmitted) return;
+    this.isSubmitted = true;
     let isCreate = true;
     if (this.post.idx) isCreate = false;
     try {
@@ -592,8 +605,10 @@ export default class Advertisement extends Vue {
           1500
         );
       }
+      this.isSubmitted = false;
     } catch (e) {
       this.api.error(e);
+      this.isSubmitted = false;
     }
   }
 
