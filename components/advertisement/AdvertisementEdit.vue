@@ -71,7 +71,9 @@
             v-model="post.code"
             :disabled="post.isAdvertisementActive"
           >
-            <option value="" disabled selected>{{ "select_type" | t }}</option>
+            <option value="" disabled selected>
+              {{ "select_type" | t }}
+            </option>
             <option v-for="type in settings.types" :key="type">
               {{ type }}
             </option>
@@ -138,7 +140,8 @@
           </div>
 
           <small class="form-text text-muted mb-2">
-            {{ "advertisement_serving_days" | t }}: <b>{{ servingDaysLeft }}</b>
+            {{ "advertisement_serving_days" | t }}:
+            <b>{{ servingDaysLeft }}</b>
             {{ "days" | t }}
           </small>
           <small class="form-text text-muted mb-2">
@@ -376,10 +379,11 @@ import { ApiService } from "@/x-vue/services/api.service";
 import { addByComma, daysBetween } from "@/x-vue/services/functions";
 import store from "@/store";
 import UploadImage from "@/x-vue/components/file/UploadImage.vue";
+import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
 import dayjs from "dayjs";
 
 @Component({
-  components: { UploadImage },
+  components: { UploadImage, LoginFirst },
 })
 export default class Advertisement extends Vue {
   api = ApiService.instance;
