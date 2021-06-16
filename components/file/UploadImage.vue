@@ -58,7 +58,7 @@ export default class UploadImage extends Vue {
   api: ApiService = ApiService.instance;
   app: AppService = AppService.instance;
   async mounted(): Promise<void> {
-    console.log("UploadImage mounted");
+    // console.log("UploadImage mounted");
     try {
       if (this.entity) {
         this.file = await this.api.fileGet({
