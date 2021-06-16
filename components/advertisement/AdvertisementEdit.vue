@@ -18,7 +18,11 @@
         <!-- TODO: Cancel, Refund, Delete -->
         <div class="mt-3">
           <div class="alert alert-info" v-if="servingDaysLeft">
-            {{ "adv_refundable_points" | t }}: <b>{{ refundablePoints }}</b>
+            No of advertisement days: <b>{{ noOfDays }}</b> <br />
+            {{ "advertisement_serving_days" | t }}:
+            <b>{{ servingDaysLeft }}</b> <br />
+            {{ "adv_refundable_points" | t }}:
+            <b>{{ refundablePoints }}</b>
             <br />
             <small class="text-info">
               {{ "adv_refundable_points_hint" | t }}
@@ -43,7 +47,7 @@
         </div>
       </div>
 
-      <div class="mb" v-if="post.idx && !post.isAdvertisementActive">
+      <div v-if="post.idx && !post.isAdvertisementActive">
         <!-- banner type -->
         <div class="form-group mt-2">
           <label>Banner Type/Position</label>
@@ -163,7 +167,7 @@
             :disabled="isPointInsufficient"
             @click="onAdvertisementStart"
           >
-            Save the advertisement
+            Start advertisement
           </button>
           <small class="text-danger" v-if="isPointInsufficient">
             <b>Insufficient point!</b> You don't have enough point to create
@@ -245,12 +249,13 @@
       <!-- memo -->
       <div class="form-group mt-2">
         <label>{{ "adv_memo" | t }}</label>
-        <input
+        <textarea
           class="form-control"
-          placeholder="Memo"
+          :placeholder="'adv_memo' | t"
           type="text"
           v-model="post.privateContent"
-        />
+          rows="2"
+        ></textarea>
         <small class="form-text text-muted">
           {{ "adv_memo_hint" | t }}
         </small>
@@ -351,12 +356,7 @@ import {
   ResponseData,
 } from "@/x-vue/services/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
-import {
-  addByComma,
-  daysBetween,
-  isFuture,
-  isPast,
-} from "@/x-vue/services/functions";
+import { addByComma, daysBetween } from "@/x-vue/services/functions";
 import store from "@/store";
 import UploadImage from "@/x-vue/components/file/UploadImage.vue";
 import dayjs from "dayjs";
@@ -457,7 +457,7 @@ export default class Advertisement extends Vue {
    * @returns number - returns the total range of days the user selected from beginAt to endAt dates.
    */
   get noOfDays(): number {
-    return daysBetween(this.post.beginDate, this.post.endDate);
+    return daysBetween(this.post.beginDate, this.post.endDate) + 1;
   }
 
   /**
@@ -465,7 +465,9 @@ export default class Advertisement extends Vue {
    * If it is not begun yet, it will return the `noOfDays` the advertisement will be served.
    */
   get servingDaysLeft(): number {
-    if (isFuture(this.post.beginDate)) return this.noOfDays;
+    const isAfter = dayjs().isAfter(this.post.beginDate, "day");
+    // console.log("isAfter --", isAfter);
+    if (isAfter) return this.noOfDays;
     else return daysBetween(this.today, this.post.endDate);
   }
 
@@ -484,11 +486,12 @@ export default class Advertisement extends Vue {
    * If it is not begun yet, it will return false.
    */
   get isRefundable(): boolean {
-    return isPast(this.post.beginDate);
+    if (dayjs().isSame(this.post.beginDate, "day")) return true;
+    return dayjs().isAfter(this.post.beginDate, "day");
   }
 
   get isCancellable(): boolean {
-    return isFuture(this.post.beginDate);
+    return dayjs().isBefore(this.post.beginDate, "day");
   }
 
   get refundablePoints(): number {
@@ -505,15 +508,24 @@ export default class Advertisement extends Vue {
     }
   }
 
-  // TODO advertisement create/update
   async onSubmit(): Promise<void> {
-    console.log(this.post.toJson);
+    console.log("onSubmit::postToJson", this.post.toJson);
     let isCreate = true;
     if (this.post.idx) isCreate = false;
     try {
-      this.post = await this.api.postEdit(this.post.toJson);
+      const res = await this.api.postEdit(this.post.toJson);
+      console.log("onSubmit::res ,", res);
+      this.post = res;
       if (isCreate) {
         ApiService.instance.open(`/advertisement/edit/${this.post.idx}`);
+      } else {
+        this.api.openToast(
+          "Updated",
+          "Advertisement successfully updated!",
+          "b-toaster-bottom-center",
+          "success",
+          true
+        );
       }
     } catch (e) {
       this.api.error(e);
@@ -524,8 +536,13 @@ export default class Advertisement extends Vue {
    * Starts the advertisement.
    */
   async onAdvertisementStart(): Promise<void> {
+    console.log("post.toJson", this.post.toJson);
+
     try {
-      this.post = await this.api.advertisementStart(this.post.toJson);
+      const res = await this.api.advertisementStart(this.post.toJson);
+
+      console.log("res", res);
+      this.post = res;
       store.commit("refreshProfile");
     } catch (e) {
       this.api.error(e);
@@ -534,7 +551,11 @@ export default class Advertisement extends Vue {
 
   async onAdvertisementStop(): Promise<void> {
     // !TODO: use ApiService confirm.
-    const conf = confirm("Are you sure you want to cancel the advertisement?");
+    // const conf = confirm("Are you sure you want to cancel the advertisement?");
+    const conf = await this.api.confirm(
+      "Confirm",
+      "Are you sure you want to cancel the advertisement?"
+    );
     if (!conf) return;
     try {
       this.post = await this.api.advertisementStop(this.post.idx);
@@ -546,7 +567,11 @@ export default class Advertisement extends Vue {
 
   async onClickDelete(): Promise<void> {
     // !TODO: use ApiService confirm.
-    const conf = confirm("Are you sure you want to delete the advertisement?");
+    // const conf = confirm("Are you sure you want to delete the advertisement?");
+    const conf = await this.api.confirm(
+      "Confirm",
+      "Are you sure you want to delete the advertisement?"
+    );
     if (!conf) return;
     try {
       this.post = await this.api.postDelete(this.post.idx);

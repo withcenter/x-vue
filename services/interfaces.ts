@@ -350,8 +350,6 @@ export class PostModel extends PostRootModel {
       phoneNo: this.phoneNo,
       code: this.code,
       countryCode: this.countryCode,
-      beginAt: this.beginAt,
-      endAt: this.endAt,
       beginDate: this.beginDate,
       endDate: this.endDate,
       files: this.fileIdxes,

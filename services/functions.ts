@@ -8,6 +8,7 @@
 
 import { ApiService } from "./api.service";
 import apiStore from "./api.store";
+import dayjs from "dayjs";
 
 export function tr(code: string): string {
   if (!code) return "";
@@ -69,50 +70,37 @@ export function deleteByComma(orgValue: string, val: string): string {
  * @param d1 Date - Begin date
  * @param d2 Date - End date
  * @returns number - number of days starting `d1` to `d2`
- * @attention It counts the Begin date to the total range of days.
- * for instance, if we put 2021-11-10 as Begin date and 2021-11-13, it will return 4.
+ * @attention It only counts the days after the initial date `til end date.
+ * for instance, if we put 2021-11-10 as Begin date and 2021-11-13, it will return 3.
  */
 export function daysBetween(date1: string, date2: string): number {
   if (!date1 || !date2) return 0;
-  const d1 = new Date(date1).getTime() / 1000;
-  const d2 = new Date(date2).getTime() / 1000;
-  return Math.floor((d2 - d1) / (60 * 60 * 24)) + 1;
+  const d2 = dayjs(date2);
+  return d2.diff(dayjs(date1), "d");
+  // const d1 = new Date(date1).getTime() / 1000;
+  // const d2 = new Date(date2).getTime() / 1000;
+  // return Math.floor((d2 - d1) / (60 * 60 * 24)) + 1;
 }
 
 /**
  * Return true if the date is future. If the date is today, it returns false.
  * @param date date - YYYY-MM-DD
  */
-export function isFuture(date: string): boolean {
-  if (!date) return false;
-  const d = new Date(date);
-  const n = new Date();
+// export function isFuture(date: string): boolean {
+//   if (!date) return false;
+//   const d = new Date(date);
+//   const n = new Date();
 
-  // if the date is today, return false.
-  if (
-    d.getFullYear() === n.getFullYear() &&
-    d.getMonth() === n.getMonth() &&
-    d.getDate() === n.getDate()
-  ) {
-    return false;
-  }
-  // if the date is past, return false.
-  if (d.getTime() < n.getTime()) return false;
+//   // if the date is today, return false.
+//   if (
+//     d.getFullYear() === n.getFullYear() &&
+//     d.getMonth() === n.getMonth() &&
+//     d.getDate() === n.getDate()
+//   ) {
+//     return false;
+//   }
+//   // if the date is past, return false.
+//   if (d.getTime() < n.getTime()) return false;
 
-  return true;
-}
-
-export function isPast(date: string): boolean {
-  if (!date) return false;
-  if (isFuture(date)) return false;
-  return true;
-}
-
-// export function getStringDate(date: Date): string {
-//   const re = new Date(date.getFullYear(), date.getMonth(), date.getDate())
-//     .toISOString()
-//     .split("T")[0];
-
-//   // console.log("re; ", re);
-//   return re;
+//   return true;
 // }

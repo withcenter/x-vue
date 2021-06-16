@@ -142,7 +142,7 @@ export class ApiService {
    */
   async refreshLoginUserProfile(): Promise<UserModel> {
     const res = await this.request("user.profile");
-    console.log("userprofile, :", res);
+    // console.log("userprofile, :", res);
     return this.setUserSessionId(res);
   }
 
@@ -632,6 +632,36 @@ export class ApiService {
       footerClass: "p-2",
       hideHeaderClose: false,
       centered: true,
+    });
+  }
+
+  /**
+   * Open toast.
+   *
+   * @param title
+   * @param content
+   * @param placement
+   * @param variant
+   * @param hideDelay
+   * @param append
+   */
+  openToast(
+    title = "title",
+    content = "content",
+    placement?: string,
+    variant?: string,
+    hideCloseButton?: boolean,
+    hideDelay?: number,
+    append?: boolean
+  ): void {
+    return store.state.vm.$bvToast.toast(content, {
+      title: title,
+      toaster: placement,
+      variant: variant,
+      noCloseButton: hideCloseButton,
+      autoHideDelay: hideDelay ?? 1000,
+      append: append,
+      solid: true,
     });
   }
 
