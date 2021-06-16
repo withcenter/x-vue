@@ -181,16 +181,14 @@
 </template>
 
 <script lang="ts">
-import { AppService } from "@/service/app.service";
+import { ApiService } from "@/x-vue/services/api.service";
 import { DEFAULT_TOPIC } from "@/x-vue/services/defines";
-import { RequestData } from "@/x-vue/services/interfaces";
+import { RequestData, ResponseData } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
 
 @Component({})
 export default class AdminPushNotification extends Vue {
-  app = AppService.instance;
-
   options = {
     idx: "",
     notify: "all",
@@ -221,7 +219,7 @@ export default class AdminPushNotification extends Vue {
       idx: this.options.idx,
     };
     try {
-      const post = await this.app.api.postGet(options);
+      const post = await ApiService.instance.postGet(options);
       this.options.title = post.title;
       this.options.body = post.content;
       this.options.click_action = post.url;
@@ -231,7 +229,7 @@ export default class AdminPushNotification extends Vue {
       this.loading = false;
     } catch (e) {
       this.loading = false;
-      this.app.error(e);
+      ApiService.instance.error(e);
     }
   }
 
@@ -254,7 +252,7 @@ export default class AdminPushNotification extends Vue {
     }
 
     try {
-      // let res: ResponseData = {};
+      let res: ResponseData = {};
 
       /**
        * Base on sending option it will request from the server
@@ -265,37 +263,37 @@ export default class AdminPushNotification extends Vue {
        */
       if (this.options.notify === "all") {
         data["topic"] = DEFAULT_TOPIC;
-        await this.app.api.sendMessageToTopic(data);
+        res = await ApiService.instance.sendMessageToTopic(data);
       } else if (this.options.notify === "topic") {
         data["topic"] = this.options.topic;
-        await this.app.api.sendMessageToTopic(data);
+        res = await ApiService.instance.sendMessageToTopic(data);
       } else if (this.options.notify === "tokens") {
         data["tokens"] = this.options.tokens;
-        await this.app.api.sendMessageToTokens(data);
+        res = await ApiService.instance.sendMessageToTokens(data);
       } else if (this.options.notify === "emails") {
         data["emails"] = this.options.emails;
         data["users"] = this.options.users;
-        await this.app.api.sendMessageToUsers(data);
+        res = await ApiService.instance.sendMessageToUsers(data);
       }
 
       this.loading = false;
 
       if (this.options.notify === "tokens") {
-        // const s = res.success.length;
-        // const f = res.error.length;
-        this.app.api.alert(
+        const s = res.success.length;
+        const f = res.error.length;
+        ApiService.instance.alert(
           "Send Push Message to tokens",
           `${s} Success, ${f} Fail.`
         );
       } else {
-        this.app.api.alert(
-          "Send Push Message to tokens",
+        ApiService.instance.alert(
+          "Send Push Message to topic",
           "Success Sending push notification to topic."
         );
       }
     } catch (e) {
       this.loading = false;
-      this.app.error(e);
+      ApiService.instance.error(e);
     }
   }
 }
