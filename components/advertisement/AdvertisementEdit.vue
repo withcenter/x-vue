@@ -20,10 +20,10 @@
 
         <!-- TODO: Cancel, Refund, Delete -->
         <div class="mt-3">
-          <div class="alert alert-info" v-if="servingDaysLeft">
+          <div class="alert alert-info">
             <div class="d-flex">
               <span class="mr-3">
-                {{ "adv_days" | t }}: <b>{{ noOfDays }}</b>
+                {{ "adv_no_of_days" | t }}: <b>{{ noOfDays }}</b>
               </span>
               <span class="mr-3">
                 {{ "advertisement_serving_days" | t }}:
@@ -258,12 +258,24 @@
           <textarea
             class="form-control"
             :placeholder="'adv_memo' | t"
-            type="text"
             v-model="post.privateContent"
             rows="2"
           ></textarea>
           <small class="form-text text-muted">
             {{ "adv_memo_hint" | t }}
+          </small>
+        </div>
+
+        <div class="form-group mt-2" v-if="post.idx">
+          <label>{{ "click_url" | t }}</label>
+          <input
+            class="form-control"
+            :placeholder="'click_url' | t"
+            type="text"
+            v-model="post.click_url"
+          />
+          <small class="form-text text-muted">
+            {{ "click_url_hint" | t }}
           </small>
         </div>
 
@@ -464,6 +476,7 @@ export default class Advertisement extends Vue {
    * @returns number - returns the total range of days the user selected from beginAt to endAt dates.
    */
   get noOfDays(): number {
+    if (dayjs(this.post.beginDate).isSame(this.post.endDate, "d")) return 1;
     const days = daysBetween(this.post.beginDate, this.post.endDate);
     if (!days) return 0;
     return days + 1;
