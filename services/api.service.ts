@@ -514,6 +514,11 @@ export class ApiService {
     return store.state.cafe;
   }
 
+  async cafeSendMessage(data: RequestData): Promise<ResponseData> {
+    const res = await this.request("cafe.sendmessage", data);
+    return res;
+  }
+
   /**
    * Saves `v` as JSON string.
    *
@@ -700,6 +705,7 @@ export class ApiService {
       store.state.myCafe = [];
     } else {
       const res = await this.request("cafe.mine");
+      console.log("myCafe", res);
       store.state.myCafe = res.map((cafe: JSON) =>
         new CafeModel().fromJson(cafe)
       );
