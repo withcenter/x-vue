@@ -17,7 +17,7 @@
           <h2>{{ post.beginDate }} ~ {{ post.endDate }}</h2>
         </div>
 
-        <!-- TODO: Cancel, Refund, Delete -->
+        <!-- TODO: Cancel, Refund -->
         <div class="mt-3">
           <div class="alert alert-info">
             <div class="d-flex">
@@ -285,8 +285,7 @@
             class="mt-2 btn btn-outline-danger"
             type="button"
             @click="onClickDelete"
-            v-if="post.idx"
-            :disabled="post.isAdvertisementActive"
+            v-if="post.idx && !post.isAdvertisementActive"
           >
             {{ "delete" | t }}
           </button>
