@@ -169,15 +169,14 @@
           <button
             class="w-100 btn btn-outline-success"
             type="button"
-            :disabled="isPointInsufficient"
+            :disabled="!canStart"
             @click="onAdvertisementStart"
           >
             {{ "start_advertisement" | t }}
           </button>
-          <small class="text-danger" v-if="isPointInsufficient">
+          <div class="alert alert-danger mt-2" v-if="isPointInsufficient">
             {{ "start_advertisement_warning" | t }}
-          </small>
-          <br />
+          </div>
         </div>
         <hr />
       </div>
@@ -482,16 +481,25 @@ export default class Advertisement extends Vue {
   }
 
   /**
-   * @returns number - returns the total number left for the advertisement to be served.
-   * If it is not begun yet, it will return the `noOfDays` the advertisement will be served.
+   * Will return 0 if:
+   *  - The advertisement is due.
+   *  - Today is same date as 'endDate'.
+   *
+   * @returns number
    */
   get servingDaysLeft(): number {
+    if (this.isDue) return 0;
     if (!this.isRefundable) return this.noOfDays;
     else return daysBetween(this.today, this.post.endDate);
   }
 
   /**
-   * @returns boolean - it returns wether or not the user's point is insufficient to create an advertisement.
+   * Will return true if:
+   *  - No logged in user.
+   *  - Current user has 0 point.
+   *  - User point is smaller than required point to create advertisement.
+   *
+   * @returns boolean
    */
   get isPointInsufficient(): boolean {
     if (!this.api.user) return true;
@@ -500,22 +508,58 @@ export default class Advertisement extends Vue {
   }
 
   /**
-   * @returns boolean - Returns wether the advertisement can be refunded or not.
-   * If the Advertisement is saved but has begun to be served, it will return true.
-   * If it is not begun yet, it will return false.
+   * Will return true if:
+   *  - 'beginDate' is equivalent as today.
+   *  - 'beginDate' is equivalent as yesterday or earlier.
+   *
+   * @returns boolean
    */
   get isRefundable(): boolean {
     if (dayjs().isSame(this.post.beginDate, "day")) return true;
     return dayjs().isAfter(this.post.beginDate, "day");
   }
 
+  /**
+   * Will return false if:
+   *  - 'beginDate' is equivalent as tomorrow or beyond.
+   *
+   * @returns boolean
+   */
   get isCancellable(): boolean {
     return dayjs().isBefore(this.post.beginDate, "day");
   }
 
+  /**
+   * Will return 0 if:
+   *  - servingDaysLeft is smaller than 0 (negative).
+   *
+   * @returns number
+   */
   get refundablePoints(): number {
     if (this.servingDaysLeft < 0) return 0;
     return this.servingDaysLeft * this.countryPointListing[this.post.code];
+  }
+
+  /**
+   * Will return false if :
+   *  - User have insufficient point.
+   *  - The advertisement date is due.
+   *
+   * @returns boolean
+   */
+  get canStart(): boolean {
+    if (!this.post.beginDate || !this.post.endDate) return false;
+    if (this.isPointInsufficient) return false;
+    if (this.isDue) return false;
+    return true;
+  }
+
+  /**
+   * Will return true if:
+   *  -'endDate' is set as yesterday or earlier.
+   */
+  get isDue(): boolean {
+    return dayjs().isAfter(this.post.endDate, "d");
   }
 
   async loadAdvertisement(): Promise<void> {
