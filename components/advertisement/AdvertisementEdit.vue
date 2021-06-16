@@ -7,7 +7,6 @@
             {{ "adv_banner_type" | t }}
             <h2>{{ post.code }}</h2>
           </span>
-          <!-- <span class="flex-grow-1"></span> -->
           <span class="ml-4">
             {{ "country" | t }}
             <h2>{{ countries[post.countryCode] }}</h2>
@@ -180,9 +179,10 @@
           </small>
           <br />
         </div>
+        <hr />
       </div>
 
-      <div class="box">
+      <div class="box mt-3">
         <!-- title -->
         <div class="form-group">
           <label>{{ "title" | t }}</label>
@@ -539,9 +539,10 @@ export default class Advertisement extends Vue {
         this.api.openToast(
           "Updated",
           "Advertisement successfully updated!",
-          "b-toaster-bottom-center",
+          "b-toaster-bottom-right",
           "success",
-          true
+          true,
+          1500
         );
       }
     } catch (e) {
