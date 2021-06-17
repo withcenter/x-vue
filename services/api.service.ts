@@ -21,6 +21,12 @@ import { getRootDomain, tr } from "./functions";
 import { RawLocation, Route } from "vue-router";
 import { FirebaseService } from "./firebase.service";
 
+/**
+ *
+ *
+ * @todo don't include `store`. That means it should not use `store` directly.
+ *  Instead, use the store to access ApiService.
+ */
 export class ApiService {
   private static _instance: ApiService;
 
@@ -498,21 +504,21 @@ export class ApiService {
     return new CafeModel().fromJson(res);
   }
 
-  async cafeGet(data: RequestData): Promise<CafeModel> {
-    const res = await this.request("cafe.get", data);
-    return new CafeModel().fromJson(res);
-  }
-
   async cafeUpdate(data: RequestData): Promise<CafeModel> {
     const res = await this.request("cafe.update", data);
     return new CafeModel().fromJson(res);
   }
 
-  async loadCafe(): Promise<CafeModel> {
-    const res = await this.request("cafe.get", { domain: this.domain });
-    store.state.cafe = new CafeModel().fromJson(res);
-    return store.state.cafe;
+  async cafeGet(data: RequestData): Promise<CafeModel> {
+    const res = await this.request("cafe.get", data);
+    return new CafeModel().fromJson(res);
   }
+
+  // async loadCafe(): Promise<CafeModel> {
+  //   const res = await this.request("cafe.get", { domain: this.domain });
+  //   store.state.cafe = new CafeModel().fromJson(res);
+  //   return store.state.cafe;
+  // }
 
   async cafeSendMessage(data: RequestData): Promise<ResponseData> {
     const res = await this.request("cafe.sendmessage", data);
