@@ -30,7 +30,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { PostModel, RequestData } from "@/x-vue/services/interfaces";
+import { AdvertisementModel, RequestData } from "@/x-vue/services/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
 import AdvertisementPreview from "./AdvertisementPreview.vue";
 
@@ -40,7 +40,7 @@ import AdvertisementPreview from "./AdvertisementPreview.vue";
   },
 })
 export default class PostList extends Vue {
-  posts: Array<PostModel> = [];
+  posts: Array<AdvertisementModel> = [];
   api = ApiService.instance;
 
   loadingPosts = false;
@@ -86,7 +86,7 @@ export default class PostList extends Vue {
     // console.log(this.options);
     this.loadingPosts = true;
     try {
-      this.posts = await this.api.postSearch(this.options);
+      this.posts = await this.api.advertisementSearch(this.options);
       // console.log(this.posts);
       this.loadingPosts = false;
     } catch (error) {
