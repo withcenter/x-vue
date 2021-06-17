@@ -232,7 +232,6 @@ export class PostRootModel {
   user: UserModel = {} as UserModel;
 
   pointPerDay = 0;
-  advertisementPoint = 0;
 
   click_url = "";
 
@@ -245,10 +244,6 @@ export class PostRootModel {
 
   get isDeleted(): boolean {
     return this.deletedAt > 0;
-  }
-
-  get isAdvertisementActive(): boolean {
-    return this.advertisementPoint > 0;
   }
 
   fromJson(map: ResponseData): PostRootModel {
@@ -291,8 +286,6 @@ export class PostModel extends PostRootModel {
   fromJson(map: ResponseData): PostModel {
     this.click_url = map.click_url;
     this.pointPerDay = map.pointPerDay;
-    this.advertisementPoint = map.advertisementPoint;
-
     this.url = map.url;
     this.path = map.path;
     this.relativeUrl = map.relativeUrl;
@@ -368,17 +361,32 @@ export class PostModel extends PostRootModel {
       this.comments.splice(index + 1, 0, comment);
     }
   }
-
-  // We don't delete post or comment. We only mark it as deleted.
-  // @todo so, don't delete.
-  // deleteComment(idx: string): void {
-  // const index = this.comments.findIndex((c) => c.idx == idx);
-  // this.comments.splice(index, 1);
-  // }
 }
 
 export class CommentModel extends PostRootModel {
   fromJson(map: ResponseData): CommentModel {
+    super.fromJson(map);
+    return this;
+  }
+}
+
+export class AdvertisementModel extends PostModel {
+  advertisementPoint = 0;
+  status = "";
+
+  get isActive(): boolean {
+    return this.status == "active";
+  }
+  get isInactive(): boolean {
+    return this.status == "inactive";
+  }
+  get isWaiting(): boolean {
+    return this.status == "waiting";
+  }
+
+  fromJson(map: ResponseData): AdvertisementModel {
+    this.advertisementPoint = map.advertisementPoint ?? 0;
+    this.status = map.status ?? "";
     super.fromJson(map);
     return this;
   }

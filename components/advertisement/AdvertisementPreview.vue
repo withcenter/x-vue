@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import { PostModel } from "@/x-vue/services/interfaces";
+import { AdvertisementModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
 
@@ -39,6 +39,6 @@ import Component from "vue-class-component";
   props: ["post"],
 })
 export default class AdvertisementPreview extends Vue {
-  post!: PostModel;
+  post!: AdvertisementModel;
 }
 </script>

@@ -13,6 +13,7 @@ import {
   GlobalCafeSettings,
   CategoryModel,
   AdvertisementSettings,
+  AdvertisementModel,
 } from "./interfaces";
 
 import Cookies from "js-cookie";
@@ -261,6 +262,7 @@ export class ApiService {
     const res = await this.request("post.search", data);
     return res.map((post: JSON) => new PostModel().fromJson(post));
   }
+
   async postCount(data: RequestData): Promise<number> {
     const res = await this.request("post.count", data);
     return res.count;
@@ -677,6 +679,13 @@ export class ApiService {
       append: append,
       solid: true,
     });
+  }
+
+  async advertisementSearch(
+    data: RequestData
+  ): Promise<Array<AdvertisementModel>> {
+    const res = await this.request("advertisement.search", data);
+    return res.map((post: JSON) => new AdvertisementModel().fromJson(post));
   }
 
   /**
