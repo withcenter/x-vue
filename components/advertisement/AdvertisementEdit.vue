@@ -17,7 +17,6 @@
           <h2>{{ post.beginDate }} ~ {{ post.endDate }}</h2>
         </div>
 
-        <!-- TODO: Cancel, Refund -->
         <div class="mt-3">
           <div class="alert alert-info">
             <div class="d-flex">
@@ -46,19 +45,20 @@
           <button
             class="w-100 btn btn-outline-danger"
             type="button"
-            v-if="isCancellable"
+            v-if="isCancellable || isRefundable"
             @click="onAdvertisementStop"
           >
-            {{ "cancel_advertisement" | t }}
+            {{
+              (isCancellable ? "cancel_advertisement" : "stop_advertisement")
+                | t
+            }}
           </button>
-          <button
-            class="w-100 mt-2 btn btn-outline-info"
-            type="button"
-            v-if="isRefundable"
-            @click="onAdvertisementStop"
-          >
-            {{ "stop_advertisement" | t }}
-          </button>
+          <small class="text-info" v-if="isDue">
+            This advertisement is already expired, you can stop it if you want
+            to reset the dates and to start it again. <br />
+            Stopping this advertisement will not cost anything, you will not
+            also get a refund since it is already expired.
+          </small>
         </div>
       </div>
 
@@ -71,7 +71,9 @@
             v-model="post.code"
             :disabled="post.isAdvertisementActive"
           >
-            <option value="" disabled selected>{{ "select_type" | t }}</option>
+            <option value="" disabled selected>
+              {{ "select_type" | t }}
+            </option>
             <option v-for="type in settings.types" :key="type">
               {{ type }}
             </option>
@@ -138,7 +140,8 @@
           </div>
 
           <small class="form-text text-muted mb-2">
-            {{ "advertisement_serving_days" | t }}: <b>{{ servingDaysLeft }}</b>
+            {{ "advertisement_serving_days" | t }}:
+            <b>{{ servingDaysLeft }}</b>
             {{ "days" | t }}
           </small>
           <small class="form-text text-muted mb-2">
@@ -164,20 +167,19 @@
           </small>
         </div>
 
-        <!-- Save Advertisement -->
+        <!-- Start Advertisement -->
         <div class="mt-2">
           <button
             class="w-100 btn btn-outline-success"
             type="button"
-            :disabled="isPointInsufficient"
+            :disabled="!canStart"
             @click="onAdvertisementStart"
           >
             {{ "start_advertisement" | t }}
           </button>
-          <small class="text-danger" v-if="isPointInsufficient">
+          <div class="alert alert-danger mt-2" v-if="isPointInsufficient">
             {{ "start_advertisement_warning" | t }}
-          </small>
-          <br />
+          </div>
         </div>
         <hr />
       </div>
@@ -284,17 +286,27 @@
           <button
             class="mt-2 btn btn-outline-danger"
             type="button"
-            @click="onClickDelete"
+            @click="advertisementDelete"
             v-if="post.idx && !post.isAdvertisementActive"
           >
             {{ "delete" | t }}
           </button>
           <span class="flex-grow-1"></span>
           <!-- save / update -->
-          <button class="mt-2 btn btn-outline-success" type="submit">
+          <button
+            class="mt-2 btn btn-outline-success"
+            type="submit"
+            v-if="!isSubmitted"
+          >
             <span v-if="post.idx">{{ "update" | t }}</span>
             <span v-if="!post.idx">{{ "save" | t }}</span>
           </button>
+          <b-spinner
+            class="m-2"
+            type="grow"
+            variant="success"
+            v-if="isSubmitted"
+          ></b-spinner>
         </div>
 
         <!-- Banner points country listing table -->
@@ -377,10 +389,11 @@ import { ApiService } from "@/x-vue/services/api.service";
 import { addByComma, daysBetween } from "@/x-vue/services/functions";
 import store from "@/store";
 import UploadImage from "@/x-vue/components/file/UploadImage.vue";
+import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
 import dayjs from "dayjs";
 
 @Component({
-  components: { UploadImage },
+  components: { UploadImage, LoginFirst },
 })
 export default class Advertisement extends Vue {
   api = ApiService.instance;
@@ -391,6 +404,8 @@ export default class Advertisement extends Vue {
   uploadProgress = 0;
 
   beginAtMin = "";
+
+  isSubmitted = false;
 
   async mounted(): Promise<void> {
     // console.log("mounted;");
@@ -482,16 +497,25 @@ export default class Advertisement extends Vue {
   }
 
   /**
-   * @returns number - returns the total number left for the advertisement to be served.
-   * If it is not begun yet, it will return the `noOfDays` the advertisement will be served.
+   * Will return 0 if:
+   *  - The advertisement is due.
+   *  - Today is same date as 'endDate'.
+   *
+   * @returns number
    */
   get servingDaysLeft(): number {
+    if (this.isDue) return 0;
     if (!this.isRefundable) return this.noOfDays;
     else return daysBetween(this.today, this.post.endDate);
   }
 
   /**
-   * @returns boolean - it returns wether or not the user's point is insufficient to create an advertisement.
+   * Will return true if:
+   *  - No logged in user.
+   *  - Current user has 0 point.
+   *  - User point is smaller than required point to create advertisement.
+   *
+   * @returns boolean
    */
   get isPointInsufficient(): boolean {
     if (!this.api.user) return true;
@@ -500,22 +524,58 @@ export default class Advertisement extends Vue {
   }
 
   /**
-   * @returns boolean - Returns wether the advertisement can be refunded or not.
-   * If the Advertisement is saved but has begun to be served, it will return true.
-   * If it is not begun yet, it will return false.
+   * Will return true if:
+   *  - 'beginDate' is equivalent as today.
+   *  - 'beginDate' is equivalent as yesterday or earlier.
+   *
+   * @returns boolean
    */
   get isRefundable(): boolean {
     if (dayjs().isSame(this.post.beginDate, "day")) return true;
     return dayjs().isAfter(this.post.beginDate, "day");
   }
 
+  /**
+   * Will return false if:
+   *  - 'beginDate' is equivalent as tomorrow or beyond.
+   *
+   * @returns boolean
+   */
   get isCancellable(): boolean {
     return dayjs().isBefore(this.post.beginDate, "day");
   }
 
+  /**
+   * Will return 0 if:
+   *  - servingDaysLeft is smaller than 0 (negative).
+   *
+   * @returns number
+   */
   get refundablePoints(): number {
     if (this.servingDaysLeft < 0) return 0;
     return this.servingDaysLeft * this.countryPointListing[this.post.code];
+  }
+
+  /**
+   * Will return false if :
+   *  - User have insufficient point.
+   *  - The advertisement date is due.
+   *
+   * @returns boolean
+   */
+  get canStart(): boolean {
+    if (!this.post.beginDate || !this.post.endDate) return false;
+    if (this.isPointInsufficient) return false;
+    if (this.isDue) return false;
+    return true;
+  }
+
+  /**
+   * Will return true if:
+   *  -'endDate' is set as yesterday or earlier.
+   */
+  get isDue(): boolean {
+    return dayjs().isAfter(this.post.endDate, "d");
   }
 
   async loadAdvertisement(): Promise<void> {
@@ -528,6 +588,8 @@ export default class Advertisement extends Vue {
   }
 
   async onSubmit(): Promise<void> {
+    if (this.isSubmitted) return;
+    this.isSubmitted = true;
     let isCreate = true;
     if (this.post.idx) isCreate = false;
     try {
@@ -544,8 +606,10 @@ export default class Advertisement extends Vue {
           1500
         );
       }
+      this.isSubmitted = false;
     } catch (e) {
       this.api.error(e);
+      this.isSubmitted = false;
     }
   }
 
@@ -575,14 +639,14 @@ export default class Advertisement extends Vue {
     }
   }
 
-  async onClickDelete(): Promise<void> {
+  async advertisementDelete(): Promise<void> {
     const conf = await this.api.confirm(
       "Confirm",
       "Are you sure you want to delete the advertisement?"
     );
     if (!conf) return;
     try {
-      this.post = await this.api.postDelete(this.post.idx);
+      this.post = await this.api.advertisementDelete(this.post.idx);
       store.state.router.push("/advertisement");
     } catch (e) {
       this.api.error(e);

@@ -10,7 +10,7 @@ import {
   FileModel,
   CafeModel,
   Obj,
-  CafeSettings,
+  GlobalCafeSettings,
   CategoryModel,
   AdvertisementSettings,
 } from "./interfaces";
@@ -546,17 +546,18 @@ export class ApiService {
     return JSON.parse(re);
   }
 
-  async loadCafeSettings(): Promise<CafeSettings> {
-    // 캐시된 데이터가 있으면 리턴
-    const json = this.getStorage("cafeSettings");
+  // Get cafe global settings
+  async loadGlobalCafeSettings(): Promise<GlobalCafeSettings> {
+    // 캐시된 데이터가 있으면 그것을 먼저 사용
+    const json = this.getStorage("globalCafeSettings");
     if (json) {
-      store.state.cafeSettings = json as CafeSettings;
+      store.state.globalCafeSettings = json as GlobalCafeSettings;
     }
     // 서버로 부터 데이터를 가져와 캐시
     const res = await this.request("cafe.settings", { domain: this.domain });
-    store.state.cafeSettings = res as CafeSettings;
-    this.setStorage("cafeSettings", store.state.cafeSettings);
-    return store.state.cafeSettings;
+    store.state.globalCafeSettings = res as GlobalCafeSettings;
+    this.setStorage("globalCafeSettings", store.state.globalCafeSettings);
+    return store.state.globalCafeSettings;
   }
 
   /**
@@ -565,11 +566,13 @@ export class ApiService {
    */
   currentCafeSettings(): Obj | undefined {
     if (
-      store.state.cafeSettings &&
-      store.state.cafeSettings["rootDomainSettings"] &&
-      store.state.cafeSettings["rootDomainSettings"][this.rootDomain]
+      store.state.globalCafeSettings &&
+      store.state.globalCafeSettings["rootDomainSettings"] &&
+      store.state.globalCafeSettings["rootDomainSettings"][this.rootDomain]
     ) {
-      return store.state.cafeSettings["rootDomainSettings"][this.rootDomain];
+      return store.state.globalCafeSettings["rootDomainSettings"][
+        this.rootDomain
+      ];
     }
   }
 
@@ -700,12 +703,17 @@ export class ApiService {
     return new PostModel().fromJson(res);
   }
 
+  async advertisementDelete(idx: number): Promise<PostModel> {
+    const res = await this.request("advertisement.delete", { idx: idx });
+    return new PostModel().fromJson(res);
+  }
+
   async myCafe(): Promise<CafeModel[]> {
     if (this.notLoggedIn) {
       store.state.myCafe = [];
     } else {
       const res = await this.request("cafe.mine");
-      console.log("myCafe", res);
+      console.log("myCafe; ", res);
       store.state.myCafe = res.map((cafe: JSON) =>
         new CafeModel().fromJson(cafe)
       );

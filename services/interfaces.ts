@@ -42,9 +42,9 @@ export interface RootDomainSettings {
 }
 
 /**
- *
+ * global cafe settings
  */
-export interface CafeSettings {
+export interface GlobalCafeSettings {
   mainDomains: string[];
   countryDomains: string[];
   rootDomainSettings: { [index: string]: RootDomainSettings };
@@ -68,8 +68,8 @@ export interface ApiStore {
   cafe: CafeModel;
   myCafe: CafeModel[];
   texts: MapStringAny;
-  // cafe settings only
-  cafeSettings: CafeSettings;
+  // global cafe settings
+  globalCafeSettings: GlobalCafeSettings;
   advertisementSettings: AdvertisementSettings;
   // Vue vm must be added here.
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -487,12 +487,14 @@ export class CafeModel extends CategoryModel {
   app_background_color = "";
   tokenCount = 0;
   orgSubcategories = "";
+  titleImageUrl = "";
 
   fromJson(map: ResponseData): CafeModel {
     this.app_name = map.app_name;
     this.app_background_color = map.app_background_color ?? "";
     this.tokenCount = map.tokenCount ?? 0;
     this.orgSubcategories = map.orgSubcategories;
+    this.titleImageUrl = map.titleImageUrl;
     super.fromJson(map);
     return this;
   }

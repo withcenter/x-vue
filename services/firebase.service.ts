@@ -38,7 +38,7 @@ export class FirebaseService {
           messaging
             .getToken()
             .then((token) => {
-              console.log("Token", token);
+              // console.log("Token", token);
               /** SAVE TOKEN::From here you need to store the TOKEN by AJAX request to your server */
               FirebaseService.instance.token = token;
               ApiService.instance.saveToken(token, location.hostname);
