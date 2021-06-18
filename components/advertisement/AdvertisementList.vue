@@ -84,15 +84,15 @@ export default class PostList extends Vue {
 
   async loadPosts(): Promise<void> {
     // console.log(this.options);
-    this.loadingPosts = true;
-    try {
-      this.posts = await this.api.advertisementSearch(this.options);
-      // console.log(this.posts);
-      this.loadingPosts = false;
-    } catch (error) {
-      this.api.error(error);
-      this.loadingPosts = false;
-    }
+    // this.loadingPosts = true;
+    // try {
+    //   this.posts = await this.api.advertisementSearch(this.options);
+    //   // console.log(this.posts);
+    //   this.loadingPosts = false;
+    // } catch (error) {
+    //   this.api.error(error);
+    //   this.loadingPosts = false;
+    // }
   }
 }
 </script>

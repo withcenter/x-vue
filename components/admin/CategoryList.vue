@@ -88,7 +88,7 @@ export default class AdminCategoryList extends Vue {
   }
 
   onPageChanged(page: number): void {
-    console.log("page; ", page);
+    // console.log("page; ", page);
     this.onSubmitSearch();
   }
 

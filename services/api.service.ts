@@ -683,12 +683,20 @@ export class ApiService {
     });
   }
 
-  async advertisementSearch(
-    data: RequestData
-  ): Promise<Array<AdvertisementModel>> {
-    const res = await this.request("advertisement.search", data);
+  async loadBanners(cafeDomain: string): Promise<Array<AdvertisementModel>> {
+    const res = await this.request("advertisement.search", {
+      cafeDomain: cafeDomain,
+    });
     return res.map((post: JSON) => new AdvertisementModel().fromJson(post));
   }
+
+  // async advertisementSearch(): // cafeDomain: string
+  // Promise<Array<AdvertisementModel>> {
+  //   // const res = await this.request("advertisement.search", {
+  //   //   cafeDomain: cafeDomain,
+  //   // });
+  //   // return res.map((post: JSON) => new AdvertisementModel().fromJson(post));
+  // }
 
   async advertisementGet(data: RequestData): Promise<AdvertisementModel> {
     const res = await this.request("advertisement.get", data);

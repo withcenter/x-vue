@@ -4,7 +4,7 @@
     <!-- <b-avatar :src="post.user.photoUrl" size="3em"></b-avatar> -->
     <div class="ml-2 d-flex w-100">
       <div class="w-100">
-        <router-link :to="post.relativeUrl || `/${post.idx}`">
+        <router-link :to="toPostView()">
           <span>No. {{ post.idx }} - </span>
           <span data-cy="post-title">{{ post.title || "no title" }}</span>
           <span class="ml-1" v-if="post.noOfComments">
@@ -34,10 +34,9 @@
 
 <script lang="ts">
 import { PostModel } from "@/x-vue/services/interfaces";
-import Vue from "vue";
-import Component from "vue-class-component";
 import PostMetaComponent from "@/x-vue/components/forum/PostMeta.vue";
 import UserAvatar from "@/x-vue/components/forum/UserAvatar.vue";
+import { Vue, Component } from "vue-property-decorator";
 
 @Component({
   props: ["post"],
@@ -47,6 +46,14 @@ import UserAvatar from "@/x-vue/components/forum/UserAvatar.vue";
   },
 })
 export default class PostTitleMetaComponent extends Vue {
-  post: PostModel | undefined;
+  post!: PostModel;
+
+  toPostView(): string {
+    let link = this.post.relativeUrl || `/${this.post.idx}`;
+    if (this.$route.query.sc) {
+      link += "?sc=" + this.$route.query.sc;
+    }
+    return link;
+  }
 }
 </script>
