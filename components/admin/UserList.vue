@@ -198,7 +198,7 @@ export default class AdminUserList extends Vue {
   }
 
   onPageChanged(page: number): void {
-    console.log("page; ", page);
+    // console.log("page; ", page);
     this.onSubmitSearch();
   }
 
@@ -208,7 +208,7 @@ export default class AdminUserList extends Vue {
   }
 
   async onSubmitSearch(): Promise<void> {
-    console.log("page changed", this.currentPage);
+    // console.log("page changed", this.currentPage);
     try {
       this.users = await ApiService.instance.userSearch({
         searchKey: this.searchKey,
