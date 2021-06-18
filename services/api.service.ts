@@ -35,6 +35,8 @@ export class ApiService {
     this.initUserAuth();
   }
 
+  advertisements: AdvertisementModel[] = [];
+
   public static get instance(): ApiService {
     if (!ApiService._instance) {
       ApiService._instance = new ApiService();
