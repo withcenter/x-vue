@@ -497,14 +497,14 @@ export class CafeModel extends CategoryModel {
   app_name = "";
   app_background_color = "";
   tokenCount = 0;
-  orgSubcategories = "";
+  subcategoriesArray: string[] = [];
   titleImageUrl = "";
 
   fromJson(map: ResponseData): CafeModel {
     this.app_name = map.app_name;
     this.app_background_color = map.app_background_color ?? "";
     this.tokenCount = map.tokenCount ?? 0;
-    this.orgSubcategories = map.orgSubcategories;
+    this.subcategoriesArray = map.subcategoriesArray;
     this.titleImageUrl = map.titleImageUrl;
     super.fromJson(map);
     return this;
