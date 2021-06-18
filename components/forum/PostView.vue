@@ -1,7 +1,19 @@
 <template>
   <article data-cy="post-view" class="post-view px-2 py-4">
     <!-- title -->
-    <h3 id="post-title">{{ post.title }}</h3>
+    <div class="d-flex justify-content-between">
+      <h3 id="post-title">{{ post.title }}</h3>
+      <router-link
+        class="btn btn-outline-info"
+        :to="
+          'forum/' +
+          post.categoryId +
+          (post.subcategory ? '?subcategory=' + post.subcategory : '')
+        "
+      >
+        {{ "back_to_list" | t }}
+      </router-link>
+    </div>
     <!-- avatar + meta -->
     <div class="d-flex">
       <user-avatar :parent="post"></user-avatar>
@@ -37,6 +49,16 @@
       <vote-buttons-component :parent="post"></vote-buttons-component>
       <span class="flex-grow-1"></span>
       <!-- mine buttons -->
+      <router-link
+        class="btn btn-sm btn-info mr-2"
+        :to="
+          'forum/' +
+          post.categoryId +
+          (post.subcategory ? '?subcategory=' + post.subcategory : '')
+        "
+      >
+        {{ "back_to_list" | t }}
+      </router-link>
       <mine-buttons-component :parent="post"></mine-buttons-component>
     </div>
     <!-- comment form -->
@@ -64,6 +86,18 @@
           :comment="comment"
         ></comment-view-component>
       </div>
+    </div>
+    <div class="d-flex justify-content-end mt-3">
+      <router-link
+        class="btn btn-outline-info"
+        :to="
+          'forum/' +
+          post.categoryId +
+          (post.subcategory ? '?subcategory=' + post.subcategory : '')
+        "
+      >
+        {{ "back_to_list" | t }}
+      </router-link>
     </div>
   </article>
 </template>

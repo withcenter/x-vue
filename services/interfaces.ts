@@ -293,6 +293,7 @@ export class PostModel extends PostRootModel {
 
     this.title = map.title;
     this.categoryIdx = map.categoryIdx;
+    this.categoryId = map.categoryId;
 
     this.noOfViews = map.noOfViews;
 

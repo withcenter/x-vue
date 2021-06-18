@@ -31,7 +31,8 @@ export class FirebaseService {
       /** Lets request user whether we need to send the notifications or not */
       // getoken also invoke request notification permission
       // source https://firebase.google.com/docs/cloud-messaging/js/client#access_the_registration_token
-      Notification.requestPermission()
+      messaging
+        .requestPermission()
         .then(() => {
           /** Standard function to get the token */
           messaging
