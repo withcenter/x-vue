@@ -3,14 +3,7 @@
     <!-- title -->
     <div class="d-flex justify-content-between">
       <h3 id="post-title">{{ post.title }}</h3>
-      <router-link
-        class="btn btn-outline-info"
-        :to="
-          'forum/' +
-          post.categoryId +
-          (post.subcategory ? '?subcategory=' + post.subcategory : '')
-        "
-      >
+      <router-link class="btn btn-outline-info" :to="toList()">
         {{ "back_to_list" | t }}
       </router-link>
     </div>
@@ -49,14 +42,7 @@
       <vote-buttons-component :parent="post"></vote-buttons-component>
       <span class="flex-grow-1"></span>
       <!-- mine buttons -->
-      <router-link
-        class="btn btn-sm btn-info mr-2"
-        :to="
-          'forum/' +
-          post.categoryId +
-          (post.subcategory ? '?subcategory=' + post.subcategory : '')
-        "
-      >
+      <router-link class="btn btn-sm btn-info mr-2" :to="toList()">
         {{ "back_to_list" | t }}
       </router-link>
       <mine-buttons-component :parent="post"></mine-buttons-component>
@@ -88,14 +74,7 @@
       </div>
     </div>
     <div class="d-flex justify-content-end mt-3">
-      <router-link
-        class="btn btn-outline-info"
-        :to="
-          'forum/' +
-          post.categoryId +
-          (post.subcategory ? '?subcategory=' + post.subcategory : '')
-        "
-      >
+      <router-link class="btn btn-outline-info" :to="toList()">
         {{ "back_to_list" | t }}
       </router-link>
     </div>
@@ -131,7 +110,14 @@ import { ApiService } from "@/x-vue/services/api.service";
 }) // without this, Vue lifecycle methods will not be invoked
 export default class PostViewComponent extends Vue {
   post!: PostModel;
-
   api = ApiService.instance;
+
+  toList(): string {
+    return (
+      "forum/" +
+      this.post.categoryId +
+      (this.$route.query.sc ? "?sc=" + this.$route.query.sc : "")
+    );
+  }
 }
 </script>
