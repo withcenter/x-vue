@@ -59,6 +59,7 @@ export interface AdvertisementSettings {
     [index: string]: { [index: string]: number };
   };
   categories: string[];
+  maximum_advertising_days: number;
 }
 
 export interface ApiStore {
@@ -388,6 +389,7 @@ export class AdvertisementModel extends PostModel {
     this.advertisementPoint = map.advertisementPoint ?? 0;
     this.status = map.status ?? "";
     super.fromJson(map);
+    // console.log(this);
     return this;
   }
 }

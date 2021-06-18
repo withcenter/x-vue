@@ -1,7 +1,7 @@
 <template>
   <div v-if="settings">
-    <form class="p-2" @submit.prevent="onSubmit">
-      <div class="box mb-2" v-if="post.isAdvertisementActive">
+    <form class="p-2" @submit.prevent="onSubmit" v-if="!loading">
+      <div class="box mb-2" v-if="post.isActive || post.isWaiting">
         <div class="d-flex">
           <span>
             {{ "adv_banner_type" | t }}
@@ -10,6 +10,10 @@
           <span class="ml-4">
             {{ "country" | t }}
             <h2>{{ countries[post.countryCode] }}</h2>
+          </span>
+          <span class="ml-4">
+            {{ "status" | t }}
+            <h2>{{ post.status }}</h2>
           </span>
         </div>
         <div class="mt-3">
@@ -62,14 +66,14 @@
         </div>
       </div>
 
-      <div class="mb-2" v-if="post.idx && !post.isAdvertisementActive">
+      <div class="mb-2" v-if="post.isInactive">
         <!-- banner type -->
         <div class="form-group mt-2">
           <label>{{ "adv_banner_type" | t }}</label>
           <select
             class="form-control"
             v-model="post.code"
-            :disabled="post.isAdvertisementActive"
+            :disabled="post.isActive"
           >
             <option value="" disabled selected>
               {{ "select_type" | t }}
@@ -90,7 +94,7 @@
             value=""
             class="form-control"
             v-model="post.countryCode"
-            :disabled="post.isAdvertisementActive"
+            :disabled="post.isActive"
           >
             <option disabled selected>{{ "select_country" | t }}</option>
             <option
@@ -125,7 +129,7 @@
                 type="date"
                 :min="beginAtMin"
                 :max="beginAtMax"
-                :disabled="post.isAdvertisementActive"
+                :disabled="post.isActive"
               />
             </label>
             <label>
@@ -134,7 +138,8 @@
                 v-model="post.endDate"
                 type="date"
                 :min="endAtMin"
-                :disabled="post.isAdvertisementActive"
+                :max="endAtMax"
+                :disabled="post.isActive"
               />
             </label>
           </div>
@@ -287,7 +292,7 @@
             class="mt-2 btn btn-outline-danger"
             type="button"
             @click="advertisementDelete"
-            v-if="post.idx && !post.isAdvertisementActive"
+            v-if="post.idx && post.isInactive"
           >
             {{ "delete" | t }}
           </button>
@@ -338,6 +343,11 @@
         </div>
       </div>
     </form>
+
+    <div class="p-3 text-center rounded" v-if="loading">
+      <b-spinner small class="mx-2" type="grow" variant="info"></b-spinner>
+      Loading ...
+    </div>
 
     <!-- TODOS:
         
@@ -407,10 +417,9 @@ export default class Advertisement extends Vue {
 
   isSubmitted = false;
 
+  loading = false;
+
   async mounted(): Promise<void> {
-    // console.log("mounted;");
-    // console.log(this.post);
-    // console.log();
     const idx = parseInt(this.$route.params.idx);
     if (idx) {
       this.post.idx = idx;
@@ -420,7 +429,6 @@ export default class Advertisement extends Vue {
     }
 
     this.beginAtMin = this.today;
-    // console.log("this.beginAtMin;", this.beginAtMin);
     this.isMounted = true;
   }
 
@@ -472,10 +480,20 @@ export default class Advertisement extends Vue {
    * @returns string - returns the minimum selectable date for the "endAt" input.
    */
   get endAtMin(): string {
-    let d = new Date();
-    if (this.post.beginDate) d = new Date(this.post.beginDate);
+    let d = dayjs();
+    if (this.post.beginDate) d = dayjs(this.post.beginDate);
+    return d.format("YYYY-MM-DD");
+  }
 
-    return dayjs(d).format("YYYY-MM-DD");
+  get endAtMax(): string {
+    let d = dayjs();
+    if (this.post.beginDate) d = dayjs(this.post.beginDate);
+    if (this.settings.maximum_advertising_days > 0) {
+      return d
+        .add(this.settings.maximum_advertising_days, "d")
+        .format("YYYY-MM-DD");
+    }
+    return "";
   }
 
   /**
@@ -579,11 +597,14 @@ export default class Advertisement extends Vue {
   }
 
   async loadAdvertisement(): Promise<void> {
+    this.loading = true;
     try {
-      this.post = await this.api.postGet({ idx: this.post.idx });
+      this.post = await this.api.advertisementGet({ idx: this.post.idx });
       // console.log("advertisement: ", this.post);
+      this.loading = false;
     } catch (e) {
       this.api.error(e);
+      this.loading = false;
     }
   }
 
@@ -593,7 +614,8 @@ export default class Advertisement extends Vue {
     let isCreate = true;
     if (this.post.idx) isCreate = false;
     try {
-      this.post = await this.api.postEdit(this.post.toJson);
+      this.post = await this.api.advertisementEdit(this.post.toJson);
+      console.log(`${isCreate ? "Create" : "Update"} =>`, this.post);
       if (isCreate) {
         ApiService.instance.open(`/advertisement/edit/${this.post.idx}`);
       } else {
@@ -618,7 +640,9 @@ export default class Advertisement extends Vue {
    */
   async onAdvertisementStart(): Promise<void> {
     try {
-      this.post = await this.api.advertisementStart(this.post.toJson);
+      const res = await this.api.advertisementStart(this.post.toJson);
+      console.log("onAdvertisementStart: ", res);
+      this.post = res;
       store.commit("refreshProfile");
     } catch (e) {
       this.api.error(e);

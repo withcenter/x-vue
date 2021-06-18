@@ -688,6 +688,16 @@ export class ApiService {
     return res.map((post: JSON) => new AdvertisementModel().fromJson(post));
   }
 
+  async advertisementGet(data: RequestData): Promise<AdvertisementModel> {
+    const res = await this.request("advertisement.get", data);
+    return new AdvertisementModel().fromJson(res);
+  }
+
+  async advertisementEdit(data: RequestData): Promise<AdvertisementModel> {
+    const res = await this.request("advertisement.edit", data);
+    return new AdvertisementModel().fromJson(res);
+  }
+
   /**
    * Returns country data
    * @attention it does memory cache. So, it will return the previous data on second call.
@@ -708,19 +718,19 @@ export class ApiService {
     return store.state.advertisementSettings;
   }
 
-  async advertisementStart(data: RequestData): Promise<PostModel> {
+  async advertisementStart(data: RequestData): Promise<AdvertisementModel> {
     const res = await this.request("advertisement.start", data);
-    return new PostModel().fromJson(res);
+    return new AdvertisementModel().fromJson(res);
   }
 
-  async advertisementStop(idx: number): Promise<PostModel> {
+  async advertisementStop(idx: number): Promise<AdvertisementModel> {
     const res = await this.request("advertisement.stop", { idx: idx });
-    return new PostModel().fromJson(res);
+    return new AdvertisementModel().fromJson(res);
   }
 
-  async advertisementDelete(idx: number): Promise<PostModel> {
+  async advertisementDelete(idx: number): Promise<AdvertisementModel> {
     const res = await this.request("advertisement.delete", { idx: idx });
-    return new PostModel().fromJson(res);
+    return new AdvertisementModel().fromJson(res);
   }
 
   async myCafe(): Promise<CafeModel[]> {

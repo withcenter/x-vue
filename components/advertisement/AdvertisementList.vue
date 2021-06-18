@@ -2,7 +2,7 @@
   <section data-cy="advertisement-list-page" class="advertisement-list-page">
     <div class="mt-3" v-if="posts.length">
       <div class="box p-2 mb-2" v-for="post of posts" :key="post.idx">
-        <advertisement-preview :post="post"></advertisement-preview>
+        <advertisement-preview :advertisement="post"></advertisement-preview>
       </div>
     </div>
     <div class="mt-3 p-2 text-center" v-if="!posts.length && !loadingPosts">
