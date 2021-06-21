@@ -37,6 +37,7 @@ import { PostModel } from "@/x-vue/services/interfaces";
 import PostMetaComponent from "@/x-vue/components/forum/PostMeta.vue";
 import UserAvatar from "@/x-vue/components/forum/UserAvatar.vue";
 import { Vue, Component } from "vue-property-decorator";
+import { currentQueryToString } from "@/x-vue/services/functions";
 
 @Component({
   props: ["post"],
@@ -49,11 +50,10 @@ export default class PostTitleMetaComponent extends Vue {
   post!: PostModel;
 
   toPostView(): string {
-    let link = this.post.relativeUrl || `/${this.post.idx}`;
-    if (this.$route.query.sc) {
-      link += "?sc=" + this.$route.query.sc;
-    }
-    return link;
+    return (
+      (this.post.relativeUrl || `/${this.post.idx}`) +
+      currentQueryToString(this.$route.query)
+    );
   }
 }
 </script>

@@ -138,7 +138,11 @@
                 <router-link
                   data-cy="user-info-edit-button"
                   class="btn btn-sm btn-outline-primary"
-                  :to="'admin/user/edit/' + user.idx"
+                  :to="
+                    '/admin/user/edit/' +
+                    user.idx +
+                    ($route.query.page ? `?page=${$route.query.page}` : '')
+                  "
                   >edit</router-link
                 >
               </td>
@@ -170,7 +174,7 @@ export default class AdminUserList extends Vue {
   users: Array<UserModel> = [];
   total = 0;
 
-  limit = 3;
+  limit = 5;
   searchKey = "";
   noOfPages = 10;
   currentPage = "1";
@@ -197,26 +201,27 @@ export default class AdminUserList extends Vue {
     return pageNum === 1 ? "?" : `?page=${pageNum}`;
   }
 
-  onPageChanged(): void {
-    // console.log("page; ", page);
+  onPageChanged(page: number): void {
+    this.currentPage = "" + page;
     this.onSubmitSearch();
   }
 
   mounted(): void {
-    this.currentPage = this.$route.query.page as string;
+    // console.log("mounted(): void {::", this.currentPage);
+    this.currentPage = this.$route.query.page
+      ? (this.$route.query.page as string)
+      : "1";
     this.onSubmitSearch();
   }
 
   async onSubmitSearch(): Promise<void> {
-    // console.log("page changed", this.currentPage);
     try {
       this.users = await ApiService.instance.userSearch({
         searchKey: this.searchKey,
         limit: this.limit,
-        page: this.currentPage ?? "1",
+        page: this.currentPage,
         full: true,
       });
-      console.log(this.users);
 
       this.total = await ApiService.instance.userCount({
         searchKey: this.searchKey,

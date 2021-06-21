@@ -20,7 +20,6 @@ import Cookies from "js-cookie";
 import { Keys, Err } from "./defines";
 import { getRootDomain, tr } from "./functions";
 import { RawLocation, Route } from "vue-router";
-import { FirebaseService } from "./firebase.service";
 
 /**
  *
@@ -164,9 +163,9 @@ export class ApiService {
     this.setCookie(Keys.sessionId, this.user.sessionId);
     this.sessionId = this.user.sessionId;
 
-    if (FirebaseService.instance.token) {
-      this.saveToken(FirebaseService.instance.token);
-    }
+    // if (FirebaseService.instance.token) {
+    //   this.saveToken(FirebaseService.instance.token);
+    // }
 
     return this.user;
   }

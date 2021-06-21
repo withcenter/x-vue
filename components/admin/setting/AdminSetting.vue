@@ -17,7 +17,7 @@
           aria-describedby="emailHelp"
         />
         <small id="emailHelp" class="form-text text-muted">
-          Input multip admin email addresses separating by comma(,).
+          Input multiple admin email addresses separating by comma(,).
         </small>
       </div>
     </form>
