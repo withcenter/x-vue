@@ -35,19 +35,21 @@ export interface ResponseData {
   [index: string]: any;
 }
 
-export interface RootDomainSettings {
+export interface MainCafeSettings {
   name: string;
   countryCode: string;
   logo: string;
 }
 
 /**
- * global cafe settings
+ * cafe settings
+ *
+ * This setting has all the cafe settings.
  */
-export interface GlobalCafeSettings {
+export interface CafeSettings {
   mainDomains: string[];
   countryDomains: string[];
-  rootDomainSettings: { [index: string]: RootDomainSettings };
+  mainCafeSettings: { [index: string]: MainCafeSettings };
   mainMenus: string[];
   sitemap: MapStringStringArray;
 }
@@ -70,7 +72,7 @@ export interface ApiStore {
   myCafe: CafeModel[];
   texts: MapStringAny;
   // global cafe settings
-  globalCafeSettings: GlobalCafeSettings;
+  cafeSettings: CafeSettings;
   advertisementSettings: AdvertisementSettings;
   // Vue vm must be added here.
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any

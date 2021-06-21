@@ -1,9 +1,4 @@
-import {
-  ApiStore,
-  GlobalCafeSettings,
-  UserModel,
-  CafeModel,
-} from "./interfaces";
+import { ApiStore, CafeSettings, UserModel, CafeModel } from "./interfaces";
 
 /**
  * @attention This will be copied into `Vuex store`. This may not be reactive.
@@ -14,7 +9,7 @@ export default {
   countries: {},
   cafe: new CafeModel(),
   myCafe: [] as CafeModel[],
-  globalCafeSettings: {} as GlobalCafeSettings,
+  cafeSettings: {} as CafeSettings,
   texts: {},
   advertisementSettings: {},
 } as ApiStore;
