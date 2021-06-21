@@ -197,7 +197,7 @@ export default class AdminUserList extends Vue {
     return pageNum === 1 ? "?" : `?page=${pageNum}`;
   }
 
-  onPageChanged(page: number): void {
+  onPageChanged(): void {
     // console.log("page; ", page);
     this.onSubmitSearch();
   }

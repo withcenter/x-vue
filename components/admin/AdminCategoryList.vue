@@ -66,7 +66,7 @@
 <script lang="ts">
 import { ApiService } from "@/x-vue/services/api.service";
 import { CategoryModel } from "@/x-vue/services/interfaces";
-import AdminCategoryCreate from "@/x-vue/components/admin/CategoryCreate.vue";
+import AdminCategoryCreate from "@/x-vue/components/admin/AdminCategoryCreate.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
 
@@ -87,7 +87,7 @@ export default class AdminCategoryList extends Vue {
     return pageNum === 1 ? "?" : `?page=${pageNum}`;
   }
 
-  onPageChanged(page: number): void {
+  onPageChanged(): void {
     // console.log("page; ", page);
     this.onSubmitSearch();
   }

@@ -10,7 +10,7 @@ import {
   FileModel,
   CafeModel,
   Obj,
-  GlobalCafeSettings,
+  CafeSettings,
   CategoryModel,
   AdvertisementSettings,
   AdvertisementModel,
@@ -557,17 +557,17 @@ export class ApiService {
   }
 
   // Get cafe global settings
-  async loadGlobalCafeSettings(): Promise<GlobalCafeSettings> {
+  async loadCafeSettings(): Promise<CafeSettings> {
     // 캐시된 데이터가 있으면 그것을 먼저 사용
-    const json = this.getStorage("globalCafeSettings");
+    const json = this.getStorage("cafeSettings");
     if (json) {
-      store.state.globalCafeSettings = json as GlobalCafeSettings;
+      store.state.cafeSettings = json as CafeSettings;
     }
     // 서버로 부터 데이터를 가져와 캐시
     const res = await this.request("cafe.settings", { domain: this.domain });
-    store.state.globalCafeSettings = res as GlobalCafeSettings;
-    this.setStorage("globalCafeSettings", store.state.globalCafeSettings);
-    return store.state.globalCafeSettings;
+    store.state.cafeSettings = res as CafeSettings;
+    this.setStorage("cafeSettings", store.state.cafeSettings);
+    return store.state.cafeSettings;
   }
 
   /**
@@ -576,13 +576,11 @@ export class ApiService {
    */
   currentCafeSettings(): Obj | undefined {
     if (
-      store.state.globalCafeSettings &&
-      store.state.globalCafeSettings["rootDomainSettings"] &&
-      store.state.globalCafeSettings["rootDomainSettings"][this.rootDomain]
+      store.state.cafeSettings &&
+      store.state.cafeSettings["mainCafeSettings"] &&
+      store.state.cafeSettings["mainCafeSettings"][this.rootDomain]
     ) {
-      return store.state.globalCafeSettings["rootDomainSettings"][
-        this.rootDomain
-      ];
+      return store.state.cafeSettings["mainCafeSettings"][this.rootDomain];
     }
   }
 
