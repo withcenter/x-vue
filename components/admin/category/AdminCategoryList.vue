@@ -66,7 +66,7 @@
 <script lang="ts">
 import { ApiService } from "@/x-vue/services/api.service";
 import { CategoryModel } from "@/x-vue/services/interfaces";
-import AdminCategoryCreate from "@/x-vue/components/admin/AdminCategoryCreate.vue";
+import AdminCategoryCreate from "@/x-vue/components/admin/category/AdminCategoryCreate.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
 
@@ -87,8 +87,9 @@ export default class AdminCategoryList extends Vue {
     return pageNum === 1 ? "?" : `?page=${pageNum}`;
   }
 
-  onPageChanged(): void {
+  onPageChanged(page: number): void {
     // console.log("page; ", page);
+    this.currentPage = "" + page;
     this.onSubmitSearch();
   }
 
@@ -100,7 +101,7 @@ export default class AdminCategoryList extends Vue {
     try {
       this.categories = await ApiService.instance.categorySearch({
         limit: this.limit,
-        page: this.currentPage ?? "1",
+        page: this.currentPage,
       });
       this.total = await ApiService.instance.categoryCount({});
       this.noOfPages = Math.ceil(this.total / this.limit);
@@ -110,7 +111,7 @@ export default class AdminCategoryList extends Vue {
   }
 
   async onClickDelete(category: CategoryModel): Promise<void> {
-    console.log(category);
+    // console.log("onClickDelete::", category);
 
     const re = confirm("Delete the category?");
     if (!re) return;

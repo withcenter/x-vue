@@ -9,6 +9,7 @@
 import { ApiService } from "./api.service";
 import apiStore from "./api.store";
 import dayjs from "dayjs";
+import { Dictionary } from "vue-router/types/router";
 
 export function tr(code: string): string {
   if (!code) return "";
@@ -104,3 +105,16 @@ export function daysBetween(date1: string, date2: string): number {
 
 //   return true;
 // }
+
+export function currentQueryToString(
+  query: Dictionary<string | (string | null)[]>,
+  questionMark = true
+): string {
+  const arr: string[] = [];
+
+  for (const q in query) {
+    arr.push(`${q}=${query[q]}`);
+  }
+  if (!arr.length) return "";
+  return questionMark ? "?" + arr.join("&") : arr.join("&");
+}

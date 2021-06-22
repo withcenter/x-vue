@@ -3,7 +3,7 @@
     <!-- title -->
     <div class="d-flex justify-content-between">
       <h3 id="post-title">{{ post.title }}</h3>
-      <router-link class="btn btn-outline-info" :to="toList()">
+      <router-link class="btn btn-outline-info" :to="toList">
         {{ "back_to_list" | t }}
       </router-link>
     </div>
@@ -42,7 +42,7 @@
       <vote-buttons-component :parent="post"></vote-buttons-component>
       <span class="flex-grow-1"></span>
       <!-- mine buttons -->
-      <router-link class="btn btn-sm btn-info mr-2" :to="toList()">
+      <router-link class="btn btn-sm btn-info mr-2" :to="toList">
         {{ "back_to_list" | t }}
       </router-link>
       <mine-buttons-component :parent="post"></mine-buttons-component>
@@ -74,7 +74,7 @@
       </div>
     </div>
     <div class="d-flex justify-content-end mt-3">
-      <router-link class="btn btn-outline-info" :to="toList()">
+      <router-link class="btn btn-outline-info" :to="toList">
         {{ "back_to_list" | t }}
       </router-link>
     </div>
@@ -94,6 +94,7 @@ import UserDisplayName from "@/x-vue/components/forum/UserDisplayName.vue";
 import UserAvatar from "@/x-vue/components/forum/UserAvatar.vue";
 import FileDisplay from "@/x-vue/components/forum/FileDisplay.vue";
 import { ApiService } from "@/x-vue/services/api.service";
+import { currentQueryToString } from "@/x-vue/services/functions";
 
 @Component({
   props: ["post"],
@@ -112,11 +113,9 @@ export default class PostViewComponent extends Vue {
   post!: PostModel;
   api = ApiService.instance;
 
-  toList(): string {
+  get toList(): string {
     return (
-      "forum/" +
-      this.post.categoryId +
-      (this.$route.query.sc ? "?sc=" + this.$route.query.sc : "")
+      "forum/" + this.post.categoryId + currentQueryToString(this.$route.query)
     );
   }
 }
