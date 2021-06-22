@@ -690,7 +690,7 @@ export class ApiService {
   async advertisementSearch(
     options: RequestData
   ): Promise<Array<AdvertisementModel>> {
-    const res = await this.request("post.search", options);
+    const res = await this.request("advertisement.search", options);
     return res.map((post: JSON) => new AdvertisementModel().fromJson(post));
   }
 

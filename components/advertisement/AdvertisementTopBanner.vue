@@ -14,8 +14,7 @@ import Component from "vue-class-component";
 @Component({
   props: ["type", "defaultUrl"],
 })
-export default class AdvertisementBanner extends Vue {
-  type!: string;
+export default class AdvertisementTopBanner extends Vue {
   defaultUrl!: string;
 
   index = 0;
@@ -26,7 +25,7 @@ export default class AdvertisementBanner extends Vue {
 
   get banners(): AdvertisementModel[] {
     return store.state.banners.filter((a) => {
-      if (a.code != this.type) return false;
+      if (a.code != "top") return false;
       if (a.category != store.state.currentCategory) {
         return false;
       }
@@ -35,8 +34,9 @@ export default class AdvertisementBanner extends Vue {
   }
 
   get src(): string {
-    if (!this.banners.length) return this.defaultUrl ?? "";
-    if (!this.banners[this.index]) return this.defaultUrl ?? "";
+    if (!this.banners.length || !this.banners[this.index]) {
+      return this.defaultUrl ?? "";
+    }
     return this.banners[this.index].bannerUrl;
   }
 

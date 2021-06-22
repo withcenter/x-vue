@@ -309,7 +309,7 @@ export class PostModel extends PostRootModel {
     this.privateTitle = map.privateTitle;
     this.privateContent = map.privateContent;
 
-    this.subcategory = map.subcategory;
+    this.subcategory = map.subcategory ?? "";
 
     // Advertisement properties
     this.companyName = map.companyName;

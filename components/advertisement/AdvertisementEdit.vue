@@ -205,8 +205,8 @@
         <div class="form-group mt-2">
           <label>{{ "category" | t }}</label>
           <select class="form-control" v-model="post.subcategory">
-            <option value="" disabled selected>
-              {{ "adv_category_hint_a" | t }}
+            <option value="" selected>
+              {{ "global" | t }}
             </option>
             <option v-for="category in settings.categories" :key="category">
               {{ category }}
