@@ -1,5 +1,10 @@
 <template>
-  <div class="banner top pointer" :class="position" @click="onClick">
+  <div
+    class="banner top pointer"
+    :class="position"
+    @click="onClick"
+    v-if="banners.length"
+  >
     <img class="w-100" :src="src" />
   </div>
 </template>
@@ -7,7 +12,7 @@
 <script lang="ts">
 import store from "@/store";
 import { ApiService } from "@/x-vue/services/api.service";
-import { AdvertisementModel } from "@/x-vue/services/interfaces";
+import { Banner } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
 
@@ -23,25 +28,58 @@ export default class AdvertisementTopBanner extends Vue {
     this.rotate();
   }
 
-  get banners(): AdvertisementModel[] {
-    return store.state.banners
-      .filter((a) => {
-        if (a.code != "top") return false;
-        if (a.subcategory != store.state.currentCategory) return false;
-        return true;
-      })
-      .filter((_, i) => {
-        if (this.position == "left") return i % 2 == 0;
-        if (this.position == "right") return i % 2 != 0;
-      });
+  get banners(): Banner[] {
+    let category = store.state.currentCategory;
+    console.log(
+      "store.state.banners[store.state.currentCategory]",
+      category,
+      store.state.banners
+    );
+
+    if (typeof store.state.banners[category] === "undefined") {
+      category = "global";
+    }
+
+    /// Check if global banner exists,
+    if (!store.state.banners[category]) return [];
+
+    if (!store.state.banners[category]["top"]) return [];
+
+    const banners = store.state.banners[category]["top"].filter((v, i) => {
+      if (this.position == "left") return i % 2 == 0;
+      else return i % 2 != 0;
+    });
+    return banners;
   }
 
   get src(): string {
-    if (!this.banners.length || !this.banners[this.index]) {
-      return this.defaultUrl;
-    }
-    return this.banners[this.index].bannerUrl;
+    return this.banners[this.index % this.banners.length].bannerUrl;
   }
+
+  rotate() {
+    setInterval(() => this.index++, 7000);
+  }
+
+  // get src(): string {
+  //   if (!this.banners.length || !this.banners[this.index]) {
+  //     return this.defaultUrl;
+  //   }
+  //   return this.banners[this.index].bannerUrl;
+  // }
+
+  // rotate(): void {
+  //   setTimeout(() => {
+  //     if (this.banners.length) {
+  //       setInterval(() => {
+  //         this.index != this.banners.length - 1
+  //           ? this.index++
+  //           : (this.index = 0);
+  //       }, 7000);
+  //     } else {
+  //       this.index = 0;
+  //     }
+  //   }, 7000);
+  // }
 
   get clickUrl(): string {
     if (!this.banners.length) return "";
@@ -50,20 +88,6 @@ export default class AdvertisementTopBanner extends Vue {
 
   get defaultUrl(): string {
     return `/tmp/${this.position}-banner.jpg`;
-  }
-
-  rotate(): void {
-    setTimeout(() => {
-      if (this.banners.length) {
-        setInterval(() => {
-          this.index != this.banners.length - 1
-            ? this.index++
-            : (this.index = 0);
-        }, 7000);
-      } else {
-        this.index = 0;
-      }
-    }, 7000);
   }
 
   onClick(): void {

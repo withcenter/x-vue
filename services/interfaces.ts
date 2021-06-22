@@ -372,6 +372,18 @@ export class CommentModel extends PostRootModel {
   }
 }
 
+export interface Banner {
+  idx: number;
+  bannerUrl: string;
+  clickUrl: string;
+}
+
+interface Banners {
+  [code: string]: Banner[];
+}
+export interface CategoryBanners {
+  [category: string]: Banners;
+}
 export class AdvertisementModel extends PostModel {
   advertisementPoint = 0;
   status = "";
@@ -395,9 +407,9 @@ export class AdvertisementModel extends PostModel {
     this.status = map.status ?? "";
     this.bannerUrl = map.bannerUrl;
     this.clickUrl = map.clickUrl ?? "";
-    this.subcategory = map.category ?? "";
+    this.subcategory = map.subcategory ?? "";
     super.fromJson(map);
-    // console.log(this);
+
     return this;
   }
 }

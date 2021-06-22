@@ -5,7 +5,6 @@
 </template>
 
 <script lang="ts">
-import store from "@/store";
 import { ApiService } from "@/x-vue/services/api.service";
 import { AdvertisementModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
@@ -26,11 +25,12 @@ export default class AdvertisementBanner extends Vue {
   }
 
   get banners(): AdvertisementModel[] {
-    return store.state.banners.filter((a) => {
-      if (a.code != this.type) return false;
-      if (a.subcategory != store.state.currentCategory) return false;
-      return true;
-    });
+    // return store.state.banners.filter((a) => {
+    //   if (a.code != this.type) return false;
+    //   if (a.subcategory != store.state.currentCategory) return false;
+    //   return true;
+    // });
+    return [];
   }
 
   get src(): string {
