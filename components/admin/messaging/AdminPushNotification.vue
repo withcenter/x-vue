@@ -1,9 +1,9 @@
 <template>
   <section data-cy="push-notification-create-page">
-    <h4>{{ "push notification" | t }}</h4>
+    <h4>{{ "push_notification" | t }}</h4>
     <form>
       <div class="form-group">
-        <label for="status">{{ "sending option" | t }}</label>
+        <label for="status">{{ "sending_option" | t }}</label>
         <select
           class="custom-select"
           id="notify"
@@ -12,7 +12,7 @@
         >
           <option value="all">{{ "all" | t }}</option>
           <option value="topic">{{ "topic" | t }}</option>
-          <option value="tokens">{{ "token" | t }}</option>
+          <option value="tokens">{{ "tokens" | t }}</option>
           <option value="emails">{{ "emails" | t }}</option>
         </select>
       </div>
@@ -49,7 +49,7 @@
           v-model="options.emails"
         />
         <div class="text-muted">
-          Input user email. Send to many emails. Separated them by comma.
+          {{ "push_notification_emails_help" }}
         </div>
       </div>
       <div class="form-group" v-if="options.notify == 'emails'">
@@ -63,7 +63,7 @@
           v-model="options.users"
         />
         <div class="text-muted">
-          Input user idx. Send to many Users. Separated them by comma.
+          {{ "push_notification_idxs_help" }}
         </div>
       </div>
       <div class="form-group">
@@ -83,7 +83,7 @@
               type="button"
               @click="loadPostIdx()"
             >
-              {{ "load post idx" | t }}
+              {{ "load_post_idx" | t }}
             </button>
           </div>
         </div>
@@ -112,29 +112,28 @@
         />
       </div>
       <div class="form-group">
-        <label for="click_action">{{ "click url" | t }}</label>
+        <label for="click_action">{{ "click_url" | t }}</label>
         <input
           type="text"
           class="form-control"
-          :placeholder="'click url' | t"
+          :placeholder="'click_url' | t"
           name="click_action"
           id="click_action"
           v-model="options.click_action"
         />
       </div>
       <div class="form-group">
-        <label for="imageUrl">{{ "Icon Url" | t }}</label>
+        <label for="imageUrl">{{ "icon_url" | t }}</label>
         <input
           type="text"
           class="form-control"
-          :placeholder="'Icon Url' | t"
+          :placeholder="'icon_url' | t"
           name="imageUrl"
           id="imageUrl"
           v-model="options.imageUrl"
         />
         <small class="form-text text-muted">
-          If the post has an image, that image will be used as Icon. or Default
-          image in 'config.php' will be used.
+          {{ "push_message_icon_url_help" }}
         </small>
       </div>
       <div class="form-group">
@@ -148,16 +147,15 @@
           v-model="options.sound"
         />
         <div class="text-muted">
-          Make sure to include the file extension. It will not work on IOS if it
-          dont have file extension.
+          {{ "push_notification_sound_help" }}
         </div>
       </div>
       <div class="form-group">
-        <label for="channel">{{ "channel id" | t }}</label>
+        <label for="channel">{{ "channel_id" | t }}</label>
         <input
           type="text"
           class="form-control"
-          :placeholder="'channel id' | t"
+          :placeholder="'channel_id' | t"
           name="channel"
           id="channel"
           v-model="options.channel"
@@ -171,7 +169,7 @@
             class="btn btn-primary"
             @click="sendPushNotification()"
           >
-            <span v-if="!loading">{{ "send notification" | t }}</span>
+            <span v-if="!loading">{{ "send_notification" | t }}</span>
             <span v-if="loading">{{ "loading" | t }}</span>
           </button>
         </div>

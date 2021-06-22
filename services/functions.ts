@@ -106,6 +106,14 @@ export function daysBetween(date1: string, date2: string): number {
 //   return true;
 // }
 
+/**
+ * alternative for `window.location.search`
+ * @improvement add exclude/include so it can give more benefit and usage
+ *
+ * @param query - from $route.query
+ * @param questionMark  - `default true` it will add the ? on the start of the string
+ * @returns
+ */
 export function currentQueryToString(
   query: Dictionary<string | (string | null)[]>,
   questionMark = true
@@ -117,4 +125,6 @@ export function currentQueryToString(
   }
   if (!arr.length) return "";
   return questionMark ? "?" + arr.join("&") : arr.join("&");
+
+  // return window.location.search;
 }
