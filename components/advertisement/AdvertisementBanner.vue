@@ -1,5 +1,5 @@
 <template>
-  <div class="banner pointer" :class="type" v-if="src" @click="onClick">
+  <div class="banner pointer" :class="type" @click="onClick">
     <img class="w-100" :src="src" />
   </div>
 </template>
@@ -12,11 +12,12 @@ import Vue from "vue";
 import Component from "vue-class-component";
 
 @Component({
-  props: ["type", "defaultUrl"],
+  props: ["type", "defaultUrl", "position"],
 })
 export default class AdvertisementBanner extends Vue {
   type!: string;
   defaultUrl!: string;
+  position!: string;
 
   index = 0;
 
@@ -27,16 +28,15 @@ export default class AdvertisementBanner extends Vue {
   get banners(): AdvertisementModel[] {
     return store.state.banners.filter((a) => {
       if (a.code != this.type) return false;
-      if (a.category != store.state.currentCategory) {
-        return false;
-      }
+      if (a.subcategory != store.state.currentCategory) return false;
       return true;
     });
   }
 
   get src(): string {
-    if (!this.banners.length) return this.defaultUrl ?? "";
-    if (!this.banners[this.index]) return this.defaultUrl ?? "";
+    if (!this.banners.length || !this.banners[this.index]) {
+      return this.defaultUrl ?? "";
+    }
     return this.banners[this.index].bannerUrl;
   }
 
@@ -46,11 +46,13 @@ export default class AdvertisementBanner extends Vue {
   }
 
   rotate(): void {
-    setInterval(
-      () =>
-        this.index != this.banners.length - 1 ? this.index++ : (this.index = 0),
-      7000
-    );
+    setInterval(() => {
+      if (this.banners.length) {
+        this.index != this.banners.length - 1 ? this.index++ : (this.index = 0);
+      } else {
+        this.index = 0;
+      }
+    }, 7000);
   }
 
   onClick(): void {

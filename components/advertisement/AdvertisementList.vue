@@ -46,7 +46,7 @@ export default class PostList extends Vue {
   loadingPosts = false;
 
   total = 0;
-  limit = 5;
+  limit = 10;
   noOfPages = 10;
   currentPage = "1";
 

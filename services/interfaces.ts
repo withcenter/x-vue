@@ -388,14 +388,14 @@ export class AdvertisementModel extends PostModel {
 
   bannerUrl = "";
   clickUrl = "";
-  category = "";
+  subcategory = "";
 
   fromJson(map: ResponseData): AdvertisementModel {
     this.advertisementPoint = map.advertisementPoint ?? 0;
     this.status = map.status ?? "";
     this.bannerUrl = map.bannerUrl;
     this.clickUrl = map.clickUrl ?? "";
-    this.category = map.category ?? "";
+    this.subcategory = map.category ?? "";
     super.fromJson(map);
     // console.log(this);
     return this;

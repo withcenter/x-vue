@@ -17,6 +17,9 @@
             Waiting
           </span>
           <span class="badge badge-secondary ml-2">
+            {{ advertisement.code }}
+          </span>
+          <span class="badge badge-secondary ml-2">
             {{
               advertisement.subcategory ? advertisement.subcategory : "global"
             }}

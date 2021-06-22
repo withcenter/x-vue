@@ -1,5 +1,5 @@
 <template>
-  <div class="banner pointer" :class="type" v-if="src" @click="onClick">
+  <div class="banner top pointer" :class="position" @click="onClick">
     <img class="w-100" :src="src" />
   </div>
 </template>
@@ -12,10 +12,10 @@ import Vue from "vue";
 import Component from "vue-class-component";
 
 @Component({
-  props: ["type", "defaultUrl"],
+  props: ["position"],
 })
 export default class AdvertisementTopBanner extends Vue {
-  defaultUrl!: string;
+  position!: string;
 
   index = 0;
 
@@ -24,18 +24,21 @@ export default class AdvertisementTopBanner extends Vue {
   }
 
   get banners(): AdvertisementModel[] {
-    return store.state.banners.filter((a) => {
-      if (a.code != "top") return false;
-      if (a.category != store.state.currentCategory) {
-        return false;
-      }
-      return true;
-    });
+    return store.state.banners
+      .filter((a) => {
+        if (a.code != "top") return false;
+        if (a.subcategory != store.state.currentCategory) return false;
+        return true;
+      })
+      .filter((_, i) => {
+        if (this.position == "left") return i % 2 == 0;
+        if (this.position == "right") return i % 2 != 0;
+      });
   }
 
   get src(): string {
     if (!this.banners.length || !this.banners[this.index]) {
-      return this.defaultUrl ?? "";
+      return this.defaultUrl;
     }
     return this.banners[this.index].bannerUrl;
   }
@@ -45,12 +48,22 @@ export default class AdvertisementTopBanner extends Vue {
     return this.banners[this.index].clickUrl;
   }
 
+  get defaultUrl(): string {
+    return `/tmp/${this.position}-banner.jpg`;
+  }
+
   rotate(): void {
-    setInterval(
-      () =>
-        this.index != this.banners.length - 1 ? this.index++ : (this.index = 0),
-      7000
-    );
+    setTimeout(() => {
+      if (this.banners.length) {
+        setInterval(() => {
+          this.index != this.banners.length - 1
+            ? this.index++
+            : (this.index = 0);
+        }, 7000);
+      } else {
+        this.index = 0;
+      }
+    }, 7000);
   }
 
   onClick(): void {
