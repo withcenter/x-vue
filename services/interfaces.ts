@@ -236,8 +236,6 @@ export class PostRootModel {
 
   pointPerDay = 0;
 
-  click_url = "";
-
   get isPost(): boolean {
     return !this.parentIdx;
   }
@@ -287,7 +285,6 @@ export class PostRootModel {
 
 export class PostModel extends PostRootModel {
   fromJson(map: ResponseData): PostModel {
-    this.click_url = map.click_url;
     this.pointPerDay = map.pointPerDay;
     this.url = map.url;
     this.path = map.path;
@@ -299,11 +296,13 @@ export class PostModel extends PostRootModel {
 
     this.noOfViews = map.noOfViews;
 
-    this.comments = map.comments
-      // .filter((c: Obj) => {
-      //   return c.deletedAt == "0";
-      // })
-      .map((c: JSON) => new CommentModel().fromJson(c));
+    if (map.comments) {
+      this.comments = map.comments
+        // .filter((c: Obj) => {
+        //   return c.deletedAt == "0";
+        // })
+        .map((c: JSON) => new CommentModel().fromJson(c));
+    }
 
     this.noOfComments = map.noOfComments;
 
@@ -353,7 +352,6 @@ export class PostModel extends PostRootModel {
       beginDate: this.beginDate,
       endDate: this.endDate,
       files: this.fileIdxes,
-      click_url: this.click_url,
     };
   }
 
@@ -388,9 +386,16 @@ export class AdvertisementModel extends PostModel {
     return this.status == "waiting";
   }
 
+  bannerUrl = "";
+  clickUrl = "";
+  category = "";
+
   fromJson(map: ResponseData): AdvertisementModel {
     this.advertisementPoint = map.advertisementPoint ?? 0;
     this.status = map.status ?? "";
+    this.bannerUrl = map.bannerUrl;
+    this.clickUrl = map.clickUrl ?? "";
+    this.category = map.category ?? "";
     super.fromJson(map);
     // console.log(this);
     return this;
