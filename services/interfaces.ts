@@ -373,9 +373,10 @@ export class CommentModel extends PostRootModel {
 }
 
 export interface Banner {
-  idx: number;
-  bannerUrl: string;
-  clickUrl: string;
+  idx?: number;
+  bannerUrl?: string;
+  clickUrl?: string;
+  title?: string;
 }
 
 interface Banners {

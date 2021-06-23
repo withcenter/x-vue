@@ -47,7 +47,7 @@ export default class AdvertisementTopBanner extends Vue {
 
   get currentBanner(): Banner {
     if (!this.banners.length) {
-      return { clickUrl: "", bannerUrl: this.defaultUrl, idx: 0 };
+      return { bannerUrl: this.defaultUrl };
     }
     return this.banners[this.index % this.banners.length];
   }

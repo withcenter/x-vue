@@ -1,11 +1,9 @@
 <template>
-  <div
-    class="banner pointer w-100"
-    :class="type"
-    @click="onClick"
-    v-if="currentBanner.bannerUrl"
-  >
-    <img class="w-100" :src="currentBanner.bannerUrl" />
+  <div class="banner line d-flex pointer" @click="onClick">
+    <img :src="currentBanner.bannerUrl" />
+    <div class="title">
+      {{ currentBanner.title }}
+    </div>
   </div>
 </template>
 
@@ -16,12 +14,8 @@ import Vue from "vue";
 import store from "@/store";
 import { ApiService } from "@/x-vue/services/api.service";
 
-@Component({
-  props: ["type"],
-})
-export default class AdvertisementBanner extends Vue {
-  type!: string;
-
+@Component({})
+export default class AdvertisementLineBanner extends Vue {
   index = 0;
 
   mounted(): void {
@@ -31,22 +25,22 @@ export default class AdvertisementBanner extends Vue {
   get banners(): Banner[] {
     let category = store.state.currentCategory;
 
-    /// if 'currentCategory' is empty, or the list for current banner type is empty.
     if (
       !store.state.banners[category] ||
-      !store.state.banners[category][this.type]
+      !store.state.banners[category]["line"]
     )
       category = "global";
 
-    /// if 'global' banner is empty, return empty.
     if (!store.state.banners[category]) return [];
 
-    if (!store.state.banners[category][this.type]) return [];
-    else return store.state.banners[category][this.type];
+    if (!store.state.banners[category]["line"]) return [];
+    else return store.state.banners[category]["line"];
   }
 
   get currentBanner(): Banner {
-    if (!this.banners.length) return {};
+    if (!this.banners.length) {
+      return {};
+    }
     return this.banners[this.index % this.banners.length];
   }
 

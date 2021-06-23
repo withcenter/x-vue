@@ -19,7 +19,7 @@ import store from "@/store";
 import { ApiService } from "@/x-vue/services/api.service";
 
 @Component({})
-export default class AdvertisementSqaureBanners extends Vue {
+export default class AdvertisementSquareBanners extends Vue {
   get banners(): Banner[] {
     let category = store.state.currentCategory;
 
