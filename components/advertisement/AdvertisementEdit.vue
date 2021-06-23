@@ -614,8 +614,9 @@ export default class Advertisement extends Vue {
     let isCreate = true;
     if (this.post.idx) isCreate = false;
     try {
-      this.post = await this.api.advertisementEdit(this.post.toJson);
-      console.log(`${isCreate ? "Create" : "Update"} =>`, this.post);
+      const res = await this.api.advertisementEdit(this.post.toJson);
+      console.log(`${isCreate ? "Create" : "Update"} =>`, res);
+      Object.assign(this.post, res);
       if (isCreate) {
         ApiService.instance.open(`/advertisement/edit/${this.post.idx}`);
       } else {
