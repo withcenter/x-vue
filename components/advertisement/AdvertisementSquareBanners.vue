@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex w-100" v-if="banners.length">
+  <div class="d-flex w-100 pb-2 border-bottom" v-if="banners.length">
     <div
       class="banner square pointer mr-1 col-3 p-0"
       @click="onClick(banner)"
