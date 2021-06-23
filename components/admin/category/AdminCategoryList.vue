@@ -1,6 +1,12 @@
 <template>
   <section>
-    <h4>Category list</h4>
+    <div class="d-flex justify-content-between mb-2">
+      <h4>{{ "category_list" | t }}</h4>
+      <div class="btn btn-sm btn-info" @click="checkDefaultCategory">
+        Check Default Category
+      </div>
+    </div>
+
     <div class="container">
       <div class="row">
         <section class="w-100">
@@ -129,6 +135,26 @@ export default class AdminCategoryList extends Vue {
         this.categories.splice(index, 1);
       }
       console.log(cat);
+    } catch (e) {
+      ApiService.instance.error(e);
+    }
+  }
+
+  async checkDefaultCategory(): Promise<void> {
+    try {
+      const menus = await ApiService.instance.cafeInitDefautMenu();
+      let ok = 0;
+      let error = 0;
+      for (const menu in menus) {
+        if (menu) ok++;
+        else error++;
+      }
+      ApiService.instance.alert(
+        "Default Menus",
+        `${ok} Okay Menus. ${error} Error Menus`
+      );
+
+      console.log(menus);
     } catch (e) {
       ApiService.instance.error(e);
     }

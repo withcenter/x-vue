@@ -336,7 +336,8 @@ export class ApiService {
     };
 
     const res = await axios.post(
-      "https://cherry.philov.com/index.php",
+      // "https://cherry.philov.com/index.php",
+      this.endpoint,
       form,
       options
     );
@@ -518,6 +519,10 @@ export class ApiService {
   async cafeGet(data: RequestData): Promise<CafeModel> {
     const res = await this.request("cafe.get", data);
     return new CafeModel().fromJson(res);
+  }
+
+  async cafeInitDefautMenu(): Promise<ResponseData> {
+    return await this.request("cafe.initDefaultCafeMenu");
   }
 
   // async loadCafe(): Promise<CafeModel> {

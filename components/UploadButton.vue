@@ -14,9 +14,9 @@
 </template>
 
 <script lang="ts">
-import { AppService } from "@/service/app.service";
 import Vue from "vue";
 import Component from "vue-class-component";
+import { ApiService } from "../services/api.service";
 
 interface HTMLInputEvent extends Event {
   target: HTMLInputElement & EventTarget;
@@ -33,15 +33,15 @@ export default class UploadButton extends Vue {
    */
   defaultSize = 35;
 
-  app = AppService.instance;
+  api = ApiService.instance;
 
   mounted(): void {
     if (this.size) this.defaultSize = this.size;
   }
 
   async onFileChange(event: HTMLInputEvent): Promise<void> {
-    if (this.app.notLoggedIn) {
-      this.app.error("error_login_first");
+    if (this.api.notLoggedIn) {
+      this.api.error("error_login_first");
       return;
     }
 
@@ -50,21 +50,12 @@ export default class UploadButton extends Vue {
       return;
     }
     const file = event.target.files[0];
-    // const file = event.target.files[0];
-    // this.app.api.fileUpload(
-    //   file,
-    //   {},
-    //   this.onUploaded,
-    //   this.app.error,
-    //   this.onProgress
-    // );
-    // }
 
     try {
-      const res = await this.app.api.fileUpload(file, {}, this.onProgress);
+      const res = await this.api.fileUpload(file, {}, this.onProgress);
       this.$emit("success", res);
     } catch (e) {
-      this.app.error(e);
+      this.api.error(e);
     }
   }
 
