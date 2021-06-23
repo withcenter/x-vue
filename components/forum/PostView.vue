@@ -113,8 +113,7 @@ export default class PostViewComponent extends Vue {
   api = ApiService.instance;
 
   get toList(): string {
-    return (
-      "forum/" + this.post.categoryId + location.search
+    return "forum/" + this.post.categoryId + location.search;
   }
 }
 </script>
