@@ -1,11 +1,12 @@
 <template>
   <div class="banner top pointer" :class="position" @click="onClick">
-    <img class="w-100" :src="src" />
+    <img class="w-100" :src="currentBanner.bannerUrl" />
   </div>
 </template>
 
 <script lang="ts">
 import store from "@/store";
+import { ApiService } from "@/x-vue/services/api.service";
 import { Banner } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
@@ -24,13 +25,11 @@ export default class AdvertisementTopBanner extends Vue {
 
   get banners(): Banner[] {
     let category = store.state.currentCategory;
-    // console.log(
-    //   "store.state.banners[store.state.currentCategory]",
-    //   category,
-    //   store.state.banners
-    // );
 
-    if (typeof store.state.banners[category] === "undefined") {
+    if (
+      !store.state.banners[category] ||
+      !store.state.banners[category]["top"]
+    ) {
       category = "global";
     }
 
@@ -46,26 +45,23 @@ export default class AdvertisementTopBanner extends Vue {
     return banners;
   }
 
-  get src(): string {
-    if (!this.banners.length) return this.defaultUrl;
-    return this.banners[this.index % this.banners.length].bannerUrl;
-  }
-
-  rotate() {
-    setInterval(() => this.index++, 7000);
-  }
-
-  get clickUrl(): string {
-    if (!this.banners.length) return "";
-    return this.banners[this.index].clickUrl;
+  get currentBanner(): Banner {
+    if (!this.banners.length) {
+      return { clickUrl: "", bannerUrl: this.defaultUrl, idx: 0 };
+    }
+    return this.banners[this.index % this.banners.length];
   }
 
   get defaultUrl(): string {
     return `/tmp/${this.position}-banner.jpg`;
   }
 
+  rotate(): void {
+    setInterval(() => this.index++, 7000);
+  }
+
   onClick(): void {
-    console.log("TODO: on advertisement click");
+    ApiService.instance.openAdvertisement(this.currentBanner);
   }
 }
 </script>

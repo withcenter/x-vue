@@ -14,6 +14,7 @@ import {
   CategoryModel,
   AdvertisementSettings,
   AdvertisementModel,
+  Banner,
 } from "./interfaces";
 
 import Cookies from "js-cookie";
@@ -794,5 +795,13 @@ export class ApiService {
   async fileGet(data: RequestData): Promise<FileModel> {
     const res = await this.request("file.get", data);
     return new FileModel().fromJson(res);
+  }
+
+  openAdvertisement(banner: Banner): void {
+    if (banner.clickUrl) {
+      // TODO: open click url (might be external link)
+    } else {
+      this.open({ path: "/advertisement/view/" + banner.idx });
+    }
   }
 }
