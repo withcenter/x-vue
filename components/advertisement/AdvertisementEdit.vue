@@ -390,9 +390,9 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import {
+  AdvertisementModel,
   AdvertisementSettings,
   FileModel,
-  PostModel,
   ResponseData,
 } from "@/x-vue/services/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
@@ -409,7 +409,7 @@ export default class Advertisement extends Vue {
   api = ApiService.instance;
   isMounted = false;
 
-  post = new PostModel();
+  post = new AdvertisementModel();
 
   uploadProgress = 0;
 

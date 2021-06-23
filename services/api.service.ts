@@ -800,6 +800,7 @@ export class ApiService {
   openAdvertisement(banner: Banner): void {
     if (banner.clickUrl) {
       // TODO: open click url (might be external link)
+      window.open(banner.clickUrl, "_newtab");
     } else {
       this.open({ path: "/advertisement/view/" + banner.idx });
     }

@@ -409,8 +409,32 @@ export class AdvertisementModel extends PostModel {
     this.clickUrl = map.clickUrl ?? "";
     this.subcategory = map.subcategory ?? "";
     super.fromJson(map);
-
     return this;
+  }
+
+  get toJson(): RequestData {
+    return {
+      idx: this.idx,
+      userIdx: this.userIdx,
+      categoryId: this.categoryId,
+      categoryIdx: this.categoryIdx,
+      title: this.title,
+      content: this.content,
+      privateTitle: this.privateTitle,
+      privateContent: this.privateContent,
+      subcategory: this.subcategory,
+
+      // Advertisement properties
+      name: this.name,
+      companyName: this.companyName,
+      phoneNo: this.phoneNo,
+      code: this.code,
+      countryCode: this.countryCode,
+      beginDate: this.beginDate,
+      endDate: this.endDate,
+      files: this.fileIdxes,
+      clickUrl: this.clickUrl,
+    };
   }
 }
 
