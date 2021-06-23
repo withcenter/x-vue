@@ -16,6 +16,14 @@
           <span class="badge badge-info" v-if="advertisement.isWaiting">
             Waiting
           </span>
+          <span class="badge badge-secondary ml-2">
+            {{ advertisement.code }}
+          </span>
+          <span class="badge badge-secondary ml-2">
+            {{
+              advertisement.subcategory ? advertisement.subcategory : "global"
+            }}
+          </span>
         </div>
         <div class="text-truncate">
           {{ advertisement.content ? advertisement.content : "No content .." }}

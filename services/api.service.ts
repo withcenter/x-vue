@@ -34,6 +34,8 @@ export class ApiService {
     this.initUserAuth();
   }
 
+  advertisements: AdvertisementModel[] = [];
+
   public static get instance(): ApiService {
     if (!ApiService._instance) {
       ApiService._instance = new ApiService();
@@ -684,19 +686,18 @@ export class ApiService {
   }
 
   async loadBanners(cafeDomain: string): Promise<Array<AdvertisementModel>> {
-    const res = await this.request("advertisement.search", {
+    const res = await this.request("advertisement.loadBanners", {
       cafeDomain: cafeDomain,
     });
     return res.map((post: JSON) => new AdvertisementModel().fromJson(post));
   }
 
-  // async advertisementSearch(): // cafeDomain: string
-  // Promise<Array<AdvertisementModel>> {
-  //   // const res = await this.request("advertisement.search", {
-  //   //   cafeDomain: cafeDomain,
-  //   // });
-  //   // return res.map((post: JSON) => new AdvertisementModel().fromJson(post));
-  // }
+  async advertisementSearch(
+    options: RequestData
+  ): Promise<Array<AdvertisementModel>> {
+    const res = await this.request("advertisement.search", options);
+    return res.map((post: JSON) => new AdvertisementModel().fromJson(post));
+  }
 
   async advertisementGet(data: RequestData): Promise<AdvertisementModel> {
     const res = await this.request("advertisement.get", data);
