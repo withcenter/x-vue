@@ -1,43 +1,44 @@
 <template>
-  <div class="banner pointer" :class="type" @click="onClick">
+  <div class="banner pointer" :class="type" @click="onClick" v-if="src">
     <img class="w-100" :src="src" />
   </div>
 </template>
 
 <script lang="ts">
-import { ApiService } from "@/x-vue/services/api.service";
-import { AdvertisementModel } from "@/x-vue/services/interfaces";
-import Vue from "vue";
+import { Banner } from "@/x-vue/services/interfaces";
 import Component from "vue-class-component";
+import Vue from "vue";
+import store from "@/store";
 
 @Component({
-  props: ["type", "defaultUrl", "position"],
+  props: ["type", "defaultUrl"],
 })
 export default class AdvertisementBanner extends Vue {
   type!: string;
   defaultUrl!: string;
-  position!: string;
 
   index = 0;
 
   mounted(): void {
-    this.rotate();
+    // this.rotate();
   }
 
-  get banners(): AdvertisementModel[] {
-    // return store.state.banners.filter((a) => {
-    //   if (a.code != this.type) return false;
-    //   if (a.subcategory != store.state.currentCategory) return false;
-    //   return true;
-    // });
-    return [];
+  get banners(): Banner[] {
+    let category = store.state.currentCategory;
+
+    /// if 'currentCategory' is empty, check global banners.
+    if (!store.state.banners[category]) category = "global";
+
+    /// if 'global' banner is empty, return empty.
+    if (!store.state.banners[category]) return [];
+
+    if (!store.state.banners[category][this.type]) return [];
+    else return store.state.banners[category][this.type];
   }
 
   get src(): string {
-    if (!this.banners.length || !this.banners[this.index]) {
-      return this.defaultUrl ?? "";
-    }
-    return this.banners[this.index].bannerUrl;
+    if (!this.banners.length) return this.defaultUrl ?? "";
+    return this.banners[this.index % this.banners.length].bannerUrl;
   }
 
   get clickUrl(): string {
@@ -45,28 +46,11 @@ export default class AdvertisementBanner extends Vue {
     return this.banners[this.index].clickUrl;
   }
 
-  rotate(): void {
-    setInterval(() => {
-      if (this.banners.length) {
-        this.index != this.banners.length - 1 ? this.index++ : (this.index = 0);
-      } else {
-        this.index = 0;
-      }
-    }, 7000);
+  rotate() {
+    setInterval(() => this.index++, 7000);
   }
-
   onClick(): void {
-    if (!this.banners[this.index]) return;
-
-    if (this.banners[this.index].clickUrl) {
-      // TODO: handle click url (might be external link)
-      console.log("ad:clickUrl =>", this.banners[this.index].clickUrl);
-    }
-    if (this.banners[this.index].idx) {
-      ApiService.instance.open({
-        path: `/advertisement/view/${this.banners[this.index].idx}`,
-      });
-    }
+    console.log("TODO: on advertisement click");
   }
 }
 </script>
