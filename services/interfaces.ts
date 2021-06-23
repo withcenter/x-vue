@@ -236,8 +236,6 @@ export class PostRootModel {
 
   pointPerDay = 0;
 
-  click_url = "";
-
   get isPost(): boolean {
     return !this.parentIdx;
   }
@@ -287,7 +285,6 @@ export class PostRootModel {
 
 export class PostModel extends PostRootModel {
   fromJson(map: ResponseData): PostModel {
-    this.click_url = map.click_url;
     this.pointPerDay = map.pointPerDay;
     this.url = map.url;
     this.path = map.path;
@@ -299,18 +296,20 @@ export class PostModel extends PostRootModel {
 
     this.noOfViews = map.noOfViews;
 
-    this.comments = map.comments
-      // .filter((c: Obj) => {
-      //   return c.deletedAt == "0";
-      // })
-      .map((c: JSON) => new CommentModel().fromJson(c));
+    if (map.comments) {
+      this.comments = map.comments
+        // .filter((c: Obj) => {
+        //   return c.deletedAt == "0";
+        // })
+        .map((c: JSON) => new CommentModel().fromJson(c));
+    }
 
     this.noOfComments = map.noOfComments;
 
     this.privateTitle = map.privateTitle;
     this.privateContent = map.privateContent;
 
-    this.subcategory = map.subcategory;
+    this.subcategory = map.subcategory ?? "";
 
     // Advertisement properties
     this.companyName = map.companyName;
@@ -353,7 +352,6 @@ export class PostModel extends PostRootModel {
       beginDate: this.beginDate,
       endDate: this.endDate,
       files: this.fileIdxes,
-      click_url: this.click_url,
     };
   }
 
@@ -374,6 +372,19 @@ export class CommentModel extends PostRootModel {
   }
 }
 
+export interface Banner {
+  idx?: number;
+  bannerUrl?: string;
+  clickUrl?: string;
+  title?: string;
+}
+
+interface Banners {
+  [code: string]: Banner[];
+}
+export interface CategoryBanners {
+  [category: string]: Banners;
+}
 export class AdvertisementModel extends PostModel {
   advertisementPoint = 0;
   status = "";
@@ -388,12 +399,43 @@ export class AdvertisementModel extends PostModel {
     return this.status == "waiting";
   }
 
+  bannerUrl = "";
+  clickUrl = "";
+  subcategory = "";
+
   fromJson(map: ResponseData): AdvertisementModel {
     this.advertisementPoint = map.advertisementPoint ?? 0;
     this.status = map.status ?? "";
+    this.bannerUrl = map.bannerUrl;
+    this.clickUrl = map.clickUrl ?? "";
+    this.subcategory = map.subcategory ?? "";
     super.fromJson(map);
-    // console.log(this);
     return this;
+  }
+
+  get toJson(): RequestData {
+    return {
+      idx: this.idx,
+      userIdx: this.userIdx,
+      categoryId: this.categoryId,
+      categoryIdx: this.categoryIdx,
+      title: this.title,
+      content: this.content,
+      privateTitle: this.privateTitle,
+      privateContent: this.privateContent,
+      subcategory: this.subcategory,
+
+      // Advertisement properties
+      name: this.name,
+      companyName: this.companyName,
+      phoneNo: this.phoneNo,
+      code: this.code,
+      countryCode: this.countryCode,
+      beginDate: this.beginDate,
+      endDate: this.endDate,
+      files: this.fileIdxes,
+      clickUrl: this.clickUrl,
+    };
   }
 }
 

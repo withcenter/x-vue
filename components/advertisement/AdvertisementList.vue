@@ -46,7 +46,7 @@ export default class PostList extends Vue {
   loadingPosts = false;
 
   total = 0;
-  limit = 5;
+  limit = 10;
   noOfPages = 10;
   currentPage = "1";
 
@@ -83,16 +83,16 @@ export default class PostList extends Vue {
   }
 
   async loadPosts(): Promise<void> {
-    // console.log(this.options);
-    // this.loadingPosts = true;
-    // try {
-    //   this.posts = await this.api.advertisementSearch(this.options);
-    //   // console.log(this.posts);
-    //   this.loadingPosts = false;
-    // } catch (error) {
-    //   this.api.error(error);
-    //   this.loadingPosts = false;
-    // }
+    // console.log("adv:loadPosts:: ", this.options);
+    this.loadingPosts = true;
+    try {
+      this.posts = await this.api.advertisementSearch(this.options);
+      // console.log(this.posts);
+      this.loadingPosts = false;
+    } catch (error) {
+      this.api.error(error);
+      this.loadingPosts = false;
+    }
   }
 }
 </script>

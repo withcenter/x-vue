@@ -205,8 +205,8 @@
         <div class="form-group mt-2">
           <label>{{ "category" | t }}</label>
           <select class="form-control" v-model="post.subcategory">
-            <option value="" disabled selected>
-              {{ "adv_category_hint_a" | t }}
+            <option value="" selected>
+              {{ "global" | t }}
             </option>
             <option v-for="category in settings.categories" :key="category">
               {{ category }}
@@ -279,7 +279,7 @@
             class="form-control"
             :placeholder="'click_url' | t"
             type="text"
-            v-model="post.click_url"
+            v-model="post.clickUrl"
           />
           <small class="form-text text-muted">
             {{ "click_url_hint" | t }}
@@ -390,9 +390,9 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import {
+  AdvertisementModel,
   AdvertisementSettings,
   FileModel,
-  PostModel,
   ResponseData,
 } from "@/x-vue/services/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
@@ -409,7 +409,7 @@ export default class Advertisement extends Vue {
   api = ApiService.instance;
   isMounted = false;
 
-  post = new PostModel();
+  post = new AdvertisementModel();
 
   uploadProgress = 0;
 

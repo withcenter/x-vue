@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex">
-    <div tabindex="0" :id="id" class="pointer">
+    <div tabindex="0" :id="id" class="pointer" v-if="id">
       {{ parent.user.displayName }}
     </div>
 
@@ -31,10 +31,10 @@ import UserMenu from "@/x-vue/components/forum/UserMenu.vue";
 export default class UserDisplayName extends Vue {
   parent!: PostModel & CommentModel;
 
-  id = "displayname-popover-";
+  id = "";
 
   mounted(): void {
-    this.id += this.parent.idx;
+    this.id = `displayname-popover-${this.parent.idx}`;
   }
 }
 </script>

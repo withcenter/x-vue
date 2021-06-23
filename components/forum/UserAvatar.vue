@@ -38,11 +38,11 @@ export default class UserAvatar extends Vue {
 
   defaultSize = 3;
   src = "";
-  id = "user-avatar-popover-";
+  id = "";
 
   mounted(): void {
     if (this.size) this.defaultSize = this.size;
-    this.id += this.parent.idx;
+    this.id = `user-avatar-popover-${this.parent.idx}`;
   }
 }
 </script>
