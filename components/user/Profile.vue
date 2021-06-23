@@ -116,7 +116,11 @@
         ></b-form-input>
       </div>
 
-      {{ api.user }}
+      <div class="mt-2">
+        <button type="submit" class="btn btn-primary col-3">
+          {{ "save" | t }}
+        </button>
+      </div>
     </form>
     <login-first></login-first>
   </section>
@@ -156,7 +160,7 @@ export default class Profile extends Vue {
     };
 
     try {
-      await this.api.userUpdate(options);
+      await this.api.profileUpdate(options);
       this.api.alert("User Update", "Update Success");
     } catch (e) {
       this.api.error(e);
