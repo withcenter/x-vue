@@ -87,7 +87,7 @@
             <input
               type="text"
               class="form-control"
-              placeholder="phone_no"
+              :placeholder="'phone_no' | t"
               name="phoneNo"
               id="phoneNo"
               v-model="user.phoneNo"
@@ -121,7 +121,7 @@
             <input
               type="text"
               class="form-control"
-              placeholder="country_code"
+              :placeholder="'country_code' | t"
               name="countryCode"
               id="countryCode"
               maxlength="2"
@@ -135,7 +135,7 @@
             <input
               type="text"
               class="form-control"
-              placeholder="province"
+              :placeholder="'province' | t"
               name="province"
               id="province"
               v-model="user.province"
@@ -147,7 +147,7 @@
             <input
               type="text"
               class="form-control"
-              placeholder="city"
+              :placeholder="'city' | t"
               name="city"
               id="city"
               v-model="user.city"
@@ -160,7 +160,7 @@
             <input
               type="text"
               class="form-control"
-              placeholder="address"
+              :placeholder="'address' | t"
               name="address"
               id="address"
               v-model="user.address"
@@ -172,7 +172,7 @@
             <input
               type="text"
               class="form-control"
-              placeholder="zipcode"
+              :placeholder="'zipcode' | t"
               name="zipcode"
               id="zipcode"
               v-model="user.zipcode"
@@ -182,7 +182,7 @@
 
         <div class="form-row">
           <div class="form-group col-6">
-            <label for="block">{{ "Block" | t }}</label>
+            <label for="block">{{ "block" | t }}</label>
             <div class="custom-control custom-checkbox">
               <input
                 type="checkbox"
@@ -192,7 +192,7 @@
                 v-model="user.block"
               />
               <label class="custom-control-label" for="block">{{
-                "Block user for posting" | t
+                "block_user_for_posting" | t
               }}</label>
             </div>
           </div>

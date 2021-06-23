@@ -51,8 +51,8 @@ export default class PostTitleMetaComponent extends Vue {
 
   toPostView(): string {
     return (
-      (this.post.relativeUrl || `/${this.post.idx}`) +
-      currentQueryToString(this.$route.query)
+      (this.post.relativeUrl || `/${this.post.idx}`) + location.search
+      // currentQueryToString(this.$route.query)
     );
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <section>
-    <h1>Admin Category Edit</h1>
+    <h1>{{ "category_edit" | t }}</h1>
     <form @submit.prevent="onSubmit()">
       <table class="table">
         <thead class="fs-sm">

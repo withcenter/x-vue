@@ -94,7 +94,7 @@ import UserDisplayName from "@/x-vue/components/forum/UserDisplayName.vue";
 import UserAvatar from "@/x-vue/components/forum/UserAvatar.vue";
 import FileDisplay from "@/x-vue/components/forum/FileDisplay.vue";
 import { ApiService } from "@/x-vue/services/api.service";
-import { currentQueryToString } from "@/x-vue/services/functions";
+// import { currentQueryToString } from "@/x-vue/services/functions";
 
 @Component({
   props: ["post"],
@@ -115,7 +115,7 @@ export default class PostViewComponent extends Vue {
 
   get toList(): string {
     return (
-      "forum/" + this.post.categoryId + currentQueryToString(this.$route.query)
+      "forum/" + this.post.categoryId + location.search //currentQueryToString(this.$route.query)
     );
   }
 }
