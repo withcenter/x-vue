@@ -1,6 +1,6 @@
 <template>
   <div
-    class="banner pointer"
+    class="banner pointer w-100"
     :class="type"
     @click="onClick"
     v-if="currentBanner.bannerUrl"
