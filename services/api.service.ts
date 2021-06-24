@@ -25,7 +25,7 @@ import { RawLocation, Route } from "vue-router";
 /**
  *
  *
- * @todo don't include `store`. That means it should not use `store` directly.
+ * @todo Remove `store`. Don't include `store`. That means it should not use `store` directly.
  *  Instead, use the store to access ApiService.
  */
 export class ApiService {
@@ -568,16 +568,9 @@ export class ApiService {
 
   // Get cafe global settings
   async loadCafeSettings(): Promise<CafeSettings> {
-    // 캐시된 데이터가 있으면 그것을 먼저 사용
-    const json = this.getStorage("cafeSettings");
-    if (json) {
-      store.state.cafeSettings = json as CafeSettings;
-    }
-    // 서버로 부터 데이터를 가져와 캐시
-    const res = await this.request("cafe.settings", { domain: this.domain });
-    store.state.cafeSettings = res as CafeSettings;
-    this.setStorage("cafeSettings", store.state.cafeSettings);
-    return store.state.cafeSettings;
+    return (await this.request("cafe.settings", {
+      domain: this.domain,
+    })) as CafeSettings;
   }
 
   /**
