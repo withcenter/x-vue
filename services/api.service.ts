@@ -810,4 +810,8 @@ export class ApiService {
       this.open({ path: "/advertisement/view/" + banner.idx });
     }
   }
+
+  async openWeatherMap(): Promise<ResponseData> {
+    return await this.request("open-weather-map.current");
+  }
 }
