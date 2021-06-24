@@ -1,7 +1,13 @@
 <template>
   <div v-if="posts.length">
     Latest Posts {{ category }}
-    <a v-for="post of posts" :key="post.idx" :href="post.relativeUrl">
+    <hr class="my-1" />
+    <a
+      class="d-block text-truncate"
+      v-for="post of posts"
+      :key="post.idx"
+      :href="post.relativeUrl"
+    >
       {{ post.title }}
     </a>
   </div>
