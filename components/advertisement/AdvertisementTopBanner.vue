@@ -1,5 +1,9 @@
 <template>
-  <div class="banner top pointer w-100" :class="position" @click="onClick">
+  <div
+    class="banner top pointer w-100 h-100"
+    :class="position"
+    @click="onClick"
+  >
     <img class="w-100" :src="currentBanner.bannerUrl" />
   </div>
 </template>
