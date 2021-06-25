@@ -829,7 +829,6 @@ export class ApiService {
     return await this.request("open-weather-map.current");
   }
 
-<<<<<<< HEAD
   async getCountryCurrencies(): Promise<CountryCurrenciesModel> {
     const res = await this.request("country.currencies");
     return new CountryCurrenciesModel().fromJson(res);
@@ -837,7 +836,7 @@ export class ApiService {
 
   async getExchangeRate(data: RequestData): Promise<ResponseData> {
     return await this.request("currency-converter.get", data);
-=======
+  }
   /**
    * Set admin settings
    *
@@ -862,6 +861,5 @@ export class ApiService {
    */
   async getConfig(c: string): Promise<ResponseData> {
     return await this.request("app.getConfig", { code: c });
->>>>>>> 0029d35 (update for vue.js admin advertsing)
   }
 }
