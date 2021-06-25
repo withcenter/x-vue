@@ -15,6 +15,7 @@ import {
   AdvertisementSettings,
   AdvertisementModel,
   Banner,
+  CountryCurrenciesModel,
 } from "./interfaces";
 
 import Cookies from "js-cookie";
@@ -806,5 +807,14 @@ export class ApiService {
 
   async openWeatherMap(): Promise<ResponseData> {
     return await this.request("open-weather-map.current");
+  }
+
+  async getCountryCurrencies(): Promise<CountryCurrenciesModel> {
+    const res = await this.request("country.currencies");
+    return new CountryCurrenciesModel().fromJson(res);
+  }
+
+  async getExchangeRate(data: RequestData): Promise<ResponseData> {
+    return await this.request("currency-converter.get", data);
   }
 }
