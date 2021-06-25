@@ -70,10 +70,10 @@ export default class CurrencyConverter extends Vue {
   amount = "1";
   convertedAmount = "0";
 
-  get first() {
+  get first(): string {
     return `${this.from}_${this.to}`;
   }
-  get second() {
+  get second(): string {
     return `${this.to}_${this.from}`;
   }
   rate: { [index: string]: number } = {};
