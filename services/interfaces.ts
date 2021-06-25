@@ -157,16 +157,6 @@ export class UserModel {
   }
 }
 
-// TODO: Remove this, instead we use PostModel.
-// @deprecated
-// export class PostEditModel {
-//   idx = 0;
-//   title = "";
-//   content = "";
-//   categoryId = "";
-//   files = "";
-// }
-
 export class CommentEditModel {
   idx = 0;
   content = "";
@@ -553,4 +543,70 @@ export class CafeModel extends CategoryModel {
     super.fromJson(map);
     return this;
   }
+}
+
+export interface CountryCurrency {
+  [index: string]: {
+    currencyCode: string;
+    currencySymbol: string;
+    currencyKoreanName: string;
+  };
+}
+
+export class CountryCurrencyModel {
+  currencyCode = "";
+  currencySymbol = "";
+  currencyKoreanName = "";
+
+  fromJson(map: ResponseData): CountryCurrencyModel {
+    this.currencyCode = map.currencyCode;
+    this.currencySymbol = map.currencySymbol;
+    this.currencyKoreanName = map.currencyKoreanName;
+    return this;
+  }
+}
+
+/**
+ * countryCurrency and selectedOptions which can be use on select options of vue bootstrap
+ *
+ *
+ *
+ */
+export class CountryCurrenciesModel {
+  countryCurrency: CountryCurrency = {};
+  selectOptions: Array<{ value: string; text: string }> = [];
+
+  fromJson(countries: ResponseData): CountryCurrenciesModel {
+    this.countryCurrency = countries;
+
+    const obj: { [index: string]: boolean } = {};
+    // filter unique and skip empty code
+    for (const c in this.countryCurrency) {
+      if (!this.countryCurrency[c].currencyCode) {
+        continue;
+      }
+      obj[this.countryCurrency[c].currencyCode] = true;
+    }
+    // sort keys
+    const sorted = Object.keys(obj).sort();
+    // format selectOptions
+    for (const i in sorted) {
+      this.selectOptions.push({
+        value: sorted[i],
+        text: sorted[i],
+      });
+    }
+
+    return this;
+  }
+}
+export interface AdvertisementPointSetting {
+  idx: number;
+  countryCode: string;
+  top: number;
+  sidebar: number;
+  square: number;
+  line: number;
+  createdAt: number;
+  updatedAt: number;
 }
