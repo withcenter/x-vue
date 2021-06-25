@@ -12,9 +12,12 @@
       <router-link class="btn btn-link" to="/admin/messaging"
         >Messaging</router-link
       >
-      <router-link class="btn btn-link" to="/admin/setting"
-        >Settings</router-link
-      >
+      <router-link class="btn btn-link" to="/admin/setting">
+        Settings
+      </router-link>
+      <router-link class="btn btn-link" to="/admin/advertisement">
+        Advertisement
+      </router-link>
     </div>
 
     <router-view></router-view>
