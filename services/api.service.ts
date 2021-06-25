@@ -729,6 +729,26 @@ export class ApiService {
     return store.state.advertisementSettings;
   }
 
+  /**
+   * It creates or updates the banner point settings.
+   *
+   * @param data data to create (or update) the banner point settings.
+   * @returns ...
+   */
+  async advertisementSetBannerPoint(data: RequestData): Promise<ResponseData> {
+    return await this.request("advertisement.setBannerPoint", data);
+  }
+
+  /**
+   *
+   * @returns
+   */
+  async advertisementGetBannerPoints(): Promise<Array<AdvertisementSettings>> {
+    return (await this.request(
+      "advertisement.getBannerPoints"
+    )) as Array<AdvertisementSettings>;
+  }
+
   async advertisementStart(data: RequestData): Promise<AdvertisementModel> {
     const res = await this.request("advertisement.start", data);
     return new AdvertisementModel().fromJson(res);
@@ -749,7 +769,7 @@ export class ApiService {
       store.state.myCafe = [];
     } else {
       const res = await this.request("cafe.mine");
-      console.log("myCafe; ", res);
+      // console.log("myCafe; ", res);
       store.state.myCafe = res.map((cafe: JSON) =>
         new CafeModel().fromJson(cafe)
       );
@@ -816,5 +836,30 @@ export class ApiService {
 
   async getExchangeRate(data: RequestData): Promise<ResponseData> {
     return await this.request("currency-converter.get", data);
+  }
+  /**
+   * Set admin settings
+   *
+   * It saves(or updates) code and data to meta table in backend.
+   * Only admin can call this method.
+   *
+   * @param c code
+   * @param d data
+   * @returns idx and code will be returned.
+   */
+  async setConfig(c: string, d: number | string): Promise<ResponseData> {
+    return await this.request("app.setConfig", { code: c, data: d });
+  }
+  /**
+   * Get admin settings.
+   *
+   *
+   * ! Note, user can read the settings. but cannot change it.
+   *
+   * @param c code
+   * @returns data
+   */
+  async getConfig(c: string): Promise<ResponseData> {
+    return await this.request("app.getConfig", { code: c });
   }
 }

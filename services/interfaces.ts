@@ -600,3 +600,13 @@ export class CountryCurrenciesModel {
     return this;
   }
 }
+export interface AdvertisementPointSetting {
+  idx: number;
+  countryCode: string;
+  top: number;
+  sidebar: number;
+  square: number;
+  line: number;
+  createdAt: number;
+  updatedAt: number;
+}
