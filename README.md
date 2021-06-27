@@ -1,6 +1,11 @@
 # x-vue
 
-## Install
+# Reference
+
+- For an exmaple of `x-vue, see [x-admin](https://github.com/withcenter/x-admin) app that does administration on matrix.
+
+
+# Install
 
 ```sh
 % npm i axios
@@ -10,10 +15,10 @@
 % npm i -D @types/js-cookie
 ```
 
-## How to use
+# How to use
 
 
-### Initialization
+## Initialization
 
 - Set the backend host into `ApiService.instance.init()`. It only supports https scheme.
 
@@ -36,7 +41,7 @@ new Vue({
 }).$mount("#app");
 ```
 
-### User login and logout
+## User login and logout
 
 
 - Below are the example of `store/index.ts` which handles user state.
@@ -75,9 +80,9 @@ export default new Vuex.Store({
 ```
 
 
-## Style Guide
+# Style Guide
 
-### ApiService
+## ApiService
 
 - ApiService must not depend on parent app.
   - It must not use any of parent's
@@ -87,7 +92,7 @@ export default new Vuex.Store({
     - logic
     - And another other from parent's app.
 
-### X-Vue components and widgets communication
+## X-Vue components and widgets communication
 
 - See how the `x-vue` and `parent app` communicate. The logic is actually on `store`.
 
