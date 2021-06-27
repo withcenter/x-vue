@@ -25,16 +25,25 @@ import { RawLocation, Route } from "vue-router";
 
 /**
  *
+ * This handles the route between app and backend.
+ * It manages user login state in cookie. Except this, it does not manage any other state.
  *
- * @todo Remove `store`. Don't include `store`. That means it should not use `store` directly.
- *  Instead, use the store to access ApiService.
+ * @todo Make this api to be the interface(Api call router) only.
+ *
+ *
+ * @todo Remove `store`. Don't include `store` at all. That means it should not use `store` directly.
+ *  Instead, use the store actions to access ApiService.
+ *
+ * @todo Dont' use `store.route`, `store.user`, `alert`, nor any other things that is not json call to backend.
  */
 export class ApiService {
   private static _instance: ApiService;
+  public host = "";
+  public _user: UserModel = new UserModel();
 
-  private constructor() {
-    this.initUserAuth();
-  }
+  // This will be called whenever user changes.
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  public userChanges: any;
 
   advertisements: AdvertisementModel[] = [];
 
@@ -48,9 +57,16 @@ export class ApiService {
 
   private sessionId: string | undefined;
 
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  init(options: { host: string; userChanges: any }) {
+    this.host = options.host;
+    this.userChanges = options.userChanges;
+    this.initUserAuth();
+  }
+
   get endpoint(): string {
-    const host = location.hostname;
-    const endpoint = `https://${host}/index.php`;
+    if (this.host == "") this.host = location.hostname;
+    const endpoint = `https://${this.host}/index.php`;
     return endpoint;
   }
 
@@ -62,7 +78,7 @@ export class ApiService {
    * Sets `user` in store.state.
    */
   set user(user: UserModel) {
-    store.state.user = user;
+    this._user = user;
   }
 
   /**
@@ -71,7 +87,7 @@ export class ApiService {
    * @returns null | UserModel
    */
   get user(): UserModel {
-    return store.state.user;
+    return this._user;
   }
 
   /**
@@ -128,13 +144,19 @@ export class ApiService {
 
   /**
    * Initialize Auth
+   *
+   * This will be called only one time when App boots.
+   *
    * It will call `getUserSessionId()` to check if `sessionId` is saved in cookie,
    * then it will `refreshLoginUserProfile()` to refresh the user instance in store.state.
    */
   async initUserAuth(): Promise<void> {
     console.log("==> ApiService::initUserAuth()");
     this.sessionId = this.getUserSessionId();
-    console.log("==> ApiService::initUserAuth() ==> sessionId has set.");
+    console.log(
+      "==> ApiService::initUserAuth() ==> sessionId has set to: ",
+      this.sessionId
+    );
     if (this.sessionId) {
       await this.refreshLoginUserProfile();
       console.log(
@@ -151,8 +173,9 @@ export class ApiService {
    * @returns UserModel
    */
   async refreshLoginUserProfile(): Promise<UserModel> {
+    console.log("refreshLoginUserProfile() => ");
     const res = await this.request("user.profile");
-    // console.log("userprofile, :", res);
+    console.log("refreshLoginUserProfile() got user data:", res);
     return this.setUserSessionId(res);
   }
 
@@ -170,6 +193,8 @@ export class ApiService {
     // if (FirebaseService.instance.token) {
     //   this.saveToken(FirebaseService.instance.token);
     // }
+
+    if (this.userChanges != null) this.userChanges(this.user);
 
     return this.user;
   }
