@@ -496,6 +496,11 @@ export class ApiService {
     return new UserModel().fromJson(user);
   }
 
+  async userProfile(): Promise<UserModel> {
+    const user = await this.request("user.profile");
+    return new UserModel().fromJson(user);
+  }
+
   async profileUpdate(data: RequestData): Promise<UserModel> {
     const res = await this.request("user.update", data);
     return this.setUserSessionId(res);

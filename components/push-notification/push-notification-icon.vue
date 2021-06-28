@@ -12,10 +12,9 @@
 </template>
 
 <script lang="ts">
-import { XFunctions } from "@/x-vue-helper/functions";
+import { XHelper } from "@/x-vue-helper/x-helper";
 import { ApiService } from "@/x-vue/services/api.service";
-import Vue from "vue";
-import Component from "vue-class-component";
+import { Vue, Prop, Component } from "vue-property-decorator";
 
 @Component({
   props: ["topic"],
@@ -23,22 +22,33 @@ import Component from "vue-class-component";
 })
 export default class PushNotificationIcon extends Vue {
   //
-  topic!: string;
+  @Prop({ default: "defaultTopic" }) topic!: string;
+  @Prop({ default: "" }) title!: string;
+
   data: { [index: string]: boolean } = {};
 
+  async mounted(): Promise<void> {
+    if (!this.topic) this.topic = "defaultTopic";
+    try {
+      //   const re = await ApiService.instance.isSubscribedToTopic(this.topic);
+    } catch (error) {
+      XHelper.instance.error(error);
+    }
+  }
+
   async onChangeSubscribeOrUnsubscribeTopic(): Promise<void> {
-    if (ApiService.instance.notLoggedIn) {
-      XFunctions.instance.alert("Login required", "Please login first");
+    if (!ApiService.instance._user.loggedIn) {
+      XHelper.instance.alert("Login required", "Please login first");
       this.data[this.topic] = false;
       return;
     }
     try {
-      ApiService.instance.topicSubscription({
+      await ApiService.instance.topicSubscription({
         topic: this.topic,
         subscribe: this.data[this.topic] ? "on" : "off",
       });
     } catch (error) {
-      XFunctions.instance.error(error);
+      XHelper.instance.error(error);
     }
   }
 }

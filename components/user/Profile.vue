@@ -131,7 +131,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
 import { ApiService } from "@/x-vue/services/api.service";
-import { RequestData } from "@/x-vue/services/interfaces";
+import { RequestData, UserModel } from "@/x-vue/services/interfaces";
 import { XHelper } from "@/x-vue-helper/x-helper";
 
 @Component({
@@ -142,26 +142,36 @@ import { XHelper } from "@/x-vue-helper/x-helper";
 export default class Profile extends Vue {
   api = ApiService.instance;
 
+  user: UserModel = {} as UserModel;
+
+  async mounted(): Promise<void> {
+    try {
+      this.user = await ApiService.instance.userProfile();
+    } catch (error) {
+      XHelper.instance.error(error);
+    }
+  }
+
   async onSubmit(): Promise<void> {
     let options: RequestData = {
-      idx: this.api.user.idx,
-      point: this.api.user.point,
-      email: this.api.user.email,
-      firebaseUid: this.api.user.firebaseUid,
-      name: this.api.user.name,
-      nickname: this.api.user.nickname,
-      phoneNo: this.api.user.phoneNo,
-      gender: this.api.user.gender,
-      birthdate: this.api.user.birthdate,
-      countryCode: this.api.user.countryCode,
-      province: this.api.user.province,
-      city: this.api.user.city,
-      address: this.api.user.address,
-      zipcode: this.api.user.zipcode,
+      idx: this.user.idx,
+      point: this.user.point,
+      email: this.user.email,
+      firebaseUid: this.user.firebaseUid,
+      name: this.user.name,
+      nickname: this.user.nickname,
+      phoneNo: this.user.phoneNo,
+      gender: this.user.gender,
+      birthdate: this.user.birthdate,
+      countryCode: this.user.countryCode,
+      province: this.user.province,
+      city: this.user.city,
+      address: this.user.address,
+      zipcode: this.user.zipcode,
     };
 
     try {
-      await this.api.profileUpdate(options);
+      await ApiService.instance.profileUpdate(options);
       XHelper.instance.alert("User Update", "Update Success");
     } catch (e) {
       XHelper.instance.error(e);
