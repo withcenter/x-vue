@@ -16,7 +16,7 @@
           <span class="badge badge-info" v-if="advertisement.isWaiting">
             Waiting
           </span>
-          <span class="badge badge-secondary ml-2">
+          <span class="badge badge-secondary ml-2" v-if="advertisement.code">
             {{ advertisement.code }}
           </span>
           <span class="badge badge-secondary ml-2">
