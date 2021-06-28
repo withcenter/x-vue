@@ -16,7 +16,7 @@ import { Banner } from "@/x-vue/services/interfaces";
 import Component from "vue-class-component";
 import Vue from "vue";
 import store from "@/store";
-import { ApiService } from "@/x-vue/services/api.service";
+import { XFunctions } from "@/x-vue-helper/functions";
 
 @Component({})
 export default class AdvertisementLineBanner extends Vue {
@@ -51,8 +51,16 @@ export default class AdvertisementLineBanner extends Vue {
   rotate(): void {
     setInterval(() => this.index++, 7000);
   }
+
   onClick(): void {
-    ApiService.instance.openAdvertisement(this.currentBanner);
+    if (this.currentBanner.clickUrl) {
+      window.open(this.currentBanner.clickUrl, "_newtab");
+    }
+    if (this.currentBanner.idx) {
+      const path = "/advertisement/view/" + this.currentBanner.idx;
+      console.log("path", path);
+      XFunctions.instance.open({ path: path });
+    }
   }
 }
 </script>
