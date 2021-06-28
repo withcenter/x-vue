@@ -105,6 +105,7 @@
 <script lang="ts">
 import store from "@/store";
 import { ApiService } from "@/x-vue/services/api.service";
+import { XFunctions } from "@/x-vue-helper/functions";
 import {
   AdvertisementSettings,
   RequestData,
@@ -118,6 +119,7 @@ import Component from "vue-class-component";
 })
 export default class AdminAdvertisement extends Vue {
   api = ApiService.instance;
+  x = XFunctions.instance;
   maximumAdvertisementDays = 0;
   advertisementCategories = "";
   points = [] as AdvertisementSettings[];
@@ -133,7 +135,7 @@ export default class AdminAdvertisement extends Vue {
 
       this.points = await this.api.advertisementGetBannerPoints();
     } catch (e) {
-      this.api.error(e);
+      this.x.error(e);
     }
   }
 
@@ -161,16 +163,16 @@ export default class AdminAdvertisement extends Vue {
         this.add = {};
       }
 
-      this.api.openToast("Points", msg, undefined, "success", true, 3000);
+      this.x.openToast("Points", msg, undefined, "success", true, 3000);
     } catch (e) {
-      this.api.error(e);
+      this.x.error(e);
     }
   }
 
   async onDelete(data: RequestData): Promise<void> {
     // console.log("onDelete::data", data);
 
-    const conf = await this.api.confirm(
+    const conf = await this.x.confirm(
       "",
       `Delete point settings for ${data.countryCode}?`
     );
@@ -180,7 +182,7 @@ export default class AdminAdvertisement extends Vue {
       await this.api.advertisementDeleteBannerPoint(data.idx);
       this.points = await this.api.advertisementGetBannerPoints();
     } catch (e) {
-      this.api.error(e);
+      this.x.error(e);
     }
   }
 
@@ -195,9 +197,9 @@ export default class AdminAdvertisement extends Vue {
         this.advertisementCategories
       );
 
-      this.api.openToast("Settings", "Saved...", undefined, "info", true, 3000);
+      this.x.openToast("Settings", "Saved...", undefined, "info", true, 3000);
     } catch (e) {
-      this.api.error(e);
+      this.x.error(e);
     }
   }
 }

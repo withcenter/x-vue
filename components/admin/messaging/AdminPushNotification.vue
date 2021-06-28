@@ -179,6 +179,7 @@
 </template>
 
 <script lang="ts">
+import { XFunctions } from "@/x-vue-helper/functions";
 import { ApiService } from "@/x-vue/services/api.service";
 import { DEFAULT_TOPIC } from "@/x-vue/services/defines";
 import { RequestData, ResponseData } from "@/x-vue/services/interfaces";
@@ -187,6 +188,8 @@ import Component from "vue-class-component";
 
 @Component({})
 export default class AdminPushNotification extends Vue {
+  x = XFunctions.instance;
+
   options = {
     idx: "",
     notify: "all",
@@ -227,7 +230,7 @@ export default class AdminPushNotification extends Vue {
       this.loading = false;
     } catch (e) {
       this.loading = false;
-      ApiService.instance.error(e);
+      this.x.error(e);
     }
   }
 
@@ -279,19 +282,16 @@ export default class AdminPushNotification extends Vue {
       if (this.options.notify === "tokens") {
         const s = res.success.length;
         const f = res.error.length;
-        ApiService.instance.alert(
-          "Send Push Message to tokens",
-          `${s} Success, ${f} Fail.`
-        );
+        this.x.alert("Send Push Message to tokens", `${s} Success, ${f} Fail.`);
       } else {
-        ApiService.instance.alert(
+        this.x.alert(
           "Send Push Message to topic",
           "Success Sending push notification to topic."
         );
       }
     } catch (e) {
       this.loading = false;
-      ApiService.instance.error(e);
+      this.x.error(e);
     }
   }
 }

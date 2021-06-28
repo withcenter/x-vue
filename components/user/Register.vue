@@ -20,24 +20,24 @@
 </template>
 
 <script lang="ts">
+import { XFunctions } from "@/x-vue-helper/functions";
 import { ApiService } from "@/x-vue/services/api.service";
 import Vue from "vue";
 import Component from "vue-class-component";
-import { AppService } from "../service/app.service";
 
 @Component({})
 export default class Login extends Vue {
-  app = AppService.instance;
+  api = ApiService.instance;
   form = {};
 
   async onSubmit(): Promise<void> {
     // console.log('Register::form', this.form);
     try {
-      await this.app.api.register(this.form);
+      await this.api.register(this.form);
       this.$store.commit("register");
-      ApiService.instance.open("/");
+      XFunctions.instance.open("/");
     } catch (e) {
-      this.app.error(e);
+      XFunctions.instance.error(e);
     }
   }
 }

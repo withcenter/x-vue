@@ -20,8 +20,9 @@ import {
 
 import Cookies from "js-cookie";
 import { Keys, Err } from "./defines";
-import { getRootDomain, tr } from "./functions";
+import { getRootDomain } from "./functions";
 import { RawLocation } from "vue-router";
+// import { RawLocation } from "vue-router";
 
 /**
  * Api Interface.
@@ -99,7 +100,7 @@ export class ApiService {
    * @returns
    */
   open(location: RawLocation): void {
-    alert("do not use open()");
+    alert("do not use open(), use store.commit('open', route)");
     // return store.state.router.push(location);
   }
 
@@ -650,14 +651,14 @@ export class ApiService {
    * @param code Error code from PHP backend
    * @returns true after the alert dialog closed
    */
-  error(code: string): Promise<boolean> {
-    if (typeof code === "string" && code.indexOf("error_") === 0) {
-      // This is a PHP backend erorr
-      return this.alert(tr("error"), tr(code));
-    } else {
-      return this.alert(tr("error"), "Unknown error: " + code);
-    }
-  }
+  // error(code: string): Promise<boolean> {
+  //   if (typeof code === "string" && code.indexOf("error_") === 0) {
+  //     // This is a PHP backend erorr
+  //     return this.alert(tr("error"), tr(code));
+  //   } else {
+  //     return this.alert(tr("error"), "Unknown error: " + code);
+  //   }
+  // }
 
   /**
    * @deprecated
@@ -669,78 +670,16 @@ export class ApiService {
    * @param content content
    * @returns boolean
    */
-  async alert(title: string, content: string): Promise<boolean> {
-    return await store.state.vm.$bvModal.msgBoxOk(content, {
-      title: title,
-      size: "sm",
-      buttonSize: "sm",
-      okVariant: "success",
-      headerClass: "p-2 border-bottom-0",
-      footerClass: "p-2 border-top-0",
-    });
-  }
-
-  /**
-   * @deprecated
-   * Ask user for confirmation
-   *
-   * Note, use this method from the app.
-   *
-   * @param title title
-   * @param content content
-   * @returns boolean|null
-   *  - true on yes
-   *  - false on no
-   *  - null if close without confirmation
-   * @example
-   * ```
-   *  console.log("confirm; ", await this.app.confirm("title", "content"));
-   * ```
-   */
-  async confirm(title: string, content: string): Promise<boolean | null> {
-    return await store.state.vm.$bvModal.msgBoxConfirm(content, {
-      title: title,
-      size: "sm",
-      buttonSize: "sm",
-      okVariant: "danger",
-      okTitle: tr("yes"),
-      cancelTitle: tr("no"),
-      footerClass: "p-2",
-      hideHeaderClose: false,
-      centered: true,
-    });
-  }
-
-  /**
-   * @deprecated
-   * Open toast.
-   *
-   * @param title
-   * @param content
-   * @param placement
-   * @param variant
-   * @param hideDelay
-   * @param append
-   */
-  openToast(
-    title = "title",
-    content = "content",
-    placement?: string,
-    variant?: string,
-    hideCloseButton?: boolean,
-    hideDelay?: number,
-    append?: boolean
-  ): void {
-    return store.state.vm.$bvToast.toast(content, {
-      title: title,
-      toaster: placement,
-      variant: variant,
-      noCloseButton: hideCloseButton,
-      autoHideDelay: hideDelay ?? 1000,
-      append: append,
-      solid: true,
-    });
-  }
+  // async alert(title: string, content: string): Promise<boolean> {
+  //   return await store.state.vm.$bvModal.msgBoxOk(content, {
+  //     title: title,
+  //     size: "sm",
+  //     buttonSize: "sm",
+  //     okVariant: "success",
+  //     headerClass: "p-2 border-bottom-0",
+  //     footerClass: "p-2 border-top-0",
+  //   });
+  // }
 
   async loadBanners(cafeDomain: string): Promise<Array<AdvertisementModel>> {
     const res = await this.request("advertisement.loadBanners", {
@@ -871,7 +810,9 @@ export class ApiService {
       window.open(banner.clickUrl, "_newtab");
     }
     if (banner.idx) {
-      this.open({ path: "/advertisement/view/" + banner.idx });
+      const path = "/advertisement/view/" + banner.idx;
+      console.log("path", path);
+      // this.open({ path: });
     }
   }
 
