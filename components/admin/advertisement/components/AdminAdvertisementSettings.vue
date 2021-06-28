@@ -47,7 +47,7 @@
       문자열을 입력하면 default setting 이 됨.
     </div>
     <form @submit.prevent="onEdit(add)">
-      <select class="w-33" v-model="add.countryCode">
+      <select v-model="add.countryCode">
         <option value="" selected>{{ "default" | t }}</option>
         <option v-for="(value, name) in countries" :key="name" :value="name">
           {{ value }}

@@ -140,8 +140,6 @@ import { XHelper } from "@/x-vue-helper/x-helper";
   },
 })
 export default class Profile extends Vue {
-  api = ApiService.instance;
-
   user: UserModel = {} as UserModel;
 
   async mounted(): Promise<void> {
