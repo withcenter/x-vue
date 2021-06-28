@@ -46,8 +46,14 @@
       Don't input countryCode for default banner point. countryCode 에 빈
       문자열을 입력하면 default setting 이 됨.
     </div>
-    <form @submit.prevent="onAdd">
-      <input v-model="add.countryCode" placeholder="2 letter country code" />
+    <form @submit.prevent="onEdit(add)">
+      <select class="w-33" v-model="add.countryCode">
+        <option value="" selected>{{ "default" | t }}</option>
+        <option v-for="(value, name) in countries" :key="name" :value="name">
+          {{ value }}
+        </option>
+      </select>
+      <!-- <input v-model="add.countryCode" placeholder="2 letter country code" /> -->
       <input size="12" v-model="add.top" />
       <input size="12" v-model="add.sidebar" />
       <input size="12" v-model="add.square" />
@@ -80,13 +86,15 @@
           <td><input size="12" v-model="points[n - 1].square" /></td>
           <td><input size="12" v-model="points[n - 1].line" /></td>
           <td>
-            <button
-              class="btn btn-primary"
-              @click="onSave(points[n - 1].countryCode)"
-            >
+            <button class="btn btn-primary" @click="onEdit(points[n - 1])">
               Update
             </button>
-            <button class="btn btn-warning ml-1">Delete</button>
+            <button
+              class="btn btn-warning ml-1"
+              @click="onDelete(points[n - 1])"
+            >
+              Delete
+            </button>
           </td>
         </tr>
       </tbody>
@@ -95,8 +103,13 @@
 </template>
 
 <script lang="ts">
+import store from "@/store";
 import { ApiService } from "@/x-vue/services/api.service";
-import { AdvertisementSettings } from "@/x-vue/services/interfaces";
+import {
+  AdvertisementSettings,
+  RequestData,
+  ResponseData,
+} from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
 
@@ -124,15 +137,53 @@ export default class AdminAdvertisement extends Vue {
     }
   }
 
-  async onAdd(): Promise<void> {
+  /**
+   * Country data list getter.
+   * @returns ResponseData - gets country list from store state.
+   */
+  get countries(): ResponseData {
+    return store.state.countries;
+  }
+
+  async onEdit(data: RequestData): Promise<void> {
+    // console.log("onEdit", data);
     try {
-      await this.api.advertisementSetBannerPoint(this.add);
+      await this.api.advertisementSetBannerPoint(data);
       this.points = await this.api.advertisementGetBannerPoints();
-      this.add = {};
+
+      let msg = `Points for ${data.countryCode} is `;
+      if (data.idx) {
+        console.log("onEdit::update", this.points);
+        msg += " updated.";
+      } else {
+        console.log("onEdit::add", this.points);
+        msg += " added.";
+        this.add = {};
+      }
+
+      this.api.openToast("Points", msg, undefined, "success", true, 3000);
     } catch (e) {
       this.api.error(e);
     }
   }
+
+  async onDelete(data: RequestData): Promise<void> {
+    // console.log("onDelete::data", data);
+
+    const conf = await this.api.confirm(
+      "",
+      `Delete point settings for ${data.countryCode}?`
+    );
+    if (!conf) return;
+    // console.log("onDelete::confirm::idx", data.idx);
+    try {
+      await this.api.advertisementDeleteBannerPoint(data.idx);
+      this.points = await this.api.advertisementGetBannerPoints();
+    } catch (e) {
+      this.api.error(e);
+    }
+  }
+
   async onSubmit(): Promise<void> {
     try {
       await this.api.setConfig(

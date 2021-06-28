@@ -739,6 +739,10 @@ export class ApiService {
     return await this.request("advertisement.setBannerPoint", data);
   }
 
+  async advertisementDeleteBannerPoint(idx: string): Promise<ResponseData> {
+    return await this.request("advertisement.deleteBannerPoint", { idx });
+  }
+
   /**
    *
    * @returns
