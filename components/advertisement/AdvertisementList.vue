@@ -76,7 +76,7 @@ export default class PostList extends Vue {
     this.options.limit = this.limit;
     this.options.page = 1;
     this.options.categoryId = "advertisement";
-    this.options.userIdx = this.api.user.idx;
+    this.options.userIdx = this.api._user.idx;
     this.loadPosts();
 
     this.currentPage = this.$route.query.page as string;

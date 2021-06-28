@@ -144,20 +144,20 @@ export default class Profile extends Vue {
 
   async onSubmit(): Promise<void> {
     let options: RequestData = {
-      idx: this.api.user.idx,
-      point: this.api.user.point,
-      email: this.api.user.email,
-      firebaseUid: this.api.user.firebaseUid,
-      name: this.api.user.name,
-      nickname: this.api.user.nickname,
-      phoneNo: this.api.user.phoneNo,
-      gender: this.api.user.gender,
-      birthdate: this.api.user.birthdate,
-      countryCode: this.api.user.countryCode,
-      province: this.api.user.province,
-      city: this.api.user.city,
-      address: this.api.user.address,
-      zipcode: this.api.user.zipcode,
+      // idx: this.api.user.idx,
+      // point: this.api.user.point,
+      // email: this.api.user.email,
+      // firebaseUid: this.api.user.firebaseUid,
+      // name: this.api.user.name,
+      // nickname: this.api.user.nickname,
+      // phoneNo: this.api.user.phoneNo,
+      // gender: this.api.user.gender,
+      // birthdate: this.api.user.birthdate,
+      // countryCode: this.api.user.countryCode,
+      // province: this.api.user.province,
+      // city: this.api.user.city,
+      // address: this.api.user.address,
+      // zipcode: this.api.user.zipcode,
     };
 
     try {

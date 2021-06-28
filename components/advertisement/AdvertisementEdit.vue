@@ -542,9 +542,9 @@ export default class Advertisement extends Vue {
    * @returns boolean
    */
   get isPointInsufficient(): boolean {
-    if (!this.api.user) return true;
-    if (this.api.user.point == 0) return true;
-    return this.api.user.point < this.priceInPoint;
+    if (!this.api._user) return true;
+    if (this.api._user.point == 0) return true;
+    return this.api._user.point < this.priceInPoint;
   }
 
   /**
