@@ -89,29 +89,6 @@ export function daysBetween(date1: string, date2: string): number {
 }
 
 /**
- * Return true if the date is future. If the date is today, it returns false.
- * @param date date - YYYY-MM-DD
- */
-// export function isFuture(date: string): boolean {
-//   if (!date) return false;
-//   const d = new Date(date);
-//   const n = new Date();
-
-//   // if the date is today, return false.
-//   if (
-//     d.getFullYear() === n.getFullYear() &&
-//     d.getMonth() === n.getMonth() &&
-//     d.getDate() === n.getDate()
-//   ) {
-//     return false;
-//   }
-//   // if the date is past, return false.
-//   if (d.getTime() < n.getTime()) return false;
-
-//   return true;
-// }
-
-/**
  * alternative for `window.location.search`
  * @improvement add exclude/include so it can give more benefit and usage
  *

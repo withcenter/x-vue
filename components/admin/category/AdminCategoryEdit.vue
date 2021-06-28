@@ -356,6 +356,7 @@
 
 <script lang="ts">
 import { AppService } from "@/service/app.service";
+import { XFunctions } from "@/x-vue-helper/functions";
 import { ApiService } from "@/x-vue/services/api.service";
 import { RequestData, CategoryModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
@@ -409,7 +410,7 @@ export default class AdminCategoryEdit extends Vue {
 
     try {
       this.category = await ApiService.instance.categoryUpdate(options);
-      ApiService.instance.alert("Category Update", "Update Success");
+      XFunctions.alert("Category Update", "Update Success");
       // console.log("Category Update::", this.category);
     } catch (e) {
       this.app.error(e);

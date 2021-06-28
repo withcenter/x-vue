@@ -16,6 +16,7 @@
   </section>
 </template>
 <script lang="ts">
+import { XFunctions } from "@/x-vue-helper/functions";
 import { ApiService } from "@/x-vue/services/api.service";
 import { CategoryModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
@@ -44,7 +45,7 @@ export default class AdminCategoryCreate extends Vue {
       if (e == "error_category_exists") {
         this.api.open({ path: `/admin/category/edit/${this.id}` });
       } else {
-        this.api.error(e);
+        XFunctions.error(e);
       }
     }
   }

@@ -132,6 +132,7 @@ import Component from "vue-class-component";
 import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
 import { ApiService } from "@/x-vue/services/api.service";
 import { RequestData } from "@/x-vue/services/interfaces";
+import { XFunctions } from "@/x-vue-helper/functions";
 
 @Component({
   components: {
@@ -161,9 +162,9 @@ export default class Profile extends Vue {
 
     try {
       await this.api.profileUpdate(options);
-      this.api.alert("User Update", "Update Success");
+      XFunctions.alert("User Update", "Update Success");
     } catch (e) {
-      this.api.error(e);
+      XFunctions.error(e);
     }
   }
 }

@@ -14,6 +14,7 @@
 </template>
 
 <script lang="ts">
+import { XFunctions } from "@/x-vue-helper/functions";
 import Vue from "vue";
 import Component from "vue-class-component";
 import { ApiService } from "../services/api.service";
@@ -41,7 +42,7 @@ export default class UploadButton extends Vue {
 
   async onFileChange(event: HTMLInputEvent): Promise<void> {
     if (this.api.notLoggedIn) {
-      this.api.error("error_login_first");
+      XFunctions.error("error_login_first");
       return;
     }
 
@@ -55,7 +56,7 @@ export default class UploadButton extends Vue {
       const res = await this.api.fileUpload(file, {}, this.onProgress);
       this.$emit("success", res);
     } catch (e) {
-      this.api.error(e);
+      XFunctions.error(e);
     }
   }
 
