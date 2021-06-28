@@ -620,7 +620,7 @@ export default class Advertisement extends Vue {
       console.log(`${isCreate ? "Create" : "Update"} =>`, res);
       Object.assign(this.post, res);
       if (isCreate) {
-        store.commit("open", `/advertisement/edit/${this.post.idx}`);
+        XFunctions.instance.open(`/advertisement/edit/${this.post.idx}`);
       } else {
         this.x.openToast(
           "Updated",

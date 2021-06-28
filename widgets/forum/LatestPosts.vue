@@ -39,7 +39,7 @@ export default class LatestPosts extends Vue {
   async loadPosts(): Promise<void> {
     try {
       const res = await ApiService.instance.postSearch(this.options);
-      console.log("latestPosts", res);
+      // console.log("latestPosts", res);
       this.posts = res;
     } catch (e) {
       console.error(e);
