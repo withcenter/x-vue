@@ -6,7 +6,7 @@
       switch
       @change="onChangeSubscribeOrUnsubscribeTopic"
     >
-      qna
+      {{ title | t }}
     </b-form-checkbox>
   </div>
 </template>
@@ -17,26 +17,33 @@ import { ApiService } from "@/x-vue/services/api.service";
 import { Vue, Prop, Component } from "vue-property-decorator";
 
 @Component({
-  props: ["topic"],
-  components: {},
+  // props: ["topic", "title"],
 })
 export default class PushNotificationIcon extends Vue {
-  //
   @Prop({ default: "defaultTopic" }) topic!: string;
   @Prop({ default: "" }) title!: string;
 
-  data: { [index: string]: boolean } = {};
+  data: { [index: string]: boolean } = {
+    [this.topic]: false,
+  };
 
   async mounted(): Promise<void> {
-    if (!this.topic) this.topic = "defaultTopic";
+    console.log("topic::", this.topic);
+    // await Vue.nextTick();
+
+    // console.log("topic::", this.topic);
     try {
-      //   const re = await ApiService.instance.isSubscribedToTopic(this.topic);
+      console.log("topic::", this.topic);
+      const re = await ApiService.instance.isSubscribedToTopic(this.topic);
+      console.log("PushNotificationIcon", re);
+      this.data[this.topic] = re[this.topic] === "Y" ? true : false;
     } catch (error) {
       XHelper.instance.error(error);
     }
   }
 
   async onChangeSubscribeOrUnsubscribeTopic(): Promise<void> {
+    console.log("onChangeSubscribeOrUnsubscribeTopic::", this.data[this.topic]);
     if (!ApiService.instance._user.loggedIn) {
       XHelper.instance.alert("Login required", "Please login first");
       this.data[this.topic] = false;
@@ -45,7 +52,7 @@ export default class PushNotificationIcon extends Vue {
     try {
       await ApiService.instance.topicSubscription({
         topic: this.topic,
-        subscribe: this.data[this.topic] ? "on" : "off",
+        subscribe: this.data[this.topic] ? "Y" : "N",
       });
     } catch (error) {
       XHelper.instance.error(error);

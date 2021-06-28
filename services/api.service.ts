@@ -785,6 +785,14 @@ export class ApiService {
     return res;
   }
 
+  async isSubscribedToTopic(topic: string): Promise<ResponseData> {
+    const res = await this.request("notification.isSubscribedToTopic", {
+      topic: topic,
+    });
+    console.log(res);
+    return res;
+  }
+
   /**
    *
    * @param data
