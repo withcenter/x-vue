@@ -21,11 +21,19 @@ import {
 import Cookies from "js-cookie";
 import { Keys, Err } from "./defines";
 import { getRootDomain, tr } from "./functions";
-import { RawLocation, Route } from "vue-router";
+import { RawLocation } from "vue-router";
 
 /**
+ * Api Interface.
  *
- * This handles the route between app and backend.
+ * This handles the connections between App and Backend.
+ *  Does not save or manage state except user model, user lanuguage.
+ *
+ * Don't do anything exception getting data from Backend.
+ *   - Don't alert
+ *   - Don't move
+ *   - Don't save anything.
+ *
  * It manages user login state in cookie. Except this, it does not manage any other state.
  *
  * @todo Make this api to be the interface(Api call router) only.
@@ -37,41 +45,62 @@ import { RawLocation, Route } from "vue-router";
  * @todo Dont' use `store.route`, `store.user`, `alert`, nor any other things that is not json call to backend.
  */
 export class ApiService {
+  // Singletone
   private static _instance: ApiService;
-  public host = "";
-  public _user: UserModel = new UserModel();
-
-  // This will be called whenever user changes.
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  public userChanges: any;
-
-  advertisements: AdvertisementModel[] = [];
-
   public static get instance(): ApiService {
     if (!ApiService._instance) {
       ApiService._instance = new ApiService();
     }
-
     return ApiService._instance;
   }
 
+  //
+  public serverUrl = "";
+  //
+  public _user: UserModel = new UserModel();
+
+  //
   private sessionId: string | undefined;
 
+  // User change callback
+  //
+  // This will be called whenever user changes.
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  init(options: { host: string; userChanges: any }) {
-    this.host = options.host;
+  public userChanges: any;
+
+  /**
+   * Initialize the Api Service.
+   *
+   * This must be called before using any other ApiService methods.
+   *
+   * @see README.md for details.
+   *
+   * @param options init options
+   */
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  init(options: { serverUrl: string; userChanges: any }): void {
+    this.serverUrl = options.serverUrl;
     this.userChanges = options.userChanges;
     this.initUserAuth();
   }
 
+  // Return server url. If it is not initiallized, then, use current url.
   get endpoint(): string {
-    if (this.host == "") this.host = location.hostname;
-    const endpoint = `https://${this.host}/index.php`;
-    return endpoint;
+    if (this.serverUrl == "") {
+      this.serverUrl =
+        location.protocol + "//" + location.hostname + "/index.php";
+    }
+    return this.serverUrl;
   }
 
-  open(location: RawLocation): Promise<Route> {
-    return store.state.router.push(location);
+  /**
+   * @deprecated
+   * @param location
+   * @returns
+   */
+  open(location: RawLocation): void {
+    alert("do not use open()");
+    // return store.state.router.push(location);
   }
 
   /**
@@ -411,17 +440,16 @@ export class ApiService {
 
   /**
    * Returns country data
-   * @attention it does memory cache. So, it will return the previous data on second call.
+   *
    * @returns Promise<ResponseData>
    */
   async countryAll(): Promise<ResponseData> {
-    if (store.state.countries["default"]) return store.state.countries;
-    store.state.countries = await this.request("country.all", {
+    return await this.request("country.all", {
       ln: this.userLanguage,
     });
-    return store.state.countries;
   }
 
+  /// Return user language.
   get userLanguage(): string {
     let language: string;
     const v = Cookies.get("language");
@@ -614,6 +642,7 @@ export class ApiService {
   }
 
   /**
+   * @deprecated
    * Display error alert box
    *
    * Note, use this method from the app.
@@ -631,6 +660,7 @@ export class ApiService {
   }
 
   /**
+   * @deprecated
    * Returns true when the confirm box has closed.
    *
    * Note, use this method from the app.
@@ -651,6 +681,7 @@ export class ApiService {
   }
 
   /**
+   * @deprecated
    * Ask user for confirmation
    *
    * Note, use this method from the app.
@@ -681,6 +712,7 @@ export class ApiService {
   }
 
   /**
+   * @deprecated
    * Open toast.
    *
    * @param title
@@ -735,23 +767,12 @@ export class ApiService {
   }
 
   /**
-   * Returns country data
-   * @attention it does memory cache. So, it will return the previous data on second call.
    * @returns Promise<ResponseData>
    */
   async advertisementSettings(): Promise<AdvertisementSettings> {
-    if (store.state.advertisementSettings?.point)
-      return store.state.advertisementSettings;
-    const res = (await this.request(
+    return (await this.request(
       "app.advertisementSettings"
     )) as AdvertisementSettings;
-    // console.log("$store.state.advertisementSettings;", res);
-    store.state.advertisementSettings = Object.assign(
-      {},
-      store.state.advertisementSettings,
-      res
-    );
-    return store.state.advertisementSettings;
   }
 
   /**
@@ -873,6 +894,7 @@ export class ApiService {
    * Only admin can call this method.
    *
    * @param c code
+   *
    * @param d data
    * @returns idx and code will be returned.
    */

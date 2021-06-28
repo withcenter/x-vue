@@ -11,6 +11,11 @@ import apiStore from "./api.store";
 import dayjs from "dayjs";
 import { Dictionary } from "vue-router/types/router";
 
+/**
+ * @deprecated
+ * @param code
+ * @returns
+ */
 export function tr(code: string): string {
   if (!code) return "";
   if (!apiStore.texts) return code;

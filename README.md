@@ -20,15 +20,19 @@
 
 ## Initialization
 
-- Set the backend host into `ApiService.instance.init()`. It only supports https scheme.
+- `ApiService` must be initialized first.
 
-- Below are `main.ts`. It shows how to initialize the `ApiService` and how to update `store` to use the status of user login, logout.
+- You can set
+  - `serverUrl` to point where is the `Matrix` restful api endpoint.
+  - `userChanges` callback event handler that will be called on every user change(login/logout/profile update, etc)
+
+- Below is an example of `main.ts`. It shows how to initialize the `ApiService` and how to update `store` to use the status of user login, logout.
 ```ts
 import store from "./store";
 import { ApiService } from "./x-vue/services/api.service";
 import { UserModel } from "./x-vue/services/interfaces";
 ApiService.instance.init({
-  host: "main.philov.com",
+  serverUrl: "https://main.philov.com/index.php",
   userChanges: (user: UserModel) => {
     store.state.user = user;
   },
