@@ -542,6 +542,7 @@ export class CafeModel extends CategoryModel {
   tokenCount = 0;
   subcategoriesArray: string[] = [];
   titleImageUrl = "";
+  countryCode = "";
 
   fromJson(map: ResponseData): CafeModel {
     this.app_name = map.app_name;
@@ -549,6 +550,7 @@ export class CafeModel extends CategoryModel {
     this.tokenCount = map.tokenCount ?? 0;
     this.subcategoriesArray = map.subcategoriesArray;
     this.titleImageUrl = map.titleImageUrl;
+    this.countryCode = map.countryCode;
     super.fromJson(map);
     return this;
   }

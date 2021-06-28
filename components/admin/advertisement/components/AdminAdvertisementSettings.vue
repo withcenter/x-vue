@@ -47,18 +47,36 @@
       문자열을 입력하면 default setting 이 됨.
     </div>
     <form @submit.prevent="onEdit(add)">
-      <select v-model="add.countryCode">
-        <option value="" selected>{{ "default" | t }}</option>
-        <option v-for="(value, name) in countries" :key="name" :value="name">
-          {{ value }}
-        </option>
-      </select>
       <!-- <input v-model="add.countryCode" placeholder="2 letter country code" /> -->
-      <input size="12" v-model="add.top" />
-      <input size="12" v-model="add.sidebar" />
-      <input size="12" v-model="add.square" />
-      <input size="12" v-model="add.line" />
-      <button class="btn btn-primary">ADD</button>
+      <div class="d-flex w-100">
+        <div class="col-3 pr-1">
+          <select class="form-control" v-model="add.countryCode">
+            <option value="" selected>{{ "default" | t }}</option>
+            <option
+              v-for="(value, name) in countries"
+              :key="name"
+              :value="name"
+            >
+              {{ value }}
+            </option>
+          </select>
+        </div>
+        <div class="col-2 px-1">
+          <input class="form-control" size="12" v-model="add.top" />
+        </div>
+        <div class="col-2 px-1">
+          <input class="form-control" size="12" v-model="add.sidebar" />
+        </div>
+        <div class="col-2 px-1">
+          <input class="form-control" size="12" v-model="add.square" />
+        </div>
+        <div class="col-2 px-1">
+          <input class="form-control" size="12" v-model="add.line" />
+        </div>
+        <div class="col-1 p-0">
+          <button class="btn btn-primary">ADD</button>
+        </div>
+      </div>
     </form>
 
     <table class="table" v-if="points.length">
