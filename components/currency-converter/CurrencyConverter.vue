@@ -84,7 +84,7 @@ export default class CurrencyConverter extends Vue {
     try {
       this.currencies = await ApiService.instance.getCountryCurrencies();
     } catch (e) {
-      XFunctions.error(e);
+      XFunctions.instance.error(e);
     }
   }
 
@@ -99,7 +99,7 @@ export default class CurrencyConverter extends Vue {
 
       this.onCompute(this.first);
     } catch (e) {
-      XFunctions.error(e);
+      XFunctions.instance.error(e);
     }
   }
 

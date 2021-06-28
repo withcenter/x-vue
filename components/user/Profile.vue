@@ -162,9 +162,9 @@ export default class Profile extends Vue {
 
     try {
       await this.api.profileUpdate(options);
-      XFunctions.alert("User Update", "Update Success");
+      XFunctions.instance.alert("User Update", "Update Success");
     } catch (e) {
-      XFunctions.error(e);
+      XFunctions.instance.error(e);
     }
   }
 }

@@ -133,7 +133,7 @@ export default class CommentForm extends Vue {
       this.uploadedFiles = [];
       this.submitted = false;
     } catch (e) {
-      XFunctions.error(e);
+      XFunctions.instance.error(e);
       this.submitted = false;
     }
   }

@@ -79,7 +79,7 @@ export default class PostList extends Vue {
       this.total = await this.api.postCount(this.options);
       this.noOfPages = Math.ceil(this.total / this.limit);
     } catch (e) {
-      XFunctions.error(e);
+      XFunctions.instance.error(e);
     }
   }
 
@@ -91,7 +91,7 @@ export default class PostList extends Vue {
       // console.log(this.posts);
       this.loadingPosts = false;
     } catch (error) {
-      XFunctions.error(error);
+      XFunctions.instance.error(error);
       this.loadingPosts = false;
     }
   }

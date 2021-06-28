@@ -410,7 +410,7 @@ export default class AdminCategoryEdit extends Vue {
 
     try {
       this.category = await ApiService.instance.categoryUpdate(options);
-      XFunctions.alert("Category Update", "Update Success");
+      XFunctions.instance.alert("Category Update", "Update Success");
       // console.log("Category Update::", this.category);
     } catch (e) {
       this.app.error(e);

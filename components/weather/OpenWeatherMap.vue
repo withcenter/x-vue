@@ -80,7 +80,7 @@ export default class OpenWeatherMap extends Vue {
     try {
       this.weather = await ApiService.instance.openWeatherMap();
     } catch (e) {
-      XFunctions.error(e);
+      XFunctions.instance.error(e);
     }
   }
 }

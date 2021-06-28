@@ -35,9 +35,9 @@ export default class Login extends Vue {
     try {
       await this.api.register(this.form);
       this.$store.commit("register");
-      XFunctions.open("/");
+      this.$store.commit("open", "/");
     } catch (e) {
-      XFunctions.error(e);
+      XFunctions.instance.error(e);
     }
   }
 }

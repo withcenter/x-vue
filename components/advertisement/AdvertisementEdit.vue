@@ -408,6 +408,7 @@ import dayjs from "dayjs";
 })
 export default class Advertisement extends Vue {
   api = ApiService.instance;
+  x = XFunctions.instance;
   isMounted = false;
 
   post = new AdvertisementModel();
@@ -604,7 +605,7 @@ export default class Advertisement extends Vue {
       // console.log("advertisement: ", this.post);
       this.loading = false;
     } catch (e) {
-      XFunctions.error(e);
+      this.x.error(e);
       this.loading = false;
     }
   }
@@ -619,9 +620,9 @@ export default class Advertisement extends Vue {
       console.log(`${isCreate ? "Create" : "Update"} =>`, res);
       Object.assign(this.post, res);
       if (isCreate) {
-        XFunctions.open(`/advertisement/edit/${this.post.idx}`);
+        store.commit("open", `/advertisement/edit/${this.post.idx}`);
       } else {
-        XFunctions.openToast(
+        this.x.openToast(
           "Updated",
           "Advertisement successfully updated!",
           "b-toaster-bottom-right",
@@ -632,7 +633,7 @@ export default class Advertisement extends Vue {
       }
       this.isSubmitted = false;
     } catch (e) {
-      XFunctions.error(e);
+      this.x.error(e);
       this.isSubmitted = false;
     }
   }
@@ -647,12 +648,12 @@ export default class Advertisement extends Vue {
       this.post = res;
       store.commit("refreshProfile");
     } catch (e) {
-      XFunctions.error(e);
+      this.x.error(e);
     }
   }
 
   async onAdvertisementStop(): Promise<void> {
-    const conf = await XFunctions.confirm(
+    const conf = await this.x.confirm(
       "Confirm",
       "Are you sure you want to cancel the advertisement?"
     );
@@ -661,12 +662,12 @@ export default class Advertisement extends Vue {
       this.post = await this.api.advertisementStop(this.post.idx);
       store.commit("refreshProfile");
     } catch (e) {
-      XFunctions.error(e);
+      this.x.error(e);
     }
   }
 
   async advertisementDelete(): Promise<void> {
-    const conf = await XFunctions.confirm(
+    const conf = await this.x.confirm(
       "Confirm",
       "Are you sure you want to delete the advertisement?"
     );
@@ -675,7 +676,7 @@ export default class Advertisement extends Vue {
       this.post = await this.api.advertisementDelete(this.post.idx);
       store.state.router.push("/advertisement");
     } catch (e) {
-      XFunctions.error(e);
+      this.x.error(e);
     }
   }
 

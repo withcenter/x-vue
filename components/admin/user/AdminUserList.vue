@@ -229,7 +229,7 @@ export default class AdminUserList extends Vue {
       });
       this.noOfPages = Math.ceil(this.total / this.limit);
     } catch (e) {
-      XFunctions.error(e);
+      XFunctions.instance.error(e);
     }
   }
 }

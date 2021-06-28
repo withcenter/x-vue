@@ -83,6 +83,7 @@ import { XFunctions } from "@/x-vue-helper/functions";
   },
 })
 export default class AdminCategoryList extends Vue {
+  x = XFunctions.instance;
   categories: Array<CategoryModel> = [];
 
   limit = 5;
@@ -113,7 +114,7 @@ export default class AdminCategoryList extends Vue {
       this.total = await ApiService.instance.categoryCount({});
       this.noOfPages = Math.ceil(this.total / this.limit);
     } catch (e) {
-      XFunctions.error(e);
+      this.x.error(e);
     }
   }
 
@@ -137,7 +138,7 @@ export default class AdminCategoryList extends Vue {
       }
       console.log(cat);
     } catch (e) {
-      XFunctions.error(e);
+      this.x.error(e);
     }
   }
 
@@ -150,14 +151,11 @@ export default class AdminCategoryList extends Vue {
         if (menu) ok++;
         else error++;
       }
-      XFunctions.alert(
-        "Default Menus",
-        `${ok} Okay Menus. ${error} Error Menus`
-      );
+      this.x.alert("Default Menus", `${ok} Okay Menus. ${error} Error Menus`);
 
       console.log(menus);
     } catch (e) {
-      XFunctions.error(e);
+      this.x.error(e);
     }
   }
 }

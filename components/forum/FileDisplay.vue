@@ -46,7 +46,7 @@ export default class FileDisplay extends Vue {
       this.files.splice(index, 1);
       this.$emit("file-deleted", idx);
     } catch (e) {
-      XFunctions.error(e);
+      XFunctions.instance.error(e);
     }
   }
 }

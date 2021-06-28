@@ -233,6 +233,7 @@ import Component from "vue-class-component";
 export default class AdminUserEdit extends Vue {
   user: UserModel = {} as UserModel;
   api: ApiService = ApiService.instance;
+  x: XFunctions = XFunctions.instance;
 
   async mounted(): Promise<void> {
     try {
@@ -241,7 +242,7 @@ export default class AdminUserEdit extends Vue {
         full: true,
       });
     } catch (e) {
-      XFunctions.error(e);
+      this.x.error(e);
     }
   }
 
@@ -267,9 +268,9 @@ export default class AdminUserEdit extends Vue {
 
     try {
       this.user = await this.api.userUpdate(options);
-      XFunctions.alert("User Update", "Update Success");
+      this.x.alert("User Update", "Update Success");
     } catch (e) {
-      XFunctions.error(e);
+      this.x.error(e);
     }
   }
 }

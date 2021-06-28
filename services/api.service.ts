@@ -21,6 +21,7 @@ import {
 import Cookies from "js-cookie";
 import { Keys, Err } from "./defines";
 import { getRootDomain } from "./functions";
+import { RawLocation } from "vue-router";
 // import { RawLocation } from "vue-router";
 
 /**
@@ -98,10 +99,10 @@ export class ApiService {
    * @param location
    * @returns
    */
-  // open(location: RawLocation): void {
-  //   alert("do not use open(), user XFunctions::open()");
-  //   // return store.state.router.push(location);
-  // }
+  open(location: RawLocation): void {
+    alert("do not use open(), use store.commit('open', route)");
+    // return store.state.router.push(location);
+  }
 
   /**
    * Sets `user` in store.state.

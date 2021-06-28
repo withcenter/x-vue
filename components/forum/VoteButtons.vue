@@ -44,7 +44,7 @@ export default class VoteButtonsComponent extends Vue {
       // console.log(res);
       this.parent.updateVoteCount(res);
     } catch (e) {
-      XFunctions.error(e);
+      XFunctions.instance.error(e);
     }
   }
 }
