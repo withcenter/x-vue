@@ -619,7 +619,7 @@ export default class Advertisement extends Vue {
       console.log(`${isCreate ? "Create" : "Update"} =>`, res);
       Object.assign(this.post, res);
       if (isCreate) {
-        ApiService.instance.open(`/advertisement/edit/${this.post.idx}`);
+        XFunctions.open(`/advertisement/edit/${this.post.idx}`);
       } else {
         XFunctions.openToast(
           "Updated",

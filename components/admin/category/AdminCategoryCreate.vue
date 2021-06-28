@@ -40,10 +40,10 @@ export default class AdminCategoryCreate extends Vue {
         id: this.id,
       });
       console.log(this.category);
-      this.api.open({ path: `/admin/category/edit/${this.category.id}` });
+      XFunctions.open({ path: `/admin/category/edit/${this.category.id}` });
     } catch (e) {
       if (e == "error_category_exists") {
-        this.api.open({ path: `/admin/category/edit/${this.id}` });
+        XFunctions.open({ path: `/admin/category/edit/${this.id}` });
       } else {
         XFunctions.error(e);
       }

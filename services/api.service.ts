@@ -21,7 +21,7 @@ import {
 import Cookies from "js-cookie";
 import { Keys, Err } from "./defines";
 import { getRootDomain } from "./functions";
-import { RawLocation } from "vue-router";
+// import { RawLocation } from "vue-router";
 
 /**
  * Api Interface.
@@ -98,10 +98,10 @@ export class ApiService {
    * @param location
    * @returns
    */
-  open(location: RawLocation): void {
-    alert("do not use open(), user XFunctions::open()");
-    // return store.state.router.push(location);
-  }
+  // open(location: RawLocation): void {
+  //   alert("do not use open(), user XFunctions::open()");
+  //   // return store.state.router.push(location);
+  // }
 
   /**
    * Sets `user` in store.state.
@@ -809,7 +809,9 @@ export class ApiService {
       window.open(banner.clickUrl, "_newtab");
     }
     if (banner.idx) {
-      this.open({ path: "/advertisement/view/" + banner.idx });
+      const path = "/advertisement/view/" + banner.idx;
+      console.log("path", path);
+      // this.open({ path: });
     }
   }
 
