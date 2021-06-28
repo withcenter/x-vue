@@ -1,6 +1,6 @@
 <template>
   <div v-if="posts.length">
-    Latest Posts {{ category }}
+    Latest Posts {{ categoryId }}
     <hr class="my-1" />
     <a
       class="d-block text-truncate"
@@ -20,10 +20,10 @@ import Vue from "vue";
 import Component from "vue-class-component";
 
 @Component({
-  props: ["category", "limit"],
+  props: ["categoryId", "limit"],
 })
 export default class LatestPosts extends Vue {
-  category!: string;
+  categoryId!: string;
   limit!: number;
 
   posts: PostModel[] = [];
@@ -31,7 +31,7 @@ export default class LatestPosts extends Vue {
   options: RequestData = {};
 
   mounted(): void {
-    this.options.category = this.category ?? "qna";
+    this.options.categoryId = this.categoryId ?? "qna";
     this.options.limit = this.limit ?? 10;
     this.loadPosts();
   }
