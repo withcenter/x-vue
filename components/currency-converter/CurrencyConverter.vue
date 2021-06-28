@@ -58,6 +58,8 @@ import { ApiService } from "@/x-vue/services/api.service";
 import { CountryCurrenciesModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 
+import { XFunctions } from "@/x-vue-helper/functions";
+
 import Component from "vue-class-component";
 
 @Component({})
@@ -70,12 +72,16 @@ export default class CurrencyConverter extends Vue {
   amount = "1";
   convertedAmount = "0";
 
+  // get first convertion pattern
   get first(): string {
     return `${this.from}_${this.to}`;
   }
+
+  // get the reverse conversion pattern
   get second(): string {
     return `${this.to}_${this.from}`;
   }
+
   rate: { [index: string]: number } = {};
 
   // get country currencies and display to select options
@@ -83,13 +89,14 @@ export default class CurrencyConverter extends Vue {
     try {
       this.currencies = await ApiService.instance.getCountryCurrencies();
     } catch (e) {
-      ApiService.instance.error(e);
+      XFunctions.error(e);
     }
   }
 
   // get exchange rate base from currency then compute current amount to converted amount
   async onSubmit(): Promise<void> {
     console.log("onSubmit");
+    if (this.from == this.to) return;
     try {
       this.rate = await ApiService.instance.getExchangeRate({
         currency1: this.from,
@@ -98,7 +105,7 @@ export default class CurrencyConverter extends Vue {
 
       this.onCompute(this.first);
     } catch (e) {
-      ApiService.instance.error(e);
+      XFunctions.error(e);
     }
   }
 

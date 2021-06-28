@@ -75,6 +75,7 @@ import { CategoryModel } from "@/x-vue/services/interfaces";
 import AdminCategoryCreate from "@/x-vue/components/admin/category/AdminCategoryCreate.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
+import { XFunctions } from "@/x-vue-helper/functions";
 
 @Component({
   components: {
@@ -112,16 +113,13 @@ export default class AdminCategoryList extends Vue {
       this.total = await ApiService.instance.categoryCount({});
       this.noOfPages = Math.ceil(this.total / this.limit);
     } catch (e) {
-      ApiService.instance.error(e);
+      XFunctions.error(e);
     }
   }
 
   async onClickDelete(category: CategoryModel): Promise<void> {
-    // console.log("onClickDelete::", category);
-
     const re = confirm("Delete the category?");
     if (!re) return;
-    console.log(re);
     try {
       const cat = await ApiService.instance.categoryDelete({
         idx: category.idx,
@@ -136,7 +134,7 @@ export default class AdminCategoryList extends Vue {
       }
       console.log(cat);
     } catch (e) {
-      ApiService.instance.error(e);
+      XFunctions.error(e);
     }
   }
 
@@ -149,14 +147,14 @@ export default class AdminCategoryList extends Vue {
         if (menu) ok++;
         else error++;
       }
-      ApiService.instance.alert(
+      XFunctions.alert(
         "Default Menus",
         `${ok} Okay Menus. ${error} Error Menus`
       );
 
       console.log(menus);
     } catch (e) {
-      ApiService.instance.error(e);
+      XFunctions.error(e);
     }
   }
 }

@@ -222,6 +222,7 @@
 </template>
 
 <script lang="ts">
+import { XFunctions } from "@/x-vue-helper/functions";
 import { ApiService } from "@/x-vue/services/api.service";
 import { RequestData, UserModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
@@ -240,7 +241,7 @@ export default class AdminUserEdit extends Vue {
         full: true,
       });
     } catch (e) {
-      this.api.error(e);
+      XFunctions.error(e);
     }
   }
 
@@ -266,9 +267,9 @@ export default class AdminUserEdit extends Vue {
 
     try {
       this.user = await this.api.userUpdate(options);
-      this.api.alert("User Update", "Update Success");
+      XFunctions.alert("User Update", "Update Success");
     } catch (e) {
-      this.api.error(e);
+      XFunctions.error(e);
     }
   }
 }

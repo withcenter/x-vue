@@ -37,21 +37,24 @@ export class FirebaseService {
           /** Standard function to get the token */
           messaging
             .getToken()
-            .then((token) => {
+            .then(async (token) => {
               // console.log("Token", token);
               /** SAVE TOKEN::From here you need to store the TOKEN by AJAX request to your server */
               FirebaseService.instance.token = token;
-              ApiService.instance.saveToken(token, location.hostname);
+              await ApiService.instance.saveToken(token, location.hostname);
+              store.commit("onMessageTokenSaved");
             })
             .catch(function (error) {
               /** If some error happens while fetching the token then handle here */
               // updateUIForPushPermissionRequired();
               console.log("Error while fetching the token " + error);
+              store.commit("onMessagePermissionDenied");
             });
         })
         .catch(function (error) {
           /** If user denies then handle something here */
           console.log("Permission denied " + error);
+          store.commit("onMessagePermissionDenied");
         });
 
       messaging.onMessage((payload) => {

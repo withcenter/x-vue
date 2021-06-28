@@ -355,7 +355,7 @@
 </template>
 
 <script lang="ts">
-import { AppService } from "@/service/app.service";
+import { XFunctions } from "@/x-vue-helper/functions";
 import { ApiService } from "@/x-vue/services/api.service";
 import { RequestData, CategoryModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
@@ -365,7 +365,6 @@ import Component from "vue-class-component";
 })
 export default class AdminCategoryEdit extends Vue {
   category: CategoryModel = {} as CategoryModel;
-  app = AppService.instance;
 
   async mounted(): Promise<void> {
     try {
@@ -373,7 +372,7 @@ export default class AdminCategoryEdit extends Vue {
         id: this.$route.params.categoryId ?? 0,
       });
     } catch (e) {
-      this.app.error(e);
+      XFunctions.error(e);
     }
   }
 
@@ -409,10 +408,9 @@ export default class AdminCategoryEdit extends Vue {
 
     try {
       this.category = await ApiService.instance.categoryUpdate(options);
-      ApiService.instance.alert("Category Update", "Update Success");
-      // console.log("Category Update::", this.category);
+      XFunctions.alert("Category Update", "Update Success");
     } catch (e) {
-      this.app.error(e);
+      XFunctions.error(e);
     }
   }
 }
