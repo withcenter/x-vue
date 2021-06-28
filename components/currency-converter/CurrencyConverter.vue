@@ -8,6 +8,7 @@
           <b-form-select
             v-model="from"
             :options="currencies.selectOptions"
+            @change="onSubmit()"
           ></b-form-select>
         </div>
 
@@ -16,6 +17,7 @@
           <b-form-select
             v-model="to"
             :options="currencies.selectOptions"
+            @change="onSubmit()"
           ></b-form-select>
         </div>
       </div>
@@ -27,7 +29,7 @@
             id="amount"
             v-model="amount"
             :placeholder="'amount' | t"
-            @keyup="onCompute"
+            @keyup="onCompute(first)"
           ></b-form-input>
         </div>
         <div>
@@ -36,7 +38,7 @@
             id="converted"
             v-model="convertedAmount"
             :placeholder="'converted' | t"
-            disabled
+            @keyup="onCompute(second)"
           ></b-form-input>
         </div>
       </div>
@@ -65,9 +67,15 @@ export default class CurrencyConverter extends Vue {
   // to: string | null = null;
   from: string | null = "USD";
   to: string | null = "PHP";
-  amount = 1;
+  amount = "1";
   convertedAmount = "0";
 
+  get first(): string {
+    return `${this.from}_${this.to}`;
+  }
+  get second(): string {
+    return `${this.to}_${this.from}`;
+  }
   rate: { [index: string]: number } = {};
 
   // get country currencies and display to select options
@@ -81,22 +89,30 @@ export default class CurrencyConverter extends Vue {
 
   // get exchange rate base from currency then compute current amount to converted amount
   async onSubmit(): Promise<void> {
+    console.log("onSubmit");
     try {
       this.rate = await ApiService.instance.getExchangeRate({
         currency1: this.from,
         currency2: this.to,
       });
-      this.onCompute();
+
+      this.onCompute(this.first);
     } catch (e) {
       ApiService.instance.error(e);
     }
   }
 
   // compute currency from to
-  onCompute(): void {
-    const first = `${this.from}_${this.to}`;
-    if (!this.rate[first]) return;
-    this.convertedAmount = "" + this.rate[first] * this.amount; //.toFixed(5);
+  onCompute(exchange: string): void {
+    console.log("onCompute");
+    if (!this.rate[exchange]) return;
+    if (exchange == this.first) {
+      this.convertedAmount =
+        "" + (this.rate[exchange] * parseInt(this.amount)).toFixed(2);
+    } else {
+      this.amount =
+        "" + (this.rate[exchange] * parseInt(this.convertedAmount)).toFixed(2);
+    }
   }
 
   // switch the currency position
@@ -104,7 +120,7 @@ export default class CurrencyConverter extends Vue {
     const temp = this.from;
     this.from = this.to;
     this.to = temp;
-    this.onCompute();
+    this.onCompute(this.first);
   }
 }
 </script>

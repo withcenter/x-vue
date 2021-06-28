@@ -121,7 +121,15 @@ export class UserModel {
   block = false;
   // domain = "";
 
-  // Returns name or nickname or email.
+  nicknameOrName = "";
+
+  get loggedIn(): boolean {
+    return !!this.idx;
+  }
+
+  /**
+   * @deprecated use nicknameOrName
+   */
   get displayName(): string {
     if (this.name) return this.name;
     if (this.nickname) return this.nickname;
@@ -152,6 +160,7 @@ export class UserModel {
     this.address = map.address;
     this.zipcode = map.zipcode;
     this.block = map.block == "Y" ? true : false;
+    this.nicknameOrName = map.nicknameOrName;
 
     return this;
   }
