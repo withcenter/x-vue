@@ -76,8 +76,8 @@ export class ApiService {
    * @param options init options
    */
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  init(options: { serverUrl: string; userChanges: any }): void {
-    this.serverUrl = options.serverUrl;
+  init(options: { serverUrl?: string; userChanges: any }): void {
+    this.serverUrl = options.serverUrl ?? "";
     this.userChanges = options.userChanges;
     this.initUserAuth();
   }
@@ -94,7 +94,7 @@ export class ApiService {
   /**
    * Sets `user` in store.state.
    */
-  set user(user: UserModel) {
+  private set user(user: UserModel) {
     this._user = user;
   }
 
@@ -103,7 +103,7 @@ export class ApiService {
    *
    * @returns null | UserModel
    */
-  get user(): UserModel {
+  private get user(): UserModel {
     return this._user;
   }
 
@@ -113,7 +113,7 @@ export class ApiService {
    *
    * @returns boolean
    */
-  get loggedIn(): boolean {
+  private get loggedIn(): boolean {
     return !!this.sessionId;
   }
 
@@ -122,7 +122,7 @@ export class ApiService {
    *
    * @returns boolean
    */
-  get notLoggedIn(): boolean {
+  private get notLoggedIn(): boolean {
     return !this.loggedIn;
   }
 

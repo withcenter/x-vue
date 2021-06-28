@@ -75,7 +75,7 @@ import { CategoryModel } from "@/x-vue/services/interfaces";
 import AdminCategoryCreate from "@/x-vue/components/admin/category/AdminCategoryCreate.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
-import { XFunctions } from "@/x-vue-helper/functions";
+import { XHelper } from "@/x-vue-helper/x-helper";
 
 @Component({
   components: {
@@ -83,7 +83,7 @@ import { XFunctions } from "@/x-vue-helper/functions";
   },
 })
 export default class AdminCategoryList extends Vue {
-  x = XFunctions.instance;
+  x = XHelper.instance;
   categories: Array<CategoryModel> = [];
 
   limit = 5;

@@ -164,7 +164,7 @@
 </template>
 
 <script lang="ts">
-import { XFunctions } from "@/x-vue-helper/functions";
+import { XHelper } from "@/x-vue-helper/x-helper";
 import { ApiService } from "@/x-vue/services/api.service";
 import { UserModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
@@ -229,7 +229,7 @@ export default class AdminUserList extends Vue {
       });
       this.noOfPages = Math.ceil(this.total / this.limit);
     } catch (e) {
-      XFunctions.instance.error(e);
+      XHelper.instance.error(e);
     }
   }
 }

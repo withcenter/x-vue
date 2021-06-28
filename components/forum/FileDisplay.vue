@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { XFunctions } from "@/x-vue-helper/functions";
+import { XHelper } from "@/x-vue-helper/x-helper";
 import { ApiService } from "@/x-vue/services/api.service";
 import { FileModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
@@ -46,7 +46,7 @@ export default class FileDisplay extends Vue {
       this.files.splice(index, 1);
       this.$emit("file-deleted", idx);
     } catch (e) {
-      XFunctions.instance.error(e);
+      XHelper.instance.error(e);
     }
   }
 }

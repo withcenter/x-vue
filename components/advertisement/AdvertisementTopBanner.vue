@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import store from "@/store";
-import { XFunctions } from "@/x-vue-helper/functions";
+import { XHelper } from "@/x-vue-helper/x-helper";
 import { Banner } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
@@ -71,7 +71,7 @@ export default class AdvertisementTopBanner extends Vue {
     if (this.currentBanner.idx) {
       const path = "/advertisement/view/" + this.currentBanner.idx;
       console.log("path", path);
-      XFunctions.instance.open({ path: path });
+      XHelper.instance.open({ path: path });
     }
   }
 }

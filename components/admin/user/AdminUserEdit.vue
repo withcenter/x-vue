@@ -222,7 +222,7 @@
 </template>
 
 <script lang="ts">
-import { XFunctions } from "@/x-vue-helper/functions";
+import { XHelper } from "@/x-vue-helper/x-helper";
 import { ApiService } from "@/x-vue/services/api.service";
 import { RequestData, UserModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
@@ -233,7 +233,7 @@ import Component from "vue-class-component";
 export default class AdminUserEdit extends Vue {
   user: UserModel = {} as UserModel;
   api: ApiService = ApiService.instance;
-  x: XFunctions = XFunctions.instance;
+  x: XHelper = XHelper.instance;
 
   async mounted(): Promise<void> {
     try {

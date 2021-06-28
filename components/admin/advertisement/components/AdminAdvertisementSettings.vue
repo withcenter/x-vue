@@ -105,7 +105,7 @@
 <script lang="ts">
 import store from "@/store";
 import { ApiService } from "@/x-vue/services/api.service";
-import { XFunctions } from "@/x-vue-helper/functions";
+import { XHelper } from "@/x-vue-helper/x-helper";
 import {
   AdvertisementSettings,
   RequestData,
@@ -119,7 +119,7 @@ import Component from "vue-class-component";
 })
 export default class AdminAdvertisement extends Vue {
   api = ApiService.instance;
-  x = XFunctions.instance;
+  x = XHelper.instance;
   maximumAdvertisementDays = 0;
   advertisementCategories = "";
   points = [] as AdvertisementSettings[];
