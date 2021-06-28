@@ -38,10 +38,12 @@ import { AdvertisementModel, RequestData } from "@/x-vue/services/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
 import AdvertisementPreview from "./AdvertisementPreview.vue";
 import { XFunctions } from "@/x-vue-helper/functions";
+import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
 
 @Component({
   components: {
     AdvertisementPreview,
+    LoginFirst,
   },
 })
 export default class PostList extends Vue {
