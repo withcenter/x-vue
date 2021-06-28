@@ -786,6 +786,13 @@ export class ApiService {
     // console.log(res);
     return res;
   }
+
+  async topicSubscription(data: RequestData): Promise<ResponseData> {
+    const res = await this.request("notification.topicSubscription", data);
+    console.log(res);
+    return res;
+  }
+
   /**
    *
    * @param data

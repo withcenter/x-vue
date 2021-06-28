@@ -67,7 +67,7 @@ export default class CurrencyConverter extends Vue {
   // from: string | null = null;
   // to: string | null = null;
   from: string | null = "USD";
-  to: string | null = "PHP";
+  to: string | null = "KRW";
   amount = "1";
   convertedAmount = "0";
 
@@ -87,6 +87,7 @@ export default class CurrencyConverter extends Vue {
   async mounted(): Promise<void> {
     try {
       this.currencies = await ApiService.instance.getCountryCurrencies();
+      this.onSubmit();
     } catch (e) {
       XFunctions.instance.error(e);
     }
