@@ -42,19 +42,19 @@ export class FirebaseService {
               /** SAVE TOKEN::From here you need to store the TOKEN by AJAX request to your server */
               FirebaseService.instance.token = token;
               await ApiService.instance.saveToken(token, location.hostname);
-              store.commit("onMessageTokenSaved");
+              store.commit("onFirebaseMessageTokenSave");
             })
             .catch(function (error) {
               /** If some error happens while fetching the token then handle here */
               // updateUIForPushPermissionRequired();
               console.log("Error while fetching the token " + error);
-              store.commit("onMessagePermissionDenied");
+              store.commit("onFirebaseMessagePermissionDenied");
             });
         })
         .catch(function (error) {
           /** If user denies then handle something here */
           console.log("Permission denied " + error);
-          store.commit("onMessagePermissionDenied");
+          store.commit("onFirebaseMessagePermissionDenied");
         });
 
       messaging.onMessage((payload) => {
@@ -63,7 +63,7 @@ export class FirebaseService {
         // console.log("notification", notification);
         // const data = payload.data ? payload.data : {};
         // console.log("data", data);
-        store.commit("onMessage", payload);
+        store.commit("onFirebaseMessageReceived", payload);
       });
     }
   }

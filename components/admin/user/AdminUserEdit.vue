@@ -242,11 +242,7 @@ export default class AdminUserEdit extends Vue {
         full: true,
       });
     } catch (e) {
-<<<<<<< HEAD
-      XFunctions.error(e);
-=======
       this.x.error(e);
->>>>>>> c02b75b84a31b60b1124051366c7fe101ab5f159
     }
   }
 
@@ -272,15 +268,9 @@ export default class AdminUserEdit extends Vue {
 
     try {
       this.user = await this.api.userUpdate(options);
-<<<<<<< HEAD
-      XFunctions.alert("User Update", "Update Success");
-    } catch (e) {
-      XFunctions.error(e);
-=======
       this.x.alert("User Update", "Update Success");
     } catch (e) {
       this.x.error(e);
->>>>>>> c02b75b84a31b60b1124051366c7fe101ab5f159
     }
   }
 }

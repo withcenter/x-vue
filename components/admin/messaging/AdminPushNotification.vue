@@ -188,8 +188,6 @@ import Component from "vue-class-component";
 
 @Component({})
 export default class AdminPushNotification extends Vue {
-  x = XFunctions.instance;
-
   options = {
     idx: "",
     notify: "all",
@@ -230,7 +228,7 @@ export default class AdminPushNotification extends Vue {
       this.loading = false;
     } catch (e) {
       this.loading = false;
-      this.x.error(e);
+      XFunctions.instance.error(e);
     }
   }
 
@@ -282,16 +280,19 @@ export default class AdminPushNotification extends Vue {
       if (this.options.notify === "tokens") {
         const s = res.success.length;
         const f = res.error.length;
-        this.x.alert("Send Push Message to tokens", `${s} Success, ${f} Fail.`);
+        XFunctions.instance.alert(
+          "Send Push Message to tokens",
+          `${s} Success, ${f} Fail.`
+        );
       } else {
-        this.x.alert(
+        XFunctions.instance.alert(
           "Send Push Message to topic",
           "Success Sending push notification to topic."
         );
       }
     } catch (e) {
       this.loading = false;
-      this.x.error(e);
+      XFunctions.instance.error(e);
     }
   }
 }

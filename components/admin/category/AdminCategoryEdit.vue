@@ -355,10 +355,6 @@
 </template>
 
 <script lang="ts">
-<<<<<<< HEAD
-=======
-import { AppService } from "@/service/app.service";
->>>>>>> c02b75b84a31b60b1124051366c7fe101ab5f159
 import { XFunctions } from "@/x-vue-helper/functions";
 import { ApiService } from "@/x-vue/services/api.service";
 import { RequestData, CategoryModel } from "@/x-vue/services/interfaces";
@@ -376,7 +372,7 @@ export default class AdminCategoryEdit extends Vue {
         id: this.$route.params.categoryId ?? 0,
       });
     } catch (e) {
-      XFunctions.error(e);
+      XFunctions.instance.error(e);
     }
   }
 
@@ -412,14 +408,9 @@ export default class AdminCategoryEdit extends Vue {
 
     try {
       this.category = await ApiService.instance.categoryUpdate(options);
-<<<<<<< HEAD
-      XFunctions.alert("Category Update", "Update Success");
-=======
       XFunctions.instance.alert("Category Update", "Update Success");
-      // console.log("Category Update::", this.category);
->>>>>>> c02b75b84a31b60b1124051366c7fe101ab5f159
     } catch (e) {
-      XFunctions.error(e);
+      XFunctions.instance.error(e);
     }
   }
 }
