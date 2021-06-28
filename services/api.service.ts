@@ -14,15 +14,12 @@ import {
   CategoryModel,
   AdvertisementSettings,
   AdvertisementModel,
-  Banner,
   CountryCurrenciesModel,
 } from "./interfaces";
 
 import Cookies from "js-cookie";
 import { Keys, Err } from "./defines";
 import { getRootDomain } from "./functions";
-import { RawLocation } from "vue-router";
-// import { RawLocation } from "vue-router";
 
 /**
  * Api Interface.
@@ -92,16 +89,6 @@ export class ApiService {
         location.protocol + "//" + location.hostname + "/index.php";
     }
     return this.serverUrl;
-  }
-
-  /**
-   * @deprecated
-   * @param location
-   * @returns
-   */
-  open(location: RawLocation): void {
-    alert("do not use open(), use store.commit('open', route)");
-    // return store.state.router.push(location);
   }
 
   /**
@@ -810,17 +797,6 @@ export class ApiService {
   async fileGet(data: RequestData): Promise<FileModel> {
     const res = await this.request("file.get", data);
     return new FileModel().fromJson(res);
-  }
-
-  openAdvertisement(banner: Banner): void {
-    if (banner.clickUrl) {
-      window.open(banner.clickUrl, "_newtab");
-    }
-    if (banner.idx) {
-      const path = "/advertisement/view/" + banner.idx;
-      console.log("path", path);
-      // this.open({ path: });
-    }
   }
 
   async openWeatherMap(): Promise<ResponseData> {

@@ -1,352 +1,356 @@
 <template>
   <div v-if="settings">
-    <form class="p-2" @submit.prevent="onSubmit" v-if="!loading">
-      <div class="box mb-2" v-if="post.isActive || post.isWaiting">
-        <div class="d-flex">
-          <span>
-            {{ "adv_banner_type" | t }}
-            <h2>{{ post.code }}</h2>
-          </span>
-          <span class="ml-4">
-            {{ "country" | t }}
-            <h2>{{ countries[post.countryCode] }}</h2>
-          </span>
-          <span class="ml-4">
-            {{ "status" | t }}
-            <h2>{{ post.status }}</h2>
-          </span>
-        </div>
-        <div class="mt-3">
-          {{ "adv_banner_dates" | t }}
-          <h2>{{ post.beginDate }} ~ {{ post.endDate }}</h2>
-        </div>
+    <login-first class="mt-2"></login-first>
 
-        <div class="mt-3">
-          <div class="alert alert-info">
-            <div class="d-flex">
-              <span class="mr-3">
-                {{ "adv_no_of_days" | t }}: <b>{{ noOfDays }}</b>
-              </span>
-              <span class="mr-3">
-                {{ "advertisement_serving_days" | t }}:
-                <b>{{ servingDaysLeft }}</b>
-              </span>
+    <div v-if="api.loggedIn">
+      <form class="p-2" @submit.prevent="onSubmit" v-if="!loading">
+        <div class="box mb-2" v-if="post.isActive || post.isWaiting">
+          <div class="d-flex">
+            <span>
+              {{ "adv_banner_type" | t }}
+              <h2>{{ post.code }}</h2>
+            </span>
+            <span class="ml-4">
+              {{ "country" | t }}
+              <h2>{{ countries[post.countryCode] }}</h2>
+            </span>
+            <span class="ml-4">
+              {{ "status" | t }}
+              <h2>{{ post.status }}</h2>
+            </span>
+          </div>
+          <div class="mt-3">
+            {{ "adv_banner_dates" | t }}
+            <h2>{{ post.beginDate }} ~ {{ post.endDate }}</h2>
+          </div>
+
+          <div class="mt-3">
+            <div class="alert alert-info">
+              <div class="d-flex">
+                <span class="mr-3">
+                  {{ "adv_no_of_days" | t }}: <b>{{ noOfDays }}</b>
+                </span>
+                <span class="mr-3">
+                  {{ "advertisement_serving_days" | t }}:
+                  <b>{{ servingDaysLeft }}</b>
+                </span>
+              </div>
+              <div class="d-flex mt-2">
+                <span class="mr-3">
+                  {{ "adv_points_per_day" | t }}:
+                  <b>{{ countryPointListing[post.code] }}</b>
+                </span>
+                <span>
+                  {{ "adv_refundable_points" | t }}:
+                  <b>{{ refundablePoints }}</b>
+                </span>
+              </div>
+              <small class="text-info">
+                {{ "adv_refundable_points_hint" | t }}
+              </small>
             </div>
-            <div class="d-flex mt-2">
-              <span class="mr-3">
-                {{ "adv_points_per_day" | t }}:
-                <b>{{ countryPointListing[post.code] }}</b>
-              </span>
-              <span>
-                {{ "adv_refundable_points" | t }}:
-                <b>{{ refundablePoints }}</b>
-              </span>
-            </div>
-            <small class="text-info">
-              {{ "adv_refundable_points_hint" | t }}
+            <button
+              class="w-100 btn btn-outline-danger"
+              type="button"
+              v-if="isCancellable || isRefundable"
+              @click="onAdvertisementStop"
+            >
+              {{
+                (isCancellable ? "cancel_advertisement" : "stop_advertisement")
+                  | t
+              }}
+            </button>
+            <small class="text-info" v-if="isDue">
+              This advertisement is already expired, you can stop it if you want
+              to reset the dates and to start it again. <br />
+              Stopping this advertisement will not cost anything, you will not
+              also get a refund since it is already expired.
             </small>
           </div>
-          <button
-            class="w-100 btn btn-outline-danger"
-            type="button"
-            v-if="isCancellable || isRefundable"
-            @click="onAdvertisementStop"
-          >
-            {{
-              (isCancellable ? "cancel_advertisement" : "stop_advertisement")
-                | t
-            }}
-          </button>
-          <small class="text-info" v-if="isDue">
-            This advertisement is already expired, you can stop it if you want
-            to reset the dates and to start it again. <br />
-            Stopping this advertisement will not cost anything, you will not
-            also get a refund since it is already expired.
-          </small>
-        </div>
-      </div>
-
-      <div class="mb-2" v-if="post.isInactive">
-        <!-- banner type -->
-        <div class="form-group mt-2">
-          <label>{{ "adv_banner_type" | t }}</label>
-          <select
-            class="form-control"
-            v-model="post.code"
-            :disabled="post.isActive"
-          >
-            <option value="" disabled selected>
-              {{ "select_type" | t }}
-            </option>
-            <option v-for="type in settings.types" :key="type">
-              {{ type }}
-            </option>
-          </select>
-          <small class="form-text text-muted">
-            {{ "adv_banner_type_hint" | t }}
-          </small>
         </div>
 
-        <!-- Banner country -->
-        <div class="form-group mt-2" v-if="countries">
-          <label>{{ "adv_cafe_country" | t }}</label>
-          <select
-            value=""
-            class="form-control"
-            v-model="post.countryCode"
-            :disabled="post.isActive"
-          >
-            <option disabled selected>{{ "select_country" | t }}</option>
-            <option
-              v-for="(value, name) in countries"
-              :key="name"
-              :value="name"
+        <div class="mb-2" v-if="post.isInactive">
+          <!-- banner type -->
+          <div class="form-group mt-2">
+            <label>{{ "adv_banner_type" | t }}</label>
+            <select
+              class="form-control"
+              v-model="post.code"
+              :disabled="post.isActive"
             >
-              {{ value }}
-            </option>
-          </select>
-          <small class="form-text text-muted">
-            {{ "adv_cafe_country_hint" | t }}
-          </small>
-        </div>
-
-        <div class="box" v-if="post.code">
-          {{ "adv_points_per_day" | t }}:
-          <b>{{ countryPointListing[post.code] }}</b> <br />
-          <small class="text-info">
-            {{ "adv_points_per_day_hint" | t }}
-          </small>
-        </div>
-
-        <!-- banner start and end date -->
-        <div class="form-group bg-light p-3 mt-3">
-          <label>{{ "advertisement_begin_end_date" | t }}</label>
-          <div class="d-flex justify-content-between">
-            <label>
-              {{ "adv_begin_date" | t }}
-              <input
-                v-model="post.beginDate"
-                type="date"
-                :min="beginAtMin"
-                :max="beginAtMax"
-                :disabled="post.isActive"
-              />
-            </label>
-            <label>
-              {{ "adv_end_date" | t }}
-              <input
-                v-model="post.endDate"
-                type="date"
-                :min="endAtMin"
-                :max="endAtMax"
-                :disabled="post.isActive"
-              />
-            </label>
+              <option value="" disabled selected>
+                {{ "select_type" | t }}
+              </option>
+              <option v-for="type in settings.types" :key="type">
+                {{ type }}
+              </option>
+            </select>
+            <small class="form-text text-muted">
+              {{ "adv_banner_type_hint" | t }}
+            </small>
           </div>
 
-          <small class="form-text text-muted mb-2">
-            {{ "advertisement_serving_days" | t }}:
-            <b>{{ servingDaysLeft }}</b>
-            {{ "days" | t }}
-          </small>
-          <small class="form-text text-muted mb-2">
-            {{ "adv_no_of_days" | t }}: {{ noOfDays }}
-          </small>
-          <small class="form-text text-muted">
-            {{ "adv_no_of_days_hint_a" | t }}
-          </small>
-          <small class="form-text text-muted">
-            {{ "adv_no_of_days_hint_b" | t }}
-          </small>
-          <small class="form-text text-muted">
-            {{ "adv_no_of_days_hint_c" | t }}
-          </small>
+          <!-- Banner country -->
+          <div class="form-group mt-2" v-if="countries">
+            <label>{{ "adv_cafe_country" | t }}</label>
+            <select
+              value=""
+              class="form-control"
+              v-model="post.countryCode"
+              :disabled="post.isActive"
+            >
+              <option disabled selected>{{ "select_country" | t }}</option>
+              <option
+                v-for="(value, name) in countries"
+                :key="name"
+                :value="name"
+              >
+                {{ value }}
+              </option>
+            </select>
+            <small class="form-text text-muted">
+              {{ "adv_cafe_country_hint" | t }}
+            </small>
+          </div>
+
+          <div class="box" v-if="post.code">
+            {{ "adv_points_per_day" | t }}:
+            <b>{{ countryPointListing[post.code] }}</b> <br />
+            <small class="text-info">
+              {{ "adv_points_per_day_hint" | t }}
+            </small>
+          </div>
+
+          <!-- banner start and end date -->
+          <div class="form-group bg-light p-3 mt-3">
+            <label>{{ "advertisement_begin_end_date" | t }}</label>
+            <div class="d-flex justify-content-between">
+              <label>
+                {{ "adv_begin_date" | t }}
+                <input
+                  v-model="post.beginDate"
+                  type="date"
+                  :min="beginAtMin"
+                  :max="beginAtMax"
+                  :disabled="post.isActive"
+                />
+              </label>
+              <label>
+                {{ "adv_end_date" | t }}
+                <input
+                  v-model="post.endDate"
+                  type="date"
+                  :min="endAtMin"
+                  :max="endAtMax"
+                  :disabled="post.isActive"
+                />
+              </label>
+            </div>
+
+            <small class="form-text text-muted mb-2">
+              {{ "advertisement_serving_days" | t }}:
+              <b>{{ servingDaysLeft }}</b>
+              {{ "days" | t }}
+            </small>
+            <small class="form-text text-muted mb-2">
+              {{ "adv_no_of_days" | t }}: {{ noOfDays }}
+            </small>
+            <small class="form-text text-muted">
+              {{ "adv_no_of_days_hint_a" | t }}
+            </small>
+            <small class="form-text text-muted">
+              {{ "adv_no_of_days_hint_b" | t }}
+            </small>
+            <small class="form-text text-muted">
+              {{ "adv_no_of_days_hint_c" | t }}
+            </small>
+          </div>
+
+          <!-- Total Advertisement price in points -->
+          <div class="alert alert-info" v-if="priceInPoint">
+            {{ "adv_total_points_required" | t }}: <b>{{ priceInPoint }}</b
+            ><br />
+            <small class="text-info">
+              {{ "adv_total_points_required_hint" | t }}
+            </small>
+          </div>
+
+          <!-- Start Advertisement -->
+          <div class="mt-2">
+            <button
+              class="w-100 btn btn-outline-success"
+              type="button"
+              :disabled="!canStart"
+              @click="onAdvertisementStart"
+            >
+              {{ "start_advertisement" | t }}
+            </button>
+            <div class="alert alert-danger mt-2" v-if="isPointInsufficient">
+              {{ "start_advertisement_warning" | t }}
+            </div>
+          </div>
+          <hr />
         </div>
 
-        <!-- Total Advertisement price in points -->
-        <div class="alert alert-info" v-if="priceInPoint">
-          {{ "adv_total_points_required" | t }}: <b>{{ priceInPoint }}</b
-          ><br />
-          <small class="text-info">
-            {{ "adv_total_points_required_hint" | t }}
-          </small>
-        </div>
+        <div class="box mt-3">
+          <!-- title -->
+          <div class="form-group">
+            <label>{{ "title" | t }}</label>
+            <input
+              class="form-control"
+              :placeholder="'title' | t"
+              type="text"
+              v-model="post.title"
+            />
+          </div>
 
-        <!-- Start Advertisement -->
-        <div class="mt-2">
-          <button
-            class="w-100 btn btn-outline-success"
-            type="button"
-            :disabled="!canStart"
-            @click="onAdvertisementStart"
-          >
-            {{ "start_advertisement" | t }}
-          </button>
-          <div class="alert alert-danger mt-2" v-if="isPointInsufficient">
-            {{ "start_advertisement_warning" | t }}
+          <!-- subcategory -->
+          <div class="form-group mt-2">
+            <label>{{ "category" | t }}</label>
+            <select class="form-control" v-model="post.subcategory">
+              <option value="" selected>
+                {{ "global" | t }}
+              </option>
+              <option v-for="category in settings.categories" :key="category">
+                {{ category }}
+              </option>
+            </select>
+            <small class="form-text text-muted">
+              {{ "adv_category_hint_b" | t }}
+            </small>
+          </div>
+
+          <!-- banner -->
+          <div class="box mt-4">
+            <label>{{ "adv_banner" | t }}</label>
+            <upload-image
+              taxonomy="posts"
+              :entity="post.idx"
+              code="banner"
+              @uploaded="onFileUpload"
+              v-if="isMounted"
+            ></upload-image>
+            <small class="form-text text-muted">
+              {{ "adv_banner_description" | t }}
+            </small>
+          </div>
+
+          <!-- content banner -->
+          <div class="box mt-2">
+            <label>{{ "adv_content_banner" | t }}</label>
+            <upload-image
+              taxonomy="posts"
+              :entity="post.idx"
+              code="content"
+              @uploaded="onFileUpload"
+              v-if="isMounted"
+            ></upload-image>
+            <small class="form-text text-muted">
+              {{ "adv_banner_description" | t }}
+            </small>
+          </div>
+
+          <!-- content -->
+          <div class="form-group mt-4">
+            <label>{{ "content" | t }}</label>
+            <textarea
+              class="form-control"
+              :placeholder="'content' | t"
+              type="text"
+              v-model="post.content"
+              rows="5"
+            ></textarea>
+          </div>
+
+          <!-- memo -->
+          <div class="form-group mt-2">
+            <label>{{ "adv_memo" | t }}</label>
+            <textarea
+              class="form-control"
+              :placeholder="'adv_memo' | t"
+              v-model="post.privateContent"
+              rows="2"
+            ></textarea>
+            <small class="form-text text-muted">
+              {{ "adv_memo_hint" | t }}
+            </small>
+          </div>
+
+          <div class="form-group mt-2" v-if="post.idx">
+            <label>{{ "click_url" | t }}</label>
+            <input
+              class="form-control"
+              :placeholder="'click_url' | t"
+              type="text"
+              v-model="post.clickUrl"
+            />
+            <small class="form-text text-muted">
+              {{ "click_url_hint" | t }}
+            </small>
+          </div>
+
+          <div class="d-flex">
+            <!-- delete -->
+            <button
+              class="mt-2 btn btn-outline-danger"
+              type="button"
+              @click="advertisementDelete"
+              v-if="post.idx && post.isInactive"
+            >
+              {{ "delete" | t }}
+            </button>
+            <span class="flex-grow-1"></span>
+            <!-- save / update -->
+            <button
+              class="mt-2 btn btn-outline-success"
+              type="submit"
+              v-if="!isSubmitted"
+            >
+              <span v-if="post.idx">{{ "update" | t }}</span>
+              <span v-if="!post.idx">{{ "save" | t }}</span>
+            </button>
+            <b-spinner
+              class="m-2"
+              type="grow"
+              variant="success"
+              v-if="isSubmitted"
+            ></b-spinner>
+          </div>
+
+          <!-- Banner points country listing table -->
+          <div class="mt-3 box" v-if="post.idx">
+            <p>
+              {{ "adv_point_listing" | t }}:
+              <span v-if="post.countryCode">
+                {{ post.countryCode }} - {{ countries[post.countryCode] }}
+              </span>
+              <span v-if="!post.countryCode">{{ "default" | t }}</span>
+            </p>
+            <table class="w-100 mt-2 table table-striped">
+              <thead>
+                <tr class="table-header">
+                  <th scope="col">{{ "adv_banner_type" | t }}</th>
+                  <th scope="col">{{ "adv_points_per_day" | t }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(value, name) in countryPointListing" :key="name">
+                  <td>{{ name }}</td>
+                  <td>{{ value }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <small class="text-info">
+              {{ "adv_point_listing_hint" | t }}
+            </small>
           </div>
         </div>
-        <hr />
+      </form>
+
+      <div class="p-3 text-center rounded" v-if="loading">
+        <b-spinner small class="mx-2" type="grow" variant="info"></b-spinner>
+        Loading ...
       </div>
-
-      <div class="box mt-3">
-        <!-- title -->
-        <div class="form-group">
-          <label>{{ "title" | t }}</label>
-          <input
-            class="form-control"
-            :placeholder="'title' | t"
-            type="text"
-            v-model="post.title"
-          />
-        </div>
-
-        <!-- subcategory -->
-        <div class="form-group mt-2">
-          <label>{{ "category" | t }}</label>
-          <select class="form-control" v-model="post.subcategory">
-            <option value="" selected>
-              {{ "global" | t }}
-            </option>
-            <option v-for="category in settings.categories" :key="category">
-              {{ category }}
-            </option>
-          </select>
-          <small class="form-text text-muted">
-            {{ "adv_category_hint_b" | t }}
-          </small>
-        </div>
-
-        <!-- banner -->
-        <div class="box mt-4">
-          <label>{{ "adv_banner" | t }}</label>
-          <upload-image
-            taxonomy="posts"
-            :entity="post.idx"
-            code="banner"
-            @uploaded="onFileUpload"
-            v-if="isMounted"
-          ></upload-image>
-          <small class="form-text text-muted">
-            {{ "adv_banner_description" | t }}
-          </small>
-        </div>
-
-        <!-- content banner -->
-        <div class="box mt-2">
-          <label>{{ "adv_content_banner" | t }}</label>
-          <upload-image
-            taxonomy="posts"
-            :entity="post.idx"
-            code="content"
-            @uploaded="onFileUpload"
-            v-if="isMounted"
-          ></upload-image>
-          <small class="form-text text-muted">
-            {{ "adv_banner_description" | t }}
-          </small>
-        </div>
-
-        <!-- content -->
-        <div class="form-group mt-4">
-          <label>{{ "content" | t }}</label>
-          <textarea
-            class="form-control"
-            :placeholder="'content' | t"
-            type="text"
-            v-model="post.content"
-            rows="5"
-          ></textarea>
-        </div>
-
-        <!-- memo -->
-        <div class="form-group mt-2">
-          <label>{{ "adv_memo" | t }}</label>
-          <textarea
-            class="form-control"
-            :placeholder="'adv_memo' | t"
-            v-model="post.privateContent"
-            rows="2"
-          ></textarea>
-          <small class="form-text text-muted">
-            {{ "adv_memo_hint" | t }}
-          </small>
-        </div>
-
-        <div class="form-group mt-2" v-if="post.idx">
-          <label>{{ "click_url" | t }}</label>
-          <input
-            class="form-control"
-            :placeholder="'click_url' | t"
-            type="text"
-            v-model="post.clickUrl"
-          />
-          <small class="form-text text-muted">
-            {{ "click_url_hint" | t }}
-          </small>
-        </div>
-
-        <div class="d-flex">
-          <!-- delete -->
-          <button
-            class="mt-2 btn btn-outline-danger"
-            type="button"
-            @click="advertisementDelete"
-            v-if="post.idx && post.isInactive"
-          >
-            {{ "delete" | t }}
-          </button>
-          <span class="flex-grow-1"></span>
-          <!-- save / update -->
-          <button
-            class="mt-2 btn btn-outline-success"
-            type="submit"
-            v-if="!isSubmitted"
-          >
-            <span v-if="post.idx">{{ "update" | t }}</span>
-            <span v-if="!post.idx">{{ "save" | t }}</span>
-          </button>
-          <b-spinner
-            class="m-2"
-            type="grow"
-            variant="success"
-            v-if="isSubmitted"
-          ></b-spinner>
-        </div>
-
-        <!-- Banner points country listing table -->
-        <div class="mt-3 box" v-if="post.idx">
-          <p>
-            {{ "adv_point_listing" | t }}:
-            <span v-if="post.countryCode">
-              {{ post.countryCode }} - {{ countries[post.countryCode] }}
-            </span>
-            <span v-if="!post.countryCode">{{ "default" | t }}</span>
-          </p>
-          <table class="w-100 mt-2 table table-striped">
-            <thead>
-              <tr class="table-header">
-                <th scope="col">{{ "adv_banner_type" | t }}</th>
-                <th scope="col">{{ "adv_points_per_day" | t }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(value, name) in countryPointListing" :key="name">
-                <td>{{ name }}</td>
-                <td>{{ value }}</td>
-              </tr>
-            </tbody>
-          </table>
-          <small class="text-info">
-            {{ "adv_point_listing_hint" | t }}
-          </small>
-        </div>
-      </div>
-    </form>
-
-    <div class="p-3 text-center rounded" v-if="loading">
-      <b-spinner small class="mx-2" type="grow" variant="info"></b-spinner>
-      Loading ...
     </div>
 
     <!-- TODOS:

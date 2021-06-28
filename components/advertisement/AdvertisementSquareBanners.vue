@@ -16,7 +16,7 @@ import { Banner } from "@/x-vue/services/interfaces";
 import Component from "vue-class-component";
 import Vue from "vue";
 import store from "@/store";
-import { ApiService } from "@/x-vue/services/api.service";
+import { XFunctions } from "@/x-vue-helper/functions";
 
 @Component({})
 export default class AdvertisementSquareBanners extends Vue {
@@ -38,7 +38,14 @@ export default class AdvertisementSquareBanners extends Vue {
   }
 
   onClick(banner: Banner): void {
-    ApiService.instance.openAdvertisement(banner);
+    if (banner.clickUrl) {
+      window.open(banner.clickUrl, "_newtab");
+    }
+    if (banner.idx) {
+      const path = "/advertisement/view/" + banner.idx;
+      console.log("path", path);
+      XFunctions.instance.open({ path: path });
+    }
   }
 }
 </script>

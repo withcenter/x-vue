@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import store from "@/store";
-import { ApiService } from "@/x-vue/services/api.service";
+import { XFunctions } from "@/x-vue-helper/functions";
 import { Banner } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
@@ -65,7 +65,14 @@ export default class AdvertisementTopBanner extends Vue {
   }
 
   onClick(): void {
-    ApiService.instance.openAdvertisement(this.currentBanner);
+    if (this.currentBanner.clickUrl) {
+      window.open(this.currentBanner.clickUrl, "_newtab");
+    }
+    if (this.currentBanner.idx) {
+      const path = "/advertisement/view/" + this.currentBanner.idx;
+      console.log("path", path);
+      XFunctions.instance.open({ path: path });
+    }
   }
 }
 </script>
