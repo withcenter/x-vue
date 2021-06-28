@@ -14,7 +14,6 @@ import {
   CategoryModel,
   AdvertisementSettings,
   AdvertisementModel,
-  Banner,
   CountryCurrenciesModel,
 } from "./interfaces";
 
