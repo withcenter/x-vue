@@ -16,7 +16,7 @@
   </section>
 </template>
 <script lang="ts">
-import { XFunctions } from "@/x-vue-helper/functions";
+import { XHelper } from "@/x-vue-helper/x-helper";
 import { ApiService } from "@/x-vue/services/api.service";
 import { CategoryModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
@@ -40,14 +40,14 @@ export default class AdminCategoryCreate extends Vue {
         id: this.id,
       });
       console.log(this.category);
-      XFunctions.instance.open({
+      XHelper.instance.open({
         path: `/admin/category/edit/${this.category.id}`,
       });
     } catch (e) {
       if (e == "error_category_exists") {
-        XFunctions.instance.open({ path: `/admin/category/edit/${this.id}` });
+        XHelper.instance.open({ path: `/admin/category/edit/${this.id}` });
       } else {
-        XFunctions.instance.error(e);
+        XHelper.instance.error(e);
       }
     }
   }

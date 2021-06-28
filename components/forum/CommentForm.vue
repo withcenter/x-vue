@@ -71,7 +71,7 @@ import UploadButton from "@/x-vue/components/UploadButton.vue";
 import FileDisplay from "@/x-vue/components/forum/FileDisplay.vue";
 import { ApiService } from "@/x-vue/services/api.service";
 import { addByComma, deleteByComma } from "../../services/functions";
-import { XFunctions } from "@/x-vue-helper/functions";
+import { XHelper } from "@/x-vue-helper/x-helper";
 
 @Component({
   props: ["root", "parent", "comment"],
@@ -133,7 +133,7 @@ export default class CommentForm extends Vue {
       this.uploadedFiles = [];
       this.submitted = false;
     } catch (e) {
-      XFunctions.instance.error(e);
+      XHelper.instance.error(e);
       this.submitted = false;
     }
   }

@@ -400,7 +400,7 @@ import {
   ResponseData,
 } from "@/x-vue/services/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
-import { XFunctions } from "@/x-vue-helper/functions";
+import { XHelper } from "@/x-vue-helper/x-helper";
 import { addByComma, daysBetween } from "@/x-vue/services/functions";
 import store from "@/store";
 import UploadImage from "@/x-vue/components/file/UploadImage.vue";
@@ -412,7 +412,7 @@ import dayjs from "dayjs";
 })
 export default class Advertisement extends Vue {
   api = ApiService.instance;
-  x = XFunctions.instance;
+  x = XHelper.instance;
   isMounted = false;
 
   post = new AdvertisementModel();
@@ -624,7 +624,7 @@ export default class Advertisement extends Vue {
       console.log(`${isCreate ? "Create" : "Update"} =>`, res);
       Object.assign(this.post, res);
       if (isCreate) {
-        XFunctions.instance.open(`/advertisement/edit/${this.post.idx}`);
+        XHelper.instance.open(`/advertisement/edit/${this.post.idx}`);
       } else {
         this.x.openToast(
           "Updated",

@@ -14,7 +14,7 @@ import { Banner } from "@/x-vue/services/interfaces";
 import Component from "vue-class-component";
 import Vue from "vue";
 import store from "@/store";
-import { XFunctions } from "@/x-vue-helper/functions";
+import { XHelper } from "@/x-vue-helper/x-helper";
 
 @Component({
   props: ["type"],
@@ -60,7 +60,7 @@ export default class AdvertisementBanner extends Vue {
     if (this.currentBanner.idx) {
       const path = "/advertisement/view/" + this.currentBanner.idx;
       console.log("path", path);
-      XFunctions.instance.open({ path: path });
+      XHelper.instance.open({ path: path });
     }
   }
 }

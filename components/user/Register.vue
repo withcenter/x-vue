@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { XFunctions } from "@/x-vue-helper/functions";
+import { XHelper } from "@/x-vue-helper/x-helper";
 import { ApiService } from "@/x-vue/services/api.service";
 import Vue from "vue";
 import Component from "vue-class-component";
@@ -35,9 +35,9 @@ export default class Login extends Vue {
     try {
       await this.api.register(this.form);
       this.$store.commit("register");
-      XFunctions.instance.open("/");
+      XHelper.instance.open("/");
     } catch (e) {
-      XFunctions.instance.error(e);
+      XHelper.instance.error(e);
     }
   }
 }
