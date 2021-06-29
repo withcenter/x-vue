@@ -1,10 +1,11 @@
 import firebase from "firebase/app";
 import "firebase/messaging";
 import { ApiService } from "./api.service";
-import store from "@/store";
 
 export class FirebaseService {
   private static _instance: FirebaseService;
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  private onMessage?: (payload: any) => void;
 
   // private constructor() {}
 
@@ -18,9 +19,14 @@ export class FirebaseService {
 
   public token = "";
 
-  init(firebaseConfig: Record<string, unknown>): void {
+  init(
+    firebaseConfig: Record<string, unknown>,
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+    options: { onMessage: (payload: any) => void }
+  ): void {
     firebase.initializeApp(firebaseConfig);
     this.pushMessageInit();
+    this.onMessage = options.onMessage;
   }
 
   pushMessageInit(): void {
@@ -63,7 +69,7 @@ export class FirebaseService {
         // console.log("notification", notification);
         // const data = payload.data ? payload.data : {};
         // console.log("data", data);
-        store.commit("onFirebaseMessageReceived", payload);
+        this.onMessage!(payload);
       });
     }
   }
