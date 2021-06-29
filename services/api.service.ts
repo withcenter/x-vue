@@ -24,22 +24,15 @@ import { getRootDomain } from "./functions";
  * Api Interface.
  *
  * This handles the connections between App and Backend.
- *  Does not save or manage state except user model, user lanuguage.
+ * This does not save or manage state except user model, user lanuguage.
  *
  * Don't do anything exception getting data from Backend.
  *   - Don't alert
  *   - Don't move
  *   - Don't save anything.
  *
- * It manages user login state in cookie. Except this, it does not manage any other state.
+ * It manages user login state in cookie.
  *
- * @todo Make this api to be the interface(Api call router) only.
- *
- *
- * @todo Remove `store`. Don't include `store` at all. That means it should not use `store` directly.
- *  Instead, use the store actions to access ApiService.
- *
- * @todo Dont' use `store.route`, `store.user`, `alert`, nor any other things that is not json call to backend.
  */
 export class ApiService {
   // Singletone
