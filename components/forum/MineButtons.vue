@@ -54,11 +54,13 @@ export default class MineButtonsComponent extends Vue {
   }
   onClickEdit(): void {
     this.hidePopup();
+    // TODO
     console.log("TODO: onClickEdit()");
     // store.commit("edit", this.parent);
   }
   onClickDelete(): void {
     this.hidePopup();
+    // TODO
     console.log("TODO: onClickDelete()");
     // store.commit("delete", this.parent);
   }

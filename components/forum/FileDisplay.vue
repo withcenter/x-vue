@@ -46,7 +46,7 @@ export default class FileDisplay extends Vue {
       this.$emit("file-deleted", idx);
     } catch (e) {
       // XHelper.instance.error(e);
-      alert("[TODO]: ERROR " + e);
+      this.$emit("error", e);
     }
   }
 }
