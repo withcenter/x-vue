@@ -33,10 +33,10 @@
 </template>
 
 <script lang="ts">
-import { PostModel } from "@/x-vue/services/interfaces";
-import PostMetaComponent from "@/x-vue/components/forum/PostMeta.vue";
-import UserAvatar from "@/x-vue/components/forum/UserAvatar.vue";
 import { Vue, Component } from "vue-property-decorator";
+import { PostModel } from "@/x-vue/services/interfaces";
+import UserAvatar from "@/x-vue/components/forum/UserAvatar.vue";
+import PostMetaComponent from "@/x-vue/components/forum/PostMeta.vue";
 
 @Component({
   props: ["post"],

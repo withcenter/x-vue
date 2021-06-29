@@ -422,9 +422,9 @@ export default class Advertisement extends Vue {
 
   isSubmitted = false;
 
-  loading = true;
+  loading = false;
 
-  countries?: ResponseData;
+  countries: ResponseData = {};
   settings: AdvertisementSettings = {} as AdvertisementSettings;
 
   async mounted(): Promise<void> {
@@ -437,28 +437,11 @@ export default class Advertisement extends Vue {
       await this.loadAdvertisement();
     } else {
       this.post.categoryId = "advertisement";
-      this.loading = false;
     }
 
     this.beginAtMin = this.today;
     this.isMounted = true;
   }
-
-  /**
-   * Advertisement settings getter.
-   * @returns AdvertisementSettings from store state.
-   */
-  // get settings(): AdvertisementSettings {
-  //   return store.state.advertisementSettings;
-  // }
-
-  /**
-   * Country data list getter.
-   * @returns ResponseData - gets country list from store state.
-   */
-  // get countries(): ResponseData {
-  //   return store.state.countries;
-  // }
 
   get today(): string {
     return dayjs().format("YYYY-MM-DD");
