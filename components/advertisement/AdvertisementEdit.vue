@@ -400,7 +400,6 @@ import {
   ResponseData,
 } from "@/x-vue/services/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
-import { XHelper } from "@/x-vue-helper/x-helper";
 import { addByComma, daysBetween } from "@/x-vue/services/functions";
 import UploadImage from "@/x-vue/components/file/UploadImage.vue";
 import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
@@ -411,7 +410,6 @@ import dayjs from "dayjs";
 })
 export default class Advertisement extends Vue {
   api = ApiService.instance;
-  x = XHelper.instance;
   isMounted = false;
 
   post = new AdvertisementModel();
@@ -598,7 +596,8 @@ export default class Advertisement extends Vue {
       // console.log("advertisement: ", this.post);
       this.loading = false;
     } catch (e) {
-      this.x.error(e);
+      // this.x.error(e);
+      this.$emit("on-error", e);
       this.loading = false;
     }
   }
@@ -613,20 +612,14 @@ export default class Advertisement extends Vue {
       console.log(`${isCreate ? "Create" : "Update"} =>`, res);
       Object.assign(this.post, res);
       if (isCreate) {
-        XHelper.instance.open(`/advertisement/edit/${this.post.idx}`);
+        this.$emit("on-create", `/advertisement/edit/${this.post.idx}`);
       } else {
-        this.x.openToast(
-          "Updated",
-          "Advertisement successfully updated!",
-          "b-toaster-bottom-right",
-          "success",
-          true,
-          1500
-        );
+        this.$emit("on-update");
       }
       this.isSubmitted = false;
     } catch (e) {
-      this.x.error(e);
+      // this.x.error(e);
+      this.$emit("on-error", e);
       this.isSubmitted = false;
     }
   }
@@ -642,13 +635,12 @@ export default class Advertisement extends Vue {
       this.$emit("on-start");
       // store.commit("refreshProfile");
     } catch (e) {
-      this.x.error(e);
+      this.$emit("on-error", e);
     }
   }
 
   async onAdvertisementStop(): Promise<void> {
-    const conf = await this.x.confirm(
-      "Confirm",
+    const conf = await confirm(
       "Are you sure you want to cancel the advertisement?"
     );
     if (!conf) return;
@@ -658,13 +650,13 @@ export default class Advertisement extends Vue {
       this.$emit("on-stop");
       // store.commit("refreshProfile");
     } catch (e) {
-      this.x.error(e);
+      // this.x.error(e);
+      this.$emit("on-error", e);
     }
   }
 
   async advertisementDelete(): Promise<void> {
-    const conf = await this.x.confirm(
-      "Confirm",
+    const conf = await confirm(
       "Are you sure you want to delete the advertisement?"
     );
     if (!conf) return;
@@ -673,7 +665,8 @@ export default class Advertisement extends Vue {
       this.$emit("on-delete");
       // store.state.router.push("/advertisement");
     } catch (e) {
-      this.x.error(e);
+      // this.x.error(e);
+      this.$emit("on-error", e);
     }
   }
 
