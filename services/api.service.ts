@@ -50,6 +50,9 @@ export class ApiService {
   }
 
   //
+  public apiKey = "";
+
+  //
   public serverUrl = "";
   //
   public _user: UserModel = new UserModel();
@@ -80,7 +83,12 @@ export class ApiService {
    * @param options init options
    */
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  init(options: { serverUrl?: string; userChanges: any }): void {
+  init(options: {
+    apiKey: string;
+    userChanges: any;
+    serverUrl?: string;
+  }): void {
+    this.apiKey = options.apiKey ?? "";
     this.serverUrl = options.serverUrl ?? "";
     this.userChanges = options.userChanges;
     this.initUserAuth();
@@ -149,6 +157,7 @@ export class ApiService {
   async request(route: string, data: RequestData = {}): Promise<ResponseData> {
     data.route = route;
     if (this.sessionId) data.sessionId = this.sessionId;
+    data.apiKey = this.apiKey;
     // console.log("endpoint; ", endpoint);
     const res = await axios.post(this.endpoint, data);
     if (typeof res.data === "string") {
