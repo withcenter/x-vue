@@ -1,5 +1,5 @@
 import axios from "axios";
-import store from "@/store";
+// import store from "@/store";
 
 import {
   RequestData,
@@ -693,16 +693,8 @@ export class ApiService {
   }
 
   async myCafe(): Promise<CafeModel[]> {
-    if (this.notLoggedIn) {
-      store.state.myCafe = [];
-    } else {
-      const res = await this.request("cafe.mine");
-      // console.log("myCafe; ", res);
-      store.state.myCafe = res.map((cafe: JSON) =>
-        new CafeModel().fromJson(cafe)
-      );
-    }
-    return store.state.myCafe;
+    const res = await this.request("cafe.mine");
+    return res.map((cafe: JSON) => new CafeModel().fromJson(cafe));
   }
 
   async saveToken(token: string, topic = ""): Promise<ResponseData> {
