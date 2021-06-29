@@ -3,7 +3,7 @@
     <div class="d-flex justify-content-center">
       <b-avatar :src="user.photuUrl" size="8rem"></b-avatar>
     </div>
-    <form @submit.prevent="onSubmit">
+    <form @submit.prevent="onSubmit($event)">
       <div role="group">
         <label for="point">{{ "point" | t }}</label>
         <b-form-input
@@ -150,15 +150,13 @@ export default class Profile extends Vue {
     try {
       this.user = await ApiService.instance.userProfile();
     } catch (e) {
-      // XHelper.instance.error(error);
       this.$emit("on-error", e);
     }
   }
 
-  async onSubmit(): Promise<void> {
-    let options: RequestData = {
+  onSubmit($event: Event): void {
+    let form: RequestData = {
       idx: this.user.idx,
-      point: this.user.point,
       email: this.user.email,
       firebaseUid: this.user.firebaseUid,
       name: this.user.name,
@@ -173,14 +171,7 @@ export default class Profile extends Vue {
       zipcode: this.user.zipcode,
     };
 
-    try {
-      await ApiService.instance.profileUpdate(options);
-      // XHelper.instance.alert("User Update", "Update Success");
-      this.$emit("on-update", "Update Success");
-    } catch (e) {
-      // XHelper.instance.error(e);
-      this.$emit("on-error", e);
-    }
+    this.$emit("submit", $event, form);
   }
 }
 </script>

@@ -4,7 +4,7 @@
     <form @submit.prevent="onSubmit">
       <div class="d-flex text-center mb-2">
         <div class="w-100 mr-2">
-          <div>From</div>
+          <div>{{ "from" | t }}</div>
           <b-form-select
             v-model="from"
             :options="currencies.selectOptions"
@@ -13,7 +13,7 @@
         </div>
 
         <div class="w-100">
-          <div>To</div>
+          <div>{{ "to" | t }}</div>
           <b-form-select
             v-model="to"
             :options="currencies.selectOptions"
