@@ -20,11 +20,11 @@ import { ApiService } from "@/x-vue/services/api.service";
 import { CategoryModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
-import AdminService from "../admin.service";
+import Service from "../../../services/x-vue.service";
 
 @Component({})
 export default class AdminCategoryCreate extends Vue {
-  as = AdminService.instance;
+  as = Service.instance;
   category: CategoryModel = {} as CategoryModel;
   api = ApiService.instance;
 

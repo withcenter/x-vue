@@ -15,16 +15,34 @@
 % npm i -D @types/js-cookie
 ```
 
+# Style Guide
+
+- `x-vue` should be independent as much as possible from parent app. But there are certain properties that `x-vue` can use from the page.
+  - `this.$router` to navigate from `x-vue` components.
+  - `this.$store.state.user` can be used but must be read only.
+  - `this.$store.commit('user', userModel)` to update user model data. To login, logout, refresh.
+
+- The parent app must install `bootstrap version 4.x`, `bootstrap vue version 2.x`. And make them available for `x-vue`.
+  - So, `x-vue` can use the full features of `bootstrap` and `bootstrap vue`.
+
+
+
 # How to use
 
 
 ## Initialization
+
+- The parent app must set
+  - `this.$store.state.user` as user model properties.
+  - `this.$router`. So the `x-vue` model can navigates between pages.
+  - `bootstrap 4.x` and `bootstrap 2.x` to work.
 
 - `ApiService` must be initialized first.
 
 - You can set
   - `serverUrl` to point where is the `Matrix` restful api endpoint.
   - `userChanges` callback event handler that will be called on every user change(login/logout/profile update, etc)
+  - `apiKey` to access the backend if needed.
 
 - Below is an example of `main.ts`. It shows how to initialize the `ApiService` and how to update `store` to use the status of user login, logout.
 ```ts

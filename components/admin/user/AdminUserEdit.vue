@@ -226,7 +226,7 @@ import { ApiService } from "@/x-vue/services/api.service";
 import { RequestData, UserModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
-import AdminService from "../admin.service";
+import AdminService from "../../../services/x-vue.service";
 @Component({
   components: {},
 })
@@ -268,7 +268,7 @@ export default class AdminUserEdit extends Vue {
 
     try {
       this.user = await this.api.userUpdate(options);
-      this.as.alert("User Update : " + "Update Success");
+      this.as.alert("User Update : ", "Update Success");
     } catch (e) {
       this.as.error(e);
     }

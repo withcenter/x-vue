@@ -54,6 +54,9 @@ export default class MineButtonsComponent extends Vue {
   }
   onClickEdit(): void {
     this.hidePopup();
+    if (this.parent.isPost) {
+      // this.$router.push('');
+    }
     // TODO
     console.log("TODO: onClickEdit()");
     // store.commit("edit", this.parent);

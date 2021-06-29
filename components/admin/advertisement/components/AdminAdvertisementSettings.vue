@@ -129,7 +129,7 @@ import {
 } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
-import AdminService from "../../admin.service";
+import AdminService from "../../../../services/x-vue.service";
 
 @Component({
   components: {},
@@ -183,7 +183,7 @@ export default class AdminAdvertisement extends Vue {
         msg += " added.";
         this.add = {};
       }
-      this.as.alert("Points " + msg);
+      this.as.alert("Points ", msg);
       // this.as.openToast("Points", msg, undefined, "success", true, 3000);
     } catch (e) {
       this.as.error(e);
@@ -217,7 +217,7 @@ export default class AdminAdvertisement extends Vue {
         this.advertisementCategories
       );
 
-      this.as.alert("Saved!");
+      this.as.alert("Settings", "Saved!");
 
       // this.as.openToast("Settings", "Saved...", undefined, "info", true, 3000);
     } catch (e) {

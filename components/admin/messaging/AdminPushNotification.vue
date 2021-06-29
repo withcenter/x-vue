@@ -184,7 +184,7 @@ import { DEFAULT_TOPIC } from "@/x-vue/services/defines";
 import { RequestData, ResponseData } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
-import AdminService from "../admin.service";
+import AdminService from "../../../services/x-vue.service";
 
 @Component({})
 export default class AdminPushNotification extends Vue {
@@ -282,12 +282,13 @@ export default class AdminPushNotification extends Vue {
         const s = res.success.length;
         const f = res.error.length;
         this.as.alert(
-          "Send Push Message to tokens: " + `${s} Success, ${f} Fail.`
+          "Send Push Message to tokens: ",
+          `${s} Success, ${f} Fail.`
         );
       } else {
         this.as.alert(
-          "Send Push Message to topic : " +
-            "Success Sending push notification to topic."
+          "Send Push Message to topic : ",
+          "Success Sending push notification to topic."
         );
       }
     } catch (e) {

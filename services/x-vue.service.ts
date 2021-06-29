@@ -1,13 +1,13 @@
-export default class AdminService {
+export default class Service {
   private constructor() {
-    console.log("AdminService::construcotr");
+    console.log("Service::construcotr");
   }
-  private static _instance: AdminService;
-  public static get instance(): AdminService {
-    if (!AdminService._instance) {
-      AdminService._instance = new AdminService();
+  private static _instance: Service;
+  public static get instance(): Service {
+    if (!Service._instance) {
+      Service._instance = new Service();
     }
-    return AdminService._instance;
+    return Service._instance;
   }
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -19,11 +19,11 @@ export default class AdminService {
     // console.log("XHelper::init", this.vm);
   }
 
-  alert(msg: string) {
-    alert(msg);
+  alert(title: string, message: string) {
+    alert(title + "\n" + message);
   }
   error(e: string) {
-    this.alert(e);
+    this.alert("Error", e);
   }
   confirm(message: string): boolean {
     return this.confirm(message);

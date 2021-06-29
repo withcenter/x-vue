@@ -165,11 +165,11 @@ import { ApiService } from "@/x-vue/services/api.service";
 import { UserModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
-import AdminService from "../admin.service";
+import Service from "../../../services/x-vue.service";
 
 @Component({})
 export default class AdminUserList extends Vue {
-  as = AdminService.instance;
+  as = Service.instance;
   users: Array<UserModel> = [];
   total = 0;
 

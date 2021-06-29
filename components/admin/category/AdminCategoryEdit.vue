@@ -359,7 +359,7 @@ import { ApiService } from "@/x-vue/services/api.service";
 import { RequestData, CategoryModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
-import AdminService from "../admin.service";
+import AdminService from "../../../services/x-vue.service";
 @Component({
   components: {},
 })
@@ -409,7 +409,7 @@ export default class AdminCategoryEdit extends Vue {
 
     try {
       this.category = await ApiService.instance.categoryUpdate(options);
-      this.as.alert("Category Update : " + "Update Success");
+      this.as.alert("Category Update : ", "Update Success");
     } catch (e) {
       this.as.error(e);
     }

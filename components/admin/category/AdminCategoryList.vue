@@ -75,7 +75,7 @@ import { CategoryModel } from "@/x-vue/services/interfaces";
 import AdminCategoryCreate from "@/x-vue/components/admin/category/AdminCategoryCreate.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
-import AdminService from "../admin.service";
+import AdminService from "../../../services/x-vue.service";
 
 @Component({
   components: {
@@ -148,7 +148,8 @@ export default class AdminCategoryList extends Vue {
         else error++;
       }
       this.as.alert(
-        "Default Menus: " + `${ok} Okay Menus. ${error} Error Menus`
+        "Default Menus: ",
+        `${ok} Okay Menus. ${error} Error Menus`
       );
     } catch (e) {
       this.as.error(e);

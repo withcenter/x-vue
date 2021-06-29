@@ -15,6 +15,7 @@ import {
   AdvertisementModel,
   CountryCurrenciesModel,
   MapStringAny,
+  CategoryBanners,
 } from "./interfaces";
 
 import Cookies from "js-cookie";
@@ -60,6 +61,12 @@ export class ApiService {
   //
   private sessionId: string | undefined;
 
+  //
+  private countries?: ResponseData;
+
+  //
+  private categoryBanners?: CategoryBanners;
+
   public texts: MapStringAny = {
     email: {
       en: "Email Address",
@@ -84,7 +91,7 @@ export class ApiService {
    */
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   init(options: {
-    apiKey: string;
+    apiKey?: string;
     userChanges: any;
     serverUrl?: string;
   }): void {
@@ -451,12 +458,16 @@ export class ApiService {
   /**
    * Returns country data
    *
+   * @attention it does memory cache. So, it will connect to backend only one time even if this method is used server times.
+   *
    * @returns Promise<ResponseData>
    */
   async countryAll(): Promise<ResponseData> {
-    return await this.request("country.all", {
+    if (this.countries) return this.countries;
+    this.countries = await this.request("country.all", {
       ln: this.userLanguage,
     });
+    return this.countries;
   }
 
   /// Return user language.
@@ -642,11 +653,42 @@ export class ApiService {
     })) as CafeSettings;
   }
 
-  async loadBanners(cafeDomain: string): Promise<Array<AdvertisementModel>> {
+  /**
+   * Get banners from backend.
+   *
+   * @attention it does memory cache.
+   * @param cafeDomain cafe domain to get the banners of
+   * @returns banner data
+   */
+  async loadBanners(cafeDomain: string): Promise<CategoryBanners> {
+    if (this.categoryBanners) return this.categoryBanners;
+
     const res = await this.request("advertisement.loadBanners", {
       cafeDomain: cafeDomain,
     });
-    return res.map((post: JSON) => new AdvertisementModel().fromJson(post));
+    const banners: AdvertisementModel[] = res.map((post: JSON) =>
+      new AdvertisementModel().fromJson(post)
+    );
+
+    const _banners: CategoryBanners = {};
+    if (banners && banners.length) {
+      for (const banner of banners) {
+        if (!_banners[banner.subcategory]) _banners[banner.subcategory] = {};
+        if (!_banners[banner.subcategory][banner.code]) {
+          _banners[banner.subcategory][banner.code] = [];
+        }
+
+        _banners[banner.subcategory][banner.code].push({
+          bannerUrl: banner.bannerUrl,
+          clickUrl: banner.clickUrl,
+          idx: banner.idx,
+          title: banner.title ?? "",
+        });
+      }
+    }
+
+    this.categoryBanners = _banners;
+    return this.categoryBanners;
   }
 
   async advertisementSearch(
