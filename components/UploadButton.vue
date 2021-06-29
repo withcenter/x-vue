@@ -43,7 +43,7 @@ export default class UploadButton extends Vue {
   async onFileChange(event: HTMLInputEvent): Promise<void> {
     if (!this.api._user.loggedIn) {
       // XHelper.instance.error("error_login_first");
-      alert("error_login_first");
+      this.$emit("error", "error_login_first");
       return;
     }
 
@@ -58,7 +58,7 @@ export default class UploadButton extends Vue {
       this.$emit("success", res);
     } catch (e) {
       // XHelper.instance.error(e);
-      alert(e);
+      this.$emit("error", e);
     }
   }
 
