@@ -1,12 +1,12 @@
 <template>
   <div class="push-notification-icon">
     <b-form-checkbox
-      v-model="data[topic]"
+      v-model="data[postTopic]"
       name="check-button"
       switch
       @change="onChangeSubscribeOrUnsubscribeTopic"
     >
-      qna
+      {{ title | t }}
     </b-form-checkbox>
   </div>
 </template>
@@ -16,36 +16,45 @@ import { XHelper } from "@/x-vue-helper/x-helper";
 import { ApiService } from "@/x-vue/services/api.service";
 import { Vue, Prop, Component } from "vue-property-decorator";
 
-@Component({
-  props: ["topic"],
-  components: {},
-})
+@Component({})
 export default class PushNotificationIcon extends Vue {
-  //
   @Prop({ default: "defaultTopic" }) topic!: string;
   @Prop({ default: "" }) title!: string;
 
-  data: { [index: string]: boolean } = {};
+  // 'notifyPost_' is the prefix for post topic subscription
+  get postTopic(): string {
+    return "notifyPost_" + this.topic;
+  }
+
+  data: { [index: string]: boolean } = {
+    [this.postTopic]: false,
+  };
 
   async mounted(): Promise<void> {
-    if (!this.topic) this.topic = "defaultTopic";
     try {
-      //   const re = await ApiService.instance.isSubscribedToTopic(this.topic);
+      console.log("postTopic::", this.postTopic);
+      const re = await ApiService.instance.isSubscribedToTopic(this.postTopic);
+      console.log("PushNotificationIcon", re);
+      this.data[this.postTopic] = re[this.postTopic] === "Y" ? true : false;
     } catch (error) {
       XHelper.instance.error(error);
     }
   }
 
   async onChangeSubscribeOrUnsubscribeTopic(): Promise<void> {
+    console.log(
+      "onChangeSubscribeOrUnsubscribeTopic::",
+      this.data[this.postTopic]
+    );
     if (!ApiService.instance._user.loggedIn) {
       XHelper.instance.alert("Login required", "Please login first");
-      this.data[this.topic] = false;
+      this.data[this.postTopic] = false;
       return;
     }
     try {
       await ApiService.instance.topicSubscription({
-        topic: this.topic,
-        subscribe: this.data[this.topic] ? "on" : "off",
+        topic: this.postTopic,
+        subscribe: this.data[this.postTopic] ? "Y" : "N",
       });
     } catch (error) {
       XHelper.instance.error(error);
