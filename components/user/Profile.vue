@@ -1,7 +1,7 @@
 <template>
-  <section class="box" v-if="api.loggedIn">
+  <section class="box" v-if="user.loggedIn">
     <div class="d-flex justify-content-center">
-      <b-avatar :src="api.user.photuUrl" size="8rem"></b-avatar>
+      <b-avatar :src="user.photuUrl" size="8rem"></b-avatar>
     </div>
     <form @submit.prevent="onSubmit">
       <div role="group">
@@ -9,7 +9,7 @@
         <b-form-input
           disabled
           id="point"
-          v-model="api.user.point"
+          v-model="user.point"
           :placeholder="'point' | t"
         ></b-form-input>
       </div>
@@ -18,7 +18,7 @@
         <b-form-input
           disabled
           id="email"
-          v-model="api.user.email"
+          v-model="user.email"
           :placeholder="'email' | t"
         ></b-form-input>
       </div>
@@ -27,7 +27,7 @@
         <b-form-input
           disabled
           id="displayName"
-          v-model="api.user.displayName"
+          v-model="user.displayName"
           :placeholder="'display_name' | t"
         ></b-form-input>
       </div>
@@ -35,7 +35,7 @@
         <label for="name">{{ "name" | t }}</label>
         <b-form-input
           id="name"
-          v-model="api.user.name"
+          v-model="user.name"
           :placeholder="'name' | t"
         ></b-form-input>
       </div>
@@ -43,7 +43,7 @@
         <label for="nickname">{{ "nickname" | t }}</label>
         <b-form-input
           id="nickname"
-          v-model="api.user.nickname"
+          v-model="user.nickname"
           :placeholder="'nickname' | t"
         ></b-form-input>
       </div>
@@ -51,13 +51,18 @@
         <label for="phoneNo">{{ "phone_number" | t }}</label>
         <b-form-input
           id="phoneNo"
-          v-model="api.user.phoneNo"
+          v-model="user.phoneNo"
           :placeholder="'phone_number' | t"
         ></b-form-input>
       </div>
       <div role="group">
         <label for="gender">{{ "gender" | t }}</label>
-        <select class="custom-select" id="gender" name="gender">
+        <select
+          class="custom-select"
+          id="gender"
+          name="gender"
+          v-model="user.gender"
+        >
           <option value="">{{ "select_gender" | t }}</option>
           <option value="M">{{ "male" | t }}</option>
           <option value="F">{{ "female" | t }}</option>
@@ -68,7 +73,7 @@
         <b-form-input
           placeholder="YYMMDD"
           id="birthdate"
-          v-model="api.user.birthdate"
+          v-model="user.birthdate"
         ></b-form-input>
       </div>
       <div role="group">
@@ -76,7 +81,7 @@
         <b-form-input
           :placeholder="'country_code' | t"
           id="countryCode"
-          v-model="api.user.countryCode"
+          v-model="user.countryCode"
         ></b-form-input>
       </div>
 
@@ -85,7 +90,7 @@
         <b-form-input
           :placeholder="'province' | t"
           id="province"
-          v-model="api.user.province"
+          v-model="user.province"
         ></b-form-input>
       </div>
 
@@ -94,7 +99,7 @@
         <b-form-input
           :placeholder="'city' | t"
           id="city"
-          v-model="api.user.city"
+          v-model="user.city"
         ></b-form-input>
       </div>
 
@@ -103,7 +108,7 @@
         <b-form-input
           :placeholder="'address' | t"
           id="address"
-          v-model="api.user.address"
+          v-model="user.address"
         ></b-form-input>
       </div>
 
@@ -112,7 +117,7 @@
         <b-form-input
           :placeholder="'zipcode' | t"
           id="zipcode"
-          v-model="api.user.zipcode"
+          v-model="user.zipcode"
         ></b-form-input>
       </div>
 

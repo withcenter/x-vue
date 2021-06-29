@@ -1,7 +1,7 @@
 <template>
   <div class="push-notification-icon">
     <b-form-checkbox
-      v-model="data[topic]"
+      v-model="data[postTopic]"
       name="check-button"
       switch
       @change="onChangeSubscribeOrUnsubscribeTopic"
@@ -16,43 +16,45 @@ import { XHelper } from "@/x-vue-helper/x-helper";
 import { ApiService } from "@/x-vue/services/api.service";
 import { Vue, Prop, Component } from "vue-property-decorator";
 
-@Component({
-  // props: ["topic", "title"],
-})
+@Component({})
 export default class PushNotificationIcon extends Vue {
   @Prop({ default: "defaultTopic" }) topic!: string;
   @Prop({ default: "" }) title!: string;
 
+  // 'notifyPost_' is the prefix for post topic subscription
+  get postTopic(): string {
+    return "notifyPost_" + this.topic;
+  }
+
   data: { [index: string]: boolean } = {
-    [this.topic]: false,
+    [this.postTopic]: false,
   };
 
   async mounted(): Promise<void> {
-    console.log("topic::", this.topic);
-    // await Vue.nextTick();
-
-    // console.log("topic::", this.topic);
     try {
-      console.log("topic::", this.topic);
-      const re = await ApiService.instance.isSubscribedToTopic(this.topic);
+      console.log("postTopic::", this.postTopic);
+      const re = await ApiService.instance.isSubscribedToTopic(this.postTopic);
       console.log("PushNotificationIcon", re);
-      this.data[this.topic] = re[this.topic] === "Y" ? true : false;
+      this.data[this.postTopic] = re[this.postTopic] === "Y" ? true : false;
     } catch (error) {
       XHelper.instance.error(error);
     }
   }
 
   async onChangeSubscribeOrUnsubscribeTopic(): Promise<void> {
-    console.log("onChangeSubscribeOrUnsubscribeTopic::", this.data[this.topic]);
+    console.log(
+      "onChangeSubscribeOrUnsubscribeTopic::",
+      this.data[this.postTopic]
+    );
     if (!ApiService.instance._user.loggedIn) {
       XHelper.instance.alert("Login required", "Please login first");
-      this.data[this.topic] = false;
+      this.data[this.postTopic] = false;
       return;
     }
     try {
       await ApiService.instance.topicSubscription({
-        topic: this.topic,
-        subscribe: this.data[this.topic] ? "Y" : "N",
+        topic: this.postTopic,
+        subscribe: this.data[this.postTopic] ? "Y" : "N",
       });
     } catch (error) {
       XHelper.instance.error(error);
