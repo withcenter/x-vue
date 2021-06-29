@@ -693,8 +693,12 @@ export class ApiService {
   }
 
   async myCafe(): Promise<CafeModel[]> {
-    const res = await this.request("cafe.mine");
-    return res.map((cafe: JSON) => new CafeModel().fromJson(cafe));
+    if (this.notLoggedIn) {
+      const res = await this.request("cafe.mine");
+      return res.map((cafe: JSON) => new CafeModel().fromJson(cafe));
+    } else {
+      return [];
+    }
   }
 
   async saveToken(token: string, topic = ""): Promise<ResponseData> {
