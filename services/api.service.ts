@@ -620,59 +620,6 @@ export class ApiService {
     })) as CafeSettings;
   }
 
-  /**
-   * 현재 카페 설정을 리턴한다.
-   * @returns
-   */
-  currentCafeSettings(): Obj | undefined {
-    if (
-      store.state.cafeSettings &&
-      store.state.cafeSettings["mainCafeSettings"] &&
-      store.state.cafeSettings["mainCafeSettings"][this.rootDomain]
-    ) {
-      return store.state.cafeSettings["mainCafeSettings"][this.rootDomain];
-    }
-  }
-
-  /**
-   * @deprecated
-   * Display error alert box
-   *
-   * Note, use this method from the app.
-   *
-   * @param code Error code from PHP backend
-   * @returns true after the alert dialog closed
-   */
-  // error(code: string): Promise<boolean> {
-  //   if (typeof code === "string" && code.indexOf("error_") === 0) {
-  //     // This is a PHP backend erorr
-  //     return this.alert(tr("error"), tr(code));
-  //   } else {
-  //     return this.alert(tr("error"), "Unknown error: " + code);
-  //   }
-  // }
-
-  /**
-   * @deprecated
-   * Returns true when the confirm box has closed.
-   *
-   * Note, use this method from the app.
-   *
-   * @param title title
-   * @param content content
-   * @returns boolean
-   */
-  // async alert(title: string, content: string): Promise<boolean> {
-  //   return await store.state.vm.$bvModal.msgBoxOk(content, {
-  //     title: title,
-  //     size: "sm",
-  //     buttonSize: "sm",
-  //     okVariant: "success",
-  //     headerClass: "p-2 border-bottom-0",
-  //     footerClass: "p-2 border-top-0",
-  //   });
-  // }
-
   async loadBanners(cafeDomain: string): Promise<Array<AdvertisementModel>> {
     const res = await this.request("advertisement.loadBanners", {
       cafeDomain: cafeDomain,
