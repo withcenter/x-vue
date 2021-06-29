@@ -1,7 +1,7 @@
 <template>
   <div data-cy="register-form">
     <h1>User Register</h1>
-    <form @submit.prevent="onSubmit">
+    <form @submit.prevent="$emit('submit', $event, form)">
       <div class="form-group">
         {{ "email" | t }}
         <input type="text" name="email" v-model="form.email" />
@@ -20,25 +20,11 @@
 </template>
 
 <script lang="ts">
-import { XHelper } from "@/x-vue-helper/x-helper";
-import { ApiService } from "@/x-vue/services/api.service";
 import Vue from "vue";
 import Component from "vue-class-component";
 
 @Component({})
 export default class Login extends Vue {
-  api = ApiService.instance;
   form = {};
-
-  async onSubmit(): Promise<void> {
-    // console.log('Register::form', this.form);
-    try {
-      await this.api.register(this.form);
-      this.$store.commit("register");
-      XHelper.instance.open("/");
-    } catch (e) {
-      XHelper.instance.error(e);
-    }
-  }
 }
 </script>

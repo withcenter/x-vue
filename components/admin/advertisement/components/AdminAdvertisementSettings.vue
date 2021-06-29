@@ -49,7 +49,7 @@
     <form @submit.prevent="onEdit(add)">
       <!-- <input v-model="add.countryCode" placeholder="2 letter country code" /> -->
       <div class="d-flex w-100">
-        <div class="col-3 pr-1">
+        <div class="col-3 pr-1" v-if="countries">
           <select class="form-control" v-model="add.countryCode">
             <option value="" selected>{{ "default" | t }}</option>
             <option
@@ -123,7 +123,6 @@
 <script lang="ts">
 import store from "@/store";
 import { ApiService } from "@/x-vue/services/api.service";
-import { XHelper } from "@/x-vue-helper/x-helper";
 import {
   AdvertisementSettings,
   RequestData,
@@ -131,18 +130,21 @@ import {
 } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
+import AdminService from "../../admin.service";
 
 @Component({
   components: {},
 })
 export default class AdminAdvertisement extends Vue {
   api = ApiService.instance;
-  x = XHelper.instance;
+  as = AdminService.instance;
   maximumAdvertisementDays = 0;
   advertisementCategories = "";
   points = [] as AdvertisementSettings[];
 
   add = {};
+
+  countries?: ResponseData;
 
   async mounted(): Promise<void> {
     try {
@@ -152,18 +154,20 @@ export default class AdminAdvertisement extends Vue {
       this.advertisementCategories = re.data;
 
       this.points = await this.api.advertisementGetBannerPoints();
+
+      this.countries = await this.api.countryAll();
     } catch (e) {
-      this.x.error(e);
+      this.as.error(e);
     }
   }
 
-  /**
-   * Country data list getter.
-   * @returns ResponseData - gets country list from store state.
-   */
-  get countries(): ResponseData {
-    return store.state.countries;
-  }
+  // /**
+  //  * Country data list getter.
+  //  * @returns ResponseData - gets country list from store state.
+  //  */
+  // get countries(): ResponseData {
+  //   return store.state.countries;
+  // }
 
   async onEdit(data: RequestData): Promise<void> {
     // console.log("onEdit", data);
@@ -180,18 +184,17 @@ export default class AdminAdvertisement extends Vue {
         msg += " added.";
         this.add = {};
       }
-
-      this.x.openToast("Points", msg, undefined, "success", true, 3000);
+      this.as.alert("Points " + msg);
+      // this.as.openToast("Points", msg, undefined, "success", true, 3000);
     } catch (e) {
-      this.x.error(e);
+      this.as.error(e);
     }
   }
 
   async onDelete(data: RequestData): Promise<void> {
     // console.log("onDelete::data", data);
 
-    const conf = await this.x.confirm(
-      "",
+    const conf = this.as.confirm(
       `Delete point settings for ${data.countryCode}?`
     );
     if (!conf) return;
@@ -200,7 +203,7 @@ export default class AdminAdvertisement extends Vue {
       await this.api.advertisementDeleteBannerPoint(data.idx);
       this.points = await this.api.advertisementGetBannerPoints();
     } catch (e) {
-      this.x.error(e);
+      this.as.error(e);
     }
   }
 
@@ -215,9 +218,11 @@ export default class AdminAdvertisement extends Vue {
         this.advertisementCategories
       );
 
-      this.x.openToast("Settings", "Saved...", undefined, "info", true, 3000);
+      this.as.alert("Saved!");
+
+      // this.as.openToast("Settings", "Saved...", undefined, "info", true, 3000);
     } catch (e) {
-      this.x.error(e);
+      this.as.error(e);
     }
   }
 }

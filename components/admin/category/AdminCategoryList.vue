@@ -75,7 +75,7 @@ import { CategoryModel } from "@/x-vue/services/interfaces";
 import AdminCategoryCreate from "@/x-vue/components/admin/category/AdminCategoryCreate.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
-import { XHelper } from "@/x-vue-helper/x-helper";
+import AdminService from "../admin.service";
 
 @Component({
   components: {
@@ -83,8 +83,8 @@ import { XHelper } from "@/x-vue-helper/x-helper";
   },
 })
 export default class AdminCategoryList extends Vue {
-  x = XHelper.instance;
   categories: Array<CategoryModel> = [];
+  as = AdminService.instance;
 
   limit = 5;
   noOfPages = 10;
@@ -114,7 +114,7 @@ export default class AdminCategoryList extends Vue {
       this.total = await ApiService.instance.categoryCount({});
       this.noOfPages = Math.ceil(this.total / this.limit);
     } catch (e) {
-      this.x.error(e);
+      this.as.error(e);
     }
   }
 
@@ -134,7 +134,7 @@ export default class AdminCategoryList extends Vue {
         this.categories.splice(index, 1);
       }
     } catch (e) {
-      this.x.error(e);
+      this.as.error(e);
     }
   }
 
@@ -147,9 +147,11 @@ export default class AdminCategoryList extends Vue {
         if (menu) ok++;
         else error++;
       }
-      this.x.alert("Default Menus", `${ok} Okay Menus. ${error} Error Menus`);
+      this.as.alert(
+        "Default Menus: " + `${ok} Okay Menus. ${error} Error Menus`
+      );
     } catch (e) {
-      this.x.error(e);
+      this.as.error(e);
     }
   }
 }

@@ -54,7 +54,6 @@
 </style>
 
 <script lang="ts">
-import { XHelper } from "@/x-vue-helper/x-helper";
 import { ApiService } from "@/x-vue/services/api.service";
 import { ResponseData } from "@/x-vue/services/interfaces";
 import dayjs from "dayjs";
@@ -80,7 +79,7 @@ export default class OpenWeatherMap extends Vue {
     try {
       this.weather = await ApiService.instance.openWeatherMap();
     } catch (e) {
-      XHelper.instance.error(e);
+      this.$emit("error", e);
     }
   }
 }

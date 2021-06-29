@@ -64,6 +64,9 @@ export interface AdvertisementSettings {
   maximum_advertising_days: number;
 }
 
+/**
+ * @deprecated
+ */
 export interface ApiStore {
   user: UserModel;
   countries: ResponseData;
@@ -125,6 +128,9 @@ export class UserModel {
 
   get loggedIn(): boolean {
     return !!this.idx;
+  }
+  get notLoggedIn(): boolean {
+    return !this.loggedIn;
   }
 
   /**

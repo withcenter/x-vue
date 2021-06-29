@@ -16,14 +16,15 @@
   </section>
 </template>
 <script lang="ts">
-import { XHelper } from "@/x-vue-helper/x-helper";
 import { ApiService } from "@/x-vue/services/api.service";
 import { CategoryModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
+import AdminService from "../admin.service";
 
 @Component({})
 export default class AdminCategoryCreate extends Vue {
+  as = AdminService.instance;
   category: CategoryModel = {} as CategoryModel;
   api = ApiService.instance;
 
@@ -40,14 +41,12 @@ export default class AdminCategoryCreate extends Vue {
         id: this.id,
       });
       console.log(this.category);
-      XHelper.instance.open({
-        path: `/admin/category/edit/${this.category.id}`,
-      });
+      this.as.open(`/admin/category/edit/${this.category.id}`);
     } catch (e) {
       if (e == "error_category_exists") {
-        XHelper.instance.open({ path: `/admin/category/edit/${this.id}` });
+        this.as.open(`/admin/category/edit/${this.id}`);
       } else {
-        XHelper.instance.error(e);
+        this.as.error(e);
       }
     }
   }

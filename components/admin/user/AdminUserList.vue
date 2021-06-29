@@ -164,14 +164,15 @@
 </template>
 
 <script lang="ts">
-import { XHelper } from "@/x-vue-helper/x-helper";
 import { ApiService } from "@/x-vue/services/api.service";
 import { UserModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
+import AdminService from "../admin.service";
 
 @Component({})
 export default class AdminUserList extends Vue {
+  as = AdminService.instance;
   users: Array<UserModel> = [];
   total = 0;
 
@@ -229,7 +230,7 @@ export default class AdminUserList extends Vue {
       });
       this.noOfPages = Math.ceil(this.total / this.limit);
     } catch (e) {
-      XHelper.instance.error(e);
+      this.as.error(e);
     }
   }
 }

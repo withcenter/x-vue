@@ -222,18 +222,18 @@
 </template>
 
 <script lang="ts">
-import { XHelper } from "@/x-vue-helper/x-helper";
 import { ApiService } from "@/x-vue/services/api.service";
 import { RequestData, UserModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
+import AdminService from "../admin.service";
 @Component({
   components: {},
 })
 export default class AdminUserEdit extends Vue {
   user: UserModel = {} as UserModel;
   api: ApiService = ApiService.instance;
-  x: XHelper = XHelper.instance;
+  as = AdminService.instance;
 
   async mounted(): Promise<void> {
     try {
@@ -242,7 +242,7 @@ export default class AdminUserEdit extends Vue {
         full: true,
       });
     } catch (e) {
-      this.x.error(e);
+      this.as.error(e);
     }
   }
 
@@ -268,9 +268,9 @@ export default class AdminUserEdit extends Vue {
 
     try {
       this.user = await this.api.userUpdate(options);
-      this.x.alert("User Update", "Update Success");
+      this.as.alert("User Update : " + "Update Success");
     } catch (e) {
-      this.x.error(e);
+      this.as.error(e);
     }
   }
 }

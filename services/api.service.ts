@@ -14,17 +14,22 @@ import {
   AdvertisementSettings,
   AdvertisementModel,
   CountryCurrenciesModel,
+  MapStringAny,
 } from "./interfaces";
 
 import Cookies from "js-cookie";
 import { Keys, Err } from "./defines";
 import { getRootDomain } from "./functions";
+import Vue from "vue";
 
 /**
  * Api Interface.
  *
  * This handles the connections between App and Backend.
- * This does not save or manage state except user model, user lanuguage.
+ * This does manage the states of
+ * - User
+ * - User launguage
+ * - Translation texts.
  *
  * Don't do anything exception getting data from Backend.
  *   - Don't alert
@@ -52,6 +57,13 @@ export class ApiService {
   //
   private sessionId: string | undefined;
 
+  public texts: MapStringAny = {
+    email: {
+      en: "Email Address",
+      ko: "이메일",
+    },
+  };
+
   // User change callback
   //
   // This will be called whenever user changes.
@@ -72,6 +84,15 @@ export class ApiService {
     this.serverUrl = options.serverUrl ?? "";
     this.userChanges = options.userChanges;
     this.initUserAuth();
+
+    /// @todo move this code somewhere.
+    Vue.filter("t", (code: string): string => {
+      if (!code) return "";
+      if (!this.texts) return code;
+      if (!this.texts[code]) return code;
+      if (!this.texts[code][ApiService.instance.userLanguage]) return code;
+      return this.texts[code][ApiService.instance.userLanguage];
+    });
   }
 
   // Return server url. If it is not initiallized, then, use current url.

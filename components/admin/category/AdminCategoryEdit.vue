@@ -355,16 +355,17 @@
 </template>
 
 <script lang="ts">
-import { XHelper } from "@/x-vue-helper/x-helper";
 import { ApiService } from "@/x-vue/services/api.service";
 import { RequestData, CategoryModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
+import AdminService from "../admin.service";
 @Component({
   components: {},
 })
 export default class AdminCategoryEdit extends Vue {
   category: CategoryModel = {} as CategoryModel;
+  as = AdminService.instance;
 
   async mounted(): Promise<void> {
     try {
@@ -372,7 +373,7 @@ export default class AdminCategoryEdit extends Vue {
         id: this.$route.params.categoryId ?? 0,
       });
     } catch (e) {
-      XHelper.instance.error(e);
+      this.as.error(e);
     }
   }
 
@@ -408,9 +409,9 @@ export default class AdminCategoryEdit extends Vue {
 
     try {
       this.category = await ApiService.instance.categoryUpdate(options);
-      XHelper.instance.alert("Category Update", "Update Success");
+      this.as.alert("Category Update : " + "Update Success");
     } catch (e) {
-      XHelper.instance.error(e);
+      this.as.error(e);
     }
   }
 }
