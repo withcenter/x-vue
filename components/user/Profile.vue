@@ -149,8 +149,9 @@ export default class Profile extends Vue {
   async mounted(): Promise<void> {
     try {
       this.user = await ApiService.instance.userProfile();
-    } catch (error) {
-      this.$app.error(error);
+    } catch (e) {
+      // XHelper.instance.error(error);
+      this.$emit("on-error", e);
     }
   }
 
@@ -174,9 +175,11 @@ export default class Profile extends Vue {
 
     try {
       await ApiService.instance.profileUpdate(options);
-      this.$app.alert("User Update Success");
+      // XHelper.instance.alert("User Update", "Update Success");
+      this.$emit("on-update", "Update Success");
     } catch (e) {
-      this.$app.error(e);
+      // XHelper.instance.error(e);
+      this.$emit("on-error", e);
     }
   }
 }

@@ -33,11 +33,11 @@
 </template>
 
 <script lang="ts">
-import { CommentModel, PostModel } from "../../services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
-import store from "@/store";
 import { ApiService } from "@/x-vue/services/api.service";
+import { CommentModel, PostModel } from "../../services/interfaces";
+// import store from "@/store";
 
 @Component({
   props: ["parent"],
@@ -54,11 +54,15 @@ export default class MineButtonsComponent extends Vue {
   }
   onClickEdit(): void {
     this.hidePopup();
-    store.commit("edit", this.parent);
+    // TODO
+    console.log("TODO: onClickEdit()");
+    // store.commit("edit", this.parent);
   }
   onClickDelete(): void {
     this.hidePopup();
-    store.commit("delete", this.parent);
+    // TODO
+    console.log("TODO: onClickDelete()");
+    // store.commit("delete", this.parent);
   }
 }
 </script>

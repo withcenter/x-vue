@@ -31,9 +31,9 @@
 
 <script lang="ts">
 import { AdvertisementModel, FileModel } from "@/x-vue/services/interfaces";
+import { ApiService } from "@/x-vue/services/api.service";
 import Component from "vue-class-component";
 import Vue from "vue";
-import { ApiService } from "@/x-vue/services/api.service";
 
 @Component({
   props: ["advertisement"],

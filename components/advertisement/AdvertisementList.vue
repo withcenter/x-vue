@@ -37,7 +37,6 @@ import Component from "vue-class-component";
 import { AdvertisementModel, RequestData } from "@/x-vue/services/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
 import AdvertisementPreview from "./AdvertisementPreview.vue";
-import { XHelper } from "@/x-vue-helper/x-helper";
 import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
 
 @Component({
@@ -85,7 +84,7 @@ export default class PostList extends Vue {
       this.total = await this.api.postCount(this.options);
       this.noOfPages = Math.ceil(this.total / this.limit);
     } catch (e) {
-      XHelper.instance.error(e);
+      this.$emit("on-error", e);
     }
   }
 
@@ -96,8 +95,8 @@ export default class PostList extends Vue {
       this.posts = await this.api.advertisementSearch(this.options);
       // console.log(this.posts);
       this.loadingPosts = false;
-    } catch (error) {
-      XHelper.instance.error(error);
+    } catch (e) {
+      this.$emit("on-error", e);
       this.loadingPosts = false;
     }
   }

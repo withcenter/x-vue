@@ -384,7 +384,7 @@ export interface Banner {
   title?: string;
 }
 
-interface Banners {
+export interface Banners {
   [code: string]: Banner[];
 }
 export interface CategoryBanners {

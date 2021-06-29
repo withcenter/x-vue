@@ -22,9 +22,9 @@
 </template>
 
 <script lang="ts">
-import { PostModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
+import { PostModel } from "@/x-vue/services/interfaces";
 import UserDisplayname from "@/x-vue/components/forum/UserDisplayName.vue";
 
 @Component({

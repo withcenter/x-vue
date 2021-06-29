@@ -49,7 +49,7 @@
     <form @submit.prevent="onEdit(add)">
       <!-- <input v-model="add.countryCode" placeholder="2 letter country code" /> -->
       <div class="d-flex w-100">
-        <div class="col-3 pr-1" v-if="countries">
+        <div class="col-3 pr-1">
           <select class="form-control" v-model="add.countryCode">
             <option value="" selected>{{ "default" | t }}</option>
             <option
@@ -121,7 +121,6 @@
 </template>
 
 <script lang="ts">
-import store from "@/store";
 import { ApiService } from "@/x-vue/services/api.service";
 import {
   AdvertisementSettings,
@@ -144,7 +143,7 @@ export default class AdminAdvertisement extends Vue {
 
   add = {};
 
-  countries?: ResponseData;
+  countries?: ResponseData = {};
 
   async mounted(): Promise<void> {
     try {
