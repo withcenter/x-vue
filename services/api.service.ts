@@ -702,7 +702,7 @@ export class ApiService {
    */
   async advertisementSettings(): Promise<AdvertisementSettings> {
     return (await this.request(
-      "app.advertisementSettings"
+      "advertisement.settings"
     )) as AdvertisementSettings;
   }
 
