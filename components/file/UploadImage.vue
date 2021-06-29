@@ -38,9 +38,8 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { FileModel } from "@/x-vue/services/interfaces";
-import FileDisplay from "@/x-vue/components/forum/FileDisplay.vue";
 import { ApiService } from "@/x-vue/services/api.service";
-import { AppService } from "@/service/app.service";
+import FileDisplay from "@/x-vue/components/forum/FileDisplay.vue";
 
 @Component({
   props: ["taxonomy", "entity", "code"],
@@ -56,7 +55,7 @@ export default class UploadImage extends Vue {
   file: FileModel = {} as FileModel;
   confirmDelete = "Do you want to delete?";
   api: ApiService = ApiService.instance;
-  app: AppService = AppService.instance;
+  // app: AppService = AppService.instance;
   async mounted(): Promise<void> {
     // console.log("UploadImage mounted");
     try {
@@ -72,7 +71,7 @@ export default class UploadImage extends Vue {
       }
     } catch (e) {
       if (e !== "error_entity_not_found") {
-        AppService.instance.error(e);
+        this.$emit("error", e);
       }
     }
   }
@@ -87,7 +86,7 @@ export default class UploadImage extends Vue {
       this.$emit("deleted", this.file.idx);
       this.file = {} as FileModel;
     } catch (e) {
-      this.app.error(e);
+      this.$emit("error", e);
     }
   }
   onClickDeleteImage(): void {
@@ -100,7 +99,7 @@ export default class UploadImage extends Vue {
   async onFileChangeImage(event: Event): Promise<void> {
     const files = (event.target as HTMLInputElement).files as FileList;
     if (files.length === 0) {
-      console.log("User cancelled upload");
+      // console.log("User cancelled upload");
       return;
     }
     const file = files[0];
@@ -124,7 +123,7 @@ export default class UploadImage extends Vue {
 
       this.$emit("uploaded", this.file);
     } catch (e) {
-      this.app.error(e);
+      this.$emit("error", e);
     }
   }
 }

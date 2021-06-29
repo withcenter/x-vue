@@ -10,17 +10,16 @@
 </template>
 
 <script lang="ts">
-import { Banner } from "@/x-vue/services/interfaces";
+import { Banner, Banners } from "@/x-vue/services/interfaces";
 import Component from "vue-class-component";
 import Vue from "vue";
-import store from "@/store";
-import { XHelper } from "@/x-vue-helper/x-helper";
 
 @Component({
-  props: ["type"],
+  props: ["type", "banners"],
 })
 export default class AdvertisementBanner extends Vue {
   type!: string;
+  banners!: Banners;
 
   index = 0;
 
@@ -28,26 +27,14 @@ export default class AdvertisementBanner extends Vue {
     this.rotate();
   }
 
-  get banners(): Banner[] {
-    let category = store.state.currentCategory;
-
-    /// if 'currentCategory' is empty, or the list for current banner type is empty.
-    if (
-      !store.state.banners[category] ||
-      !store.state.banners[category][this.type]
-    )
-      category = "global";
-
-    /// if 'global' banner is empty, return empty.
-    if (!store.state.banners[category]) return [];
-
-    if (!store.state.banners[category][this.type]) return [];
-    else return store.state.banners[category][this.type];
+  get _banners(): Banner[] {
+    if (!this.banners || !this.banners[this.type]) return [];
+    else return this.banners[this.type];
   }
 
   get currentBanner(): Banner {
-    if (!this.banners.length) return {};
-    return this.banners[this.index % this.banners.length];
+    if (!this._banners.length) return {};
+    return this._banners[this.index % this._banners.length];
   }
 
   rotate(): void {
@@ -60,7 +47,8 @@ export default class AdvertisementBanner extends Vue {
     if (this.currentBanner.idx) {
       const path = "/advertisement/view/" + this.currentBanner.idx;
       console.log("path", path);
-      XHelper.instance.open({ path: path });
+      // XHelper.instance.open({ path: path });
+      this.$emit("on-click", path);
     }
   }
 }

@@ -12,40 +12,32 @@
 </template>
 
 <script lang="ts">
-import { Banner } from "@/x-vue/services/interfaces";
+import { Banner, Banners } from "@/x-vue/services/interfaces";
 import Component from "vue-class-component";
 import Vue from "vue";
-import store from "@/store";
-import { XHelper } from "@/x-vue-helper/x-helper";
 
-@Component({})
+@Component({
+  props: ["banners"],
+})
 export default class AdvertisementLineBanner extends Vue {
+  banners!: Banners;
+
   index = 0;
 
   mounted(): void {
     this.rotate();
   }
 
-  get banners(): Banner[] {
-    let category = store.state.currentCategory;
-
-    if (
-      !store.state.banners[category] ||
-      !store.state.banners[category]["line"]
-    )
-      category = "global";
-
-    if (!store.state.banners[category]) return [];
-
-    if (!store.state.banners[category]["line"]) return [];
-    else return store.state.banners[category]["line"];
+  get _banners(): Banner[] {
+    if (!this.banners || !this.banners["line"]) return [];
+    else return this.banners["line"];
   }
 
   get currentBanner(): Banner {
-    if (!this.banners.length) {
+    if (!this._banners.length) {
       return {};
     }
-    return this.banners[this.index % this.banners.length];
+    return this._banners[this.index % this._banners.length];
   }
 
   rotate(): void {
@@ -59,7 +51,8 @@ export default class AdvertisementLineBanner extends Vue {
     if (this.currentBanner.idx) {
       const path = "/advertisement/view/" + this.currentBanner.idx;
       console.log("path", path);
-      XHelper.instance.open({ path: path });
+      // XHelper.instance.open({ path: path });
+      this.$emit("on-click", path);
     }
   }
 }

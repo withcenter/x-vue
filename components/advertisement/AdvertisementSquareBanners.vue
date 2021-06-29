@@ -12,29 +12,18 @@
 </template>
 
 <script lang="ts">
-import { Banner } from "@/x-vue/services/interfaces";
+import { Banner, Banners } from "@/x-vue/services/interfaces";
 import Component from "vue-class-component";
 import Vue from "vue";
-import store from "@/store";
-import { XHelper } from "@/x-vue-helper/x-helper";
 
-@Component({})
+@Component({
+  props: ["banners"],
+})
 export default class AdvertisementSquareBanners extends Vue {
-  get banners(): Banner[] {
-    let category = store.state.currentCategory;
-
-    /// if 'currentCategory' is empty, check global banners.
-    if (
-      !store.state.banners[category] ||
-      !store.state.banners[category]["square"]
-    )
-      category = "global";
-
-    /// if 'global' banner is empty, return empty.
-    if (!store.state.banners[category]) return [];
-
-    if (!store.state.banners[category]["square"]) return [];
-    else return store.state.banners[category]["square"];
+  banners!: Banners;
+  get _banners(): Banner[] {
+    if (!this.banners || !this.banners["square"]) return [];
+    else return this.banners["square"];
   }
 
   onClick(banner: Banner): void {
@@ -44,7 +33,8 @@ export default class AdvertisementSquareBanners extends Vue {
     if (banner.idx) {
       const path = "/advertisement/view/" + banner.idx;
       console.log("path", path);
-      XHelper.instance.open({ path: path });
+      // XHelper.instance.open({ path: path });
+      this.$emit("on-click", path);
     }
   }
 }

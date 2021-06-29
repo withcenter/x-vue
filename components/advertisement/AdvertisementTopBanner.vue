@@ -9,17 +9,16 @@
 </template>
 
 <script lang="ts">
-import store from "@/store";
-import { XHelper } from "@/x-vue-helper/x-helper";
-import { Banner } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
+import { Banner, Banners } from "@/x-vue/services/interfaces";
 
 @Component({
-  props: ["position"],
+  props: ["position", "banners"],
 })
 export default class AdvertisementTopBanner extends Vue {
   position!: string;
+  banners!: Banners;
 
   index = 0;
 
@@ -27,22 +26,12 @@ export default class AdvertisementTopBanner extends Vue {
     this.rotate();
   }
 
-  get banners(): Banner[] {
-    let category = store.state.currentCategory;
+  get _banners(): Banner[] {
+    if (!this.banners) return [];
 
-    if (
-      !store.state.banners[category] ||
-      !store.state.banners[category]["top"]
-    ) {
-      category = "global";
-    }
+    if (!this.banners["top"]) return [];
 
-    /// Check if global banner exists,
-    if (!store.state.banners[category]) return [];
-
-    if (!store.state.banners[category]["top"]) return [];
-
-    const banners = store.state.banners[category]["top"].filter((v, i) => {
+    const banners = this.banners["top"].filter((v, i) => {
       if (this.position == "left") return i % 2 == 0;
       else return i % 2 != 0;
     });
@@ -50,10 +39,10 @@ export default class AdvertisementTopBanner extends Vue {
   }
 
   get currentBanner(): Banner {
-    if (!this.banners.length) {
+    if (!this._banners.length) {
       return { bannerUrl: this.defaultUrl };
     }
-    return this.banners[this.index % this.banners.length];
+    return this._banners[this.index % this._banners.length];
   }
 
   get defaultUrl(): string {
@@ -71,7 +60,8 @@ export default class AdvertisementTopBanner extends Vue {
     if (this.currentBanner.idx) {
       const path = "/advertisement/view/" + this.currentBanner.idx;
       console.log("path", path);
-      XHelper.instance.open({ path: path });
+      // XHelper.instance.open({ path: path });
+      this.$emit("on-click", path);
     }
   }
 }

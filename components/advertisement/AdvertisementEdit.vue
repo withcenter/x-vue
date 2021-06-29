@@ -402,7 +402,6 @@ import {
 import { ApiService } from "@/x-vue/services/api.service";
 import { XHelper } from "@/x-vue-helper/x-helper";
 import { addByComma, daysBetween } from "@/x-vue/services/functions";
-import store from "@/store";
 import UploadImage from "@/x-vue/components/file/UploadImage.vue";
 import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
 import dayjs from "dayjs";
@@ -423,39 +422,46 @@ export default class Advertisement extends Vue {
 
   isSubmitted = false;
 
-  loading = false;
+  loading = true;
+
+  countries?: ResponseData;
+  settings: AdvertisementSettings = {} as AdvertisementSettings;
 
   async mounted(): Promise<void> {
+    this.settings = await this.api.advertisementSettings();
+    this.countries = await this.api.countryAll();
+
     const idx = parseInt(this.$route.params.idx);
     if (idx) {
       this.post.idx = idx;
       await this.loadAdvertisement();
     } else {
       this.post.categoryId = "advertisement";
+      this.loading = false;
     }
 
     this.beginAtMin = this.today;
     this.isMounted = true;
   }
 
-  get today(): string {
-    return dayjs().format("YYYY-MM-DD");
-  }
-
   /**
    * Advertisement settings getter.
    * @returns AdvertisementSettings from store state.
    */
-  get settings(): AdvertisementSettings {
-    return store.state.advertisementSettings;
-  }
+  // get settings(): AdvertisementSettings {
+  //   return store.state.advertisementSettings;
+  // }
 
   /**
    * Country data list getter.
    * @returns ResponseData - gets country list from store state.
    */
-  get countries(): ResponseData {
-    return store.state.countries;
+  // get countries(): ResponseData {
+  //   return store.state.countries;
+  // }
+
+  get today(): string {
+    return dayjs().format("YYYY-MM-DD");
   }
 
   /**
@@ -650,7 +656,8 @@ export default class Advertisement extends Vue {
       const res = await this.api.advertisementStart(this.post.toJson);
       console.log("onAdvertisementStart: ", res);
       this.post = res;
-      store.commit("refreshProfile");
+      this.$emit("on-start");
+      // store.commit("refreshProfile");
     } catch (e) {
       this.x.error(e);
     }
@@ -664,7 +671,9 @@ export default class Advertisement extends Vue {
     if (!conf) return;
     try {
       this.post = await this.api.advertisementStop(this.post.idx);
-      store.commit("refreshProfile");
+
+      this.$emit("on-stop");
+      // store.commit("refreshProfile");
     } catch (e) {
       this.x.error(e);
     }
@@ -678,7 +687,8 @@ export default class Advertisement extends Vue {
     if (!conf) return;
     try {
       this.post = await this.api.advertisementDelete(this.post.idx);
-      store.state.router.push("/advertisement");
+      this.$emit("on-delete");
+      // store.state.router.push("/advertisement");
     } catch (e) {
       this.x.error(e);
     }
