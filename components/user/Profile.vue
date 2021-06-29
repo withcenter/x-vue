@@ -137,7 +137,6 @@ import Component from "vue-class-component";
 import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
 import { ApiService } from "@/x-vue/services/api.service";
 import { RequestData, UserModel } from "@/x-vue/services/interfaces";
-import { XHelper } from "@/x-vue-helper/x-helper";
 
 @Component({
   components: {
@@ -151,7 +150,7 @@ export default class Profile extends Vue {
     try {
       this.user = await ApiService.instance.userProfile();
     } catch (error) {
-      XHelper.instance.error(error);
+      this.$app.error(error);
     }
   }
 
@@ -175,9 +174,9 @@ export default class Profile extends Vue {
 
     try {
       await ApiService.instance.profileUpdate(options);
-      XHelper.instance.alert("User Update", "Update Success");
+      this.$app.alert("User Update Success");
     } catch (e) {
-      XHelper.instance.error(e);
+      this.$app.error(e);
     }
   }
 }

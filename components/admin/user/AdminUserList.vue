@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h4>Users</h4>
+    <h4>{{ "Users" | t }}</h4>
     <div class="d-flex justify-content-end mb-3">
-      <div class="mt-2 fw-700">{{ "No·of·Users" | t }}:{{ total }}</div>
+      <div class="mt-2 fw-700">{{ "no_of_users" | t }}: {{ total }}</div>
 
       <span class="flex-grow-1"></span>
 
@@ -12,8 +12,8 @@
             <input
               type="text"
               class="form-control mb-2"
-              name="key"
-              placeholder="사용자 메일 주소, 이름을 입력해주세요."
+              name="searchKey"
+              :placeholder="'enter_email_address_or_name' | t"
               v-model="searchKey"
             />
           </div>
@@ -138,13 +138,10 @@
                 <router-link
                   data-cy="user-info-edit-button"
                   class="btn btn-sm btn-outline-primary"
-                  :to="
-                    '/admin/user/edit/' +
-                    user.idx +
-                    ($route.query.page ? `?page=${$route.query.page}` : '')
-                  "
-                  >edit</router-link
+                  :to="editLink(user)"
                 >
+                  {{ "edit" | t }}
+                </router-link>
               </td>
             </tr>
           </tbody>
@@ -198,6 +195,10 @@ export default class AdminUserList extends Vue {
     createdAt: false,
     updatedAt: false,
   };
+
+  editLink(user: UserModel) {
+    return "/admin/user/edit/" + user.idx + window.location.search;
+  }
 
   linkGen(pageNum: number): string {
     return pageNum === 1 ? "?" : `?page=${pageNum}`;

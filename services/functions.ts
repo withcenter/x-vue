@@ -88,8 +88,13 @@ export function daysBetween(date1: string, date2: string): number {
   // return Math.floor((d2 - d1) / (60 * 60 * 24)) + 1;
 }
 
+export function getPageQueryString() {
+  return window.location.search;
+}
+
 /**
- * alternative for `window.location.search`
+ * if you simply need the query params with ? you can use the getPageQueryString
+ *
  * @improvement add exclude/include so it can give more benefit and usage
  *
  * @param query - from $route.query

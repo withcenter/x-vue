@@ -1,25 +1,28 @@
 <template>
-  <div>
+  <div class="px-3">
     <h1>{{ "admin_dashboard" | t }}</h1>
-
     <div>
       <router-link class="btn btn-link" to="/admin/user">User</router-link>
-      <router-link class="btn btn-link" to="/admin/category"
-        >Category</router-link
-      >
-      <router-link class="btn btn-link" to="/admin/post">Post</router-link>
-      <router-link class="btn btn-link" to="/admin/file">File</router-link>
-      <router-link class="btn btn-link" to="/admin/messaging"
-        >Messaging</router-link
-      >
+      <router-link class="btn btn-link" to="/admin/category">
+        {{ "category" | t }}
+      </router-link>
+      <router-link class="btn btn-link" to="/admin/post">
+        {{ "post" | t }}
+      </router-link>
+      <router-link class="btn btn-link" to="/admin/file">
+        {{ "file" | t }}
+      </router-link>
+      <router-link class="btn btn-link" to="/admin/messaging">
+        {{ "messaging" | t }}
+      </router-link>
       <router-link class="btn btn-link" to="/admin/setting">
-        Settings
+        {{ "settings" | t }}
       </router-link>
       <router-link class="btn btn-link" to="/admin/advertisement">
-        Advertisement
+        {{ "advertisement" | t }}
       </router-link>
     </div>
-
+    <hr />
     <router-view></router-view>
   </div>
 </template>
