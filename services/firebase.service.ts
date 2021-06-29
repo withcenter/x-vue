@@ -4,10 +4,9 @@ import { ApiService } from "./api.service";
 
 export class FirebaseService {
   private static _instance: FirebaseService;
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  private onMessage?: (payload: any) => void;
-
-  // private constructor() {}
+  private onMessage?: (
+    payload: Record<string, Record<string, unknown>>
+  ) => void;
 
   public static get instance(): FirebaseService {
     if (!FirebaseService._instance) {
@@ -21,8 +20,9 @@ export class FirebaseService {
 
   init(
     firebaseConfig: Record<string, unknown>,
-    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-    options: { onMessage: (payload: any) => void }
+    options: {
+      onMessage: (payload: Record<string, Record<string, unknown>>) => void;
+    }
   ): void {
     firebase.initializeApp(firebaseConfig);
     this.pushMessageInit();
