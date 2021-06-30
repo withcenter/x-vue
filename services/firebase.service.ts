@@ -69,6 +69,7 @@ export class FirebaseService {
         // console.log("notification", notification);
         // const data = payload.data ? payload.data : {};
         // console.log("data", data);
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         this.onMessage!(payload);
       });
     }
