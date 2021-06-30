@@ -37,6 +37,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { ApiService } from "@/x-vue/services/api.service";
 import { CommentModel, PostModel } from "../../services/interfaces";
+import Service from "@/x-vue/services/x-vue.service";
 // import store from "@/store";
 
 @Component({
@@ -55,17 +56,28 @@ export default class MineButtonsComponent extends Vue {
   onClickEdit(): void {
     this.hidePopup();
     if (this.parent.isPost) {
-      // this.$router.push('');
+      Service.instance.open(`/edit/${this.parent.idx}` + location.search);
+    } else {
+      this.parent.inEdit = true;
     }
-    // TODO
-    console.log("TODO: onClickEdit()");
-    // store.commit("edit", this.parent);
   }
-  onClickDelete(): void {
+  async onClickDelete(): Promise<void> {
     this.hidePopup();
-    // TODO
-    console.log("TODO: onClickDelete()");
-    // store.commit("delete", this.parent);
+    const conf = await Service.instance.confirm(
+      `Are you sure you want to delete this comment? [IDX]: ${this.parent.idx}`
+    );
+    if (!conf) return;
+    try {
+      let res;
+      if (this.parent.isPost) {
+        res = await this.api.postDelete(this.parent.idx);
+      } else {
+        res = await this.api.commentDelete(this.parent.idx);
+      }
+      this.parent = Object.assign(this.parent, res);
+    } catch (e) {
+      Service.instance.error(e);
+    }
   }
 }
 </script>

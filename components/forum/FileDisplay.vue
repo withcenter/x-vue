@@ -25,6 +25,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { FileModel } from "@/x-vue/services/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
+import Service from "@/x-vue/services/x-vue.service";
 
 @Component({
   props: ["files", "showDelete"],
@@ -36,7 +37,9 @@ export default class FileDisplay extends Vue {
   api = ApiService.instance;
 
   async onClickDelete(idx: string): Promise<void> {
-    const conf = confirm("Are you sure you want to delete this file?");
+    const conf = await Service.instance.confirm(
+      "Are you sure you want to delete this file?"
+    );
     if (!conf) return;
 
     try {
@@ -45,8 +48,7 @@ export default class FileDisplay extends Vue {
       this.files.splice(index, 1);
       this.$emit("file-deleted", idx);
     } catch (e) {
-      // XHelper.instance.error(e);
-      this.$emit("error", e);
+      Service.instance.error(e);
     }
   }
 }

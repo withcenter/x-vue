@@ -56,6 +56,7 @@
 <script lang="ts">
 import { ApiService } from "@/x-vue/services/api.service";
 import { CountryCurrenciesModel } from "@/x-vue/services/interfaces";
+import Service from "@/x-vue/services/x-vue.service";
 
 import { Vue, Prop, Component } from "vue-property-decorator";
 
@@ -100,7 +101,8 @@ export default class CurrencyConverter extends Vue {
       this.currencies = await ApiService.instance.getCountryCurrencies();
       this.onSubmit();
     } catch (e) {
-      this.$emit("error", e);
+      // this.$emit("error", e);
+      Service.instance.error(e);
     }
   }
 
@@ -114,7 +116,8 @@ export default class CurrencyConverter extends Vue {
       });
       this.onCompute(this.first);
     } catch (e) {
-      this.$emit("error", e);
+      // this.$emit("error", e);
+      Service.instance.error(e);
     }
   }
 

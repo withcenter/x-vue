@@ -5,6 +5,7 @@
     <div v-if="api.loggedIn">
       <form class="p-2" @submit.prevent="onSubmit" v-if="!loading">
         <div class="box mb-2" v-if="post.isActive || post.isWaiting">
+          {{ post.pointPerDay }}
           <div class="d-flex">
             <span>
               {{ "adv_banner_type" | t }}
@@ -38,7 +39,7 @@
               <div class="d-flex mt-2">
                 <span class="mr-3">
                   {{ "adv_points_per_day" | t }}:
-                  <b>{{ countryPointListing[post.code] }}</b>
+                  <b>{{ post.pointPerDay }}</b>
                 </span>
                 <span>
                   {{ "adv_refundable_points" | t }}:
@@ -318,7 +319,7 @@
           </div>
 
           <!-- Banner points country listing table -->
-          <div class="mt-3 box" v-if="post.idx">
+          <div class="mt-3 box" v-if="!post.isActive">
             <p>
               {{ "adv_point_listing" | t }}:
               <span v-if="post.countryCode">
@@ -404,12 +405,14 @@ import { addByComma, daysBetween } from "@/x-vue/services/functions";
 import UploadImage from "@/x-vue/components/file/UploadImage.vue";
 import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
 import dayjs from "dayjs";
+import Service from "@/x-vue/services/x-vue.service";
 
 @Component({
   components: { UploadImage, LoginFirst },
 })
 export default class Advertisement extends Vue {
   api = ApiService.instance;
+  s = Service.instance;
   isMounted = false;
 
   post = new AdvertisementModel();
@@ -564,7 +567,7 @@ export default class Advertisement extends Vue {
    */
   get refundablePoints(): number {
     if (this.servingDaysLeft < 0) return 0;
-    return this.servingDaysLeft * this.countryPointListing[this.post.code];
+    return this.servingDaysLeft * this.post.pointPerDay;
   }
 
   /**
@@ -609,17 +612,23 @@ export default class Advertisement extends Vue {
     if (this.post.idx) isCreate = false;
     try {
       const res = await this.api.advertisementEdit(this.post.toJson);
-      console.log(`${isCreate ? "Create" : "Update"} =>`, res);
+      // console.log(`${isCreate ? "Create" : "Update"} =>`, res);
       Object.assign(this.post, res);
       if (isCreate) {
-        this.$emit("on-create", `/advertisement/edit/${this.post.idx}`);
+        this.s.open(`/advertisement/edit/${this.post.idx}`);
       } else {
-        this.$emit("on-update");
+        this.s.toast(
+          "Updated",
+          "Advertisement successfully updated!",
+          "b-toaster-bottom-right",
+          "success",
+          true,
+          1500
+        );
       }
       this.isSubmitted = false;
     } catch (e) {
-      // this.x.error(e);
-      this.$emit("on-error", e);
+      this.s.error(e);
       this.isSubmitted = false;
     }
   }
@@ -630,43 +639,42 @@ export default class Advertisement extends Vue {
   async onAdvertisementStart(): Promise<void> {
     try {
       const res = await this.api.advertisementStart(this.post.toJson);
-      console.log("onAdvertisementStart: ", res);
       this.post = res;
-      this.$emit("on-start");
-      // store.commit("refreshProfile");
+      this.s.vm.$store.commit(
+        "user",
+        await ApiService.instance.refreshLoginUserProfile()
+      );
     } catch (e) {
-      this.$emit("on-error", e);
+      this.s.error(e);
     }
   }
 
   async onAdvertisementStop(): Promise<void> {
-    const conf = await confirm(
+    const conf = await Service.instance.confirm(
       "Are you sure you want to cancel the advertisement?"
     );
     if (!conf) return;
     try {
       this.post = await this.api.advertisementStop(this.post.idx);
-
-      this.$emit("on-stop");
-      // store.commit("refreshProfile");
+      this.s.vm.$store.commit(
+        "user",
+        await ApiService.instance.refreshLoginUserProfile()
+      );
     } catch (e) {
-      // this.x.error(e);
-      this.$emit("on-error", e);
+      this.s.error(e);
     }
   }
 
   async advertisementDelete(): Promise<void> {
-    const conf = await confirm(
+    const conf = await this.s.confirm(
       "Are you sure you want to delete the advertisement?"
     );
     if (!conf) return;
     try {
       this.post = await this.api.advertisementDelete(this.post.idx);
-      this.$emit("on-delete");
-      // store.state.router.push("/advertisement");
+      this.s.open("/advertisement");
     } catch (e) {
-      // this.x.error(e);
-      this.$emit("on-error", e);
+      this.s.error(e);
     }
   }
 

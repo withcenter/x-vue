@@ -18,7 +18,7 @@
 # Style Guide
 
 - `x-vue` should be independent as much as possible from parent app. But there are certain properties that `x-vue` can use from the page.
-  - `this.$router` to navigate from `x-vue` components.
+  - `this._router` to navigate from `x-vue` components.
   - `this.$store.state.user` can be used but must be read only.
   - `this.$store.commit('user', userModel)` to update user model data. To login, logout, refresh.
 

@@ -15,6 +15,7 @@
 import { Banner, Banners } from "@/x-vue/services/interfaces";
 import Component from "vue-class-component";
 import Vue from "vue";
+import Service from "@/x-vue/services/x-vue.service";
 
 @Component({
   props: ["banners"],
@@ -32,9 +33,7 @@ export default class AdvertisementSquareBanners extends Vue {
     }
     if (banner.idx) {
       const path = "/advertisement/view/" + banner.idx;
-      console.log("path", path);
-      // XHelper.instance.open({ path: path });
-      this.$emit("on-click", path);
+      Service.instance.open(path);
     }
   }
 }

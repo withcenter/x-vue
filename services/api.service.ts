@@ -79,7 +79,7 @@ export class ApiService {
   private countries?: ResponseData;
 
   //
-  private categoryBanners?: CategoryBanners;
+  private categoryBanners: CategoryBanners = {};
 
   public texts: MapStringAny = {};
 
@@ -658,7 +658,8 @@ export class ApiService {
    * @returns banner data
    */
   async loadBanners(cafeDomain: string): Promise<CategoryBanners> {
-    if (this.categoryBanners) return this.categoryBanners;
+    // console.log("loadBanners");
+    if (this.categoryBanners.keys?.length) return this.categoryBanners;
 
     const res = await this.request("advertisement.loadBanners", {
       cafeDomain: cafeDomain,
@@ -685,6 +686,7 @@ export class ApiService {
     }
 
     this.categoryBanners = _banners;
+    // console.log("loadBanners", this.categoryBanners);
     return this.categoryBanners;
   }
 

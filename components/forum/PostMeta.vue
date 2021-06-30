@@ -6,12 +6,6 @@
       v-if="showName"
     ></user-displayname>
     <span class="mr-2" v-if="!showName">No. {{ post.idx }}</span>
-    <!-- <span class="text-muted mr-2" v-if="post.categoryIdx">
-      • Category {{ post.categoryIdx }}
-    </span> -->
-    <!-- <span class="text-muted mr-2" v-if="post.noOfComments">
-      • Comments {{ post.noOfComments }}
-    </span> -->
     <span class="text-muted" v-if="post.shortDate">
       {{ post.shortDate }}
     </span>

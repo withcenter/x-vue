@@ -56,6 +56,7 @@
 <script lang="ts">
 import { ApiService } from "@/x-vue/services/api.service";
 import { ResponseData } from "@/x-vue/services/interfaces";
+import Service from "@/x-vue/services/x-vue.service";
 import dayjs from "dayjs";
 import Vue from "vue";
 
@@ -79,7 +80,8 @@ export default class OpenWeatherMap extends Vue {
     try {
       this.weather = await ApiService.instance.openWeatherMap();
     } catch (e) {
-      this.$emit("error", e);
+      // this.$emit("error", e);
+      Service.instance.error(e);
     }
   }
 }

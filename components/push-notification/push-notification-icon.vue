@@ -13,6 +13,7 @@
 
 <script lang="ts">
 import { ApiService } from "@/x-vue/services/api.service";
+import Service from "@/x-vue/services/x-vue.service";
 import { Vue, Prop, Component } from "vue-property-decorator";
 
 @Component({})
@@ -34,14 +35,16 @@ export default class PushNotificationIcon extends Vue {
       const re = await ApiService.instance.isSubscribedToTopic(this.postTopic);
       this.data[this.postTopic] = re[this.postTopic] === "Y" ? true : false;
     } catch (e) {
-      this.$emit("error", e);
+      // this.$emit("error", e);
+      Service.instance.error(e);
     }
   }
 
   async onChangeSubscribeOrUnsubscribeTopic(): Promise<void> {
     if (!ApiService.instance._user.loggedIn) {
-      this.$emit("error", "error_login_first");
+      // this.$emit("error", "error_login_first");
       this.data[this.postTopic] = false;
+      Service.instance.error("error_login_first");
       return;
     }
     try {
@@ -50,7 +53,8 @@ export default class PushNotificationIcon extends Vue {
         subscribe: this.data[this.postTopic] ? "Y" : "N",
       });
     } catch (e) {
-      this.$emit("error", e);
+      // this.$emit("error", e);
+      Service.instance.error(e);
     }
   }
 }

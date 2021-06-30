@@ -15,6 +15,7 @@
 import { Banner, Banners } from "@/x-vue/services/interfaces";
 import Component from "vue-class-component";
 import Vue from "vue";
+import Service from "@/x-vue/services/x-vue.service";
 
 @Component({
   props: ["banners"],
@@ -50,9 +51,7 @@ export default class AdvertisementLineBanner extends Vue {
     }
     if (this.currentBanner.idx) {
       const path = "/advertisement/view/" + this.currentBanner.idx;
-      console.log("path", path);
-      // XHelper.instance.open({ path: path });
-      this.$emit("on-click", path);
+      Service.instance.open(path);
     }
   }
 }
