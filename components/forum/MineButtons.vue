@@ -64,6 +64,7 @@ export default class MineButtonsComponent extends Vue {
   async onClickDelete(): Promise<void> {
     this.hidePopup();
     const conf = await Service.instance.confirm(
+      "Title",
       `Are you sure you want to delete this comment? [IDX]: ${this.parent.idx}`
     );
     if (!conf) return;

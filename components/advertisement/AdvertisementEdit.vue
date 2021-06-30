@@ -619,11 +619,11 @@ export default class Advertisement extends Vue {
       } else {
         this.s.toast(
           "Updated",
-          "Advertisement successfully updated!",
-          "b-toaster-bottom-right",
-          "success",
-          true,
-          1500
+          "Advertisement successfully updated!"
+          // "b-toaster-bottom-right",
+          // "success",
+          // true,
+          // 1500
         );
       }
       this.isSubmitted = false;
@@ -640,10 +640,6 @@ export default class Advertisement extends Vue {
     try {
       const res = await this.api.advertisementStart(this.post.toJson);
       this.post = res;
-      this.s.vm.$store.commit(
-        "user",
-        await ApiService.instance.refreshLoginUserProfile()
-      );
     } catch (e) {
       this.s.error(e);
     }
@@ -651,15 +647,12 @@ export default class Advertisement extends Vue {
 
   async onAdvertisementStop(): Promise<void> {
     const conf = await Service.instance.confirm(
+      "Title",
       "Are you sure you want to cancel the advertisement?"
     );
     if (!conf) return;
     try {
       this.post = await this.api.advertisementStop(this.post.idx);
-      this.s.vm.$store.commit(
-        "user",
-        await ApiService.instance.refreshLoginUserProfile()
-      );
     } catch (e) {
       this.s.error(e);
     }
@@ -667,6 +660,7 @@ export default class Advertisement extends Vue {
 
   async advertisementDelete(): Promise<void> {
     const conf = await this.s.confirm(
+      "Title",
       "Are you sure you want to delete the advertisement?"
     );
     if (!conf) return;

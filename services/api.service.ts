@@ -106,10 +106,12 @@ export class ApiService {
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     userChanges: any;
     serverUrl?: string;
+    texts?: MapStringAny;
   }): void {
     this.apiKey = options.apiKey ?? "";
     this.serverUrl = options.serverUrl ?? "";
     this.userChanges = options.userChanges;
+    this.texts = options.texts ?? {};
     this.initUserAuth();
   }
 

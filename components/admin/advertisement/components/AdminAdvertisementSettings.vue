@@ -194,6 +194,7 @@ export default class AdminAdvertisement extends Vue {
     // console.log("onDelete::data", data);
 
     const conf = this.as.confirm(
+      "Title",
       `Delete point settings for ${data.countryCode}?`
     );
     if (!conf) return;

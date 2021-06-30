@@ -26,8 +26,50 @@
   - So, `x-vue` can use the full features of `bootstrap` and `bootstrap vue`.
 
 
+- If the parent is using `x-vue` components and wants to have same UI of `alert`, `confirm`, `error`, `toast`, then the parent must set them as callback functions with `ComponentService.init({})`. So, the `x-vue` can use the callback to display UI dialogs.
+
+
 
 # How to use
+
+
+## Display boxes - alert, toast, confirm, error
+
+
+- `x-vue` is using `x-vue.service.ts` to use the dialog boxes like `alert`, `toast`, `confirm`, `error`, `confirmToast`, and more.
+  - `x-vue.service` handles with basic Javascript alert or confirm dialog when the parent app didn't set up the dialog callbackes.
+
+- The parent app can set the callbacks for these dialogs, so the `x-vue` components can use the same UI of its parent app.
+
+  - Below is an example of how to set up callbacks. Simply connect the methods that the parent app is using.
+
+```ts
+ComponentService.instance.init({
+  alert: (t: string, m: string) => x.alert(t, m),
+  confirmToast: (options: ConfirmToast) => x.confirmToast(options),
+  toast: (t: string, m: string) => x.toast(t, m),
+  confirm: (t: string, m: string) => x.confirm(t, m),
+});
+```
+
+  - And in `x-vue` component, it can use `x-vue.service.ts` to use its parent's callback methods to use the parent's dialogs.
+
+```ts
+s = ComponentService.instance;
+// ...
+onDialogCall() {
+  await this.s.error("This is an error");
+  console.log("Showing error box has done!");
+  this.s.confirmToast({
+    title: "confirm toast title",
+    message: "confirm toast content",
+    yesCallback: () => console.log("yes"),
+    noCallback: () => console.log("no"),
+  });
+  const re = await this.s.confirm("hi", "how are you?");
+  console.log("re; ", re);
+}
+```
 
 
 ## Initialization

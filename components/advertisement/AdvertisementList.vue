@@ -39,6 +39,7 @@ import { ApiService } from "@/x-vue/services/api.service";
 import AdvertisementPreview from "./AdvertisementPreview.vue";
 import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
 import Service from "@/x-vue/services/x-vue.service";
+import ComponentService from "@/x-vue/services/x-vue.service";
 
 @Component({
   components: {
@@ -49,6 +50,7 @@ import Service from "@/x-vue/services/x-vue.service";
 export default class PostList extends Vue {
   posts: Array<AdvertisementModel> = [];
   api = ApiService.instance;
+  s = ComponentService.instance;
 
   loadingPosts = false;
 
@@ -62,7 +64,6 @@ export default class PostList extends Vue {
   get category(): string {
     return this.$route.params.category;
   }
-
   linkGen(pageNum: number): string {
     return pageNum === 1 ? "?" : `?page=${pageNum}`;
   }
