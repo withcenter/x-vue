@@ -16,11 +16,6 @@ export default class Service {
     console.log("Service::init() ,", this.vm);
   }
 
-<<<<<<< HEAD
-  alert(title: string, message: string): void {
-    alert(title + "\n" + message);
-  }
-=======
   /**
    * This uses bootstrap-vue modal.
    *
@@ -39,7 +34,6 @@ export default class Service {
     });
   }
 
->>>>>>> 8f62dc6a81430fbe548899200a9d75cd7c7cd0f7
   error(e: string): void {
     this.alert("Error", e);
   }
@@ -62,10 +56,7 @@ export default class Service {
       centered: true,
     });
   }
-<<<<<<< HEAD
-=======
 
->>>>>>> 8f62dc6a81430fbe548899200a9d75cd7c7cd0f7
   open(path: string): void {
     this.vm._router.push(path);
   }
