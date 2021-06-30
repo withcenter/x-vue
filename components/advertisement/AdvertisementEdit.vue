@@ -5,6 +5,7 @@
     <div v-if="api.loggedIn">
       <form class="p-2" @submit.prevent="onSubmit" v-if="!loading">
         <div class="box mb-2" v-if="post.isActive || post.isWaiting">
+          {{ post.pointPerDay }}
           <div class="d-flex">
             <span>
               {{ "adv_banner_type" | t }}
@@ -38,7 +39,7 @@
               <div class="d-flex mt-2">
                 <span class="mr-3">
                   {{ "adv_points_per_day" | t }}:
-                  <b>{{ countryPointListing[post.code] }}</b>
+                  <b>{{ post.pointPerDay }}</b>
                 </span>
                 <span>
                   {{ "adv_refundable_points" | t }}:
@@ -318,7 +319,7 @@
           </div>
 
           <!-- Banner points country listing table -->
-          <div class="mt-3 box" v-if="post.idx">
+          <div class="mt-3 box" v-if="!post.isActive">
             <p>
               {{ "adv_point_listing" | t }}:
               <span v-if="post.countryCode">
@@ -566,7 +567,7 @@ export default class Advertisement extends Vue {
    */
   get refundablePoints(): number {
     if (this.servingDaysLeft < 0) return 0;
-    return this.servingDaysLeft * this.countryPointListing[this.post.code];
+    return this.servingDaysLeft * this.post.pointPerDay;
   }
 
   /**
@@ -627,8 +628,7 @@ export default class Advertisement extends Vue {
       }
       this.isSubmitted = false;
     } catch (e) {
-      // this.x.error(e);
-      this.$emit("on-error", e);
+      this.s.error(e);
       this.isSubmitted = false;
     }
   }
@@ -650,7 +650,9 @@ export default class Advertisement extends Vue {
   }
 
   async onAdvertisementStop(): Promise<void> {
-    const conf = confirm("Are you sure you want to cancel the advertisement?");
+    const conf = await Service.instance.confirm(
+      "Are you sure you want to cancel the advertisement?"
+    );
     if (!conf) return;
     try {
       this.post = await this.api.advertisementStop(this.post.idx);

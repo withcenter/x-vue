@@ -12,8 +12,8 @@
 </template>
 
 <script lang="ts">
-// import { XHelper } from "@/x-vue-helper/x-helper";
 import { ApiService } from "@/x-vue/services/api.service";
+import Service from "@/x-vue/services/x-vue.service";
 import { Vue, Prop, Component } from "vue-property-decorator";
 
 @Component({})
@@ -48,9 +48,8 @@ export default class PushNotificationIcon extends Vue {
       this.data[this.postTopic]
     );
     if (!ApiService.instance._user.loggedIn) {
-      // XHelper.instance.alert("Login required", "Please login first");
-      this.$emit("error", "error_login_first");
       this.data[this.postTopic] = false;
+      Service.instance.error("error_login_first");
       return;
     }
     try {
@@ -59,8 +58,7 @@ export default class PushNotificationIcon extends Vue {
         subscribe: this.data[this.postTopic] ? "Y" : "N",
       });
     } catch (e) {
-      this.$emit("error", e);
-      // XHelper.instance.error(error);
+      Service.instance.error(e);
     }
   }
 }
