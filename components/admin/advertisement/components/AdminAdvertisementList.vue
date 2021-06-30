@@ -1,12 +1,28 @@
 <template>
   <div class="admin-advertisement-list">
     <div v-if="!loading">
-      <div
-        class="box"
-        v-for="advertisement of advertisements"
-        :key="advertisement.idx"
-      >
-        {{ advertisement }}
+      <div class="mt-3" v-if="advertisements.length">
+        <div
+          class="box d-flex p-2 mb-2"
+          v-for="advertisement of advertisements"
+          :key="advertisement.idx"
+        >
+          <advertisement-preview
+            class="w-100"
+            :advertisement="advertisement"
+          ></advertisement-preview>
+          <div class="ml-1 px-2 text-center border-left">
+            <b-avatar
+              tabindex="0"
+              class="center"
+              :src="advertisement.user.src"
+              :size="'4em'"
+            ></b-avatar>
+            <div class="w-100 text-truncate">
+              {{ advertisement.user.displayName }}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="p-3 text-center rounded" v-if="loading">
@@ -16,13 +32,18 @@
   </div>
 </template>
 <script lang="ts">
-import { ApiService } from "@/x-vue/services/api.service";
-import { AdvertisementModel } from "@/x-vue/services/interfaces";
-import Service from "@/x-vue/services/x-vue.service";
 import Vue from "vue";
 import Component from "vue-class-component";
+import Service from "@/x-vue/services/x-vue.service";
+import { ApiService } from "@/x-vue/services/api.service";
+import { AdvertisementModel } from "@/x-vue/services/interfaces";
+import AdvertisementPreview from "@/x-vue/components/advertisement/AdvertisementPreview.vue";
 
-@Component({})
+@Component({
+  components: {
+    AdvertisementPreview,
+  },
+})
 export default class AdminAdvertisementList extends Vue {
   api = ApiService.instance;
 
