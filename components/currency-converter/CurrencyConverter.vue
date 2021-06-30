@@ -6,7 +6,7 @@
         <div class="w-100 mr-2">
           <div>{{ "from" | t }}</div>
           <b-form-select
-            v-model="from"
+            v-model="fromCode"
             :options="currencies.selectOptions"
             @change="onSubmit()"
           ></b-form-select>
@@ -15,7 +15,7 @@
         <div class="w-100">
           <div>{{ "to" | t }}</div>
           <b-form-select
-            v-model="to"
+            v-model="toCode"
             :options="currencies.selectOptions"
             @change="onSubmit()"
           ></b-form-select>
@@ -57,61 +57,72 @@
 import { ApiService } from "@/x-vue/services/api.service";
 import { CountryCurrenciesModel } from "@/x-vue/services/interfaces";
 import Service from "@/x-vue/services/x-vue.service";
-import Vue from "vue";
 
-import Component from "vue-class-component";
+import { Vue, Prop, Component } from "vue-property-decorator";
 
+/**
+ * Usage by default the `from` is 'USD' and `to` is 'KRW'
+ * 
+ *  
+    <currency-converter
+      from="USD"
+      to="PHP"
+      @error="app.error($event)"
+    ></currency-converter>
+ */
 @Component({})
 export default class CurrencyConverter extends Vue {
   currencies: CountryCurrenciesModel = new CountryCurrenciesModel();
-  // from: string | null = null;
-  // to: string | null = null;
-  from: string | null = "USD";
-  to: string | null = "KRW";
+  @Prop({ default: "USD" }) from!: string;
+  @Prop({ default: "KRW" }) to!: string;
   amount = "1";
   convertedAmount = "0";
 
+  fromCode = "";
+  toCode = "";
+
   // get first convertion pattern
   get first(): string {
-    return `${this.from}_${this.to}`;
+    return `${this.fromCode}_${this.toCode}`;
   }
 
   // get the reverse conversion pattern
   get second(): string {
-    return `${this.to}_${this.from}`;
+    return `${this.toCode}_${this.fromCode}`;
   }
 
   rate: { [index: string]: number } = {};
 
   // get country currencies and display to select options
   async mounted(): Promise<void> {
+    this.fromCode = this.from;
+    this.toCode = this.to;
     try {
       this.currencies = await ApiService.instance.getCountryCurrencies();
       this.onSubmit();
     } catch (e) {
+      // this.$emit("error", e);
       Service.instance.error(e);
     }
   }
 
   // get exchange rate base from currency then compute current amount to converted amount
   async onSubmit(): Promise<void> {
-    console.log("onSubmit");
-    if (this.from == this.to) return;
+    if (this.fromCode == this.toCode) return;
     try {
       this.rate = await ApiService.instance.getExchangeRate({
-        currency1: this.from,
-        currency2: this.to,
+        currency1: this.fromCode,
+        currency2: this.toCode,
       });
-
       this.onCompute(this.first);
     } catch (e) {
+      // this.$emit("error", e);
       Service.instance.error(e);
     }
   }
 
   // compute currency from to
   onCompute(exchange: string): void {
-    console.log("onCompute");
     if (!this.rate[exchange]) return;
     if (exchange == this.first) {
       this.convertedAmount =
@@ -124,9 +135,10 @@ export default class CurrencyConverter extends Vue {
 
   // switch the currency position
   onSwitch(): void {
-    const temp = this.from;
-    this.from = this.to;
-    this.to = temp;
+    console.log("onSwitch");
+    const temp = this.fromCode;
+    this.fromCode = this.toCode;
+    this.toCode = temp;
     this.onCompute(this.first);
   }
 }

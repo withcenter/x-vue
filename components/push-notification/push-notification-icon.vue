@@ -32,22 +32,17 @@ export default class PushNotificationIcon extends Vue {
 
   async mounted(): Promise<void> {
     try {
-      console.log("postTopic::", this.postTopic);
       const re = await ApiService.instance.isSubscribedToTopic(this.postTopic);
-      console.log("PushNotificationIcon", re);
       this.data[this.postTopic] = re[this.postTopic] === "Y" ? true : false;
     } catch (e) {
-      // XHelper.instance.error(error);
-      this.$emit("error", e);
+      // this.$emit("error", e);
+      Service.instance.error(e);
     }
   }
 
   async onChangeSubscribeOrUnsubscribeTopic(): Promise<void> {
-    console.log(
-      "onChangeSubscribeOrUnsubscribeTopic::",
-      this.data[this.postTopic]
-    );
     if (!ApiService.instance._user.loggedIn) {
+      // this.$emit("error", "error_login_first");
       this.data[this.postTopic] = false;
       Service.instance.error("error_login_first");
       return;
@@ -58,6 +53,7 @@ export default class PushNotificationIcon extends Vue {
         subscribe: this.data[this.postTopic] ? "Y" : "N",
       });
     } catch (e) {
+      // this.$emit("error", e);
       Service.instance.error(e);
     }
   }
