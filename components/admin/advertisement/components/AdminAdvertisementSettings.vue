@@ -129,14 +129,14 @@ import {
 } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
-import AdminService from "../../../../services/x-vue.service";
+import Service from "@/x-vue/services/x-vue.service";
 
 @Component({
   components: {},
 })
 export default class AdminAdvertisement extends Vue {
   api = ApiService.instance;
-  as = AdminService.instance;
+  s = Service.instance;
   maximumAdvertisementDays = 0;
   advertisementCategories = "";
   points = [] as AdvertisementSettings[];
@@ -156,17 +156,9 @@ export default class AdminAdvertisement extends Vue {
 
       this.countries = await this.api.countryAll();
     } catch (e) {
-      this.as.error(e);
+      this.s.error(e);
     }
   }
-
-  // /**
-  //  * Country data list getter.
-  //  * @returns ResponseData - gets country list from store state.
-  //  */
-  // get countries(): ResponseData {
-  //   return store.state.countries;
-  // }
 
   async onEdit(data: RequestData): Promise<void> {
     // console.log("onEdit", data);
@@ -176,24 +168,23 @@ export default class AdminAdvertisement extends Vue {
 
       let msg = `Points for ${data.countryCode} is `;
       if (data.idx) {
-        console.log("onEdit::update", this.points);
+        // console.log("onEdit::update", this.points);
         msg += " updated.";
       } else {
-        console.log("onEdit::add", this.points);
+        // console.log("onEdit::add", this.points);
         msg += " added.";
         this.add = {};
       }
-      this.as.alert("Points ", msg);
-      // this.as.openToast("Points", msg, undefined, "success", true, 3000);
+      this.s.alert("Points ", msg);
     } catch (e) {
-      this.as.error(e);
+      this.s.error(e);
     }
   }
 
   async onDelete(data: RequestData): Promise<void> {
     // console.log("onDelete::data", data);
 
-    const conf = this.as.confirm(
+    const conf = await this.s.confirm(
       `Delete point settings for ${data.countryCode}?`
     );
     if (!conf) return;
@@ -202,7 +193,7 @@ export default class AdminAdvertisement extends Vue {
       await this.api.advertisementDeleteBannerPoint(data.idx);
       this.points = await this.api.advertisementGetBannerPoints();
     } catch (e) {
-      this.as.error(e);
+      this.s.error(e);
     }
   }
 
@@ -217,11 +208,11 @@ export default class AdminAdvertisement extends Vue {
         this.advertisementCategories
       );
 
-      this.as.alert("Settings", "Saved!");
+      this.s.alert("Settings", "Saved!");
 
-      // this.as.openToast("Settings", "Saved...", undefined, "info", true, 3000);
+      // this.s.openToast("Settings", "Saved...", undefined, "info", true, 3000);
     } catch (e) {
-      this.as.error(e);
+      this.s.error(e);
     }
   }
 }

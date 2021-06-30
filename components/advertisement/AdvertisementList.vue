@@ -46,9 +46,10 @@ import Service from "@/x-vue/services/x-vue.service";
     LoginFirst,
   },
 })
-export default class PostList extends Vue {
+export default class AdvertisementList extends Vue {
   posts: Array<AdvertisementModel> = [];
   api = ApiService.instance;
+  s = Service.instance;
 
   loadingPosts = false;
 
@@ -76,12 +77,11 @@ export default class PostList extends Vue {
     this.options.limit = this.limit;
     this.options.page = 1;
     this.options.categoryId = "advertisement";
-    this.options.userIdx = this.api._user.idx;
-    this.loadPosts();
-
     this.currentPage = this.$route.query.page as string;
+    this.options.userIdx = this.s.vm.$store.state.user.idx;
 
     try {
+      await this.loadPosts();
       this.total = await this.api.postCount(this.options);
       this.noOfPages = Math.ceil(this.total / this.limit);
     } catch (e) {
