@@ -35,13 +35,11 @@ export default class VoteButtonsComponent extends Vue {
   api = ApiService.instance;
 
   async onClickVote(choice: string): Promise<void> {
-    // console.log(choice);
     try {
       const res = await this.api.vote({
         idx: this.parent.idx,
         choice: choice,
       });
-      // console.log(res);
       this.parent.updateVoteCount(res);
     } catch (e) {
       Service.instance.alert("ERROR", e);

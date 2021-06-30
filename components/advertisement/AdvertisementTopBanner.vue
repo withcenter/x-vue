@@ -12,6 +12,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Banner, Banners } from "@/x-vue/services/interfaces";
+import Service from "@/x-vue/services/x-vue.service";
 
 @Component({
   props: ["position", "banners"],
@@ -59,9 +60,7 @@ export default class AdvertisementTopBanner extends Vue {
     }
     if (this.currentBanner.idx) {
       const path = "/advertisement/view/" + this.currentBanner.idx;
-      console.log("path", path);
-      // XHelper.instance.open({ path: path });
-      this.$emit("on-click", path);
+      Service.instance.open(path);
     }
   }
 }

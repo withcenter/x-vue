@@ -38,6 +38,7 @@ import { AdvertisementModel, RequestData } from "@/x-vue/services/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
 import AdvertisementPreview from "./AdvertisementPreview.vue";
 import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
+import Service from "@/x-vue/services/x-vue.service";
 
 @Component({
   components: {
@@ -84,7 +85,7 @@ export default class PostList extends Vue {
       this.total = await this.api.postCount(this.options);
       this.noOfPages = Math.ceil(this.total / this.limit);
     } catch (e) {
-      this.$emit("on-error", e);
+      Service.instance.error(e);
     }
   }
 
@@ -96,8 +97,8 @@ export default class PostList extends Vue {
       // console.log(this.posts);
       this.loadingPosts = false;
     } catch (e) {
-      this.$emit("on-error", e);
       this.loadingPosts = false;
+      Service.instance.error(e);
     }
   }
 }
