@@ -1,83 +1,75 @@
-export default class Service {
-  private static _instance: Service;
-  public static get instance(): Service {
-    if (!Service._instance) {
-      Service._instance = new Service();
+import router from "@/router";
+export interface ConfirmToast {
+  title: string;
+  message: string;
+  yesCallback: () => void;
+  noCallback: () => void;
+  placement?: string;
+  variant?: string;
+  hideDelay?: number;
+  append?: boolean;
+}
+interface ComponentServiceOptions {
+  alert?: (title: string, message: string) => Promise<void>;
+  confirmToast?: (options: ConfirmToast) => void;
+  toast?: (title: string, message: string) => void;
+  confirm?: (title: string, message: string) => Promise<boolean | null>;
+}
+export default class ComponentService {
+  // private constructor() {
+  //   console.log("ComponentService::construcotr");
+  // }
+  private static _instance: ComponentService;
+  public static get instance(): ComponentService {
+    if (!ComponentService._instance) {
+      ComponentService._instance = new ComponentService();
     }
-    return Service._instance;
+    return ComponentService._instance;
   }
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  vm: any;
+  options: ComponentServiceOptions = {} as ComponentServiceOptions;
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  init(options: { vm: any }): void {
-    this.vm = options.vm;
-    console.log("Service::init() ,", this.vm);
+  init(options: ComponentServiceOptions): void {
+    this.options = options;
   }
 
-  /**
-   * This uses bootstrap-vue modal.
-   *
-   * @param title string
-   * @param message string
-   * @returns void
-   */
-  alert(title: string, message: string): void {
-    return this.vm.$bvModal.msgBoxOk(message, {
-      title: title,
-      size: "sm",
-      buttonSize: "sm",
-      okVariant: "success",
-      headerClass: "p-2 border-bottom-0",
-      footerClass: "p-2 border-top-0",
-    });
+  alert(title: string, message: string): Promise<void> {
+    if (this.options.alert) {
+      return this.options.alert(title, message);
+    } else {
+      alert(title + "\n" + message);
+      return Promise.resolve();
+    }
   }
-
-  error(e: string): void {
-    this.alert("Error", e);
+  error(e: string): Promise<void> {
+    return this.alert("Error", e);
   }
-
-  async confirm(
-    message: string,
-    title?: string,
-    okText?: string,
-    noText?: string
-  ): Promise<boolean> {
-    return await this.vm.$bvModal.msgBoxConfirm(message, {
-      title: title ?? "",
-      size: "sm",
-      buttonSize: "sm",
-      okVariant: "danger",
-      okTitle: okText ?? "yes",
-      cancelTitle: noText ?? "no",
-      footerClass: "p-2",
-      hideHeaderClose: false,
-      centered: true,
-    });
+  confirm(title: string, message: string): Promise<boolean | null> {
+    if (this.options.confirm) {
+      return this.options.confirm(title, message);
+    } else {
+      const re = confirm(title + "\n" + message);
+      if (re) return Promise.resolve(true);
+      else return Promise.resolve(false);
+    }
   }
-
+  toast(title: string, message: string): void {
+    if (this.options.toast) {
+      this.options.toast(title, message);
+    } else {
+      this.alert(title, message);
+    }
+  }
+  async confirmToast(options: ConfirmToast): Promise<void> {
+    if (this.options.confirmToast) {
+      return this.options.confirmToast(options);
+    } else {
+      const re = await this.confirm(options.title, options.message);
+      if (re) options.yesCallback();
+      else options.noCallback();
+    }
+  }
   open(path: string): void {
-    this.vm._router.push(path);
-  }
-
-  toast(
-    title = "title",
-    content = "content",
-    placement?: string,
-    variant?: string,
-    hideCloseButton?: boolean,
-    hideDelay?: number,
-    append?: boolean
-  ): void {
-    return this.vm.$bvToast.toast(content, {
-      title: title,
-      toaster: placement,
-      variant: variant,
-      noCloseButton: hideCloseButton,
-      autoHideDelay: hideDelay ?? 1000,
-      append: append,
-      solid: true,
-    });
+    router.push(path);
   }
 }

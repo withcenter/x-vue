@@ -184,7 +184,8 @@ export default class AdminAdvertisement extends Vue {
   async onDelete(data: RequestData): Promise<void> {
     // console.log("onDelete::data", data);
 
-    const conf = await this.s.confirm(
+    const conf = this.s.confirm(
+      "Title",
       `Delete point settings for ${data.countryCode}?`
     );
     if (!conf) return;
