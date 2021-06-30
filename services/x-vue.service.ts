@@ -19,16 +19,16 @@ export default class Service {
     // console.log("XHelper::init", this.vm);
   }
 
-  alert(title: string, message: string) {
+  alert(title: string, message: string): void {
     alert(title + "\n" + message);
   }
-  error(e: string) {
+  error(e: string): void {
     this.alert("Error", e);
   }
   confirm(message: string): boolean {
-    return this.confirm(message);
+    return confirm(message);
   }
-  open(path: string) {
+  open(path: string): void {
     this.vm._router.push(path);
   }
 }

@@ -196,7 +196,7 @@ export default class AdminUserList extends Vue {
     updatedAt: false,
   };
 
-  editLink(user: UserModel) {
+  editLink(user: UserModel): string {
     return "/admin/user/edit/" + user.idx + window.location.search;
   }
 

@@ -25,6 +25,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { CommentModel, PostModel } from "@/x-vue/services/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
+import Service from "@/x-vue/services/x-vue.service";
 
 @Component({
   props: ["parent"],
@@ -43,8 +44,7 @@ export default class VoteButtonsComponent extends Vue {
       // console.log(res);
       this.parent.updateVoteCount(res);
     } catch (e) {
-      // TODO
-      alert("[TODO]: ERROR " + e);
+      Service.instance.alert("ERROR", e);
     }
   }
 }
