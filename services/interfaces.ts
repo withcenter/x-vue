@@ -64,24 +64,21 @@ export interface AdvertisementSettings {
   maximum_advertising_days: number;
 }
 
-/**
- * @deprecated
- */
-export interface ApiStore {
-  user: UserModel;
-  countries: ResponseData;
-  // cafe category model(record) data.
-  cafe: CafeModel;
-  myCafe: CafeModel[];
-  texts: MapStringAny;
-  // global cafe settings
-  cafeSettings: CafeSettings;
-  advertisementSettings: AdvertisementSettings;
-  // Vue vm must be added here.
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  vm: any;
-  router: VueRouter;
-}
+// export interface ApiStore {
+//   user: UserModel;
+// countries: ResponseData;
+// cafe category model(record) data.
+// cafe: CafeModel;
+// myCafe: CafeModel[];
+// texts: MapStringAny;
+// global cafe settings
+// cafeSettings: CafeSettings;
+// advertisementSettings: AdvertisementSettings;
+// Vue vm must be added here.
+// eslint-disable-next-line  @typescript-eslint/no-explicit-any
+// vm: any;
+// router: VueRouter;
+// }
 
 export interface KakaoUserMe {
   id: number;
@@ -626,4 +623,10 @@ export interface AdvertisementPointSetting {
   line: number;
   createdAt: number;
   updatedAt: number;
+}
+
+export interface RequestCafeCreate {
+  countryCode: string;
+  domain: string;
+  rootDomain: string;
 }

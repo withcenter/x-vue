@@ -37,7 +37,8 @@
   - `this.$router`. So the `x-vue` model can navigates between pages.
   - `bootstrap 4.x` and `bootstrap 2.x` to work.
 
-- `ApiService` must be initialized first.
+- `ApiService` must be initialized before `Vue` initialization, Since `AppService` adds
+  some filters.
 
 - You can set
   - `serverUrl` to point where is the `Matrix` restful api endpoint.
@@ -49,6 +50,8 @@
 import store from "./store";
 import { ApiService } from "./x-vue/services/api.service";
 import { UserModel } from "./x-vue/services/interfaces";
+
+/// ApiService must be initialized before Vue initialization.
 ApiService.instance.init({
   serverUrl: "https://main.philov.com/index.php",
   userChanges: (user: UserModel) => {

@@ -16,6 +16,7 @@ import {
   CountryCurrenciesModel,
   MapStringAny,
   CategoryBanners,
+  RequestCafeCreate,
 } from "./interfaces";
 
 import Cookies from "js-cookie";
@@ -41,6 +42,19 @@ import Vue from "vue";
  *
  */
 export class ApiService {
+  private constructor() {
+    /// Add filter `t` for translating.
+    /// This must be inside this constructor or somewhere it can be defined
+    /// before Vue initialization.
+    Vue.filter("t", (code: string): string => {
+      if (!code) return "";
+      const texts = ApiService.instance.texts;
+      if (!ApiService.instance.texts) return code;
+      if (!texts[code]) return code;
+      if (!texts[code][ApiService.instance.userLanguage]) return code;
+      return texts[code][ApiService.instance.userLanguage];
+    });
+  }
   // Singletone
   private static _instance: ApiService;
   public static get instance(): ApiService {
@@ -67,12 +81,9 @@ export class ApiService {
   //
   private categoryBanners?: CategoryBanners;
 
-  public texts: MapStringAny = {
-    email: {
-      en: "Email Address",
-      ko: "이메일",
-    },
-  };
+  public texts: MapStringAny = {};
+
+  private _advertisementSettings?: AdvertisementSettings;
 
   // User change callback
   //
@@ -89,9 +100,10 @@ export class ApiService {
    *
    * @param options init options
    */
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   init(options: {
     apiKey?: string;
+
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     userChanges: any;
     serverUrl?: string;
   }): void {
@@ -99,15 +111,6 @@ export class ApiService {
     this.serverUrl = options.serverUrl ?? "";
     this.userChanges = options.userChanges;
     this.initUserAuth();
-
-    /// @todo move this code somewhere.
-    Vue.filter("t", (code: string): string => {
-      if (!code) return "";
-      if (!this.texts) return code;
-      if (!this.texts[code]) return code;
-      if (!this.texts[code][ApiService.instance.userLanguage]) return code;
-      return this.texts[code][ApiService.instance.userLanguage];
-    });
   }
 
   // Return server url. If it is not initiallized, then, use current url.
@@ -219,9 +222,7 @@ export class ApiService {
    * @returns UserModel
    */
   async refreshLoginUserProfile(): Promise<UserModel> {
-    console.log("refreshLoginUserProfile() => ");
     const res = await this.request("user.profile");
-    console.log("refreshLoginUserProfile() got user data:", res);
     return this.setUserSessionId(res);
   }
 
@@ -585,11 +586,7 @@ export class ApiService {
   ///
   /// cafe
   ///
-  async cafeCreate(data: {
-    countryCode: string;
-    domain: string;
-    rootDomain: string;
-  }): Promise<CafeModel> {
+  async cafeCreate(data: RequestCafeCreate): Promise<CafeModel> {
     const res = await this.request("cafe.create", data);
     return new CafeModel().fromJson(res);
   }
@@ -709,12 +706,22 @@ export class ApiService {
   }
 
   /**
+   * Gets the global advertisement settings.
+   *
+   * @usage
+   *  - Get advertisement settings only if the app is using advertisement functionality.
+   *
+   * @attention It does memory cache. Meaning, it will only connect to backend to get data,
+   *    no matter how many times you call this method.
+   *
    * @returns Promise<ResponseData>
    */
   async advertisementSettings(): Promise<AdvertisementSettings> {
-    return (await this.request(
+    if (this._advertisementSettings) return this._advertisementSettings;
+    this._advertisementSettings = (await this.request(
       "advertisement.settings"
     )) as AdvertisementSettings;
+    return this._advertisementSettings;
   }
 
   /**
@@ -756,7 +763,7 @@ export class ApiService {
     return new AdvertisementModel().fromJson(res);
   }
 
-  async myCafe(): Promise<CafeModel[]> {
+  async myCafeList(): Promise<CafeModel[]> {
     if (this.notLoggedIn) {
       const res = await this.request("cafe.mine");
       return res.map((cafe: JSON) => new CafeModel().fromJson(cafe));

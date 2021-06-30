@@ -1,20 +1,18 @@
-import { ApiService } from "./api.service";
-import apiStore from "./api.store";
 import dayjs from "dayjs";
 import { Dictionary } from "vue-router/types/router";
 
-/**
- * @deprecated
- * @param code
- * @returns
- */
-export function tr(code: string): string {
-  if (!code) return "";
-  if (!apiStore.texts) return code;
-  if (!apiStore.texts[code]) return code;
-  if (!apiStore.texts[code][ApiService.instance.userLanguage]) return code;
-  return apiStore.texts[code][ApiService.instance.userLanguage];
-}
+// /**
+//  * @deprecated
+//  * @param code
+//  * @returns
+//  */
+// export function tr(code: string): string {
+//   if (!code) return "";
+//   if (!apiStore.texts) return code;
+//   if (!apiStore.texts[code]) return code;
+//   if (!apiStore.texts[code][ApiService.instance.userLanguage]) return code;
+//   return apiStore.texts[code][ApiService.instance.userLanguage];
+// }
 
 /**
  * Returns root domain(top level domain) from the domain that may have subdomain.
@@ -80,7 +78,7 @@ export function daysBetween(date1: string, date2: string): number {
   // return Math.floor((d2 - d1) / (60 * 60 * 24)) + 1;
 }
 
-export function getPageQueryString() {
+export function getPageQueryString(): string {
   return window.location.search;
 }
 

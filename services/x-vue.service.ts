@@ -1,7 +1,7 @@
 export default class Service {
-  private constructor() {
-    console.log("Service::construcotr");
-  }
+  // private constructor() {
+  //   console.log("Service::construcotr");
+  // }
   private static _instance: Service;
   public static get instance(): Service {
     if (!Service._instance) {
