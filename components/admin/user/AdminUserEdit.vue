@@ -226,14 +226,14 @@ import { ApiService } from "@/x-vue/services/api.service";
 import { RequestData, UserModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
-import AdminService from "../../../services/x-vue.service";
+import Service from "../../../services/x-vue.service";
 @Component({
   components: {},
 })
 export default class AdminUserEdit extends Vue {
   user: UserModel = {} as UserModel;
   api: ApiService = ApiService.instance;
-  as = AdminService.instance;
+  s = Service.instance;
 
   async mounted(): Promise<void> {
     try {
@@ -242,7 +242,7 @@ export default class AdminUserEdit extends Vue {
         full: true,
       });
     } catch (e) {
-      this.as.error(e);
+      this.s.error(e);
     }
   }
 
@@ -268,9 +268,9 @@ export default class AdminUserEdit extends Vue {
 
     try {
       this.user = await this.api.userUpdate(options);
-      this.as.alert("User Update : ", "Update Success");
+      this.s.alert("User Update : ", "Update Success");
     } catch (e) {
-      this.as.error(e);
+      this.s.error(e);
     }
   }
 }
