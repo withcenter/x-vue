@@ -18,15 +18,17 @@
 
 - `x-vue` should be independent as much as possible from parent app. But there are certain properties that `x-vue` can use from the page.
 
-  - `this._router` to navigate from `x-vue` components.
   - `this.$store.state.user` can be used but must be read only.
   - `this.$store.commit('user', userModel)` to update user model data. To login, logout, refresh.
+
+- The parent must import and enable `vue-router` module, so `x-vue` can use to navigate inside.
 
 - The parent app must install `bootstrap version 4.x`, `bootstrap vue version 2.x`. And make them available for `x-vue`.
 
   - So, `x-vue` can use the full features of `bootstrap` and `bootstrap vue`.
 
 - If the parent is using `x-vue` components and wants to have same UI of `alert`, `confirm`, `error`, `toast`, then the parent must set them as callback functions with `ComponentService.init({})`. So, the `x-vue` can use the callback to display UI dialogs.
+  **This is optional**.
 
 # How to use
 
