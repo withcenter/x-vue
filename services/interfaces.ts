@@ -47,7 +47,6 @@ export interface PostSearchRequest {
   by?: string;
   page?: number;
   limit?: number;
-  page?: string;
   comments?: number;
 }
 
