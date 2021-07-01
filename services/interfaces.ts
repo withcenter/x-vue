@@ -52,14 +52,25 @@ export interface CafeSettings {
   sitemap: MapStringStringArray;
 }
 
+export interface AdvertisementPointSetting {
+  idx?: number;
+  countryCode: string;
+  top: number;
+  sidebar: number;
+  square: number;
+  line: number;
+  createdAt?: number;
+  updatedAt?: number;
+}
+
 export interface AdvertisementSettings {
   types: string[];
   point: {
-    default: { [index: string]: number };
-    [index: string]: { [index: string]: number };
+    default: AdvertisementPointSetting;
+    [index: string]: AdvertisementPointSetting;
   };
   categories: string[];
-  maximum_advertising_days: number;
+  maximumAdvertisementDays: number;
 }
 
 // export interface ApiStore {
@@ -611,16 +622,6 @@ export class CountryCurrenciesModel {
 
     return this;
   }
-}
-export interface AdvertisementPointSetting {
-  idx: number;
-  countryCode: string;
-  top: number;
-  sidebar: number;
-  square: number;
-  line: number;
-  createdAt: number;
-  updatedAt: number;
 }
 
 export interface RequestCafeCreate {

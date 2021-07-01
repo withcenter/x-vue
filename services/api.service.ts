@@ -17,6 +17,7 @@ import {
   MapStringAny,
   CategoryBanners,
   RequestCafeCreate,
+  AdvertisementPointSetting,
 } from "./interfaces";
 
 import Cookies from "js-cookie";
@@ -746,10 +747,12 @@ export class ApiService {
    *
    * @returns
    */
-  async advertisementGetBannerPoints(): Promise<Array<AdvertisementSettings>> {
+  async advertisementGetBannerPoints(): Promise<
+    Array<AdvertisementPointSetting>
+  > {
     return (await this.request(
       "advertisement.getBannerPoints"
-    )) as Array<AdvertisementSettings>;
+    )) as Array<AdvertisementPointSetting>;
   }
 
   async advertisementStart(data: RequestData): Promise<AdvertisementModel> {
