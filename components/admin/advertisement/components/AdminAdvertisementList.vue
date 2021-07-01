@@ -7,10 +7,14 @@
           v-for="advertisement of advertisements"
           :key="advertisement.idx"
         >
-          <advertisement-preview
+          <router-link
             class="w-100"
-            :advertisement="advertisement"
-          ></advertisement-preview>
+            :to="`/advertisement/view/${advertisement.idx}`"
+          >
+            <advertisement-preview
+              :advertisement="advertisement"
+            ></advertisement-preview>
+          </router-link>
           <div class="ml-1 px-2 text-center border-left">
             <b-avatar
               tabindex="0"

@@ -638,7 +638,7 @@ export default class Advertisement extends Vue {
   }
 
   async onAdvertisementStop(): Promise<void> {
-    const conf = await Service.instance.confirm(
+    const conf = await this.s.confirm(
       "Title",
       "Are you sure you want to cancel the advertisement?"
     );

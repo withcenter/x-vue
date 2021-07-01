@@ -2,7 +2,7 @@
   <div>
     <h1>Admin Advertisement Settings</h1>
 
-    <form @submit.prevent="onSubmit">
+    <form class="mb-3" @submit.prevent="onSubmit">
       <div class="form-group">
         <label for="maximum-advertisement-days"
           >Maximum Advertisement Days</label
@@ -37,19 +37,11 @@
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 
-    <div class="alert alert-info">
-      @todo later, get all countries and make it selectable.
-    </div>
-
     <h3>Add banner points for a country</h3>
-    <div>
-      Don't input countryCode for default banner point. countryCode 에 빈
-      문자열을 입력하면 default setting 이 됨.
-    </div>
     <form @submit.prevent="onEdit(add)">
       <!-- <input v-model="add.countryCode" placeholder="2 letter country code" /> -->
       <div class="d-flex w-100">
-        <div class="col-3 pr-1">
+        <div class="col-3 pl-0 pr-1">
           <select class="form-control" v-model="add.countryCode">
             <option value="" selected>{{ "default" | t }}</option>
             <option
@@ -62,24 +54,28 @@
           </select>
         </div>
         <div class="col-2 px-1">
-          <input class="form-control" size="12" v-model="add.top" />
+          <input type="number" class="form-control" v-model="add.top" />
         </div>
         <div class="col-2 px-1">
-          <input class="form-control" size="12" v-model="add.sidebar" />
+          <input type="number" class="form-control" v-model="add.sidebar" />
         </div>
         <div class="col-2 px-1">
-          <input class="form-control" size="12" v-model="add.square" />
+          <input type="number" class="form-control" v-model="add.square" />
         </div>
         <div class="col-2 px-1">
-          <input class="form-control" size="12" v-model="add.line" />
+          <input type="number" class="form-control" v-model="add.line" />
         </div>
-        <div class="col-1 p-0">
+        <div class="col-1 pl-1 pr-0">
           <button class="btn btn-primary">ADD</button>
         </div>
       </div>
+      <div class="mt-2 alert alert-info">
+        Don't input countryCode for default banner point. countryCode 에 빈
+        문자열을 입력하면 default setting 이 됨.
+      </div>
     </form>
 
-    <table class="table" v-if="points.length">
+    <table class="mt-3 w-100 table" v-if="points.length">
       <thead>
         <tr>
           <th scope="col">CountryCode</th>
@@ -99,16 +95,43 @@
                 : "Default Setting"
             }}
           </th>
-          <td><input size="12" v-model="points[n - 1].top" /></td>
-          <td><input size="12" v-model="points[n - 1].sidebar" /></td>
-          <td><input size="12" v-model="points[n - 1].square" /></td>
-          <td><input size="12" v-model="points[n - 1].line" /></td>
           <td>
-            <button class="btn btn-primary" @click="onEdit(points[n - 1])">
+            <input
+              class="form-control"
+              type="number"
+              v-model="points[n - 1].top"
+            />
+          </td>
+          <td>
+            <input
+              class="form-control"
+              type="number"
+              v-model="points[n - 1].sidebar"
+            />
+          </td>
+          <td>
+            <input
+              class="form-control"
+              type="number"
+              v-model="points[n - 1].square"
+            />
+          </td>
+          <td>
+            <input
+              class="form-control"
+              type="number"
+              v-model="points[n - 1].line"
+            />
+          </td>
+          <td>
+            <button
+              class="w-100 btn btn-primary"
+              @click="onEdit(points[n - 1])"
+            >
               Update
             </button>
             <button
-              class="btn btn-warning ml-1"
+              class="w-100 btn btn-warning"
               @click="onDelete(points[n - 1])"
             >
               Delete
@@ -184,12 +207,11 @@ export default class AdminAdvertisement extends Vue {
   async onDelete(data: RequestData): Promise<void> {
     // console.log("onDelete::data", data);
 
-    const conf = this.s.confirm(
+    const conf = await this.s.confirm(
       "Title",
       `Delete point settings for ${data.countryCode}?`
     );
     if (!conf) return;
-    // console.log("onDelete::confirm::idx", data.idx);
     try {
       await this.api.advertisementDeleteBannerPoint(data.idx);
       this.points = await this.api.advertisementGetBannerPoints();
