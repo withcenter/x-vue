@@ -10,7 +10,9 @@
 <script lang="ts">
 import { ApiService } from "../../services/api.service";
 import Vue from "vue";
+import Component from "vue-class-component";
 
+@Component({})
 export default class LoginFirst extends Vue {
   api = ApiService.instance;
 }

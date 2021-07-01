@@ -121,7 +121,7 @@
         ></b-form-input>
       </div>
 
-      <div class="mt-2">
+      <div class="mt-2 mb-3">
         <button type="submit" class="btn btn-primary col-3">
           {{ "save" | t }}
         </button>
@@ -150,7 +150,7 @@ export default class Profile extends Vue {
     try {
       this.user = await ApiService.instance.userProfile();
     } catch (e) {
-      this.$emit("on-error", e);
+      this.$emit("error", e);
     }
   }
 
