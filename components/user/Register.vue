@@ -1,8 +1,8 @@
 <template>
   <div data-cy="register-form">
-    <h1>User Register</h1>
+    <h1>{{ "user_register" | t }}</h1>
     <form @submit.prevent="$emit('submit', $event, form)">
-      <b-form-group :label="'email' | t" label-for="email">
+      <b-form-group class="mb-2" :label="'email' | t" label-for="email">
         <b-form-input
           id="email"
           v-model="form.email"
@@ -11,7 +11,7 @@
           required
         ></b-form-input>
       </b-form-group>
-      <b-form-group :label="'password' | t" label-for="password">
+      <b-form-group class="mb-2" :label="'password' | t" label-for="password">
         <b-form-input
           id="password"
           v-model="form.password"
@@ -21,7 +21,7 @@
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group :label="'name' | t" label-for="name">
+      <b-form-group class="mb-2" :label="'name' | t" label-for="name">
         <b-form-input
           id="name"
           v-model="form.name"

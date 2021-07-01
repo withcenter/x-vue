@@ -169,7 +169,7 @@ import Service from "../../../services/x-vue.service";
 
 @Component({})
 export default class AdminUserList extends Vue {
-  as = Service.instance;
+  s = Service.instance;
   users: Array<UserModel> = [];
   total = 0;
 
@@ -231,7 +231,7 @@ export default class AdminUserList extends Vue {
       });
       this.noOfPages = Math.ceil(this.total / this.limit);
     } catch (e) {
-      this.as.error(e);
+      this.s.error(e);
     }
   }
 }

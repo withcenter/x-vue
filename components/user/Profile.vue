@@ -150,7 +150,7 @@ export default class Profile extends Vue {
     try {
       this.user = await ApiService.instance.userProfile();
     } catch (e) {
-      this.$emit("on-error", e);
+      this.$emit("error", e);
     }
   }
 
