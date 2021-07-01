@@ -36,7 +36,7 @@
 
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
-
+    <hr />
     <h3>Add banner points for a country</h3>
     <form @submit.prevent="onEdit(add)">
       <!-- <input v-model="add.countryCode" placeholder="2 letter country code" /> -->
