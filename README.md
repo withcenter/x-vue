@@ -4,7 +4,6 @@
 
 - For an exmaple of `x-vue, see [x-admin](https://github.com/withcenter/x-admin) app that does administration on matrix.
 
-
 # Install
 
 ```sh
@@ -18,25 +17,23 @@
 # Style Guide
 
 - `x-vue` should be independent as much as possible from parent app. But there are certain properties that `x-vue` can use from the page.
+
   - `this._router` to navigate from `x-vue` components.
   - `this.$store.state.user` can be used but must be read only.
   - `this.$store.commit('user', userModel)` to update user model data. To login, logout, refresh.
 
 - The parent app must install `bootstrap version 4.x`, `bootstrap vue version 2.x`. And make them available for `x-vue`.
-  - So, `x-vue` can use the full features of `bootstrap` and `bootstrap vue`.
 
+  - So, `x-vue` can use the full features of `bootstrap` and `bootstrap vue`.
 
 - If the parent is using `x-vue` components and wants to have same UI of `alert`, `confirm`, `error`, `toast`, then the parent must set them as callback functions with `ComponentService.init({})`. So, the `x-vue` can use the callback to display UI dialogs.
 
-
-
 # How to use
-
 
 ## Display boxes - alert, toast, confirm, error
 
-
 - `x-vue` is using `x-vue.service.ts` to use the dialog boxes like `alert`, `toast`, `confirm`, `error`, `confirmToast`, and more.
+
   - `x-vue.service` handles with basic Javascript alert or confirm dialog when the parent app didn't set up the dialog callbackes.
 
 - The parent app can set the callbacks for these dialogs, so the `x-vue` components can use the same UI of its parent app.
@@ -47,12 +44,12 @@
 ComponentService.instance.init({
   alert: (t: string, m: string) => x.alert(t, m),
   confirmToast: (options: ConfirmToast) => x.confirmToast(options),
-  toast: (t: string, m: string) => x.toast(t, m),
+  toast: (options: Toast) => x.toast(options),
   confirm: (t: string, m: string) => x.confirm(t, m),
 });
 ```
 
-  - And in `x-vue` component, it can use `x-vue.service.ts` to use its parent's callback methods to use the parent's dialogs.
+- And in `x-vue` component, it can use `x-vue.service.ts` to use its parent's callback methods to use the parent's dialogs.
 
 ```ts
 s = ComponentService.instance;
@@ -71,10 +68,10 @@ onDialogCall() {
 }
 ```
 
-
 ## Initialization
 
 - The parent app must set
+
   - `this.$store.state.user` as user model properties.
   - `this.$router`. So the `x-vue` model can navigates between pages.
   - `bootstrap 4.x` and `bootstrap 2.x` to work.
@@ -83,11 +80,13 @@ onDialogCall() {
   some filters.
 
 - You can set
+
   - `serverUrl` to point where is the `Matrix` restful api endpoint.
   - `userChanges` callback event handler that will be called on every user change(login/logout/profile update, etc)
   - `apiKey` to access the backend if needed.
 
 - Below is an example of `main.ts`. It shows how to initialize the `ApiService` and how to update `store` to use the status of user login, logout.
+
 ```ts
 import store from "./store";
 import { ApiService } from "./x-vue/services/api.service";
@@ -109,7 +108,6 @@ new Vue({
 ```
 
 ## User login and logout
-
 
 - Below are the example of `store/index.ts` which handles user state.
 
@@ -145,7 +143,6 @@ export default new Vuex.Store({
   modules: {},
 });
 ```
-
 
 # Style Guide
 
@@ -191,7 +188,6 @@ export default class LoginView extends Vue {
 </script>
 ```
 
-
 - Below is the `store/index.ts`. The logic is in the `store action`. So, the `x-vue` and `parent app` are completely isolated.
 
 ```ts
@@ -226,7 +222,6 @@ export default new Vuex.Store({
   modules: {},
 });
 ```
-
 
 - Below is the login form component from `x-vue`.
   - It may login and emit an event of success or failure to parent app.
