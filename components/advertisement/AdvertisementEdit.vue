@@ -616,7 +616,14 @@ export default class Advertisement extends Vue {
       if (isCreate) {
         this.s.open(`/advertisement/edit/${this.post.idx}`);
       } else {
-        this.s.toast("Updated", "Advertisement successfully updated!");
+        this.s.toast({
+          title: "Updated",
+          message: "Advertisement successfully updated!",
+          // placement: "b-toaster-bottom-right",
+          // variant: "success",
+          // append: true,
+          // hideDelay: 1500,
+        });
       }
       this.isSubmitted = false;
     } catch (e) {

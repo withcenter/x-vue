@@ -9,10 +9,33 @@ export interface ConfirmToast {
   hideDelay?: number;
   append?: boolean;
 }
+
+export interface Toast {
+  title: string;
+  message: string;
+  clickCallback?: () => void;
+  closeCallback?: () => void;
+  placement?: string;
+  variant?: string;
+  hideDelay?: number;
+  append?: boolean;
+}
+
+export enum PLACEMENT {
+  TOP_RIGHT = "b-toaster-top-right",
+  TOP_LEFT = "b-toaster-top-left",
+  TOP_CENTER = "b-toaster-top-center",
+  TOP_FULL = "b-toaster-top-full",
+  BOTTOM_RIGHT = "b-toaster-bottom-right",
+  BOTTOM_LEFT = "b-toaster-bottom-left",
+  BOTTOM_CENTER = "b-toaster-bottom-center",
+  BOTTOM_FULL = "b-toaster-bottom-full",
+}
+
 interface ComponentServiceOptions {
   alert?: (title: string, message: string) => Promise<void>;
   confirmToast?: (options: ConfirmToast) => void;
-  toast?: (title: string, message: string) => void;
+  toast?: (options: Toast) => void;
   confirm?: (title: string, message: string) => Promise<boolean | null>;
 }
 export default class ComponentService {
@@ -53,11 +76,16 @@ export default class ComponentService {
       else return Promise.resolve(false);
     }
   }
-  toast(title: string, message: string): void {
+  async toast(options: Toast): Promise<void> {
     if (this.options.toast) {
-      this.options.toast(title, message);
+      return this.options.toast(options);
     } else {
-      this.alert(title, message);
+      const re = await this.confirm(options.title, options.message);
+      if (re) {
+        if (options.clickCallback) options.clickCallback;
+      } else {
+        if (options.closeCallback) options.closeCallback;
+      }
     }
   }
   async confirmToast(options: ConfirmToast): Promise<void> {

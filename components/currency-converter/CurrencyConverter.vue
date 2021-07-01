@@ -101,7 +101,6 @@ export default class CurrencyConverter extends Vue {
       this.currencies = await ApiService.instance.getCountryCurrencies();
       this.onSubmit();
     } catch (e) {
-      // this.$emit("error", e);
       Service.instance.error(e);
     }
   }
@@ -116,7 +115,6 @@ export default class CurrencyConverter extends Vue {
       });
       this.onCompute(this.first);
     } catch (e) {
-      // this.$emit("error", e);
       Service.instance.error(e);
     }
   }
@@ -135,7 +133,6 @@ export default class CurrencyConverter extends Vue {
 
   // switch the currency position
   onSwitch(): void {
-    console.log("onSwitch");
     const temp = this.fromCode;
     this.fromCode = this.toCode;
     this.toCode = temp;
