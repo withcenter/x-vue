@@ -18,6 +18,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { ApiService } from "../services/api.service";
+import ComponentService from "../services/x-vue.service";
 
 interface HTMLInputEvent extends Event {
   target: HTMLInputElement & EventTarget;
@@ -58,7 +59,7 @@ export default class UploadButton extends Vue {
       this.$emit("success", res);
     } catch (e) {
       // XHelper.instance.error(e);
-      this.$emit("error", e);
+      ComponentService.instance.error(e);
     }
   }
 

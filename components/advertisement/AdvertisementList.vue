@@ -47,7 +47,7 @@ import ComponentService from "@/x-vue/services/x-vue.service";
     LoginFirst,
   },
 })
-export default class PostList extends Vue {
+export default class AdvertisementList extends Vue {
   posts: Array<AdvertisementModel> = [];
   api = ApiService.instance;
   s = ComponentService.instance;
@@ -77,12 +77,12 @@ export default class PostList extends Vue {
     this.options.limit = this.limit;
     this.options.page = 1;
     this.options.categoryId = "advertisement";
-    this.options.userIdx = this.api._user.idx;
-    this.loadPosts();
-
     this.currentPage = this.$route.query.page as string;
+    // TODO - check wh on landing, it is not working.
+    this.options.userIdx = this.$store.state.user.idx;
 
     try {
+      await this.loadPosts();
       this.total = await this.api.postCount(this.options);
       this.noOfPages = Math.ceil(this.total / this.limit);
     } catch (e) {
@@ -91,11 +91,9 @@ export default class PostList extends Vue {
   }
 
   async loadPosts(): Promise<void> {
-    // console.log("adv:loadPosts:: ", this.options);
     this.loadingPosts = true;
     try {
       this.posts = await this.api.advertisementSearch(this.options);
-      // console.log(this.posts);
       this.loadingPosts = false;
     } catch (e) {
       this.loadingPosts = false;

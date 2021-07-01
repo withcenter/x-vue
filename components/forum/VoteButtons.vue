@@ -42,7 +42,7 @@ export default class VoteButtonsComponent extends Vue {
       });
       this.parent.updateVoteCount(res);
     } catch (e) {
-      Service.instance.alert("ERROR", e);
+      Service.instance.error(e);
     }
   }
 }

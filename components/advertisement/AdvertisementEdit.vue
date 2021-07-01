@@ -599,8 +599,7 @@ export default class Advertisement extends Vue {
       // console.log("advertisement: ", this.post);
       this.loading = false;
     } catch (e) {
-      // this.x.error(e);
-      this.$emit("on-error", e);
+      this.s.error(e);
       this.loading = false;
     }
   }

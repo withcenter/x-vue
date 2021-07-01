@@ -7,9 +7,9 @@
         <b-tab title="Advertisement Settings" active>
           <AdminAdvertisementSettings></AdminAdvertisementSettings>
         </b-tab>
-        <b-tab title="Advertisement List"
-          ><p>@todo display advertisements of all user</p></b-tab
-        >
+        <b-tab title="Advertisement List">
+          <AdminAdvertisementList></AdminAdvertisementList>
+        </b-tab>
       </b-tabs>
     </div>
   </div>
@@ -19,10 +19,12 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import AdminAdvertisementSettings from "./components/AdminAdvertisementSettings.vue";
+import AdminAdvertisementList from "./components/AdminAdvertisementList.vue";
 
 @Component({
   components: {
     AdminAdvertisementSettings,
+    AdminAdvertisementList,
   },
 })
 export default class AdminAdvertisement extends Vue {}
