@@ -78,6 +78,7 @@ export default class AdvertisementList extends Vue {
     this.options.page = 1;
     this.options.categoryId = "advertisement";
     this.currentPage = this.$route.query.page as string;
+    // TODO - check wh on landing, it is not working.
     this.options.userIdx = this.$store.state.user.idx;
 
     try {
@@ -90,11 +91,9 @@ export default class AdvertisementList extends Vue {
   }
 
   async loadPosts(): Promise<void> {
-    // console.log("adv:loadPosts:: ", this.options);
     this.loadingPosts = true;
     try {
       this.posts = await this.api.advertisementSearch(this.options);
-      // console.log(this.posts);
       this.loadingPosts = false;
     } catch (e) {
       this.loadingPosts = false;

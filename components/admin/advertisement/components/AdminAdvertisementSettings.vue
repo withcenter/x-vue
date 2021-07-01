@@ -210,8 +210,6 @@ export default class AdminAdvertisement extends Vue {
       );
 
       this.s.alert("Settings", "Saved!");
-
-      // this.s.openToast("Settings", "Saved...", undefined, "info", true, 3000);
     } catch (e) {
       this.s.error(e);
     }
