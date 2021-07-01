@@ -27,6 +27,16 @@
             </div>
           </div>
         </div>
+
+        <div class="d-flex overflow-auto justify-content-center">
+          <b-pagination-nav
+            :link-gen="linkGen"
+            :number-of-pages="noOfPages"
+            v-model="options.page"
+            v-on:change="onPageChanged"
+            use-router
+          ></b-pagination-nav>
+        </div>
       </div>
     </div>
     <div class="p-3 text-center rounded" v-if="loading">
@@ -40,7 +50,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import Service from "@/x-vue/services/x-vue.service";
 import { ApiService } from "@/x-vue/services/api.service";
-import { AdvertisementModel } from "@/x-vue/services/interfaces";
+import { AdvertisementModel, RequestData } from "@/x-vue/services/interfaces";
 import AdvertisementPreview from "@/x-vue/components/advertisement/AdvertisementPreview.vue";
 
 @Component({
@@ -54,14 +64,39 @@ export default class AdminAdvertisementList extends Vue {
   loading = false;
   advertisements: AdvertisementModel[] = [];
 
-  mounted(): void {
+  total = 0;
+  limit = 10;
+  noOfPages = 10;
+
+  options: RequestData = {};
+
+  async mounted(): Promise<void> {
+    this.options.limit = this.limit;
+    this.options.categoryId = "advertisement";
+    this.options.page = (this.$route.query.page as string) ?? "1";
+
+    try {
+      await this.loadAdvertisements();
+      this.total = await this.api.postCount(this.options);
+      this.noOfPages = Math.ceil(this.total / this.limit);
+    } catch (e) {
+      Service.instance.error(e);
+    }
+  }
+
+  linkGen(pageNum: number): string {
+    return pageNum === 1 ? "?" : `?page=${pageNum}`;
+  }
+
+  onPageChanged(page: number): void {
+    this.options.page = page;
     this.loadAdvertisements();
   }
 
   async loadAdvertisements(): Promise<void> {
     this.loading = true;
     try {
-      this.advertisements = await this.api.advertisementSearch({});
+      this.advertisements = await this.api.advertisementSearch(this.options);
       // console.log(this.posts);
       this.loading = false;
     } catch (e) {
