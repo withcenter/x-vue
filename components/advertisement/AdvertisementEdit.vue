@@ -2,7 +2,7 @@
   <div v-if="settings">
     <login-first class="mt-2"></login-first>
 
-    <div v-if="api.loggedIn">
+    <div v-if="api._user.loggedIn">
       <form class="p-2" @submit.prevent="onSubmit" v-if="!loading">
         <div class="box mb-2" v-if="post.isActive || post.isWaiting">
           {{ post.pointPerDay }}
@@ -423,7 +423,7 @@ export default class Advertisement extends Vue {
 
   isSubmitted = false;
 
-  loading = false;
+  loading = true;
 
   countries: ResponseData = {};
   settings: AdvertisementSettings = {} as AdvertisementSettings;
@@ -438,6 +438,7 @@ export default class Advertisement extends Vue {
       await this.loadAdvertisement();
     } else {
       this.post.categoryId = "advertisement";
+      this.loading = false;
     }
 
     this.beginAtMin = this.today;

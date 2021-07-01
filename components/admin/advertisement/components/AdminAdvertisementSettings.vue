@@ -171,7 +171,7 @@ export default class AdminAdvertisement extends Vue {
   async mounted(): Promise<void> {
     try {
       let re = await this.api.getConfig("maximumAdvertisementDays");
-      this.maximumAdvertisementDays = re.data;
+      this.maximumAdvertisementDays = re.data ? re.data : 0;
       re = await this.api.getConfig("advertisementCategories");
       this.advertisementCategories = re.data;
 

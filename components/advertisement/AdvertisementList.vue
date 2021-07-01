@@ -2,7 +2,7 @@
   <section data-cy="advertisement-list-page" class="advertisement-list-page">
     <login-first class="mt-2"></login-first>
 
-    <div v-if="api.loggedIn">
+    <div v-if="api._user.loggedIn">
       <div class="mt-3" v-if="posts.length">
         <div class="box p-2 mb-2" v-for="post of posts" :key="post.idx">
           <router-link :to="`/advertisement/edit/${post.idx}`">
@@ -82,7 +82,6 @@ export default class AdvertisementList extends Vue {
     this.options.page = 1;
     this.options.categoryId = "advertisement";
     this.currentPage = this.$route.query.page as string;
-    // TODO - check wh on landing, it is not working.
     this.options.userIdx = this.$store.state.user.idx;
 
     try {
