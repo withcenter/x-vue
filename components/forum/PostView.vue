@@ -1,10 +1,14 @@
 <template>
-  <div v-if="post">
-    <article data-cy="post-view" class="post-view px-2 py-4">
+  <div>
+    <article
+      data-cy="post-view"
+      class="post-view px-2 py-4"
+      v-if="post.idx && !loading"
+    >
       <!-- title -->
       <div class="d-flex justify-content-between">
         <h3 id="post-title">{{ post.title }}</h3>
-        <router-link class="btn btn-outline-info" :to="forumLink">
+        <router-link class="btn btn-outline-info" :to="toListPage">
           {{ "back_to_list" | t }}
         </router-link>
       </div>
@@ -43,7 +47,7 @@
         <vote-buttons-component :parent="post"></vote-buttons-component>
         <span class="flex-grow-1"></span>
         <!-- mine buttons -->
-        <router-link class="btn btn-sm btn-info mr-2" :to="forumLink">
+        <router-link class="btn btn-sm btn-info mr-2" :to="toListPage">
           {{ "back_to_list" | t }}
         </router-link>
         <mine-buttons-component :parent="post"></mine-buttons-component>
@@ -75,18 +79,22 @@
         </div>
       </div>
       <div class="d-flex justify-content-end mt-3">
-        <router-link class="btn btn-outline-info" :to="forumLink">
+        <router-link class="btn btn-outline-info" :to="toListPage">
           {{ "back_to_list" | t }}
         </router-link>
       </div>
     </article>
+    <div class="p-3 text-center rounded" v-if="loading">
+      <b-spinner small class="mx-2" type="grow" variant="info"></b-spinner>
+      Please wait while loading the post ...
+    </div>
   </div>
 </template>
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
 
-import { PostModel } from "@/x-vue/services/interfaces";
+import { PostModel, RequestData } from "@/x-vue/services/interfaces";
 import CommentFormComponent from "@/x-vue/components/forum/CommentForm.vue";
 import CommentViewComponent from "@/x-vue/components/forum/CommentView.vue";
 import PostMetaComponent from "@/x-vue/components/forum/PostMeta.vue";
@@ -97,7 +105,6 @@ import UserAvatar from "@/x-vue/components/forum/UserAvatar.vue";
 import FileDisplay from "@/x-vue/components/forum/FileDisplay.vue";
 
 @Component({
-  props: ["post", "forumLink"],
   components: {
     CommentFormComponent,
     CommentViewComponent,
@@ -110,7 +117,32 @@ import FileDisplay from "@/x-vue/components/forum/FileDisplay.vue";
   },
 }) // without this, Vue lifecycle methods will not be invoked
 export default class PostView extends Vue {
-  post!: PostModel;
-  forumLink!: string;
+  post: PostModel = new PostModel();
+  loading = false;
+
+  async mounted(): Promise<void> {
+    console.log("PostView::mounted::");
+    this.loading = true;
+
+    const arr = location.href.split("/");
+    const last = arr[arr.length - 1];
+    const options: RequestData = {
+      idx: last,
+    };
+
+    try {
+      this.post = await this.$app.api.postGet(options);
+      // this.$store.commit("currentCategory", this.post.categoryId);
+      this.$emit("post", this.post);
+      this.loading = false;
+    } catch (e) {
+      this.loading = false;
+      this.$app.error(e);
+    }
+  }
+
+  get toListPage(): string {
+    return "forum/" + this.post.categoryId + location.search;
+  }
 }
 </script>

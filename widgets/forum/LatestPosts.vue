@@ -15,7 +15,11 @@
 
 <script lang="ts">
 import { ApiService } from "@/x-vue/services/api.service";
-import { PostModel, RequestData } from "@/x-vue/services/interfaces";
+import {
+  PostModel,
+  PostSearchRequest,
+  RequestData,
+} from "@/x-vue/services/interfaces";
 import ComponentService from "@/x-vue/services/x-vue.service";
 import Vue from "vue";
 import Component from "vue-class-component";
@@ -29,7 +33,7 @@ export default class LatestPosts extends Vue {
 
   posts: PostModel[] = [];
 
-  options: RequestData = {};
+  options: PostSearchRequest = {};
 
   mounted(): void {
     this.options.categoryId = this.categoryId ?? "qna";
