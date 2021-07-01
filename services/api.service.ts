@@ -788,22 +788,16 @@ export class ApiService {
     return res;
   }
 
-  async sendMessageToTopic(data: RequestData): Promise<ResponseData> {
-    const res = await this.request("notification.sendMessageToTopic", data);
-    // console.log(res);
-    return res;
+  sendMessageToTopic(data: RequestData): Promise<ResponseData> {
+    return this.request("notification.sendMessageToTopic", data);
   }
 
-  async sendMessageToTokens(data: RequestData): Promise<ResponseData> {
-    const res = await this.request("notification.sendMessageToTokens", data);
-    // console.log(res);
-    return res;
+  sendMessageToTokens(data: RequestData): Promise<ResponseData> {
+    return this.request("notification.sendMessageToTokens", data);
   }
 
-  async topicSubscription(data: RequestData): Promise<ResponseData> {
-    const res = await this.request("notification.topicSubscription", data);
-    console.log(res);
-    return res;
+  topicSubscription(data: RequestData): Promise<ResponseData> {
+    return this.request("notification.topicSubscription", data);
   }
 
   async isSubscribedToTopic(topic: string): Promise<ResponseData> {
@@ -822,10 +816,8 @@ export class ApiService {
    * - emails is an array of email or string separated by comma
    * @returns
    */
-  async sendMessageToUsers(data: RequestData): Promise<ResponseData> {
-    const res = await this.request("notification.sendMessageToUsers", data);
-    // console.log(res);
-    return res;
+  sendMessageToUsers(data: RequestData): Promise<ResponseData> {
+    return this.request("notification.sendMessageToUsers", data);
   }
 
   async fileGet(data: RequestData): Promise<FileModel> {
@@ -833,8 +825,8 @@ export class ApiService {
     return new FileModel().fromJson(res);
   }
 
-  async openWeatherMap(): Promise<ResponseData> {
-    return await this.request("open-weather-map.current");
+  openWeatherMap(): Promise<ResponseData> {
+    return this.request("open-weather-map.current");
   }
 
   async getCountryCurrencies(): Promise<CountryCurrenciesModel> {
@@ -842,8 +834,8 @@ export class ApiService {
     return new CountryCurrenciesModel().fromJson(res);
   }
 
-  async getExchangeRate(data: RequestData): Promise<ResponseData> {
-    return await this.request("currency-converter.get", data);
+  getExchangeRate(data: RequestData): Promise<ResponseData> {
+    return this.request("currency-converter.get", data);
   }
   /**
    * Set admin settings
@@ -851,13 +843,12 @@ export class ApiService {
    * It saves(or updates) code and data to meta table in backend.
    * Only admin can call this method.
    *
-   * @param c code
-   *
-   * @param d data
+   * @param code code
+   * @param data data
    * @returns idx and code will be returned.
    */
-  async setConfig(c: string, d: number | string): Promise<ResponseData> {
-    return await this.request("app.setConfig", { code: c, data: d });
+  setConfig(code: string, data: number | string): Promise<ResponseData> {
+    return this.request("app.setConfig", { code: code, data: data });
   }
   /**
    * Get admin settings.
@@ -868,7 +859,24 @@ export class ApiService {
    * @param c code
    * @returns data
    */
-  async getConfig(c: string): Promise<ResponseData> {
-    return await this.request("app.getConfig", { code: c });
+  getConfig(code: string): Promise<ResponseData> {
+    return this.request("app.getConfig", { code: code });
+  }
+
+  /**
+   * 관리자 설저응ㄹ 삭제한다.
+   * @param code 삭제 할 관리자 설정 코드
+   * @returns 에러이면, Exception throw, 성공이면, code
+   */
+  deleteConfig(code: string): Promise<ResponseData> {
+    return this.request("app.deleteConfig", { code: code });
+  }
+
+  /**
+   * 전체 관리자 설정을 가져온다.
+   * @returns 전체 관리자 설정
+   */
+  settings(): Promise<ResponseData> {
+    return this.request("app.settings");
   }
 }

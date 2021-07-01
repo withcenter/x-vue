@@ -359,13 +359,13 @@ import { ApiService } from "@/x-vue/services/api.service";
 import { RequestData, CategoryModel } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
-import AdminService from "../../../services/x-vue.service";
+import Service from "../../../services/x-vue.service";
 @Component({
   components: {},
 })
 export default class AdminCategoryEdit extends Vue {
   category: CategoryModel = {} as CategoryModel;
-  as = AdminService.instance;
+  s = Service.instance;
 
   async mounted(): Promise<void> {
     try {
@@ -373,7 +373,7 @@ export default class AdminCategoryEdit extends Vue {
         id: this.$route.params.categoryId ?? 0,
       });
     } catch (e) {
-      this.as.error(e);
+      this.s.error(e);
     }
   }
 
@@ -409,9 +409,9 @@ export default class AdminCategoryEdit extends Vue {
 
     try {
       this.category = await ApiService.instance.categoryUpdate(options);
-      this.as.alert("Category Update : ", "Update Success");
+      this.s.alert("Category Update : ", "Update Success");
     } catch (e) {
-      this.as.error(e);
+      this.s.error(e);
     }
   }
 }
