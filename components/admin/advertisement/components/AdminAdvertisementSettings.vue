@@ -146,7 +146,7 @@
 <script lang="ts">
 import { ApiService } from "@/x-vue/services/api.service";
 import {
-  AdvertisementSettings,
+  AdvertisementPointSetting,
   RequestData,
   ResponseData,
 } from "@/x-vue/services/interfaces";
@@ -162,7 +162,7 @@ export default class AdminAdvertisement extends Vue {
   s = Service.instance;
   maximumAdvertisementDays = 0;
   advertisementCategories = "";
-  points = [] as AdvertisementSettings[];
+  points = [] as AdvertisementPointSetting[];
 
   add = {};
 
@@ -170,12 +170,19 @@ export default class AdminAdvertisement extends Vue {
 
   async mounted(): Promise<void> {
     try {
-      let re = await this.api.getConfig("maximumAdvertisementDays");
-      this.maximumAdvertisementDays = re.data ? re.data : 0;
-      re = await this.api.getConfig("advertisementCategories");
-      this.advertisementCategories = re.data;
+      const settings = await this.api.advertisementSettings();
 
-      this.points = await this.api.advertisementGetBannerPoints();
+      // let re = await this.api.getConfig("maximumAdvertisementDays");
+      // this.maximumAdvertisementDays = re.data ? re.data : 0;
+      this.maximumAdvertisementDays = settings.maximumAdvertisementDays;
+      // re = await this.api.getConfig("advertisementCategories");
+      this.advertisementCategories = settings.categories.join(",");
+
+      // this.points = await this.api.advertisementGetBannerPoints();
+      this.points = Object.keys(settings.point).map((k) => {
+        settings.point[k].countryCode = k;
+        return settings.point[k];
+      });
 
       this.countries = await this.api.countryAll();
     } catch (e) {
@@ -188,17 +195,8 @@ export default class AdminAdvertisement extends Vue {
     try {
       await this.api.advertisementSetBannerPoint(data);
       this.points = await this.api.advertisementGetBannerPoints();
-
-      let msg = `Points for ${data.countryCode} is `;
-      if (data.idx) {
-        // console.log("onEdit::update", this.points);
-        msg += " updated.";
-      } else {
-        // console.log("onEdit::add", this.points);
-        msg += " added.";
-        this.add = {};
-      }
-      this.s.alert("Points ", msg);
+      this.add = {};
+      this.s.alert("Points ", "Point setting updated!");
     } catch (e) {
       this.s.error(e);
     }
