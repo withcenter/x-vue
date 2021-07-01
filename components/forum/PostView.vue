@@ -121,6 +121,7 @@ export default class PostView extends Vue {
   loading = false;
 
   async mounted(): Promise<void> {
+    console.log("PostView::mounted::");
     this.loading = true;
 
     const arr = location.href.split("/");
