@@ -1,47 +1,44 @@
 <template>
   <div class="admin-advertisement-list">
-    <div v-if="!loading">
-      <div class="mt-3" v-if="advertisements.length">
-        <div
-          class="box d-flex p-2 mb-2"
-          v-for="advertisement of advertisements"
-          :key="advertisement.idx"
+    <div class="mt-3" v-if="advertisements.length">
+      <div
+        class="box d-flex p-2 mb-2"
+        v-for="advertisement of advertisements"
+        :key="advertisement.idx"
+      >
+        <router-link
+          class="w-100"
+          :to="`/advertisement/view/${advertisement.idx}`"
         >
-          <router-link
-            class="w-100"
-            :to="`/advertisement/view/${advertisement.idx}`"
-          >
-            <advertisement-preview
-              :advertisement="advertisement"
-            ></advertisement-preview>
-          </router-link>
-          <div class="ml-1 px-2 text-center border-left">
-            <b-avatar
-              tabindex="0"
-              class="center"
-              :src="advertisement.user.src"
-              :size="'4em'"
-            ></b-avatar>
-            <div class="w-100 text-truncate">
-              {{ advertisement.user.displayName }}
-            </div>
+          <advertisement-preview
+            :advertisement="advertisement"
+          ></advertisement-preview>
+        </router-link>
+        <div class="ml-1 px-2 text-center border-left">
+          <b-avatar
+            tabindex="0"
+            class="center"
+            :src="advertisement.user.src"
+            :size="'4em'"
+          ></b-avatar>
+          <div class="w-100 text-truncate">
+            {{ advertisement.user.displayName }}
           </div>
-        </div>
-
-        <div class="d-flex overflow-auto justify-content-center">
-          <b-pagination-nav
-            :link-gen="linkGen"
-            :number-of-pages="noOfPages"
-            v-model="options.page"
-            v-on:change="onPageChanged"
-            use-router
-          ></b-pagination-nav>
         </div>
       </div>
     </div>
     <div class="p-3 text-center rounded" v-if="loading">
       <b-spinner small class="mx-2" type="grow" variant="info"></b-spinner>
       Loading Advertisements ...
+    </div>
+    <div class="d-flex overflow-auto justify-content-center">
+      <b-pagination-nav
+        :link-gen="linkGen"
+        :number-of-pages="noOfPages"
+        v-model="options.page"
+        v-on:change="onPageChanged"
+        use-router
+      ></b-pagination-nav>
     </div>
   </div>
 </template>

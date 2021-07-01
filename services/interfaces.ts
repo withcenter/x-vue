@@ -44,6 +44,8 @@ export interface PostSearchRequest {
   userIdx?: number;
   otherUserIdx?: number;
   limit?: number;
+  page?: string;
+  comments?: number;
 }
 
 export interface MainCafeSettings {
