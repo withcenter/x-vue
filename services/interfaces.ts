@@ -33,6 +33,19 @@ export interface ResponseData {
   [index: string]: any;
 }
 
+export interface PostSearchRequest {
+  categoryIdx?: number;
+  categoryId?: string;
+  subcategory?: string;
+  code?: string;
+  files?: "Y" | "";
+  countryCode?: string;
+  searchKey?: string;
+  userIdx?: number;
+  otherUserIdx?: number;
+  limit?: number;
+}
+
 export interface MainCafeSettings {
   name: string;
   countryCode: string;
