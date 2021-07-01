@@ -43,6 +43,9 @@ export interface PostSearchRequest {
   searchKey?: string;
   userIdx?: number;
   otherUserIdx?: number;
+  order?: string;
+  by?: string;
+  page?: number;
   limit?: number;
 }
 
