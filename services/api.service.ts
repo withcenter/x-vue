@@ -18,6 +18,7 @@ import {
   CategoryBanners,
   RequestCafeCreate,
   AdvertisementPointSetting,
+  PostSearchRequest,
 } from "./interfaces";
 
 import Cookies from "js-cookie";
@@ -336,7 +337,12 @@ export class ApiService {
     return new PostModel().fromJson(res);
   }
 
-  async postSearch(data: RequestData): Promise<Array<PostModel>> {
+  /**
+   * Returns the posts.
+   * @param data request data
+   * @returns posts
+   */
+  async postSearch(data: PostSearchRequest): Promise<Array<PostModel>> {
     const res = await this.request("post.search", data);
     return res.map((post: JSON) => new PostModel().fromJson(post));
   }

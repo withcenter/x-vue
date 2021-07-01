@@ -1,6 +1,6 @@
 <template>
-  <section class="post-edit-page p-2">
-    <div v-if="api._user.loggedIn && api.isMine(form)">
+  <section class="post">
+    <div v-if="api._user.loggedIn">
       <div v-if="form.categoryId">
         {{ "category" | t }}
         <span class="text-uppercase">
@@ -57,7 +57,6 @@
         ></file-display>
       </form>
     </div>
-    <div v-if="!api.isMine(form) && !loading">TODO: Post is not yours</div>
     <login-first v-if="!loading"></login-first>
     <div class="p-3 text-center rounded" v-if="loading">
       <b-spinner small class="mx-2" type="grow" variant="info"></b-spinner>
