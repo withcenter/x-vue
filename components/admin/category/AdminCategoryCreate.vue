@@ -24,7 +24,7 @@ import Service from "../../../services/x-vue.service";
 
 @Component({})
 export default class AdminCategoryCreate extends Vue {
-  as = Service.instance;
+  s = Service.instance;
   category: CategoryModel = {} as CategoryModel;
   api = ApiService.instance;
 
@@ -33,7 +33,6 @@ export default class AdminCategoryCreate extends Vue {
   description = "";
 
   async onSubmit(): Promise<void> {
-    console.log("categoryUpdate:: create");
     try {
       this;
 
@@ -41,12 +40,12 @@ export default class AdminCategoryCreate extends Vue {
         id: this.id,
       });
       console.log(this.category);
-      this.as.open(`/admin/category/edit/${this.category.id}`);
+      this.s.open(`/admin/category/edit/${this.category.id}`);
     } catch (e) {
       if (e == "error_category_exists") {
-        this.as.open(`/admin/category/edit/${this.id}`);
+        this.s.open(`/admin/category/edit/${this.id}`);
       } else {
-        this.as.error(e);
+        this.s.error(e);
       }
     }
   }

@@ -485,9 +485,9 @@ export default class Advertisement extends Vue {
   get endAtMax(): string {
     let d = dayjs();
     if (this.post.beginDate) d = dayjs(this.post.beginDate);
-    if (this.settings.maximum_advertising_days > 0) {
+    if (this.settings.maximumAdvertisementDays > 0) {
       return d
-        .add(this.settings.maximum_advertising_days, "d")
+        .add(this.settings.maximumAdvertisementDays, "d")
         .format("YYYY-MM-DD");
     }
     return "";

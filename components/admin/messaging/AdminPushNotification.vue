@@ -184,11 +184,11 @@ import { DEFAULT_TOPIC } from "@/x-vue/services/defines";
 import { RequestData, ResponseData } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
-import AdminService from "../../../services/x-vue.service";
+import Service from "../../../services/x-vue.service";
 
 @Component({})
 export default class AdminPushNotification extends Vue {
-  as = AdminService.instance;
+  s = Service.instance;
   options = {
     idx: "",
     notify: "all",
@@ -229,7 +229,7 @@ export default class AdminPushNotification extends Vue {
       this.loading = false;
     } catch (e) {
       this.loading = false;
-      this.as.error(e);
+      this.s.error(e);
     }
   }
 
@@ -281,19 +281,19 @@ export default class AdminPushNotification extends Vue {
       if (this.options.notify === "tokens") {
         const s = res.success.length;
         const f = res.error.length;
-        this.as.alert(
+        this.s.alert(
           "Send Push Message to tokens: ",
           `${s} Success, ${f} Fail.`
         );
       } else {
-        this.as.alert(
+        this.s.alert(
           "Send Push Message to topic : ",
           "Success Sending push notification to topic."
         );
       }
     } catch (e) {
       this.loading = false;
-      this.as.error(e);
+      this.s.error(e);
     }
   }
 }
