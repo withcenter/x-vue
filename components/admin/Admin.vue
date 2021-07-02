@@ -1,5 +1,5 @@
 <template>
-  <div class="px-3">
+  <div class="px-3 bg-light">
     <h1>{{ "admin_dashboard" | t }}</h1>
     <div>
       <router-link class="btn btn-link" to="/admin/user">User</router-link>
@@ -20,6 +20,9 @@
       </router-link>
       <router-link class="btn btn-link" to="/admin/advertisement">
         {{ "advertisement" | t }}
+      </router-link>
+      <router-link class="btn btn-link" to="/admin/samples">
+        {{ "samples" | t }}
       </router-link>
     </div>
     <hr />

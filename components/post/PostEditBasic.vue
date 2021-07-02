@@ -6,7 +6,7 @@
 
       <div class="d-flex justify-content-between">
         <FileUploadButton
-          @success="onFileUpload"
+          @uploaded="onFileUpload"
           @progress="progress = $event"
         ></FileUploadButton>
 

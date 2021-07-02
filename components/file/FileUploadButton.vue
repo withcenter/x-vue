@@ -38,14 +38,14 @@ export default class UploadButtonBasic extends Vue {
 
     console.log("file; ", file);
     try {
-      const res = await this.api.fileUpload(
+      const uploadedFile = await this.api.fileUpload(
         file,
         {
           taxonomy: "posts",
         },
         (progress) => this.$emit("progress", progress)
       );
-      this.$emit("success", res);
+      this.$emit("uploaded", uploadedFile);
     } catch (e) {
       ComponentService.instance.error(e);
     }
