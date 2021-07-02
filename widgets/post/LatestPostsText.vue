@@ -2,14 +2,14 @@
   <div v-if="posts.length">
     Latest Posts {{ categoryId }}
     <hr class="my-1" />
-    <a
+    <router-link
       class="d-block text-truncate"
       v-for="post of posts"
       :key="post.idx"
-      :href="post.relativeUrl"
+      :to="post.relativeUrl"
     >
       {{ post.title }}
-    </a>
+    </router-link>
   </div>
 </template>
 
@@ -23,7 +23,7 @@ import Component from "vue-class-component";
 @Component({
   props: ["categoryId", "limit"],
 })
-export default class LatestPosts extends Vue {
+export default class LatestPostsText extends Vue {
   categoryId!: string;
   limit!: number;
 
