@@ -261,6 +261,14 @@ export default class Login extends Vue {
 ```
 
 
+# Components and Widgets
+
+- If a component and its children component are the core part of a page(screen) and it goes into `x-vue/components` folder.
+  - For instance, a `post-list` comopnent is the core part of post list page. so, it should go into `x-vue/components`.
+- If a component is not a part of specific page(screen), and it can be used in any places, then it goes into `x-vue/widgets`.
+  - For instance, `latest-posts` component can be displayed in sidebar area and it is not belonging to a single page(screen), so it should go into `x-vue/widgets`.
+
+
 
 # Forum
 
