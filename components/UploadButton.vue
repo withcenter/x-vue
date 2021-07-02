@@ -1,10 +1,10 @@
 <template>
   <div class="pr-2 position-relative overflow-hidden pointer">
-    <img
+    <camera-svg
       class="pointer"
-      src="@/assets/svg/camera.svg"
       :style="{ width: `${defaultSize}px`, height: `${defaultSize}px` }"
-    />
+    ></camera-svg>
+
     <input
       class="h-100 top right position-absolute fs-lg opacity-0 pointer"
       type="file"
@@ -19,6 +19,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { ApiService } from "../services/api.service";
 import ComponentService from "../services/x-vue.service";
+import CameraSvg from "./svg/CameraSvg.vue";
 
 interface HTMLInputEvent extends Event {
   target: HTMLInputElement & EventTarget;
@@ -26,6 +27,7 @@ interface HTMLInputEvent extends Event {
 
 @Component({
   props: ["size"],
+  components: { CameraSvg },
 })
 export default class UploadButton extends Vue {
   size!: number;

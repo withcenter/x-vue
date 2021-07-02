@@ -12,7 +12,7 @@
           v-if="showDelete"
           @click="onClickDelete(file.idx)"
         >
-          <img class="icon-md" src="@/assets/svg/fas-trash.svg" />
+          <trash-svg></trash-svg>
         </div>
         <img class="w-100 h-100" :src="file.url" :alt="file.name" />
       </div>
@@ -26,9 +26,11 @@ import Component from "vue-class-component";
 import { FileModel } from "@/x-vue/services/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
 import Service from "@/x-vue/services/x-vue.service";
+import TrashSvg from "@/x-vue/components/svg/TrashSvg.vue";
 
 @Component({
   props: ["files", "showDelete"],
+  components: { TrashSvg },
 })
 export default class FileDisplay extends Vue {
   files!: Array<FileModel>;
