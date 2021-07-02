@@ -139,12 +139,14 @@
                 class="w-25 form-control"
                 type="number"
                 v-model="category.createHourLimit"
+                :placeholder="'create_hour_limit' | t"
               />
               <span class="mx-2">/</span>
               <input
                 class="w-25 form-control"
                 type="number"
                 v-model="category.createHourLimitCount"
+                :placeholder="'create_hour_limit_count' | t"
               />
             </td>
           </tr>
@@ -196,7 +198,11 @@
           <tr>
             <td>{{ "post_create_limit" | t }}</td>
             <td>
-              <input class="form-control" v-model="category.postCreateLimit" />
+              <input
+                class="form-control"
+                type="number"
+                v-model="category.postCreateLimit"
+              />
             </td>
           </tr>
 
@@ -205,6 +211,7 @@
             <td>
               <input
                 class="form-control"
+                type="number"
                 v-model="category.commentCreateLimit"
               />
             </td>
@@ -213,7 +220,11 @@
           <tr>
             <td>{{ "post_comment_read_limit" | t }}</td>
             <td>
-              <input class="form-control" v-model="category.readLimit" />
+              <input
+                class="form-control"
+                type="number"
+                v-model="category.readLimit"
+              />
             </td>
           </tr>
 
@@ -324,7 +335,7 @@
             <td>
               <input
                 class="form-control"
-                type="text"
+                type="number"
                 v-model="category.noOfPostsPerPage"
               />
             </td>
@@ -336,7 +347,7 @@
             <td>
               <input
                 class="form-control"
-                type="text"
+                type="number"
                 v-model="category.noOfPagesOnNav"
               />
             </td>
