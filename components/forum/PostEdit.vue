@@ -129,6 +129,7 @@ export default class PostEdit extends Vue {
       let link = `/${res.path}` + location.search;
       ComponentService.instance.open(link);
       this.submitted = false;
+      this.$emit("edited");
     } catch (e) {
       ComponentService.instance.error(e);
       this.submitted = false;
