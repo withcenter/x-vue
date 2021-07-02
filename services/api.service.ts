@@ -46,6 +46,9 @@ import Vue from "vue";
  */
 export class ApiService {
   private constructor() {
+    /// 로딩 할 때, 바로 사용자 세션 값을 읽어 들여서 최대한 빠르게 사용자 로그인 여부를 판단한다.
+    this.sessionId = this.getUserSessionId();
+    console.log("session id; ", this.sessionId);
     /// Add filter `t` for translating.
     /// This must be inside this constructor or somewhere it can be defined
     /// before Vue initialization.
@@ -145,7 +148,7 @@ export class ApiService {
 
   /**
    * returns true if the user is logged in, false if not.
-   * It will check if `this.user` is not null.
+   * It only checks if session id is available.
    *
    * @returns boolean
    */
@@ -206,7 +209,6 @@ export class ApiService {
    */
   async initUserAuth(): Promise<void> {
     console.log("==> ApiService::initUserAuth()");
-    this.sessionId = this.getUserSessionId();
     console.log(
       "==> ApiService::initUserAuth() ==> sessionId has set to: ",
       this.sessionId
@@ -222,7 +224,8 @@ export class ApiService {
   /**
    * It will refresh the `user` instance in store base on the current `sessionId` saved in the cookie
    *
-   * @note it only returns UserModel. It does not return void, or undefined. But it throws an error if there is an error.
+   * @note it only returns UserModel. It does not return void, or undefined.
+   * But it throws an error if there is an error.
    *
    * @returns UserModel
    */
@@ -475,7 +478,8 @@ export class ApiService {
   /**
    * Returns country data
    *
-   * @attention it does memory cache. So, it will connect to backend only one time even if this method is used server times.
+   * @attention it does memory cache.
+   * So, it will connect to backend only one time even if this method is used server times.
    *
    * @returns Promise<ResponseData>
    */
@@ -783,8 +787,12 @@ export class ApiService {
     return new AdvertisementModel().fromJson(res);
   }
 
+  /**
+   * Returns login user's cafe list.
+   * @returns cafe list
+   */
   async myCafeList(): Promise<CafeModel[]> {
-    if (this.notLoggedIn) {
+    if (this.loggedIn) {
       const res = await this.request("cafe.mine");
       return res.map((cafe: JSON) => new CafeModel().fromJson(cafe));
     } else {
