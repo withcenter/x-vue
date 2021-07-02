@@ -348,6 +348,11 @@ export class PostRootModel {
   }
 }
 
+/**
+ * Post model
+ *
+ * To clean(clear, reset) the model, just call `model.fromJson({})`.
+ */
 export class PostModel extends PostRootModel {
   fromJson(map: ResponseData): PostModel {
     this.pointPerDay = map.pointPerDay;
@@ -430,8 +435,14 @@ export class PostModel extends PostRootModel {
   }
 
   async edit(): Promise<PostModel> {
+    // create
     const post = await ApiService.instance.postEdit(this.toJson);
 
+    // finish edit work
+    this.inEdit = false;
+
+    // Reset the post
+    this.fromJson({});
     return post;
   }
 }
