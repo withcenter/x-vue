@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { ForumInterface, PostModel } from "@/x-vue/services/interfaces";
+import { ForumInterface } from "@/x-vue/services/interfaces";
 import Vue from "vue";
 
 import { Component, Prop } from "vue-property-decorator";
@@ -39,9 +39,25 @@ export default class PostEditBasic extends Vue {
     if (!this.forum) alert("[forum] is not binded.");
   }
   async onSubmit(): Promise<void> {
+    /// Set categoryId. This must be here.
+    this.forum.post.categoryId = this.forum.categoryId;
     console.log("post", this.forum.post.toJson);
     try {
-      const res = this.forum.post.edit();
+      /// create or edit
+      const post = await this.forum.post.edit();
+
+      console.log("post; ", post);
+      /// find post that was edited
+      const i = this.forum.posts.findIndex((p) => {
+        console.log("p.idx; ", p.idx, "post.idx;", post.idx);
+        return p.idx == post.idx;
+      });
+      if (i == -1) {
+        /// If it can't find, then it's a new post.
+        this.forum.posts.splice(0, 0, post);
+      } else {
+        this.$set(this.forum.post, i, post);
+      }
     } catch (e) {
       ComponentService.instance.error(e);
     }
