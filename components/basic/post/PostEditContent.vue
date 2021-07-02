@@ -4,7 +4,7 @@
     <div class="form-group">
       <textarea
         class="w-100 form-control"
-        v-model="$parent.post.content"
+        v-model="$parent.forum.post.content"
         type="text"
         name="content"
       />

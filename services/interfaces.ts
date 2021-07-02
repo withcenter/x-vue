@@ -2,6 +2,8 @@
  * @see README 참고
  */
 
+import { ApiService } from "./api.service";
+
 //
 export interface MapStringAny {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -106,6 +108,41 @@ export interface AdvertisementSettings {
 // router: VueRouter;
 // }
 
+/**
+ * Forum interface that can be used for post list, edit
+ */
+export class ForumInterface {
+  /// post list
+  posts: PostModel[] = [];
+  /// post to create, edit
+  post: PostModel = new PostModel();
+  /// page no
+  page = 0;
+  limit = 12;
+  loading = false;
+  noMore = false;
+  categoryId = "";
+
+  get searchOptions(): PostSearchRequest {
+    return {
+      categoryId: this.categoryId,
+      page: this.page,
+      limit: this.limit,
+    };
+  }
+
+  get canLoad(): boolean {
+    return this.loading || this.noMore;
+  }
+  beginLoad(): void {
+    this.loading = true;
+    this.page++;
+  }
+  endLoad(): void {
+    this.loading = false;
+  }
+}
+
 export interface KakaoUserMe {
   id: number;
   kakao_account: {
@@ -125,7 +162,7 @@ export interface KakaoUserMe {
 }
 
 export class UserModel {
-  idx = "";
+  idx = 0;
   sessionId = "";
   email = "";
   name = "";
@@ -206,7 +243,7 @@ export class CommentEditModel {
 export class PostRootModel {
   parentIdx = 0;
 
-  rootIdx = "";
+  rootIdx = 0;
 
   url = "";
   path = "";
@@ -214,7 +251,7 @@ export class PostRootModel {
 
   title = "";
   categoryId = "";
-  categoryIdx = "";
+  categoryIdx = 0;
 
   subcategory = "";
 
@@ -239,7 +276,7 @@ export class PostRootModel {
   endDate = "";
 
   idx = 0;
-  userIdx = "";
+  userIdx = 0;
 
   content = "";
   shortDate = "";
@@ -247,7 +284,7 @@ export class PostRootModel {
   Y = 0;
   N = 0;
   deletedAt = 0;
-  depth = "";
+  depth = 0;
 
   /**
    * client side use only
@@ -390,6 +427,12 @@ export class PostModel extends PostRootModel {
       const index = this.comments.findIndex((c) => c.idx == comment.parentIdx);
       this.comments.splice(index + 1, 0, comment);
     }
+  }
+
+  async edit(): Promise<PostModel> {
+    const post = await ApiService.instance.postEdit(this.toJson);
+
+    return post;
   }
 }
 

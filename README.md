@@ -259,3 +259,22 @@ export default class Login extends Vue {
 }
 </script>
 ```
+
+
+
+# Forum
+
+
+## Forum Interface
+
+- The reason why there is an interface for forum related pages is to set a protocol.
+  - So, forum related pages can communicate each other in a unified way.
+  - For instance, the post list page can include its child component without passing props like below.
+```ts
+<PostListLoading></PostListLoading>
+```
+  - And the parent component and child component can communicate with each other.
+  - For child component, it can simply access parent's member properties like below.
+```ts
+<div class="..." v-if="$parent.forum.loading">
+```
