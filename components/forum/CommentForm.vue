@@ -126,9 +126,10 @@ export default class CommentForm extends Vue {
         this.comment.inEdit = false;
       } else {
         // comment create
-        res.depth = (this.parent.depth ? +this.parent.depth + 1 : 1).toString();
+        res.depth = this.parent.depth ? +this.parent.depth + 1 : 1;
         this.root.insertComment(res);
       }
+
       this.form.content = "";
       this.uploadedFiles = [];
       this.submitted = false;

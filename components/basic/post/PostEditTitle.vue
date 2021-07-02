@@ -4,7 +4,7 @@
     <div class="form-group">
       <input
         class="w-100 form-control"
-        v-model="$parent.post.title"
+        v-model="$parent.forum.post.title"
         type="text"
         name="title"
       />

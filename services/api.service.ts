@@ -175,7 +175,7 @@ export class ApiService {
     // console.log("endpoint; ", endpoint);
     const res = await axios.post(this.endpoint, data);
     if (typeof res.data === "string") {
-      console.error(res);
+      console.error(res.data);
       throw "error_error_string_from_php_backend";
     } else if (!res.data.response) {
       throw "error_malformed_response_from_php_backend";
