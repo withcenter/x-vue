@@ -1,10 +1,12 @@
 <template>
   <section>
     <thumbnail-with-text
-      v-for="(post, index) of posts"
+      class="mb-3"
+      v-for="(post, index) of posts.slice(0, limit)"
       :key="index"
       :post="post"
-      class="mb-2"
+      :thumbnailWidth="thumbnailWidth"
+      :thumbnailHeight="thumbnailHeight"
     ></thumbnail-with-text>
   </section>
 </template>
@@ -27,8 +29,7 @@ export default class TwoStoriesThumbnailWithText extends Vue {
       posts.push(
         new PostModel().fromJson({
           title: "1st Story Title will be here",
-          content:
-            "1st Story Content will be here 1st Story Content will be here 1st Story Content will be here 1st Story Content will be here 1st Story Content will be here 1st Story Content will be here 1st Story Content will be here 1st Story Content will be here ",
+          content: "1st Story Content will be here",
           files: [
             {
               url: "https://symbols.getvecta.com/stencil_82/45_google-icon.d8d982f8a1.svg",
@@ -39,20 +40,38 @@ export default class TwoStoriesThumbnailWithText extends Vue {
       posts.push(
         new PostModel().fromJson({
           title: "2nd Story Title will be here",
-          content:
-            // "2nd Story Content will be here",
-            "1st Story Content will be here 1st Story Content will be here 1st Story Content will be here 1st Story Content will be here 1st Story Content will be here 1st Story Content will be here 1st Story Content will be here 1st Story Content will be here ",
-          files: [
-            {
-              url: "https://png.pngtree.com/thumb_back/fh260/background/20190223/ourmid/pngtree-pure-color-watercolor-graffiti-gradient-background-board-design-board-design-image_66713.jpg",
-            },
-          ],
+          content: "2nd Story Content will be here",
+          // files: [
+          //   {
+          //     url: "https://symbols.getvecta.com/stencil_82/45_google-icon.d8d982f8a1.svg",
+          //   },
+          // ],
+        })
+      );
+      posts.push(
+        new PostModel().fromJson({
+          title: "2nd Story Title will be here",
+          content: "2nd Story Content will be here",
+          // files: [
+          //   {
+          //     url: "https://symbols.getvecta.com/stencil_82/45_google-icon.d8d982f8a1.svg",
+          //   },
+          // ],
         })
       );
       return posts;
     },
   })
   posts!: PostModel[];
+
+  @Prop({ default: 70 })
+  thumbnailWidth!: number;
+
+  @Prop({ default: 70 })
+  thumbnailHeight!: number;
+
+  @Prop({ default: 2 })
+  limit!: number;
 
   mounted(): void {
     console.log("TwoStoriesThumbnailWithText", this.posts);
