@@ -52,6 +52,13 @@ export interface PostSearchRequest {
   comments?: number;
 }
 
+export interface FileUploadRequest {
+  taxonomy?: string;
+  entity?: number;
+  code?: string;
+  deletePreviousUpload?: "Y" | "";
+}
+
 export interface MainCafeSettings {
   name: string;
   countryCode: string;
@@ -288,9 +295,26 @@ export class PostRootModel {
 
   /**
    * client side use only
+   * `inEdit` becomes true when user pressed for creating or editing.
+   * `inEdit` 의 값이 참이면, 화면에 수정 버튼을 보여주면 된다.
    */
   inEdit = false;
+
+  /**
+   *
+   */
   inReply = false;
+
+  /**
+   * 글 작성을 위한 초기화
+   *
+   * 사용자가, 글 작성 버튼 클릭 시, 현재 모델을 먼저 초기화 하고, 카테고리 지정 및 글 수정 표시를 한다.
+   */
+  toCreate(categoryId: string) {
+    this.fromJson({});
+    this.categoryId = categoryId;
+    this.inEdit = true;
+  }
 
   // `files` is an FileModel object array
   files: Array<FileModel> = [];
@@ -313,7 +337,7 @@ export class PostRootModel {
   }
 
   fromJson(map: ResponseData): PostRootModel {
-    this.idx = map.idx;
+    this.idx = map.idx ?? 0;
     this.userIdx = map.userIdx;
     this.content = map.content;
     this.shortDate = map.shortDate;
@@ -434,6 +458,10 @@ export class PostModel extends PostRootModel {
     }
   }
 
+  /**
+   * Create or update current post.
+   * @returns PostModel
+   */
   async edit(): Promise<PostModel> {
     // create
     const post = await ApiService.instance.postEdit(this.toJson);
@@ -441,8 +469,6 @@ export class PostModel extends PostRootModel {
     // finish edit work
     this.inEdit = false;
 
-    // Reset the post
-    this.fromJson({});
     return post;
   }
 }

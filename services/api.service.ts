@@ -19,6 +19,7 @@ import {
   RequestCafeCreate,
   AdvertisementPointSetting,
   PostSearchRequest,
+  FileUploadRequest,
 } from "./interfaces";
 
 import Cookies from "js-cookie";
@@ -396,16 +397,22 @@ export class ApiService {
 
   async fileUpload(
     file: File,
-    params: RequestData,
+    params: FileUploadRequest,
     progressCallback: (progress: number) => void
   ): Promise<FileModel> {
     const form = new FormData();
     form.append("route", "file.upload");
     if (this.sessionId) form.append("sessionId", this.sessionId);
 
-    for (const key in params) {
-      form.append(key, params[key]);
-    }
+    // for (const key in params) {
+    //   form.append(key, params[key]);
+    // }
+
+    if (params.taxonomy) form.append("taxonomy", params.taxonomy);
+    if (params.entity) form.append("entity", params.entity.toString());
+    if (params.code) form.append("code", params.code);
+    if (params.deletePreviousUpload)
+      form.append("deletePreviousUpload", params.deletePreviousUpload);
 
     form.append("userfile", file);
 
