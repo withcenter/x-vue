@@ -1,11 +1,11 @@
 <template>
   <router-link
-    class="thumbnail-with-text-bottom h-100"
+    class="thumbnail-with-text-bottom"
     v-if="post && post.idx"
-    :to="link"
+    :to="post.relativeUrl"
   >
     <img class="image w-100" :src="src" />
-    <div class="title overflow-hidden">
+    <div class="p-2 title w-100 overflow-hidden">
       <b>{{ post.title }}</b>
     </div>
   </router-link>
@@ -13,36 +13,43 @@
 
 <style lang="scss" scoped>
 .title {
-  height: 2.6em;
-  line-height: 1.3em;
-  font-size: 1.2em;
+  max-height: 3.8em;
+  font-size: 1em;
 }
 </style>
 
 <script lang="ts">
 import Vue from "vue";
-import Component from "vue-class-component";
+import { Component, Prop } from "vue-property-decorator";
 import { PostModel } from "@/x-vue/services/interfaces";
 
-@Component({
-  props: ["post"],
-})
+@Component({})
 export default class ThumbnailWithTextBottom extends Vue {
+  @Prop({
+    default: () => {
+      return new PostModel().fromJson({
+        idx: 1,
+        title:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        files: [
+          {
+            url: "https://spaceplace.nasa.gov/nebula/en/nebula3.en.jpg",
+          },
+        ],
+        relativeUrl: "#",
+      });
+    },
+  })
   post!: PostModel;
+
+  @Prop({
+    default: 150,
+  })
+  imageHeight!: number;
 
   get src(): string {
     if (!this.post.files.length) return "";
     return this.post.files[0].url;
-  }
-
-  get title(): string {
-    if (!this.post) return "Sample title";
-    return this.post.title;
-  }
-
-  get link(): string {
-    if (!this.post.relativeUrl) return "#";
-    return this.post.relativeUrl;
   }
 }
 </script>

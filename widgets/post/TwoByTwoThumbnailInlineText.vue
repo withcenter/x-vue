@@ -1,6 +1,6 @@
 <template>
-  <div class="two-by-two-thumbnail-with-text-bottom" v-if="categoryId">
-    <div class="top d-flex" :style="{ height: height + 'px' }">
+  <div class="two-by-two-thumbnail-with-text-bottom">
+    <div class="top d-flex" :style="{ height: itemHeight + 'px' }">
       <ThumbnailWithInlineText
         class="w-50"
         :post="posts[0]"
@@ -10,7 +10,7 @@
         :post="posts[1]"
       ></ThumbnailWithInlineText>
     </div>
-    <div class="mt-1 bottom d-flex" :style="{ height: height + 'px' }">
+    <div class="mt-1 bottom d-flex" :style="{ height: itemHeight + 'px' }">
       <ThumbnailWithInlineText
         class="w-50"
         :post="posts[2]"
@@ -24,36 +24,34 @@
 </template>
 
 <script lang="ts">
+import Vue from "vue";
 import { ApiService } from "@/x-vue/services/api.service";
 import { PostModel } from "@/x-vue/services/interfaces";
-import ComponentService from "@/x-vue/services/x-vue.service";
-import Vue from "vue";
+import { Component, Prop } from "vue-property-decorator";
 
-import Component from "vue-class-component";
 import ThumbnailWithInlineText from "./ThumbnailWithInlineText.vue";
+import ComponentService from "@/x-vue/services/x-vue.service";
 
 @Component({
-  props: ["categoryId", "itemHeight"],
   components: {
     ThumbnailWithInlineText,
   },
 })
 export default class TwoByTwoThumbnailInlineText extends Vue {
+  @Prop({})
   categoryId!: string;
+  @Prop({
+    default: 150,
+  })
   itemHeight!: number;
 
   posts: PostModel[] = [];
 
-  get height(): number {
-    if (!this.itemHeight) return 150;
-    return this.itemHeight;
-  }
-
   async mounted(): Promise<void> {
-    const categoryId = this.categoryId;
+    if (!this.categoryId) return;
     try {
       this.posts = await ApiService.instance.postSearch({
-        categoryId,
+        categoryId: this.categoryId,
         limit: 4,
         files: "Y",
       });
