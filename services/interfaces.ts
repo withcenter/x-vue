@@ -310,7 +310,7 @@ export class PostRootModel {
    *
    * 사용자가, 글 작성 버튼 클릭 시, 현재 모델을 먼저 초기화 하고, 카테고리 지정 및 글 수정 표시를 한다.
    */
-  toCreate(categoryId: string) {
+  toCreate(categoryId: string): void {
     this.fromJson({});
     this.categoryId = categoryId;
     this.inEdit = true;
