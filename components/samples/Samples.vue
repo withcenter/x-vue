@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pb-5">
     <h1>Samples of Components and Widgets</h1>
 
     <div class="alert alert-info">
@@ -20,14 +20,46 @@
       <FileUploadButton @uploaded="onUploaded"></FileUploadButton>
     </div>
 
-    <div class="card" style="width: 18rem">
-      <div class="card-body">
-        <h5 class="card-title">LatestText</h5>
-        <p class="card-text">Display the title of a post</p>
-        <hr />
-        <p><LatestText></LatestText></p>
-      </div>
+    <div class="alert alert-info">
+      <h2>LatestText</h2>
+      Display the title of a post
+      <b-card>
+        <LatestText></LatestText>
+      </b-card>
     </div>
+
+    <div class="alert alert-info">
+      <h2>ThumbnailWithText</h2>
+      Display thumbnail and title and content from a post
+      <div>Props</div>
+      <ul>
+        <li>post: PostModel</li>
+        <li>thumbnailWidth: number</li>
+        <li>thumbnailHeight: number</li>
+      </ul>
+      <b-card>
+        <thumbnail-with-text
+          :thumbnailHeight="50"
+          :thumbnailWidth="50"
+        ></thumbnail-with-text>
+      </b-card>
+    </div>
+
+    <div class="alert alert-info">
+      <h2>TwoStoriesThumbnailWithText</h2>
+      Display two ThumbnailWithText from posts
+
+      <div>Props</div>
+      <ul>
+        <li>posts: PostModel[]</li>
+        <li>thumbnailWidth: number</li>
+        <li>thumbnailHeight: number</li>
+      </ul>
+      <b-card>
+        <two-stories-thumbnail-with-text></two-stories-thumbnail-with-text>
+      </b-card>
+    </div>
+
     <p>..</p>
     <p>..</p>
     <p>..</p>
@@ -48,8 +80,19 @@ import FileUploadButton from "@/x-vue/components/file/FileUploadButton.vue";
 import ComponentService from "@/x-vue/services/x-vue.service";
 import { FileModel } from "@/x-vue/services/interfaces";
 import LatestText from "@/x-vue/widgets/post/LatestText.vue";
+
+import ThumbnailWithText from "@/x-vue/widgets/post/ThumbnailWithText.vue";
+import TwoStoriesThumbnailWithText from "@/x-vue/widgets/post/TwoStoriesThumbnailWithText.vue";
+
 @Component({
-  components: { CameraSvg, UploadButton, FileUploadButton, LatestText },
+  components: {
+    CameraSvg,
+    UploadButton,
+    FileUploadButton,
+    LatestText,
+    ThumbnailWithText,
+    TwoStoriesThumbnailWithText,
+  },
 })
 export default class Samples extends Vue {
   cs = ComponentService.instance;
