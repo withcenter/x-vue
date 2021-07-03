@@ -337,18 +337,6 @@ export class PostModel extends PostRootModel {
   }
 
   /**
-   * Return properties in JSON for submitting to backend.
-   */
-  get toJson(): MapStringAny {
-    const json = super.toJson;
-
-    // Do whatever it takes for a post to be exported.
-    // json['...'] = ...;
-
-    return json;
-  }
-
-  /**
    * Replace current post model with the input.
    * @param post post to replace
    */
@@ -415,18 +403,6 @@ export class CommentModel extends PostRootModel {
   fromJson(map: ResponseData): CommentModel {
     super.fromJson(map);
     return this;
-  }
-
-  /**
-   * Return properties in JSON for submitting to backend.
-   */
-  get toJson(): MapStringAny {
-    const json = super.toJson;
-
-    // Do whatever it takes for a comment to be exported.
-    // json['...'] = ...;
-
-    return json;
   }
 
   get toJsonEdit(): MapStringAny {
