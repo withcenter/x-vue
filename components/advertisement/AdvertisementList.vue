@@ -43,6 +43,7 @@ import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
 import Service from "@/x-vue/services/x-vue.service";
 import ComponentService from "@/x-vue/services/x-vue.service";
 import { AdvertisementModel } from "@/x-vue/interfaces/advertisement.interface";
+import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 
 @Component({
   components: {
@@ -95,7 +96,7 @@ export default class AdvertisementList extends Vue {
   async loadPosts(): Promise<void> {
     this.loadingPosts = true;
     try {
-      this.posts = await this.api.advertisementSearch(this.options);
+      this.posts = await AdvertisementService.instance.advertisementSearch(this.options);
       this.loadingPosts = false;
     } catch (e) {
       this.loadingPosts = false;

@@ -115,6 +115,7 @@ import {
 import Vue from "vue";
 import Component from "vue-class-component";
 import Service from "@/x-vue/services/x-vue.service";
+import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 
 @Component({
   components: {},
@@ -132,7 +133,7 @@ export default class AdminAdvertisement extends Vue {
 
   async mounted(): Promise<void> {
     try {
-      const settings = await this.api.advertisementSettings();
+      const settings = await AdvertisementService.instance.advertisementSettings();
 
       // let re = await this.api.getConfig("maximumAdvertisementDays");
       // this.maximumAdvertisementDays = re.data ? re.data : 0;
@@ -140,7 +141,7 @@ export default class AdminAdvertisement extends Vue {
       // re = await this.api.getConfig("advertisementCategories");
       this.advertisementCategories = settings.categories.join(",");
 
-      // this.points = await this.api.advertisementGetBannerPoints();
+      // this.points = await AdvertisementService.instance.advertisementGetBannerPoints();
       this.points = Object.keys(settings.point).map((k) => {
         settings.point[k].countryCode = k;
         return settings.point[k];
@@ -155,8 +156,8 @@ export default class AdminAdvertisement extends Vue {
   async onEdit(data: RequestData): Promise<void> {
     // console.log("onEdit", data);
     try {
-      await this.api.advertisementSetBannerPoint(data);
-      this.points = await this.api.advertisementGetBannerPoints();
+      await AdvertisementService.instance.advertisementSetBannerPoint(data);
+      this.points = await AdvertisementService.instance.advertisementGetBannerPoints();
       this.add = {};
       this.s.alert("Points ", "Point setting updated!");
     } catch (e) {
@@ -170,8 +171,8 @@ export default class AdminAdvertisement extends Vue {
     const conf = await this.s.confirm("Title", `Delete point settings for ${data.countryCode}?`);
     if (!conf) return;
     try {
-      await this.api.advertisementDeleteBannerPoint(data.idx);
-      this.points = await this.api.advertisementGetBannerPoints();
+      await AdvertisementService.instance.advertisementDeleteBannerPoint(data.idx);
+      this.points = await AdvertisementService.instance.advertisementGetBannerPoints();
     } catch (e) {
       this.s.error(e);
     }

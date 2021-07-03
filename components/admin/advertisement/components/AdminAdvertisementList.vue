@@ -45,6 +45,7 @@ import { ApiService } from "@/x-vue/services/api.service";
 import { RequestData } from "@/x-vue/interfaces/interfaces";
 import AdvertisementPreview from "@/x-vue/components/advertisement/AdvertisementPreview.vue";
 import { AdvertisementModel } from "@/x-vue/interfaces/advertisement.interface";
+import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 
 @Component({
   components: {
@@ -89,7 +90,7 @@ export default class AdminAdvertisementList extends Vue {
   async loadAdvertisements(): Promise<void> {
     this.loading = true;
     try {
-      this.advertisements = await this.api.advertisementSearch(this.options);
+      this.advertisements = await AdvertisementService.instance.advertisementSearch(this.options);
       // console.log(this.posts);
       this.loading = false;
     } catch (e) {

@@ -381,6 +381,7 @@ import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
 import dayjs from "dayjs";
 import Service from "@/x-vue/services/x-vue.service";
 import { AdvertisementModel } from "@/x-vue/interfaces/advertisement.interface";
+import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 
 @Component({
   components: { UploadImage, LoginFirst },
@@ -404,7 +405,7 @@ export default class Advertisement extends Vue {
   settings: AdvertisementSettings = {} as AdvertisementSettings;
 
   async mounted(): Promise<void> {
-    this.settings = await this.api.advertisementSettings();
+    this.settings = await AdvertisementService.instance.advertisementSettings();
     this.countries = await this.api.countryAll();
 
     const idx = parseInt(this.$route.params.idx);
@@ -569,7 +570,7 @@ export default class Advertisement extends Vue {
   async loadAdvertisement(): Promise<void> {
     this.loading = true;
     try {
-      this.post = await this.api.advertisementGet({ idx: this.post.idx });
+      this.post = await AdvertisementService.instance.advertisementGet({ idx: this.post.idx });
       // console.log("advertisement: ", this.post);
       this.loading = false;
     } catch (e) {
@@ -584,7 +585,7 @@ export default class Advertisement extends Vue {
     let isCreate = true;
     if (this.post.idx) isCreate = false;
     try {
-      const res = await this.api.advertisementEdit(this.post.toJson);
+      const res = await AdvertisementService.instance.advertisementEdit(this.post.toJson);
       // console.log(`${isCreate ? "Create" : "Update"} =>`, res);
       Object.assign(this.post, res);
       if (isCreate) {
@@ -611,7 +612,7 @@ export default class Advertisement extends Vue {
    */
   async onAdvertisementStart(): Promise<void> {
     try {
-      const res = await this.api.advertisementStart(this.post.toJson);
+      const res = await AdvertisementService.instance.advertisementStart(this.post.toJson);
       this.post = res;
     } catch (e) {
       this.s.error(e);
@@ -625,7 +626,7 @@ export default class Advertisement extends Vue {
     );
     if (!conf) return;
     try {
-      this.post = await this.api.advertisementStop(this.post.idx);
+      this.post = await AdvertisementService.instance.advertisementStop(this.post.idx);
     } catch (e) {
       this.s.error(e);
     }
@@ -638,7 +639,7 @@ export default class Advertisement extends Vue {
     );
     if (!conf) return;
     try {
-      this.post = await this.api.advertisementDelete(this.post.idx);
+      this.post = await AdvertisementService.instance.advertisementDelete(this.post.idx);
       this.s.open("/advertisement");
     } catch (e) {
       this.s.error(e);
