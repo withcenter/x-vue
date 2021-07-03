@@ -176,27 +176,38 @@ export class ApiService {
     data.route = route;
     if (this.sessionId) data.sessionId = this.sessionId;
     data.apiKey = this.apiKey;
-    // console.log("endpoint; ", endpoint);
-    const res = await axios.post(this.endpoint, data);
-    if (typeof res.data === "string") {
-      console.error(res.data);
-      throw "error_error_string_from_php_backend";
-    } else if (!res.data.response) {
-      throw "error_malformed_response_from_php_backend";
-    } else if (
-      typeof res.data.response === "string" &&
-      res.data.response.indexOf("error_") === 0
-    ) {
-      // Backend error code
-      if (res.data.response === Err.user_not_found_by_that_session_id) {
-        console.log(
-          "User has wrong session id: This may happen on development."
-        );
-        this.logout();
+
+    /// try/catch 를 통해서, axios 자체에서 발생하는 에러를 처리한다. 예) 네트워크 접속 에러.
+    try {
+      /// 만약, 접속이나 axios 자체에서 발생하는 에러가 아닌, 프로그램적 에러는 절적한 에러 메시지 리턴.
+      const res = await axios.post(this.endpoint, data);
+      if (typeof res.data === "string") {
+        console.error(res.data);
+        throw "error_error_string_from_php_backend";
+      } else if (!res.data.response) {
+        throw "error_malformed_response_from_php_backend";
+      } else if (
+        typeof res.data.response === "string" &&
+        res.data.response.indexOf("error_") === 0
+      ) {
+        // Backend error code
+        if (res.data.response === Err.user_not_found_by_that_session_id) {
+          console.log(
+            "User has wrong session id: This may happen on development."
+          );
+          this.logout();
+        }
+        throw res.data.response;
       }
-      throw res.data.response;
+      return res.data.response;
+    } catch (e) {
+      console.log("axios error; ", e.message);
+      if (e.message === "Network Error") {
+        throw Err.cannot_connect_to_server;
+      } else {
+        throw e;
+      }
     }
-    return res.data.response;
   }
 
   /**
