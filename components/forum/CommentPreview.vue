@@ -3,10 +3,7 @@
     <div class="d-flex">
       <user-avatar :parent="comment" :size="2.8"></user-avatar>
       <div class="ml-2 text-truncate">
-        <user-display-name
-          class="font-weight-bold"
-          :parent="comment"
-        ></user-display-name>
+        <user-display-name class="font-weight-bold" :parent="comment"></user-display-name>
         <div>No. {{ comment.idx }} • {{ comment.shortDate }}</div>
       </div>
     </div>
@@ -24,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { CommentModel } from "@/x-vue/services/interfaces";
+import { CommentModel } from "@/x-vue/interfaces/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
 import UserAvatar from "@/x-vue/components/forum/UserAvatar.vue";

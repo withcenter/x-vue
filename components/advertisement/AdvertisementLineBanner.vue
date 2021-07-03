@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { Banner, Banners } from "@/x-vue/services/interfaces";
+import { Banner, Banners } from "@/x-vue/interfaces/interfaces";
 import Component from "vue-class-component";
 import Vue from "vue";
 import Service from "@/x-vue/services/x-vue.service";

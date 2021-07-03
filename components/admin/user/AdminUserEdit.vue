@@ -207,10 +207,7 @@
           <div>
             <router-link
               class="btn btn-outline-secondary"
-              :to="
-                '/admin/user' +
-                ($route.query.page ? `?page=${$route.query.page}` : '')
-              "
+              :to="'/admin/user' + ($route.query.page ? `?page=${$route.query.page}` : '')"
             >
               {{ "cancel" | t }}
             </router-link>
@@ -223,7 +220,7 @@
 
 <script lang="ts">
 import { ApiService } from "@/x-vue/services/api.service";
-import { RequestData, UserModel } from "@/x-vue/services/interfaces";
+import { RequestData, UserModel } from "@/x-vue/interfaces/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
 import Service from "../../../services/x-vue.service";

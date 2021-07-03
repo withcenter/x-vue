@@ -1,10 +1,6 @@
 <template>
   <div>
-    <article
-      data-cy="post-view"
-      class="post-view px-2 py-4"
-      v-if="post.idx && !loading"
-    >
+    <article data-cy="post-view" class="post-view px-2 py-4" v-if="post.idx && !loading">
       <!-- title -->
       <div class="d-flex justify-content-between">
         <h3 id="post-title">{{ post.title }}</h3>
@@ -16,14 +12,8 @@
       <div class="d-flex">
         <user-avatar :parent="post"></user-avatar>
         <div class="ml-2">
-          <user-display-name
-            class="font-weight-bold"
-            :parent="post"
-          ></user-display-name>
-          <post-meta-component
-            data-cy="post-view-meta"
-            :post="post"
-          ></post-meta-component>
+          <user-display-name class="font-weight-bold" :parent="post"></user-display-name>
+          <post-meta-component data-cy="post-view-meta" :post="post"></post-meta-component>
         </div>
       </div>
       <!-- content - TODO move css to global -->
@@ -62,9 +52,7 @@
       <!-- comments -->
       <div class="comments" v-if="post.comments.length">
         <hr class="m-2" />
-        <div class="text-muted px-2 mb-3">
-          {{ post.comments.length }} comments
-        </div>
+        <div class="text-muted px-2 mb-3">{{ post.comments.length }} comments</div>
         <div
           class="mt-2"
           v-for="(comment, index) of post.comments"
@@ -94,7 +82,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 
-import { PostModel, RequestData } from "@/x-vue/services/interfaces";
+import { PostModel, RequestData } from "@/x-vue/interfaces/interfaces";
 import CommentFormComponent from "@/x-vue/components/forum/CommentForm.vue";
 import CommentViewComponent from "@/x-vue/components/forum/CommentView.vue";
 import PostMetaComponent from "@/x-vue/components/forum/PostMeta.vue";

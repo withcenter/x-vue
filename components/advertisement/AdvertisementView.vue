@@ -18,10 +18,7 @@
       <!-- buttons -->
       <div class="d-flex" v-if="api.isMine(advertisement)">
         <span class="flex-grow-1"></span>
-        <router-link
-          class="btn btn-success"
-          :to="'/advertisement/edit/' + advertisement.idx"
-        >
+        <router-link class="btn btn-success" :to="'/advertisement/edit/' + advertisement.idx">
           {{ "edit" | t }}
         </router-link>
       </div>
@@ -30,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { AdvertisementModel, FileModel } from "@/x-vue/services/interfaces";
+import { AdvertisementModel, FileModel } from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
 import Component from "vue-class-component";
 import Vue from "vue";

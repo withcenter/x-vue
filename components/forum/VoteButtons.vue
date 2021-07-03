@@ -7,11 +7,7 @@
         {{ parent.Y }}
       </span>
     </button>
-    <button
-      class="ml-2 btn btn-sm"
-      @click="onClickVote('N')"
-      style="color: red"
-    >
+    <button class="ml-2 btn btn-sm" @click="onClickVote('N')" style="color: red">
       Dislike
       <span class="badge badge-pill badge-danger" v-if="parent.N">
         {{ parent.N }}
@@ -23,7 +19,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { CommentModel, PostModel } from "@/x-vue/services/interfaces";
+import { CommentModel, PostModel } from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
 import Service from "@/x-vue/services/x-vue.service";
 

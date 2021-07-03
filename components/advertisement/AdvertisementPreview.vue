@@ -6,15 +6,9 @@
         {{ advertisement.title ? advertisement.title : "No title .." }}
       </div>
       <div>
-        <span class="badge badge-success" v-if="advertisement.isActive">
-          Active
-        </span>
-        <span class="badge badge-warning" v-if="advertisement.isInactive">
-          Inactive
-        </span>
-        <span class="badge badge-info" v-if="advertisement.isWaiting">
-          Waiting
-        </span>
+        <span class="badge badge-success" v-if="advertisement.isActive"> Active </span>
+        <span class="badge badge-warning" v-if="advertisement.isInactive"> Inactive </span>
+        <span class="badge badge-info" v-if="advertisement.isWaiting"> Waiting </span>
         <span class="badge badge-secondary ml-2" v-if="advertisement.code">
           {{ advertisement.code }}
         </span>
@@ -34,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { AdvertisementModel } from "@/x-vue/services/interfaces";
+import { AdvertisementModel } from "@/x-vue/interfaces/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
 

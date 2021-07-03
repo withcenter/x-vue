@@ -6,13 +6,8 @@
         v-for="advertisement of advertisements"
         :key="advertisement.idx"
       >
-        <router-link
-          class="w-100"
-          :to="`/advertisement/view/${advertisement.idx}`"
-        >
-          <advertisement-preview
-            :advertisement="advertisement"
-          ></advertisement-preview>
+        <router-link class="w-100" :to="`/advertisement/view/${advertisement.idx}`">
+          <advertisement-preview :advertisement="advertisement"></advertisement-preview>
         </router-link>
         <div class="ml-1 px-2 text-center border-left">
           <b-avatar
@@ -47,7 +42,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import Service from "@/x-vue/services/x-vue.service";
 import { ApiService } from "@/x-vue/services/api.service";
-import { AdvertisementModel, RequestData } from "@/x-vue/services/interfaces";
+import { AdvertisementModel, RequestData } from "@/x-vue/interfaces/interfaces";
 import AdvertisementPreview from "@/x-vue/components/advertisement/AdvertisementPreview.vue";
 
 @Component({

@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { PostModel } from "@/x-vue/services/interfaces";
+import { PostModel } from "@/x-vue/interfaces/interfaces";
 
 import { Component, Prop } from "vue-property-decorator";
 

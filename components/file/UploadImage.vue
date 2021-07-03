@@ -37,7 +37,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { FileModel } from "@/x-vue/services/interfaces";
+import { FileModel } from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
 import FileDisplay from "@/x-vue/components/forum/FileDisplay.vue";
 

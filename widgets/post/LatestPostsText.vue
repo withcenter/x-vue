@@ -17,7 +17,7 @@
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { ApiService } from "@/x-vue/services/api.service";
-import { PostModel } from "@/x-vue/services/interfaces";
+import { PostModel } from "@/x-vue/interfaces/interfaces";
 import ComponentService from "@/x-vue/services/x-vue.service";
 
 @Component({})

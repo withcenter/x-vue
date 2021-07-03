@@ -1,16 +1,11 @@
 <template>
-  <div
-    class="banner pointer w-100"
-    :class="type"
-    @click="onClick"
-    v-if="currentBanner.bannerUrl"
-  >
+  <div class="banner pointer w-100" :class="type" @click="onClick" v-if="currentBanner.bannerUrl">
     <img class="w-100" :src="currentBanner.bannerUrl" />
   </div>
 </template>
 
 <script lang="ts">
-import { Banner, Banners } from "@/x-vue/services/interfaces";
+import { Banner, Banners } from "@/x-vue/interfaces/interfaces";
 import Component from "vue-class-component";
 import Vue from "vue";
 import Service from "@/x-vue/services/x-vue.service";

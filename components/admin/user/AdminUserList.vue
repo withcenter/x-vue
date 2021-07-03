@@ -30,12 +30,7 @@
       <div class="p-1 mb-3 border-radius-sm" style="border: 1px solid #e8e8e8">
         <div class="m-2">{{ "Fields" | t }}</div>
         <div
-          class="
-            custom-control custom-checkbox custom-control-inline
-            m-2
-            fs-sm
-            align-middle
-          "
+          class="custom-control custom-checkbox custom-control-inline m-2 fs-sm align-middle"
           v-for="(option, key) in options"
           :key="key"
         >
@@ -46,11 +41,9 @@
             :id="key + '-option'"
             v-model="options[key]"
           />
-          <label
-            class="custom-control-label text-capitalize"
-            :for="key + '-option'"
-            >{{ key }}</label
-          >
+          <label class="custom-control-label text-capitalize" :for="key + '-option'">{{
+            key
+          }}</label>
         </div>
       </div>
       <section class="overflow-auto">
@@ -162,7 +155,7 @@
 
 <script lang="ts">
 import { ApiService } from "@/x-vue/services/api.service";
-import { UserModel } from "@/x-vue/services/interfaces";
+import { UserModel } from "@/x-vue/interfaces/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
 import Service from "../../../services/x-vue.service";
@@ -211,9 +204,7 @@ export default class AdminUserList extends Vue {
 
   mounted(): void {
     // console.log("mounted(): void {::", this.currentPage);
-    this.currentPage = this.$route.query.page
-      ? (this.$route.query.page as string)
-      : "1";
+    this.currentPage = this.$route.query.page ? (this.$route.query.page as string) : "1";
     this.onSubmitSearch();
   }
 

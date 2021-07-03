@@ -56,16 +56,13 @@
               v-if="isCancellable || isRefundable"
               @click="onAdvertisementStop"
             >
-              {{
-                (isCancellable ? "cancel_advertisement" : "stop_advertisement")
-                  | t
-              }}
+              {{ (isCancellable ? "cancel_advertisement" : "stop_advertisement") | t }}
             </button>
             <small class="text-info" v-if="isDue">
-              This advertisement is already expired, you can stop it if you want
-              to reset the dates and to start it again. <br />
-              Stopping this advertisement will not cost anything, you will not
-              also get a refund since it is already expired.
+              This advertisement is already expired, you can stop it if you want to reset the dates
+              and to start it again. <br />
+              Stopping this advertisement will not cost anything, you will not also get a refund
+              since it is already expired.
             </small>
           </div>
         </div>
@@ -74,11 +71,7 @@
           <!-- banner type -->
           <div class="form-group mt-2">
             <label>{{ "adv_banner_type" | t }}</label>
-            <select
-              class="form-control"
-              v-model="post.code"
-              :disabled="post.isActive"
-            >
+            <select class="form-control" v-model="post.code" :disabled="post.isActive">
               <option value="" disabled selected>
                 {{ "select_type" | t }}
               </option>
@@ -101,11 +94,7 @@
               :disabled="post.isActive"
             >
               <option disabled selected>{{ "select_country" | t }}</option>
-              <option
-                v-for="(value, name) in countries"
-                :key="name"
-                :value="name"
-              >
+              <option v-for="(value, name) in countries" :key="name" :value="name">
                 {{ value }}
               </option>
             </select>
@@ -115,8 +104,7 @@
           </div>
 
           <div class="box" v-if="post.code">
-            {{ "adv_points_per_day" | t }}:
-            <b>{{ countryPointListing[post.code] }}</b> <br />
+            {{ "adv_points_per_day" | t }}: <b>{{ countryPointListing[post.code] }}</b> <br />
             <small class="text-info">
               {{ "adv_points_per_day_hint" | t }}
             </small>
@@ -302,20 +290,11 @@
             </button>
             <span class="flex-grow-1"></span>
             <!-- save / update -->
-            <button
-              class="mt-2 btn btn-outline-success"
-              type="submit"
-              v-if="!isSubmitted"
-            >
+            <button class="mt-2 btn btn-outline-success" type="submit" v-if="!isSubmitted">
               <span v-if="post.idx">{{ "update" | t }}</span>
               <span v-if="!post.idx">{{ "save" | t }}</span>
             </button>
-            <b-spinner
-              class="m-2"
-              type="grow"
-              variant="success"
-              v-if="isSubmitted"
-            ></b-spinner>
+            <b-spinner class="m-2" type="grow" variant="success" v-if="isSubmitted"></b-spinner>
           </div>
 
           <!-- Banner points country listing table -->
@@ -399,7 +378,7 @@ import {
   AdvertisementSettings,
   FileModel,
   ResponseData,
-} from "@/x-vue/services/interfaces";
+} from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
 import { addByComma, daysBetween } from "@/x-vue/services/functions";
 import UploadImage from "@/x-vue/components/file/UploadImage.vue";
@@ -486,9 +465,7 @@ export default class Advertisement extends Vue {
     let d = dayjs();
     if (this.post.beginDate) d = dayjs(this.post.beginDate);
     if (this.settings.maximumAdvertisementDays > 0) {
-      return d
-        .add(this.settings.maximumAdvertisementDays, "d")
-        .format("YYYY-MM-DD");
+      return d.add(this.settings.maximumAdvertisementDays, "d").format("YYYY-MM-DD");
     }
     return "";
   }

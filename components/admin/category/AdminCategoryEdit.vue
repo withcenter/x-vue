@@ -18,32 +18,20 @@
           <tr>
             <td>{{ "title" | t }}</td>
             <td>
-              <input
-                class="form-control"
-                type="text"
-                v-model="category.title"
-              />
+              <input class="form-control" type="text" v-model="category.title" />
             </td>
           </tr>
           <tr>
             <td>{{ "description" | t }}</td>
             <td>
-              <input
-                class="form-control"
-                type="text"
-                v-model="category.description"
-              />
+              <input class="form-control" type="text" v-model="category.description" />
             </td>
           </tr>
 
           <tr>
             <td>{{ "domain" | t }}</td>
             <td>
-              <input
-                class="form-control"
-                type="text"
-                v-model="category.domain"
-              />
+              <input class="form-control" type="text" v-model="category.domain" />
             </td>
           </tr>
 
@@ -82,42 +70,26 @@
           <tr>
             <td>{{ "post_create_point" | t }}</td>
             <td>
-              <input
-                class="form-control"
-                type="number"
-                v-model="category.createPost"
-              />
+              <input class="form-control" type="number" v-model="category.createPost" />
             </td>
           </tr>
           <tr>
             <td>{{ "post_delete_point" | t }}</td>
             <td>
-              <input
-                class="form-control"
-                type="number"
-                v-model="category.deletePost"
-              />
+              <input class="form-control" type="number" v-model="category.deletePost" />
             </td>
           </tr>
 
           <tr>
             <td>{{ "comment_create_point" | t }}</td>
             <td>
-              <input
-                class="form-control"
-                type="number"
-                v-model="category.createComment"
-              />
+              <input class="form-control" type="number" v-model="category.createComment" />
             </td>
           </tr>
           <tr>
             <td>{{ "comment_delete_point" | t }}</td>
             <td>
-              <input
-                class="form-control"
-                type="number"
-                v-model="category.deleteComment"
-              />
+              <input class="form-control" type="number" v-model="category.deleteComment" />
             </td>
           </tr>
 
@@ -165,20 +137,12 @@
             <td>{{ "ban_on_writing" | t }}</td>
             <td>
               <label>
-                <input
-                  type="radio"
-                  value="Y"
-                  v-model="category.banCreateOnLimit"
-                />
+                <input type="radio" value="Y" v-model="category.banCreateOnLimit" />
                 {{ "yes" | t }},
               </label>
               &nbsp;
               <label>
-                <input
-                  type="radio"
-                  value="N"
-                  v-model="category.banCreateOnLimit"
-                />
+                <input type="radio" value="N" v-model="category.banCreateOnLimit" />
                 {{ "no" | t }}
               </label>
             </td>
@@ -198,33 +162,21 @@
           <tr>
             <td>{{ "post_create_limit" | t }}</td>
             <td>
-              <input
-                class="form-control"
-                type="number"
-                v-model="category.postCreateLimit"
-              />
+              <input class="form-control" type="number" v-model="category.postCreateLimit" />
             </td>
           </tr>
 
           <tr>
             <td>{{ "comment_create_limit" | t }}</td>
             <td>
-              <input
-                class="form-control"
-                type="number"
-                v-model="category.commentCreateLimit"
-              />
+              <input class="form-control" type="number" v-model="category.commentCreateLimit" />
             </td>
           </tr>
 
           <tr>
             <td>{{ "post_comment_read_limit" | t }}</td>
             <td>
-              <input
-                class="form-control"
-                type="number"
-                v-model="category.readLimit"
-              />
+              <input class="form-control" type="number" v-model="category.readLimit" />
             </td>
           </tr>
 
@@ -236,20 +188,12 @@
             <td>{{ "return_to_after_edit" | t }}</td>
             <td>
               <label>
-                <input
-                  type="radio"
-                  v-model="category.returnToAfterPostEdit"
-                  value="V"
-                />
+                <input type="radio" v-model="category.returnToAfterPostEdit" value="V" />
                 {{ "Post view page" | t }}
               </label>
               &nbsp;
               <label>
-                <input
-                  type="radio"
-                  v-model="category.returnToAfterPostEdit"
-                  value="L"
-                />
+                <input type="radio" v-model="category.returnToAfterPostEdit" value="L" />
                 {{ "Post list page" | t }}
               </label>
             </td>
@@ -276,11 +220,7 @@
 
           <tr>
             <td colspan="2">
-              <textarea
-                class="w-100"
-                rows="5"
-                v-model="category.postEditWidgetOption"
-              ></textarea>
+              <textarea class="w-100" rows="5" v-model="category.postEditWidgetOption"></textarea>
             </td>
           </tr>
           <tr>
@@ -293,10 +233,7 @@
           <tr>
             <td>{{ "Forum List Header" | t }}</td>
             <td>
-              <input
-                class="form-control"
-                v-model="category.postListHeaderWidget"
-              />
+              <input class="form-control" v-model="category.postListHeaderWidget" />
             </td>
           </tr>
 
@@ -333,11 +270,7 @@
           <tr>
             <td>{{ "No of posts per page" | t }}</td>
             <td>
-              <input
-                class="form-control"
-                type="number"
-                v-model="category.noOfPostsPerPage"
-              />
+              <input class="form-control" type="number" v-model="category.noOfPostsPerPage" />
             </td>
           </tr>
           <tr>
@@ -345,11 +278,7 @@
               {{ "No of pages on navigator" | t }}
             </td>
             <td>
-              <input
-                class="form-control"
-                type="number"
-                v-model="category.noOfPagesOnNav"
-              />
+              <input class="form-control" type="number" v-model="category.noOfPagesOnNav" />
             </td>
           </tr>
           <tr>
@@ -367,7 +296,7 @@
 
 <script lang="ts">
 import { ApiService } from "@/x-vue/services/api.service";
-import { RequestData, CategoryModel } from "@/x-vue/services/interfaces";
+import { RequestData, CategoryModel } from "@/x-vue/interfaces/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
 import Service from "../../../services/x-vue.service";

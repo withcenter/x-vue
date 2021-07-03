@@ -2,9 +2,7 @@
   <section>
     <div class="d-flex justify-content-between mb-2">
       <h4>{{ "category_list" | t }}</h4>
-      <div class="btn btn-sm btn-info" @click="checkDefaultCategory">
-        Check Default Category
-      </div>
+      <div class="btn btn-sm btn-info" @click="checkDefaultCategory">Check Default Category</div>
     </div>
 
     <div class="container">
@@ -26,9 +24,7 @@
           <tbody>
             <tr v-for="category of categories" :key="category.idx">
               <th scope="row">
-                <router-link :to="'/forum/' + category.id">{{
-                  category.idx
-                }}</router-link>
+                <router-link :to="'/forum/' + category.id">{{ category.idx }}</router-link>
               </th>
               <td>
                 <router-link :to="'/admin/category/edit/' + category.id"
@@ -44,12 +40,7 @@
                 </span>
               </td>
               <td class="justify-content-center">
-                <div
-                  class="btn btn-sm btn-outline-danger"
-                  @click="onClickDelete(category)"
-                >
-                  ❌
-                </div>
+                <div class="btn btn-sm btn-outline-danger" @click="onClickDelete(category)">❌</div>
               </td>
             </tr>
           </tbody>
@@ -71,7 +62,7 @@
 
 <script lang="ts">
 import { ApiService } from "@/x-vue/services/api.service";
-import { CategoryModel } from "@/x-vue/services/interfaces";
+import { CategoryModel } from "@/x-vue/interfaces/interfaces";
 import AdminCategoryCreate from "@/x-vue/components/admin/category/AdminCategoryCreate.vue";
 import Vue from "vue";
 import Component from "vue-class-component";

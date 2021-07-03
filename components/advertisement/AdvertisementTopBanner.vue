@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="banner top pointer w-100 h-100"
-    :class="position"
-    @click="onClick"
-  >
+  <div class="banner top pointer w-100 h-100" :class="position" @click="onClick">
     <img class="w-100" :src="currentBanner.bannerUrl" />
   </div>
 </template>
@@ -11,7 +7,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { Banner, Banners } from "@/x-vue/services/interfaces";
+import { Banner, Banners } from "@/x-vue/interfaces/interfaces";
 import Service from "@/x-vue/services/x-vue.service";
 
 @Component({

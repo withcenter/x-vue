@@ -24,7 +24,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Prop } from "vue-property-decorator";
-import { FileModel } from "@/x-vue/services/interfaces";
+import { FileModel } from "@/x-vue/interfaces/interfaces";
 import TrashSvg from "@/x-vue/components/svg/TrashSvg.vue";
 
 @Component({

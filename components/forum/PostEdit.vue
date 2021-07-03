@@ -10,21 +10,11 @@
       <form class="mt-3" @submit.prevent="onSubmit">
         {{ "title" | t }}
         <div class="form-group">
-          <input
-            class="w-100 form-control"
-            v-model="form.title"
-            type="text"
-            name="title"
-          />
+          <input class="w-100 form-control" v-model="form.title" type="text" name="title" />
         </div>
         {{ "content" | t }}
         <div class="form-group">
-          <textarea
-            class="w-100 form-control"
-            v-model="form.content"
-            type="text"
-            name="content"
-          />
+          <textarea class="w-100 form-control" v-model="form.content" type="text" name="content" />
         </div>
         <div class="d-flex align-center">
           <upload-button
@@ -42,12 +32,7 @@
           <button type="submit" class="btn btn-success" v-if="!submitted">
             {{ "submit" | t }}
           </button>
-          <b-spinner
-            class="mx-2"
-            type="grow"
-            variant="success"
-            v-if="submitted"
-          ></b-spinner>
+          <b-spinner class="mx-2" type="grow" variant="success" v-if="submitted"></b-spinner>
         </div>
         <!-- file display -->
         <file-display
@@ -70,7 +55,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 
 import { ApiService } from "@/x-vue/services/api.service";
-import { FileModel, PostModel } from "@/x-vue/services/interfaces";
+import { FileModel, PostModel } from "@/x-vue/interfaces/interfaces";
 import { addByComma, deleteByComma } from "@/x-vue/services/functions";
 
 import ComponentService from "@/x-vue/services/x-vue.service";

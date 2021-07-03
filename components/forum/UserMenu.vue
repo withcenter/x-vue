@@ -6,10 +6,7 @@
     <router-link class="btn d-block text-left" :to="`/user/posts/${user.idx}`">
       See user posts
     </router-link>
-    <router-link
-      class="btn d-block text-left"
-      :to="`/user/comments/${user.idx}`"
-    >
+    <router-link class="btn d-block text-left" :to="`/user/comments/${user.idx}`">
       See user comments
     </router-link>
     <router-link class="btn d-block text-left" :to="`/message/${user.idx}`">
@@ -19,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { UserModel } from "@/x-vue/services/interfaces";
+import { UserModel } from "@/x-vue/interfaces/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
 

@@ -1,10 +1,6 @@
 <template>
   <div class="mine-buttons" v-if="api.isMine(parent)">
-    <button
-      data-cy="mine-button"
-      :id="'mine-button-popover-' + parent.idx"
-      class="btn btn-sm"
-    >
+    <button data-cy="mine-button" :id="'mine-button-popover-' + parent.idx" class="btn btn-sm">
       <img class="icon-v grey" src="@/assets/svg/ellipsis-v.svg" />
     </button>
 
@@ -14,11 +10,7 @@
       :target="'mine-button-popover-' + parent.idx"
       triggers="click blur"
     >
-      <button
-        data-cy="mine-edit-button"
-        class="btn btn-sm btn-success"
-        @click="onClickEdit"
-      >
+      <button data-cy="mine-edit-button" class="btn btn-sm btn-success" @click="onClickEdit">
         Edit
       </button>
       <button
@@ -36,7 +28,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { ApiService } from "@/x-vue/services/api.service";
-import { CommentModel, PostModel } from "../../services/interfaces";
+import { CommentModel, PostModel } from "../../interfaces/interfaces";
 import Service from "@/x-vue/services/x-vue.service";
 // import store from "@/store";
 
@@ -48,10 +40,7 @@ export default class MineButtonsComponent extends Vue {
   api = ApiService.instance;
 
   hidePopup(): void {
-    this.$root.$emit(
-      "bv::hide::popover",
-      "mine-button-popover-" + this.parent.idx
-    );
+    this.$root.$emit("bv::hide::popover", "mine-button-popover-" + this.parent.idx);
   }
   onClickEdit(): void {
     this.hidePopup();

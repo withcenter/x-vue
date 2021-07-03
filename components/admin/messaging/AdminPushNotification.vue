@@ -4,12 +4,7 @@
     <form>
       <div class="form-group">
         <label for="status">{{ "sending_option" | t }}</label>
-        <select
-          class="custom-select"
-          id="notify"
-          name="notify"
-          v-model="options.notify"
-        >
+        <select class="custom-select" id="notify" name="notify" v-model="options.notify">
           <option value="all">{{ "all" | t }}</option>
           <option value="topic">{{ "topic" | t }}</option>
           <option value="tokens">{{ "tokens" | t }}</option>
@@ -78,11 +73,7 @@
             v-model="options.idx"
           />
           <div class="input-group-append">
-            <button
-              class="btn btn-outline-secondary px-5"
-              type="button"
-              @click="loadPostIdx()"
-            >
+            <button class="btn btn-outline-secondary px-5" type="button" @click="loadPostIdx()">
               {{ "load_post_idx" | t }}
             </button>
           </div>
@@ -164,11 +155,7 @@
 
       <div class="d-flex justify-content-between mt-2 mb-3">
         <div>
-          <button
-            type="button"
-            class="btn btn-primary"
-            @click="sendPushNotification()"
-          >
+          <button type="button" class="btn btn-primary" @click="sendPushNotification()">
             <span v-if="!loading">{{ "send_notification" | t }}</span>
             <span v-if="loading">{{ "loading" | t }}</span>
           </button>
@@ -181,7 +168,7 @@
 <script lang="ts">
 import { ApiService } from "@/x-vue/services/api.service";
 import { DEFAULT_TOPIC } from "@/x-vue/services/defines";
-import { RequestData, ResponseData } from "@/x-vue/services/interfaces";
+import { RequestData, ResponseData } from "@/x-vue/interfaces/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
 import Service from "../../../services/x-vue.service";
@@ -281,10 +268,7 @@ export default class AdminPushNotification extends Vue {
       if (this.options.notify === "tokens") {
         const s = res.success.length;
         const f = res.error.length;
-        this.s.alert(
-          "Send Push Message to tokens: ",
-          `${s} Success, ${f} Fail.`
-        );
+        this.s.alert("Send Push Message to tokens: ", `${s} Success, ${f} Fail.`);
       } else {
         this.s.alert(
           "Send Push Message to topic : ",

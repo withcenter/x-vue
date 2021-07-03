@@ -1,9 +1,5 @@
 <template>
-  <router-link
-    class="thumbnail-with-text-bottom"
-    v-if="post && post.idx"
-    :to="post.relativeUrl"
-  >
+  <router-link class="thumbnail-with-text-bottom" v-if="post && post.idx" :to="post.relativeUrl">
     <img class="image w-100" :src="src" />
     <div class="p-2 title w-100 overflow-hidden">
       <b>{{ post.title }}</b>
@@ -21,7 +17,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import { PostModel } from "@/x-vue/services/interfaces";
+import { PostModel } from "@/x-vue/interfaces/interfaces";
 
 @Component({})
 export default class ThumbnailWithTextBottom extends Vue {

@@ -38,10 +38,7 @@
         <li>thumbnailHeight: number</li>
       </ul>
       <b-card>
-        <thumbnail-with-text
-          :thumbnailHeight="50"
-          :thumbnailWidth="50"
-        ></thumbnail-with-text>
+        <thumbnail-with-text :thumbnailHeight="50" :thumbnailWidth="50"></thumbnail-with-text>
       </b-card>
     </div>
 
@@ -145,7 +142,7 @@ import CameraSvg from "@/x-vue/components/svg/CameraSvg.vue";
 import UploadButton from "@/x-vue/components/buttons/UploadButton.vue";
 import FileUploadButton from "@/x-vue/components/file/FileUploadButton.vue";
 import ComponentService from "@/x-vue/services/x-vue.service";
-import { FileModel } from "@/x-vue/services/interfaces";
+import { FileModel } from "@/x-vue/interfaces/interfaces";
 import LatestText from "@/x-vue/widgets/post/LatestText.vue";
 
 import LatestPostsText from "@/x-vue/widgets/post/LatestPostsText.vue";

@@ -20,7 +20,7 @@ import {
   AdvertisementPointSetting,
   PostSearchRequest,
   FileUploadRequest,
-} from "./interfaces";
+} from "../interfaces/interfaces";
 
 import Cookies from "js-cookie";
 import { Keys, Err } from "./defines";
@@ -124,8 +124,7 @@ export class ApiService {
   // Return server url. If it is not initiallized, then, use current url.
   get endpoint(): string {
     if (this.serverUrl == "") {
-      this.serverUrl =
-        location.protocol + "//" + location.hostname + "/index.php";
+      this.serverUrl = location.protocol + "//" + location.hostname + "/index.php";
     }
     return this.serverUrl;
   }
@@ -177,7 +176,8 @@ export class ApiService {
     if (this.sessionId) data.sessionId = this.sessionId;
     data.apiKey = this.apiKey;
 
-    /// try/catch 를 통해서, axios 자체에서 발생하는 에러를 처리한다. 예) 네트워크 접속 에러.
+    /// try/catch 를 통해서, axios 자체에서 발생하는 에러를 처리하기 위해 사용.
+    /// 예) 네트워크 접속 에러 등 처리.
     try {
       /// 만약, 접속이나 axios 자체에서 발생하는 에러가 아닌, 프로그램적 에러는 절적한 에러 메시지 리턴.
       const res = await axios.post(this.endpoint, data);
@@ -192,9 +192,7 @@ export class ApiService {
       ) {
         // Backend error code
         if (res.data.response === Err.user_not_found_by_that_session_id) {
-          console.log(
-            "User has wrong session id: This may happen on development."
-          );
+          console.log("User has wrong session id: This may happen on development.");
           this.logout();
         }
         throw res.data.response;
@@ -220,15 +218,10 @@ export class ApiService {
    */
   async initUserAuth(): Promise<void> {
     console.log("==> ApiService::initUserAuth()");
-    console.log(
-      "==> ApiService::initUserAuth() ==> sessionId has set to: ",
-      this.sessionId
-    );
+    console.log("==> ApiService::initUserAuth() ==> sessionId has set to: ", this.sessionId);
     if (this.sessionId) {
       await this.refreshLoginUserProfile();
-      console.log(
-        "==> ApiService::initUserAuth() ==> refreshLoginUserProfile has done."
-      );
+      console.log("==> ApiService::initUserAuth() ==> refreshLoginUserProfile has done.");
     }
   }
 
@@ -377,9 +370,7 @@ export class ApiService {
   }
 
   async postDelete(idx: number): Promise<PostModel> {
-    return new PostModel().fromJson(
-      await this.request("post.delete", { idx: idx })
-    );
+    return new PostModel().fromJson(await this.request("post.delete", { idx: idx }));
   }
 
   async commentSearch(data: RequestData): Promise<Array<CommentModel>> {
@@ -432,9 +423,7 @@ export class ApiService {
 
     const options = {
       onUploadProgress: (progressEvent: ProgressEvent) => {
-        const p = Math.round(
-          (progressEvent.loaded * 100) / progressEvent.total
-        );
+        const p = Math.round((progressEvent.loaded * 100) / progressEvent.total);
         if (progressCallback) {
           progressCallback(p);
         }
@@ -453,10 +442,7 @@ export class ApiService {
       throw "error_error_string_from_php_backend";
     } else if (!res.data.response) {
       throw "error_malformed_response_from_php_backend";
-    } else if (
-      typeof res.data.response === "string" &&
-      res.data.response.indexOf("error_") === 0
-    ) {
+    } else if (typeof res.data.response === "string" && res.data.response.indexOf("error_") === 0) {
       throw res.data.response;
     }
     return new FileModel().fromJson(res.data.response);
@@ -509,9 +495,7 @@ export class ApiService {
     if (v) {
       language = v;
     } else {
-      language = navigator.languages
-        ? navigator.languages[0]
-        : navigator.language;
+      language = navigator.languages ? navigator.languages[0] : navigator.language;
     }
     return language.substring(0, 2);
   }
@@ -721,9 +705,7 @@ export class ApiService {
     return this.categoryBanners;
   }
 
-  async advertisementSearch(
-    options: RequestData
-  ): Promise<Array<AdvertisementModel>> {
+  async advertisementSearch(options: RequestData): Promise<Array<AdvertisementModel>> {
     const res = await this.request("advertisement.search", options);
     return res.map((post: JSON) => new AdvertisementModel().fromJson(post));
   }
@@ -775,9 +757,7 @@ export class ApiService {
    *
    * @returns
    */
-  async advertisementGetBannerPoints(): Promise<
-    Array<AdvertisementPointSetting>
-  > {
+  async advertisementGetBannerPoints(): Promise<Array<AdvertisementPointSetting>> {
     return (await this.request(
       "advertisement.getBannerPoints"
     )) as Array<AdvertisementPointSetting>;

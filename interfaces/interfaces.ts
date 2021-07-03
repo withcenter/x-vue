@@ -2,7 +2,7 @@
  * @see README 참고
  */
 
-import { ApiService } from "./api.service";
+import { ApiService } from "../services/api.service";
 
 //
 export interface MapStringAny {
@@ -99,22 +99,6 @@ export interface AdvertisementSettings {
   maximumAdvertisementDays: number;
 }
 
-// export interface ApiStore {
-//   user: UserModel;
-// countries: ResponseData;
-// cafe category model(record) data.
-// cafe: CafeModel;
-// myCafe: CafeModel[];
-// texts: MapStringAny;
-// global cafe settings
-// cafeSettings: CafeSettings;
-// advertisementSettings: AdvertisementSettings;
-// Vue vm must be added here.
-// eslint-disable-next-line  @typescript-eslint/no-explicit-any
-// vm: any;
-// router: VueRouter;
-// }
-
 /**
  * Forum interface that can be used for post list, edit
  */
@@ -147,6 +131,12 @@ export class ForumInterface {
   }
   endLoad(): void {
     this.loading = false;
+  }
+
+  /// Since the [forum.post] is the ....
+  toEdit(post: PostModel): void {
+    this.post = post;
+    post.toEdit();
   }
 }
 
@@ -305,16 +295,7 @@ export class PostRootModel {
    */
   inReply = false;
 
-  /**
-   * 글 작성을 위한 초기화
-   *
-   * 사용자가, 글 작성 버튼 클릭 시, 현재 모델을 먼저 초기화 하고, 카테고리 지정 및 글 수정 표시를 한다.
-   */
-  toCreate(categoryId: string): void {
-    this.fromJson({});
-    this.categoryId = categoryId;
-    this.inEdit = true;
-  }
+  inView = false;
 
   // `files` is an FileModel object array
   files: Array<FileModel> = [];
@@ -470,6 +451,34 @@ export class PostModel extends PostRootModel {
     this.inEdit = false;
 
     return post;
+  }
+
+  /**
+   * Set the post to create mode
+   *
+   * Initialize for crate mode.
+   * 사용자가, 글 작성 버튼 클릭 시, 현재 글 모델을 먼저 초기화 하고, 카테고리 지정 및 글 수정 표시를 한다.
+   */
+  toCreate(categoryId: string): void {
+    this.fromJson({});
+    this.categoryId = categoryId;
+    this.toEdit();
+  }
+
+  /**
+   * Set the post to edit mode.
+   */
+  toEdit() {
+    this.inEdit = true;
+  }
+
+  /**
+   * Set the post to view mode
+   *
+   * It toggles view mode.
+   */
+  toggleView(): void {
+    this.inView = !this.inView;
   }
 }
 

@@ -66,7 +66,7 @@ import {
   CommentModel,
   FileModel,
   PostModel,
-} from "@/x-vue/services/interfaces";
+} from "@/x-vue/interfaces/interfaces";
 import UploadButton from "@/x-vue/components/UploadButton.vue";
 import FileDisplay from "@/x-vue/components/forum/FileDisplay.vue";
 import { ApiService } from "@/x-vue/services/api.service";
@@ -101,9 +101,7 @@ export default class CommentForm extends Vue {
     if (this.comment) {
       this.form.idx = this.comment.idx;
       this.form.content = this.comment.content;
-      this.form.files = this.comment.files
-        .map((file) => `${file.idx}`)
-        .join(",");
+      this.form.files = this.comment.files.map((file) => `${file.idx}`).join(",");
 
       this.uploadedFiles = this.comment.files;
     }
@@ -114,9 +112,7 @@ export default class CommentForm extends Vue {
     if (this.submitted) return;
     this.submitted = true;
     this.form.rootIdx = this.root.idx;
-    this.form.parentIdx = this.comment
-      ? this.comment.parentIdx
-      : this.parent.idx;
+    this.form.parentIdx = this.comment ? this.comment.parentIdx : this.parent.idx;
     // console.log(this.form);
     try {
       const res = await this.api.commentEdit(this.form);

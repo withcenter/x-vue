@@ -5,33 +5,18 @@
       <PostEditContent></PostEditContent>
 
       <div class="d-flex justify-content-between">
-        <FileUploadButton
-          @uploaded="onFileUpload"
-          @progress="progress = $event"
-        ></FileUploadButton>
+        <FileUploadButton @uploaded="onFileUpload" @progress="progress = $event"></FileUploadButton>
 
         <post-edit-submit></post-edit-submit>
       </div>
     </form>
-    <b-progress
-      :value="progress"
-      max="100"
-      class="mb-3"
-      v-if="progress"
-    ></b-progress>
-    <FileEditList
-      :files="forum.post.files"
-      @deleted="onFileDelete"
-    ></FileEditList>
+    <b-progress :value="progress" max="100" class="mb-3" v-if="progress"></b-progress>
+    <FileEditList :files="forum.post.files" @deleted="onFileDelete"></FileEditList>
   </div>
 </template>
 
 <script lang="ts">
-import {
-  FileModel,
-  ForumInterface,
-  PostModel,
-} from "@/x-vue/services/interfaces";
+import { FileModel, ForumInterface, PostModel } from "@/x-vue/interfaces/interfaces";
 import Vue from "vue";
 
 import { Component, Prop } from "vue-property-decorator";
@@ -75,6 +60,7 @@ export default class PostEditBasic extends Vue {
 
       // Reset after create or edit
       this.forum.post = new PostModel();
+      this.$emit("edited", post);
     } catch (e) {
       ComponentService.instance.error(e);
     }

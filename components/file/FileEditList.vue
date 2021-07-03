@@ -17,7 +17,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Prop } from "vue-property-decorator";
-import { FileModel } from "@/x-vue/services/interfaces";
+import { FileModel } from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
 import Service from "@/x-vue/services/x-vue.service";
 import FileEdit from "@/x-vue/components/file/FileEdit.vue";

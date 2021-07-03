@@ -6,9 +6,7 @@
       <div class="mt-3" v-if="posts.length">
         <div class="box p-2 mb-2" v-for="post of posts" :key="post.idx">
           <router-link :to="`/advertisement/edit/${post.idx}`">
-            <advertisement-preview
-              :advertisement="post"
-            ></advertisement-preview>
+            <advertisement-preview :advertisement="post"></advertisement-preview>
           </router-link>
         </div>
       </div>
@@ -38,7 +36,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { AdvertisementModel, RequestData } from "@/x-vue/services/interfaces";
+import { AdvertisementModel, RequestData } from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
 import AdvertisementPreview from "./AdvertisementPreview.vue";
 import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";

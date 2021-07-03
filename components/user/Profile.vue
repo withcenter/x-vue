@@ -33,11 +33,7 @@
       </div>
       <div role="group">
         <label for="name">{{ "name" | t }}</label>
-        <b-form-input
-          id="name"
-          v-model="user.name"
-          :placeholder="'name' | t"
-        ></b-form-input>
+        <b-form-input id="name" v-model="user.name" :placeholder="'name' | t"></b-form-input>
       </div>
       <div role="group">
         <label for="nickname">{{ "nickname" | t }}</label>
@@ -57,12 +53,7 @@
       </div>
       <div role="group">
         <label for="gender">{{ "gender" | t }}</label>
-        <select
-          class="custom-select"
-          id="gender"
-          name="gender"
-          v-model="user.gender"
-        >
+        <select class="custom-select" id="gender" name="gender" v-model="user.gender">
           <option value="">{{ "select_gender" | t }}</option>
           <option value="M">{{ "male" | t }}</option>
           <option value="F">{{ "female" | t }}</option>
@@ -70,11 +61,7 @@
       </div>
       <div role="group">
         <label for="birthdate">{{ "birthdate" | t }}</label>
-        <b-form-input
-          placeholder="YYMMDD"
-          id="birthdate"
-          v-model="user.birthdate"
-        ></b-form-input>
+        <b-form-input placeholder="YYMMDD" id="birthdate" v-model="user.birthdate"></b-form-input>
       </div>
       <div role="group">
         <label for="countryCode">{{ "country_code" | t }}</label>
@@ -96,11 +83,7 @@
 
       <div role="group">
         <label for="city">{{ "city" | t }}</label>
-        <b-form-input
-          :placeholder="'city' | t"
-          id="city"
-          v-model="user.city"
-        ></b-form-input>
+        <b-form-input :placeholder="'city' | t" id="city" v-model="user.city"></b-form-input>
       </div>
 
       <div role="group">
@@ -136,7 +119,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
 import { ApiService } from "@/x-vue/services/api.service";
-import { RequestData, UserModel } from "@/x-vue/services/interfaces";
+import { RequestData, UserModel } from "@/x-vue/interfaces/interfaces";
 
 @Component({
   components: {

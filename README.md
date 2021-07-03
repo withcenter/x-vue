@@ -286,3 +286,13 @@ export default class Login extends Vue {
 ```ts
 <div class="..." v-if="$parent.forum.loading">
 ```
+
+
+## Forum customization
+
+- It is important to let developers customize their own design while they can use main logic.
+  - For instance, `x-vue-default` project has a `views/Forum.vue` that has all the child components to make the forum functionalities.
+    - Develooper can simply change(or re-make) one of the components if he want to change the design.
+
+
+

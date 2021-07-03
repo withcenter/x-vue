@@ -1,15 +1,10 @@
 <template>
   <section>
-    <router-link
-      class="d-flex justify-content-start"
-      :to="post.relativeUrl || '#'"
-    >
+    <router-link class="d-flex justify-content-start" :to="post.relativeUrl || '#'">
       <div v-if="post.files.length">
         <div
           class="mr-3"
-          :style="
-            'height:' + thumbnailHeight + 'px;width:' + thumbnailWidth + 'px'
-          "
+          :style="'height:' + thumbnailHeight + 'px;width:' + thumbnailWidth + 'px'"
         >
           <b-img
             :width="thumbnailWidth"
@@ -39,7 +34,7 @@
 </style>
 
 <script lang="ts">
-import { PostModel } from "@/x-vue/services/interfaces";
+import { PostModel } from "@/x-vue/interfaces/interfaces";
 import { Vue, Component, Prop } from "vue-property-decorator";
 
 @Component({})

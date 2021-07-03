@@ -1,24 +1,12 @@
 <template>
   <div class="two-by-two-thumbnail-with-text-bottom">
     <div class="top d-flex" :style="{ height: itemHeight + 'px' }">
-      <ThumbnailWithInlineText
-        class="w-50"
-        :post="posts[0]"
-      ></ThumbnailWithInlineText>
-      <ThumbnailWithInlineText
-        class="pl-1 w-50"
-        :post="posts[1]"
-      ></ThumbnailWithInlineText>
+      <ThumbnailWithInlineText class="w-50" :post="posts[0]"></ThumbnailWithInlineText>
+      <ThumbnailWithInlineText class="pl-1 w-50" :post="posts[1]"></ThumbnailWithInlineText>
     </div>
     <div class="mt-1 bottom d-flex" :style="{ height: itemHeight + 'px' }">
-      <ThumbnailWithInlineText
-        class="w-50"
-        :post="posts[2]"
-      ></ThumbnailWithInlineText>
-      <ThumbnailWithInlineText
-        class="pl-1 w-50"
-        :post="posts[3]"
-      ></ThumbnailWithInlineText>
+      <ThumbnailWithInlineText class="w-50" :post="posts[2]"></ThumbnailWithInlineText>
+      <ThumbnailWithInlineText class="pl-1 w-50" :post="posts[3]"></ThumbnailWithInlineText>
     </div>
   </div>
 </template>
@@ -26,7 +14,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { ApiService } from "@/x-vue/services/api.service";
-import { PostModel } from "@/x-vue/services/interfaces";
+import { PostModel } from "@/x-vue/interfaces/interfaces";
 import { Component, Prop } from "vue-property-decorator";
 
 import ThumbnailWithInlineText from "./ThumbnailWithInlineText.vue";

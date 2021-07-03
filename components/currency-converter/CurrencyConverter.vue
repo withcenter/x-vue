@@ -55,7 +55,7 @@
 
 <script lang="ts">
 import { ApiService } from "@/x-vue/services/api.service";
-import { CountryCurrenciesModel } from "@/x-vue/services/interfaces";
+import { CountryCurrenciesModel } from "@/x-vue/interfaces/interfaces";
 import Service from "@/x-vue/services/x-vue.service";
 
 import { Vue, Prop, Component } from "vue-property-decorator";
@@ -123,11 +123,9 @@ export default class CurrencyConverter extends Vue {
   onCompute(exchange: string): void {
     if (!this.rate[exchange]) return;
     if (exchange == this.first) {
-      this.convertedAmount =
-        "" + (this.rate[exchange] * parseInt(this.amount)).toFixed(2);
+      this.convertedAmount = "" + (this.rate[exchange] * parseInt(this.amount)).toFixed(2);
     } else {
-      this.amount =
-        "" + (this.rate[exchange] * parseInt(this.convertedAmount)).toFixed(2);
+      this.amount = "" + (this.rate[exchange] * parseInt(this.convertedAmount)).toFixed(2);
     }
   }
 

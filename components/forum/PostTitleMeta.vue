@@ -7,19 +7,13 @@
         <router-link :to="toPostView()">
           <span>No. {{ post.idx }} - </span>
           <span data-cy="post-title">{{ post.title || "no title" }}</span>
-          <span class="ml-1" v-if="post.noOfComments">
-            ({{ post.noOfComments }})
-          </span>
+          <span class="ml-1" v-if="post.noOfComments"> ({{ post.noOfComments }}) </span>
         </router-link>
         <div>
           <i class="text-muted" v-if="post.comments.length">
-            {{ post.comments[0].user.displayName }}: "{{
-              post.comments[0].content
-            }}"
+            {{ post.comments[0].user.displayName }}: "{{ post.comments[0].content }}"
           </i>
-          <i class="text-muted" v-if="!post.comments.length">
-            No comments yet ..
-          </i>
+          <i class="text-muted" v-if="!post.comments.length"> No comments yet .. </i>
         </div>
       </div>
       <post-meta-component
@@ -34,7 +28,7 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import { PostModel } from "@/x-vue/services/interfaces";
+import { PostModel } from "@/x-vue/interfaces/interfaces";
 import UserAvatar from "@/x-vue/components/forum/UserAvatar.vue";
 import PostMetaComponent from "@/x-vue/components/forum/PostMeta.vue";
 

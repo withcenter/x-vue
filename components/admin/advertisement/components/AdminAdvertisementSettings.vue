@@ -4,9 +4,7 @@
 
     <form class="mb-3" @submit.prevent="onSubmit">
       <div class="form-group">
-        <label for="maximum-advertisement-days"
-          >Maximum Advertisement Days</label
-        >
+        <label for="maximum-advertisement-days">Maximum Advertisement Days</label>
         <input
           type="number"
           class="form-control"
@@ -14,9 +12,8 @@
           v-model="maximumAdvertisementDays"
         />
         <small class="form-text text-muted">
-          Users cannot set advertisement end-date later than this day. For
-          instance, if it is set to 5 days, user can set his advertisement only
-          for 5 days from today.
+          Users cannot set advertisement end-date later than this day. For instance, if it is set to
+          5 days, user can set his advertisement only for 5 days from today.
         </small>
       </div>
       <div class="form-group">
@@ -28,9 +25,8 @@
           v-model="advertisementCategories"
         />
         <small class="form-text text-muted">
-          Only these categories can display banners. These will appear on banner
-          edit form. It can have many categories separating by comma(,). For
-          instance, "qna,discussion,job"
+          Only these categories can display banners. These will appear on banner edit form. It can
+          have many categories separating by comma(,). For instance, "qna,discussion,job"
         </small>
       </div>
 
@@ -44,11 +40,7 @@
         <div class="col-3 pl-0 pr-1">
           <select class="form-control" v-model="add.countryCode">
             <option value="" selected>{{ "default" | t }}</option>
-            <option
-              v-for="(value, name) in countries"
-              :key="name"
-              :value="name"
-            >
+            <option v-for="(value, name) in countries" :key="name" :value="name">
               {{ value }}
             </option>
           </select>
@@ -70,8 +62,8 @@
         </div>
       </div>
       <div class="mt-2 alert alert-info">
-        Don't input countryCode for default banner point. countryCode 에 빈
-        문자열을 입력하면 default setting 이 됨.
+        Don't input countryCode for default banner point. countryCode 에 빈 문자열을 입력하면
+        default setting 이 됨.
       </div>
     </form>
 
@@ -89,53 +81,23 @@
       <tbody>
         <tr v-for="n in points.length" :key="n">
           <th scope="row">
-            {{
-              points[n - 1].countryCode
-                ? points[n - 1].countryCode
-                : "Default Setting"
-            }}
+            {{ points[n - 1].countryCode ? points[n - 1].countryCode : "Default Setting" }}
           </th>
           <td>
-            <input
-              class="form-control"
-              type="number"
-              v-model="points[n - 1].top"
-            />
+            <input class="form-control" type="number" v-model="points[n - 1].top" />
           </td>
           <td>
-            <input
-              class="form-control"
-              type="number"
-              v-model="points[n - 1].sidebar"
-            />
+            <input class="form-control" type="number" v-model="points[n - 1].sidebar" />
           </td>
           <td>
-            <input
-              class="form-control"
-              type="number"
-              v-model="points[n - 1].square"
-            />
+            <input class="form-control" type="number" v-model="points[n - 1].square" />
           </td>
           <td>
-            <input
-              class="form-control"
-              type="number"
-              v-model="points[n - 1].line"
-            />
+            <input class="form-control" type="number" v-model="points[n - 1].line" />
           </td>
           <td>
-            <button
-              class="w-100 btn btn-primary"
-              @click="onEdit(points[n - 1])"
-            >
-              Update
-            </button>
-            <button
-              class="w-100 btn btn-warning"
-              @click="onDelete(points[n - 1])"
-            >
-              Delete
-            </button>
+            <button class="w-100 btn btn-primary" @click="onEdit(points[n - 1])">Update</button>
+            <button class="w-100 btn btn-warning" @click="onDelete(points[n - 1])">Delete</button>
           </td>
         </tr>
       </tbody>
@@ -149,7 +111,7 @@ import {
   AdvertisementPointSetting,
   RequestData,
   ResponseData,
-} from "@/x-vue/services/interfaces";
+} from "@/x-vue/interfaces/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
 import Service from "@/x-vue/services/x-vue.service";
@@ -205,10 +167,7 @@ export default class AdminAdvertisement extends Vue {
   async onDelete(data: RequestData): Promise<void> {
     // console.log("onDelete::data", data);
 
-    const conf = await this.s.confirm(
-      "Title",
-      `Delete point settings for ${data.countryCode}?`
-    );
+    const conf = await this.s.confirm("Title", `Delete point settings for ${data.countryCode}?`);
     if (!conf) return;
     try {
       await this.api.advertisementDeleteBannerPoint(data.idx);
@@ -220,14 +179,8 @@ export default class AdminAdvertisement extends Vue {
 
   async onSubmit(): Promise<void> {
     try {
-      await this.api.setConfig(
-        "maximumAdvertisementDays",
-        this.maximumAdvertisementDays
-      );
-      await this.api.setConfig(
-        "advertisementCategories",
-        this.advertisementCategories
-      );
+      await this.api.setConfig("maximumAdvertisementDays", this.maximumAdvertisementDays);
+      await this.api.setConfig("advertisementCategories", this.advertisementCategories);
 
       this.s.alert("Settings", "Saved!");
     } catch (e) {
