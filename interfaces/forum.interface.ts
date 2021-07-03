@@ -202,7 +202,7 @@ export class PostRootModel {
   /**
    * Return properties in JSON for submitting to backend.
    */
-  get toJson(): MapStringAny {
+  public get toJson(): MapStringAny {
     return {
       idx: this.idx,
       parentIdx: this.parentIdx,
