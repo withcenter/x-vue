@@ -1,19 +1,6 @@
-import { PostModel } from "./forum.interface";
-import { RequestData, ResponseData } from "./interfaces";
+import { PostModel } from "@/x-vue/interfaces/forum.interface";
+import { RequestData, ResponseData } from "@/x-vue/interfaces/interfaces";
 
-export interface Banner {
-  idx?: number;
-  bannerUrl?: string;
-  clickUrl?: string;
-  title?: string;
-}
-
-export interface Banners {
-  [code: string]: Banner[];
-}
-export interface CategoryBanners {
-  [category: string]: Banners;
-}
 export class AdvertisementModel extends PostModel {
   advertisementPoint = 0;
   status = "";
@@ -66,4 +53,18 @@ export class AdvertisementModel extends PostModel {
       clickUrl: this.clickUrl,
     };
   }
+}
+
+export interface Banner {
+  idx?: number;
+  bannerUrl?: string;
+  clickUrl?: string;
+  title?: string;
+}
+
+export interface Banners {
+  [code: string]: Banner[];
+}
+export interface CategoryBanners {
+  [category: string]: Banners;
 }
