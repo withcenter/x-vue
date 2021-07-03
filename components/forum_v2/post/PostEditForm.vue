@@ -5,11 +5,7 @@
       <PostEditContent></PostEditContent>
 
       <div class="d-flex justify-content-between">
-        <FileUploadButton
-          :post="forum.post"
-          @uploaded="onFileUpload"
-          @progress="progress = $event"
-        ></FileUploadButton>
+        <FileUploadButton :post="forum.post" @uploaded="onFileUpload" @progress="progress = $event"></FileUploadButton>
         <div class="d-flex">
           <button class="btn btn-secondary mr-2" @click="onCancel">Cancel</button>
           <PostEditSubmitButton :loading="loading"></PostEditSubmitButton>
@@ -50,8 +46,11 @@ export default class PostEditForm extends Vue {
   loading = false;
   mounted(): void {
     if (!this.forum) alert("[forum] is not binded.");
+    // autosize();
+    // autosize
   }
   async onSubmit(): Promise<void> {
+    if (this.loading) return;
     console.log("post", this.forum.post.toJson);
     try {
       this.loading = true;

@@ -6,12 +6,12 @@
   </div>
 </template>
 <script lang="ts">
-import { PostModel } from "@/x-vue/interfaces/forum.interface";
+import { CommentModel, PostModel } from "@/x-vue/interfaces/forum.interface";
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 
 @Component({})
 export default class FileList extends Vue {
-  @Prop({ default: new PostModel() }) post!: PostModel;
+  @Prop({ default: () => new PostModel() }) post!: PostModel | CommentModel;
 }
 </script>

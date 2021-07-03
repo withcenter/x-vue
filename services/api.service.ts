@@ -9,11 +9,9 @@ import {
   Obj,
   CafeSettings,
   CategoryModel,
-  AdvertisementSettings,
   CountryCurrenciesModel,
   MapStringAny,
   RequestCafeCreate,
-  AdvertisementPointSetting,
   FileUploadRequest,
 } from "../interfaces/interfaces";
 

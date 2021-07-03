@@ -1,57 +1,96 @@
 <template>
-  <div>
-    <textarea></textarea>
-  </div>
-</template>
+  <section>
+    <div class="d-flex align-items-center mt-2 form">
+      <FileUploadButton :post="comment" @uploaded="onFileUpload" @progress="progress = $event"></FileUploadButton>
+      <textarea ref="textarea" v-model="comment.content"></textarea>
+      <button class="btn btn-primary" @click="onSubmit" v-if="!loading">Submit</button>
+      <b-spinner class="mx-2" type="grow" variant="success" v-if="loading"></b-spinner>
+    </div>
 
+    <b-progress :value="progress" max="100" class="mb-3" v-if="progress"></b-progress>
+    <FileEditList :post="comment"></FileEditList>
+  </section>
+</template>
+<style lang="scss" scoped>
+.form {
+  textarea {
+    margin-left: 0.25em;
+    padding: 0.25em;
+    width: 100%;
+    height: 2.25em;
+  }
+  button {
+    margin-left: 0.25em;
+  }
+}
+</style>
 <script lang="ts">
+import { CommentModel, PostModel } from "@/x-vue/interfaces/forum.interface";
 import Vue from "vue";
 
-import { Component } from "vue-property-decorator";
+import { Component, Prop } from "vue-property-decorator";
+import FileUploadButton from "@/x-vue/components/file/FileUploadButton.vue";
+import FileEditList from "@/x-vue/components/file/FileEditList.vue";
+
+import autosize from "autosize";
+import { ApiService } from "@/x-vue/services/api.service";
+import ComponentService from "@/x-vue/services/x-vue.service";
 
 @Component({
-  components: {},
+  components: {
+    FileUploadButton,
+    FileEditList,
+  },
 })
-export default class PostEditForm extends Vue {
-  //   @Prop() forum!: ForumInterface;
-  //   progress = 0;
-  //   api = ApiService.instance;
-  //   loading = false;
-  //   mounted(): void {
-  //     if (!this.forum) alert("[forum] is not binded.");
-  //   }
-  //   async onSubmit(): Promise<void> {
-  //     console.log("post", this.forum.post.toJson);
-  //     try {
-  //       this.loading = true;
-  //       // create or edit
-  //       const post = await this.forum.post.edit();
-  //       // Find post that was edited, and insert on top for new post or update the existing post.
-  //       const i = this.forum.posts.findIndex((p) => p.idx == post.idx);
-  //       if (i == -1) {
-  //         this.forum.posts.splice(0, 0, post);
-  //       } else {
-  //         this.$set(this.forum.posts, i, post);
-  //       }
-  //       // Reset after create or edit
-  //       this.forum.post = new PostModel();
-  //       this.$emit("edited", post);
-  //     } catch (e) {
-  //       ComponentService.instance.error(e);
-  //     }
-  //     this.loading = false;
-  //   }
-  //   onFileUpload(file: FileModel): void {
-  //     this.forum.post.fileIdxes = addByComma(this.forum.post.fileIdxes, file.idx);
-  //     console.log("form file idxes;", this.forum.post.fileIdxes);
-  //     this.forum.post.files.push(file);
-  //     setTimeout(() => (this.progress = 0), 200);
-  //   }
-  //   onFileDelete(idx: string): void {
-  //     const index = this.forum.post.files.findIndex((file) => file.idx == idx);
-  //     console.log("index; ", index);
-  //     this.forum.post.files.splice(index, 1);
-  //     this.forum.post.fileIdxes = deleteByComma(this.forum.post.fileIdxes, idx);
-  //   }
+export default class extends Vue {
+  @Prop() post!: PostModel;
+  @Prop() parent!: PostModel | CommentModel;
+  @Prop({ default: () => new CommentModel() }) comment!: CommentModel;
+  $refs!: {
+    textarea: HTMLInputElement;
+  };
+  progress = 0;
+  loading = false;
+  mounted(): void {
+    autosize(this.$refs.textarea);
+  }
+  onFileUpload(): void {
+    setTimeout(() => (this.progress = 0), 200);
+  }
+
+  async onSubmit(): Promise<void> {
+    if (this.loading) return;
+    this.loading = true;
+
+    console.log("this.post;", this.post);
+    console.log("this.parent;", this.parent);
+
+    // rootIdx
+    this.comment.rootIdx = this.post.idx;
+
+    // update parentIdx on create
+    if (this.comment.parentIdx == 0) {
+      this.comment.parentIdx = this.parent.idx;
+    }
+
+    try {
+      // create or update the comment.
+      const edited = await ApiService.instance.commentEdit(this.comment.toJsonEdit);
+      if (this.comment.idx) {
+        // if comment updated, copy updated data to original comment. and close the form.
+        this.comment.copyWith(edited);
+        this.comment.inEdit = false;
+      } else {
+        // if a comment was created, insert right below the parent and close the form.
+        edited.depth = this.parent.depth ? +this.parent.depth + 1 : 1;
+        this.post.insertComment(edited);
+        this.parent.inReply = false;
+      }
+    } catch (e) {
+      ComponentService.instance.error(e);
+    }
+
+    this.loading = false;
+  }
 }
 </script>

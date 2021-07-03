@@ -2,8 +2,6 @@
  * @see README 참고
  */
 
-import { ApiService } from "../services/api.service";
-
 //
 export interface MapStringAny {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any

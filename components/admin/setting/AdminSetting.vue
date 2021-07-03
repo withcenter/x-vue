@@ -3,8 +3,8 @@
     <h4>Admin Settings</h4>
 
     <div class="mt-2 alert alert-warning">
-      Admin settings are <b>optional</b>. If you create the option, then the
-      option can affect the app. Please read README.md of `matrix`.
+      Admin settings are <b>optional</b>. If you create the option, then the option can affect the
+      app. Please read README.md of `matrix`.
     </div>
 
     <div class="mt-2 alert alert-info" v-if="Object.keys(settings).length">
@@ -121,8 +121,8 @@
     <div class="alert alert-secondary">
       <h4>Dynamic admin settings</h4>
       <small class=""
-        >You can create, update, delete custom settings. You can create custom
-        settings for the need of the client app.</small
+        >You can create, update, delete custom settings. You can create custom settings for the need
+        of the client app.</small
       >
       <form @submit.prevent="onCreate">
         <div class="row">
@@ -162,20 +162,12 @@
               </div>
               <div class="col">
                 <div class="form-group">
-                  <textarea
-                    class="form-control"
-                    rows="1"
-                    v-model="settings[code]"
-                  ></textarea>
+                  <textarea class="form-control" rows="1" v-model="settings[code]"></textarea>
                 </div>
               </div>
               <div class="col">
                 <button class="btn btn-primary">Update</button>
-                <button
-                  type="button"
-                  class="ml-2 btn btn-danger"
-                  @click="onDelete(code)"
-                >
+                <button type="button" class="ml-2 btn btn-danger" @click="onDelete(code)">
                   Delete
                 </button>
               </div>
@@ -233,9 +225,7 @@ export default class AdminSettings extends Vue {
     }
   }
   get codes(): string[] {
-    const keys = Object.keys(this.settings).filter(
-      (v) => !this.hiddenCodes.includes(v)
-    );
+    const keys = Object.keys(this.settings).filter((v) => !this.hiddenCodes.includes(v));
     // console.log(keys);
     return keys;
   }
@@ -245,10 +235,7 @@ export default class AdminSettings extends Vue {
     }
     try {
       await this.api.setConfig(this.form.code, this.form.data);
-      await this.cs.alert(
-        "Admin settings",
-        `${this.form.code} has been created.`
-      );
+      await this.cs.alert("Admin settings", `${this.form.code} has been created.`);
       this.settings = Object.assign({}, this.settings, {
         [this.form.code]: this.form.data,
       });

@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="p-2 text-center rounded bg-secondary"
-    v-if="api._user.notLoggedIn"
-  >
+  <div class="p-2 text-center rounded bg-secondary" v-if="api._user.notLoggedIn">
     <h3>Login First</h3>
   </div>
 </template>

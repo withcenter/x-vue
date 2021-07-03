@@ -10,15 +10,8 @@
           v-model="v"
           v-if="type == 'textarea'"
         ></textarea>
-        <input
-          class="form-control"
-          type="number"
-          v-model="v"
-          v-if="type == 'number'"
-        />
-        <button class="ml-2 btn btn-primary" @click="$emit('update', code, v)">
-          Update
-        </button>
+        <input class="form-control" type="number" v-model="v" v-if="type == 'number'" />
+        <button class="ml-2 btn btn-primary" @click="$emit('update', code, v)">Update</button>
       </div>
       <small class="form-text">{{ description }}</small>
     </div>

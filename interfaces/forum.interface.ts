@@ -60,7 +60,7 @@ export class ForumInterface {
    *
    * @param post post to edit
    */
-  toEdit(post: PostModel) {
+  toEdit(post: PostModel): void {
     this.post = post;
     this.post.toEdit();
   }
@@ -245,6 +245,10 @@ export class PostRootModel {
     };
   }
 
+  empty(): void {
+    this.fromJson({});
+  }
+
   /**
    * Update vote count
    * @param json json response from backend
@@ -411,5 +415,35 @@ export class CommentModel extends PostRootModel {
   fromJson(map: ResponseData): CommentModel {
     super.fromJson(map);
     return this;
+  }
+
+  /**
+   * Return properties in JSON for submitting to backend.
+   */
+  get toJson(): MapStringAny {
+    const json = super.toJson;
+
+    // Do whatever it takes for a comment to be exported.
+    // json['...'] = ...;
+
+    return json;
+  }
+
+  get toJsonEdit(): MapStringAny {
+    const json = this.toJson;
+    delete json["files"];
+    delete json["beginDate"];
+    delete json["endDate"];
+    delete json["depth"];
+    delete json["url"];
+    return json;
+  }
+
+  /**
+   * Replace current comment model with the input.
+   * @param comment comment to replace
+   */
+  copyWith(comment: CommentModel): void {
+    this.fromJson(comment.toJson);
   }
 }
