@@ -78,7 +78,9 @@ export default class extends Vue {
       const edited = await ApiService.instance.commentEdit(this.comment.toJsonEdit);
       if (this.comment.idx) {
         // if comment updated, copy updated data to original comment. and close the form.
+        const depth = this.comment.depth;
         this.comment.copyWith(edited);
+        this.comment.depth = depth;
         this.comment.inEdit = false;
       } else {
         // if a comment was created, insert right below the parent and close the form.

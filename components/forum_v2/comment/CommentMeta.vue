@@ -1,14 +1,14 @@
 <template>
   <div>
-    <article class="comment-content" v-if="comment.notDeleted">{{ comment.idx }}. {{ comment.content }}</article>
-    <article v-else>{{ comment.idx }}. has been deleted</article>
+    <div class="comment-meta" v-if="comment.notDeleted">
+      Author {{ comment.user.nicknameOrName }}. {{ comment.shortDate }}
+    </div>
   </div>
 </template>
 <style lang="scss" scoped>
-.comment-content {
+.comment-meta {
   padding: 1em;
-  background-color: beige;
-  white-space: pre-line;
+  background-color: rgb(165, 167, 133);
 }
 </style>
 <script lang="ts">

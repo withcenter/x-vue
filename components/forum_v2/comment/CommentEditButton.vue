@@ -1,23 +1,17 @@
 <template>
   <div>
-    <article class="comment-content" v-if="comment.notDeleted">{{ comment.idx }}. {{ comment.content }}</article>
-    <article v-else>{{ comment.idx }}. has been deleted</article>
+    <button class="btn btn-secondary btn-sm mr-2" @click="comment.inEdit = true">edit</button>
   </div>
 </template>
-<style lang="scss" scoped>
-.comment-content {
-  padding: 1em;
-  background-color: beige;
-  white-space: pre-line;
-}
-</style>
+
 <script lang="ts">
 import { CommentModel } from "@/x-vue/interfaces/forum.interface";
+import { ApiService } from "@/x-vue/services/api.service";
 import Vue from "vue";
-
 import { Component, Prop } from "vue-property-decorator";
 @Component({})
 export default class extends Vue {
   @Prop() comment!: CommentModel;
+  api = ApiService.instance;
 }
 </script>
