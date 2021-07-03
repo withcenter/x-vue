@@ -44,6 +44,7 @@ export default class PostEditForm extends Vue {
   progress = 0;
   api = ApiService.instance;
   loading = false;
+
   mounted(): void {
     if (!this.forum) alert("[forum] is not binded.");
     // autosize();

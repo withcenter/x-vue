@@ -1,29 +1,13 @@
 <template>
   <section>
     <div class="d-flex align-items-center mt-2 form">
-      <FileUploadButton
-        :post="comment"
-        @uploaded="onFileUpload"
-        @progress="progress = $event"
-      ></FileUploadButton>
+      <FileUploadButton :post="comment" @uploaded="onFileUpload" @progress="progress = $event"></FileUploadButton>
       <textarea ref="textarea" v-model="comment.content"></textarea>
-      <button class="btn btn-primary" @click="onSubmit" v-if="!loading">
-        Submit
-      </button>
-      <b-spinner
-        class="mx-2"
-        type="grow"
-        variant="success"
-        v-if="loading"
-      ></b-spinner>
+      <button class="btn btn-primary" @click="onSubmit" v-if="!loading">Submit</button>
+      <b-spinner class="mx-2" type="grow" variant="success" v-if="loading"></b-spinner>
     </div>
 
-    <b-progress
-      :value="progress"
-      max="100"
-      class="mb-3"
-      v-if="progress"
-    ></b-progress>
+    <b-progress :value="progress" max="100" class="mb-3" v-if="progress"></b-progress>
     <FileEditList :post="comment"></FileEditList>
   </section>
 </template>
@@ -91,9 +75,7 @@ export default class extends Vue {
 
     try {
       // create or update the comment.
-      const edited = await ApiService.instance.commentEdit(
-        this.comment.toJsonEdit
-      );
+      const edited = await ApiService.instance.commentEdit(this.comment.toJsonEdit);
       if (this.comment.idx) {
         // if comment updated, copy updated data to original comment. and close the form.
         const depth = this.comment.depth;
