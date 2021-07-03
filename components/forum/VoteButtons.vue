@@ -19,9 +19,9 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { CommentModel, PostModel } from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
 import Service from "@/x-vue/services/x-vue.service";
+import { CommentModel, PostModel } from "@/x-vue/interfaces/forum.interface";
 
 @Component({
   props: ["parent"],

@@ -28,9 +28,9 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import { PostModel } from "@/x-vue/interfaces/interfaces";
 import UserAvatar from "@/x-vue/components/forum/UserAvatar.vue";
 import PostMetaComponent from "@/x-vue/components/forum/PostMeta.vue";
+import { PostModel } from "@/x-vue/interfaces/forum.interface";
 
 @Component({
   props: ["post"],

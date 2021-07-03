@@ -15,10 +15,10 @@
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { ApiService } from "@/x-vue/services/api.service";
-import { PostModel } from "@/x-vue/interfaces/interfaces";
 import ComponentService from "@/x-vue/services/x-vue.service";
 
 import ThumbnailWithTextBottom from "./ThumbnailWithTextBottom.vue";
+import { PostModel } from "@/x-vue/interfaces/forum.interface";
 
 @Component({
   components: {

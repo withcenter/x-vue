@@ -3,8 +3,6 @@ import axios from "axios";
 import {
   RequestData,
   UserModel,
-  PostModel,
-  CommentModel,
   ResponseData,
   FileModel,
   CafeModel,
@@ -12,13 +10,10 @@ import {
   CafeSettings,
   CategoryModel,
   AdvertisementSettings,
-  AdvertisementModel,
   CountryCurrenciesModel,
   MapStringAny,
-  CategoryBanners,
   RequestCafeCreate,
   AdvertisementPointSetting,
-  PostSearchRequest,
   FileUploadRequest,
 } from "../interfaces/interfaces";
 
@@ -26,6 +21,8 @@ import Cookies from "js-cookie";
 import { Keys, Err } from "./defines";
 import { getRootDomain } from "./functions";
 import Vue from "vue";
+import { AdvertisementModel, CategoryBanners } from "../interfaces/advertisement.interface";
+import { CommentModel, PostModel, PostSearchRequest } from "../interfaces/forum.interface";
 
 /**
  * Api Interface.

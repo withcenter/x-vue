@@ -36,12 +36,13 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { AdvertisementModel, RequestData } from "@/x-vue/interfaces/interfaces";
+import { RequestData } from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
 import AdvertisementPreview from "./AdvertisementPreview.vue";
 import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
 import Service from "@/x-vue/services/x-vue.service";
 import ComponentService from "@/x-vue/services/x-vue.service";
+import { AdvertisementModel } from "@/x-vue/interfaces/advertisement.interface";
 
 @Component({
   components: {

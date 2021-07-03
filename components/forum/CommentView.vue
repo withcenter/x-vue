@@ -54,13 +54,13 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { CommentModel, PostModel } from "@/x-vue/interfaces/interfaces";
 import CommentFormComponent from "./CommentForm.vue";
 import VoteButtonsComponent from "./VoteButtons.vue";
 import MineButtonsComponent from "./MineButtons.vue";
 import UserDisplayName from "./UserDisplayName.vue";
 import UserAvatar from "./UserAvatar.vue";
 import FileDisplay from "./FileDisplay.vue";
+import { CommentModel, PostModel } from "@/x-vue/interfaces/forum.interface";
 
 @Component({
   props: ["post", "comment"],

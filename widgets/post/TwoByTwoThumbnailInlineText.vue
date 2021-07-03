@@ -14,11 +14,11 @@
 <script lang="ts">
 import Vue from "vue";
 import { ApiService } from "@/x-vue/services/api.service";
-import { PostModel } from "@/x-vue/interfaces/interfaces";
 import { Component, Prop } from "vue-property-decorator";
 
 import ThumbnailWithInlineText from "./ThumbnailWithInlineText.vue";
 import ComponentService from "@/x-vue/services/x-vue.service";
+import { PostModel } from "@/x-vue/interfaces/forum.interface";
 
 @Component({
   components: {

@@ -15,9 +15,9 @@
 </style>
 
 <script lang="ts">
+import { PostModel } from "@/x-vue/interfaces/forum.interface";
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import { PostModel } from "@/x-vue/interfaces/interfaces";
 
 @Component({})
 export default class ThumbnailWithTextBottom extends Vue {

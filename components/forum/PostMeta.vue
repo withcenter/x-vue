@@ -16,8 +16,8 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { PostModel } from "@/x-vue/interfaces/interfaces";
 import UserDisplayname from "@/x-vue/components/forum/UserDisplayName.vue";
+import { PostModel } from "@/x-vue/interfaces/forum.interface";
 
 @Component({
   props: ["post", "showName"],

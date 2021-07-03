@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { PostModel } from "@/x-vue/interfaces/interfaces";
+import { PostModel } from "@/x-vue/interfaces/forum.interface";
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 @Component({

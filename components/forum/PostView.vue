@@ -82,7 +82,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 
-import { PostModel, RequestData } from "@/x-vue/interfaces/interfaces";
+import { RequestData } from "@/x-vue/interfaces/interfaces";
 import CommentFormComponent from "@/x-vue/components/forum/CommentForm.vue";
 import CommentViewComponent from "@/x-vue/components/forum/CommentView.vue";
 import PostMetaComponent from "@/x-vue/components/forum/PostMeta.vue";
@@ -91,6 +91,7 @@ import MineButtonsComponent from "@/x-vue/components/forum/MineButtons.vue";
 import UserDisplayName from "@/x-vue/components/forum/UserDisplayName.vue";
 import UserAvatar from "@/x-vue/components/forum/UserAvatar.vue";
 import FileDisplay from "@/x-vue/components/forum/FileDisplay.vue";
+import { PostModel } from "@/x-vue/interfaces/forum.interface";
 
 @Component({
   components: {

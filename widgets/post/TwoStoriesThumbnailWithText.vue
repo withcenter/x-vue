@@ -12,9 +12,9 @@
 </template>
 
 <script lang="ts">
-import { PostModel } from "@/x-vue/interfaces/interfaces";
 import { Vue, Component, Prop } from "vue-property-decorator";
 import ThumbnailWithText from "@/x-vue/widgets/post/ThumbnailWithText.vue";
+import { PostModel } from "@/x-vue/interfaces/forum.interface";
 
 @Component({
   components: {

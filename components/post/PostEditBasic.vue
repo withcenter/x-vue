@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { FileModel, ForumInterface, PostModel } from "@/x-vue/interfaces/interfaces";
+import { FileModel } from "@/x-vue/interfaces/interfaces";
 import Vue from "vue";
 
 import { Component, Prop } from "vue-property-decorator";
@@ -28,6 +28,7 @@ import ComponentService from "@/x-vue/services/x-vue.service";
 import FileUploadButton from "@/x-vue/components/file/FileUploadButton.vue";
 import FileEditList from "@/x-vue/components/file/FileEditList.vue";
 import { addByComma, deleteByComma } from "@/x-vue/services/functions";
+import { ForumInterface, PostModel } from "@/x-vue/interfaces/forum.interface";
 @Component({
   components: {
     PostEditTitle,

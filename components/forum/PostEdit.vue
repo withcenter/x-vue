@@ -55,13 +55,14 @@ import Vue from "vue";
 import Component from "vue-class-component";
 
 import { ApiService } from "@/x-vue/services/api.service";
-import { FileModel, PostModel } from "@/x-vue/interfaces/interfaces";
+import { FileModel } from "@/x-vue/interfaces/interfaces";
 import { addByComma, deleteByComma } from "@/x-vue/services/functions";
 
 import ComponentService from "@/x-vue/services/x-vue.service";
 import UploadButton from "@/x-vue/components/UploadButton.vue";
 import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
 import FileDisplay from "@/x-vue/components/forum/FileDisplay.vue";
+import { PostModel } from "@/x-vue/interfaces/forum.interface";
 
 @Component({
   components: {

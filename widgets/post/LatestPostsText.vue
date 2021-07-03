@@ -17,8 +17,8 @@
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { ApiService } from "@/x-vue/services/api.service";
-import { PostModel } from "@/x-vue/interfaces/interfaces";
 import ComponentService from "@/x-vue/services/x-vue.service";
+import { PostModel } from "@/x-vue/interfaces/forum.interface";
 
 @Component({})
 export default class LatestPostsText extends Vue {

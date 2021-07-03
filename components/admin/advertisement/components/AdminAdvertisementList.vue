@@ -42,8 +42,9 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import Service from "@/x-vue/services/x-vue.service";
 import { ApiService } from "@/x-vue/services/api.service";
-import { AdvertisementModel, RequestData } from "@/x-vue/interfaces/interfaces";
+import { RequestData } from "@/x-vue/interfaces/interfaces";
 import AdvertisementPreview from "@/x-vue/components/advertisement/AdvertisementPreview.vue";
+import { AdvertisementModel } from "@/x-vue/interfaces/advertisement.interface";
 
 @Component({
   components: {

@@ -7,8 +7,8 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { Banner, Banners } from "@/x-vue/interfaces/interfaces";
 import Service from "@/x-vue/services/x-vue.service";
+import { Banner, Banners } from "@/x-vue/interfaces/advertisement.interface";
 
 @Component({
   props: ["position", "banners"],

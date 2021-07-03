@@ -373,18 +373,14 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import {
-  AdvertisementModel,
-  AdvertisementSettings,
-  FileModel,
-  ResponseData,
-} from "@/x-vue/interfaces/interfaces";
+import { AdvertisementSettings, FileModel, ResponseData } from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
 import { addByComma, daysBetween } from "@/x-vue/services/functions";
 import UploadImage from "@/x-vue/components/file/UploadImage.vue";
 import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
 import dayjs from "dayjs";
 import Service from "@/x-vue/services/x-vue.service";
+import { AdvertisementModel } from "@/x-vue/interfaces/advertisement.interface";
 
 @Component({
   components: { UploadImage, LoginFirst },

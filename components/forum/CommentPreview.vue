@@ -21,12 +21,12 @@
 </template>
 
 <script lang="ts">
-import { CommentModel } from "@/x-vue/interfaces/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
 import UserAvatar from "@/x-vue/components/forum/UserAvatar.vue";
 import UserDisplayName from "@/x-vue/components/forum/UserDisplayName.vue";
 import FileDisplay from "@/x-vue/components/forum/FileDisplay.vue";
+import { CommentModel } from "@/x-vue/interfaces/forum.interface";
 
 @Component({
   props: ["comment"],

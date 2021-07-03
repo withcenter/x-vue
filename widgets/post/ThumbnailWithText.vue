@@ -34,7 +34,7 @@
 </style>
 
 <script lang="ts">
-import { PostModel } from "@/x-vue/interfaces/interfaces";
+import { PostModel } from "@/x-vue/interfaces/forum.interface";
 import { Vue, Component, Prop } from "vue-property-decorator";
 
 @Component({})

@@ -61,17 +61,13 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import {
-  CommentEditModel,
-  CommentModel,
-  FileModel,
-  PostModel,
-} from "@/x-vue/interfaces/interfaces";
+import { FileModel } from "@/x-vue/interfaces/interfaces";
 import UploadButton from "@/x-vue/components/UploadButton.vue";
 import FileDisplay from "@/x-vue/components/forum/FileDisplay.vue";
 import { ApiService } from "@/x-vue/services/api.service";
 import { addByComma, deleteByComma } from "@/x-vue/services/functions";
 import Service from "@/x-vue/services/x-vue.service";
+import { CommentEditModel, CommentModel, PostModel } from "@/x-vue/interfaces/forum.interface";
 
 @Component({
   props: ["root", "parent", "comment"],

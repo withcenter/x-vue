@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { AdvertisementModel } from "@/x-vue/interfaces/interfaces";
+import { AdvertisementModel } from "@/x-vue/interfaces/advertisement.interface";
 import Vue from "vue";
 import Component from "vue-class-component";
 

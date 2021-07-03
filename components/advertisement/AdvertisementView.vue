@@ -27,10 +27,11 @@
 </template>
 
 <script lang="ts">
-import { AdvertisementModel, FileModel } from "@/x-vue/interfaces/interfaces";
+import { FileModel } from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
 import Component from "vue-class-component";
 import Vue from "vue";
+import { AdvertisementModel } from "@/x-vue/interfaces/advertisement.interface";
 
 @Component({
   props: ["advertisement"],
