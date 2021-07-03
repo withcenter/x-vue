@@ -174,11 +174,11 @@ import TwoStoriesThumbnailWithText from "@/x-vue/widgets/post/TwoStoriesThumbnai
 export default class Samples extends Vue {
   cs = ComponentService.instance;
 
-  onUploaded(file: FileModel) {
+  onUploaded(file: FileModel): void {
     alert("uploaded: " + file.url);
   }
-  onChange(event: Event) {
-    alert("file chagned");
+  onChange(event: Event): void {
+    alert("file chagned" + event.type);
   }
 }
 </script>

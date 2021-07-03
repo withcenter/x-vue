@@ -49,7 +49,7 @@ export default class AdminSettingsPreDefined extends Vue {
   v: string = this.data[this.code] ?? "";
 
   checked: boolean = this.v == "Y";
-  onChange(checked: boolean) {
+  onChange(checked: boolean): void {
     if (checked) this.v = "Y";
     else this.v = "N";
     this.$emit("update", this.code, this.v);

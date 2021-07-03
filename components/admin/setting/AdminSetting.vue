@@ -266,7 +266,7 @@ export default class AdminSettings extends Vue {
       this.cs.error(e);
     }
   }
-  onChildUpdate(code: string, data: string) {
+  onChildUpdate(code: string, data: string): void {
     this.settings[code] = data;
     this.onUpdate(code);
   }

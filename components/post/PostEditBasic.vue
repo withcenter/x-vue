@@ -37,7 +37,7 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import PostEditTitle from "./PostEditTitle.vue";
 import PostEditContent from "./PostEditContent.vue";
-import PostEditSubmit from "./PostEditSubmit.vue";
+import PostEditSubmit from "./PostEditSubmitButton.vue";
 import { ApiService } from "@/x-vue/services/api.service";
 import ComponentService from "@/x-vue/services/x-vue.service";
 import FileUploadButton from "@/x-vue/components/file/FileUploadButton.vue";
@@ -56,7 +56,7 @@ export default class PostEditBasic extends Vue {
   @Prop() forum!: ForumInterface;
   progress = 0;
   api = ApiService.instance;
-  mounted() {
+  mounted(): void {
     if (!this.forum) alert("[forum] is not binded.");
   }
   async onSubmit(): Promise<void> {
