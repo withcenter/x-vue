@@ -3,7 +3,7 @@
     <div class="row">
       <div
         class="position-relative p-1 col-3"
-        v-for="file of files"
+        v-for="file of post.files"
         :key="file.idx"
         style="height: 150px"
       >
@@ -21,12 +21,14 @@ import { FileModel } from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
 import Service from "@/x-vue/services/x-vue.service";
 import FileEdit from "@/x-vue/components/file/FileEdit.vue";
+import { CommentModel, PostModel } from "@/x-vue/interfaces/forum.interface";
+import { deleteByComma } from "@/x-vue/services/functions";
 
 @Component({
   components: { FileEdit },
 })
 export default class FileDisplay extends Vue {
-  @Prop({ default: [] }) files!: Array<FileModel>;
+  @Prop() post!: PostModel | CommentModel;
 
   api = ApiService.instance;
 
@@ -39,10 +41,18 @@ export default class FileDisplay extends Vue {
 
     try {
       await this.api.fileDelete(file.idx);
+      this.onFileDelete(file.idx);
       this.$emit("deleted", file.idx);
     } catch (e) {
       Service.instance.error(e);
     }
+  }
+
+  onFileDelete(idx: string): void {
+    const index = this.post.files.findIndex((file) => file.idx == idx);
+    console.log("index; ", index);
+    this.post.files.splice(index, 1);
+    this.post.fileIdxes = deleteByComma(this.post.fileIdxes, idx);
   }
 }
 </script>

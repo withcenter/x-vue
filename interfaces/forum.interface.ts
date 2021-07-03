@@ -52,10 +52,17 @@ export class ForumInterface {
     this.loading = false;
   }
 
-  /// Since the [forum.post] is the ....
-  toEdit(post: PostModel): void {
+  /**
+   * Set the forum on post edit mode.
+   *
+   * 글 수정은 `ForumInterface.post` 의 `inEdit` 값에 따라 결정이 된다.
+   * 즉, 현재 모델의 `post` 에 수정 할 글을 기록해 놓아야 하는 것이다.
+   *
+   * @param post post to edit
+   */
+  toEdit(post: PostModel) {
     this.post = post;
-    post.toEdit();
+    this.post.toEdit();
   }
 }
 
@@ -64,7 +71,7 @@ export class CommentEditModel {
   content = "";
   rootIdx = 0;
   parentIdx = 0;
-  files = "";
+  fileIdxes = "";
 }
 
 export class PostRootModel {
@@ -143,8 +150,23 @@ export class PostRootModel {
     return !this.isPost;
   }
 
+  /**
+   * Return true if deleted
+   */
   get isDeleted(): boolean {
     return this.deletedAt > 0;
+  }
+  /**
+   * Return true if deleted
+   */
+  get deleted(): boolean {
+    return this.isDeleted;
+  }
+  /**
+   * Return true if NOT deleted
+   */
+  get notDeleted(): boolean {
+    return !this.deleted;
   }
 
   fromJson(map: ResponseData): PostRootModel {
@@ -177,9 +199,86 @@ export class PostRootModel {
     return this;
   }
 
-  updateVoteCount(map: ResponseData): void {
-    this.N = map.N;
-    this.Y = map.Y;
+  /**
+   * Return properties in JSON for submitting to backend.
+   */
+  get toJson(): MapStringAny {
+    return {
+      idx: this.idx,
+      parentIdx: this.parentIdx,
+      rootIdx: this.rootIdx,
+      userIdx: this.userIdx,
+      categoryId: this.categoryId,
+      categoryIdx: this.categoryIdx,
+
+      title: this.title,
+      content: this.content,
+      privateTitle: this.privateTitle,
+      privateContent: this.privateContent,
+      subcategory: this.subcategory,
+
+      beginAt: this.beginAt,
+      endAt: this.endAt,
+
+      Y: this.Y,
+      N: this.N,
+      deletedAt: this.deletedAt,
+      depth: this.depth,
+
+      user: this.user,
+      //
+
+      url: this.url,
+      path: this.path,
+      relativeUrl: this.relativeUrl,
+
+      // Advertisement properties
+      name: this.name,
+      companyName: this.companyName,
+      phoneNo: this.phoneNo,
+      code: this.code,
+      countryCode: this.countryCode,
+      beginDate: this.beginDate,
+      endDate: this.endDate,
+      files: this.files,
+      fileIdxes: this.fileIdxes,
+    };
+  }
+
+  /**
+   * Update vote count
+   * @param json json response from backend
+   */
+  updateVoteCount(json: ResponseData): void {
+    this.N = json.N;
+    this.Y = json.Y;
+  }
+
+  /**
+   * Vote
+   *
+   * You may want to handle the exception.
+   *
+   * @param choice like or dislike choice
+   */
+  async like(choice: "Y" | "N" = "Y"): Promise<void> {
+    const res = await ApiService.instance.vote({
+      idx: this.idx,
+      choice: choice,
+    });
+    console.log("res; ", res);
+    this.updateVoteCount(res);
+  }
+  async dislike(): Promise<void> {
+    return this.like("N");
+  }
+
+  markDeleted(): void {
+    this.deletedAt = new Date().getTime();
+    this.title = "";
+    this.content = "";
+    this.privateTitle = "";
+    this.privateContent = "";
   }
 }
 
@@ -237,27 +336,20 @@ export class PostModel extends PostRootModel {
    * Return properties in JSON for submitting to backend.
    */
   get toJson(): MapStringAny {
-    return {
-      idx: this.idx,
-      userIdx: this.userIdx,
-      categoryId: this.categoryId,
-      categoryIdx: this.categoryIdx,
-      title: this.title,
-      content: this.content,
-      privateTitle: this.privateTitle,
-      privateContent: this.privateContent,
-      subcategory: this.subcategory,
+    const json = super.toJson;
 
-      // Advertisement properties
-      name: this.name,
-      companyName: this.companyName,
-      phoneNo: this.phoneNo,
-      code: this.code,
-      countryCode: this.countryCode,
-      beginDate: this.beginDate,
-      endDate: this.endDate,
-      files: this.fileIdxes,
-    };
+    // Do whatever it takes for a post to be exported.
+    // json['...'] = ...;
+
+    return json;
+  }
+
+  /**
+   * Replace current post model with the input.
+   * @param post post to replace
+   */
+  copyWith(post: PostModel): void {
+    this.fromJson(post.toJson);
   }
 
   insertComment(comment: CommentModel): void {
@@ -292,13 +384,16 @@ export class PostModel extends PostRootModel {
   toCreate(categoryId: string): void {
     this.fromJson({});
     this.categoryId = categoryId;
-    this.toEdit();
+    this.toEdit(this);
   }
 
   /**
    * Set the post to edit mode.
    */
-  toEdit() {
+  toEdit(post?: PostModel): void {
+    if (post) {
+      this.copyWith(post);
+    }
     this.inEdit = true;
   }
 

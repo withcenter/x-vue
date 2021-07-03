@@ -97,7 +97,7 @@ export default class CommentForm extends Vue {
     if (this.comment) {
       this.form.idx = this.comment.idx;
       this.form.content = this.comment.content;
-      this.form.files = this.comment.files.map((file) => `${file.idx}`).join(",");
+      this.form.fileIdxes = this.comment.files.map((file) => `${file.idx}`).join(",");
 
       this.uploadedFiles = this.comment.files;
     }
@@ -140,13 +140,13 @@ export default class CommentForm extends Vue {
   }
 
   onFileUploaded(file: FileModel): void {
-    this.form.files = addByComma(this.form.files, file.idx);
+    this.form.fileIdxes = addByComma(this.form.fileIdxes, file.idx);
     this.uploadedFiles.push(file);
     this.uploadProgress = 0;
   }
 
   onFileDeleted(idx: string): void {
-    this.form.files = deleteByComma(this.form.files, idx);
+    this.form.fileIdxes = deleteByComma(this.form.fileIdxes, idx);
   }
 }
 </script>

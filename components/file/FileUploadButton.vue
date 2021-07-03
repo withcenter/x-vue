@@ -11,6 +11,9 @@ import Component from "vue-class-component";
 import UploadButton from "@/x-vue/components/buttons/UploadButton.vue";
 
 import { Prop } from "vue-property-decorator";
+import { FileModel } from "@/x-vue/interfaces/interfaces";
+import { CommentModel, PostModel } from "@/x-vue/interfaces/forum.interface";
+import { addByComma } from "@/x-vue/services/functions";
 
 interface HTMLInputEvent extends Event {
   target: HTMLInputElement & EventTarget;
@@ -19,8 +22,9 @@ interface HTMLInputEvent extends Event {
 @Component({
   components: { UploadButton },
 })
-export default class UploadButtonBasic extends Vue {
+export default class FileUploadButton extends Vue {
   @Prop({ default: 35 }) size!: number;
+  @Prop() post!: PostModel | CommentModel;
 
   api = ApiService.instance;
 
@@ -45,10 +49,17 @@ export default class UploadButtonBasic extends Vue {
         },
         (progress) => this.$emit("progress", progress)
       );
+      this.onFileUpload(uploadedFile);
       this.$emit("uploaded", uploadedFile);
     } catch (e) {
       ComponentService.instance.error(e);
     }
+  }
+
+  onFileUpload(file: FileModel): void {
+    this.post.fileIdxes = addByComma(this.post.fileIdxes, file.idx);
+    console.log("form file idxes;", this.post.fileIdxes);
+    this.post.files.push(file);
   }
 }
 </script>

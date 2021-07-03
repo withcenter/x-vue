@@ -1,8 +1,11 @@
 <template>
-  <h1 @click="post.toggleView()">{{ post.title }}</h1>
+  <div class="title" @click="post.toggleView()">
+    <div v-if="post.deleted">Post. {{ post.idx }} has been deleted.</div>
+    <div v-else>{{ post.idx }} {{ post.title }}</div>
+  </div>
 </template>
 <style lang="scss" scoped>
-h1 {
+.title {
   margin: 0.25em 0;
   padding: 1em;
   background-color: aliceblue;
