@@ -21,8 +21,9 @@ import Cookies from "js-cookie";
 import { Keys, Err } from "./defines";
 import { getRootDomain } from "./functions";
 import Vue from "vue";
-import { AdvertisementModel, CategoryBanners } from "../interfaces/advertisement.interface";
 import { CommentModel, PostModel, PostSearchRequest } from "../interfaces/forum.interface";
+
+import { AdvertisementModel, CategoryBanners } from "../interfaces/advertisement.interface";
 
 /**
  * Api Interface.
