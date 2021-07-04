@@ -1,5 +1,5 @@
 <template>
-  <div v-if="settings">
+  <div v-if="!app.isEmptyObject(settings)">
     <login-first class="mt-2"></login-first>
 
     <div v-if="api._user.loggedIn">
@@ -375,7 +375,7 @@ export default class Advertisement extends Vue {
 
   countries: ResponseData = {};
   bannerPoints!: ResponseData;
-  settings: AdvertisementSettings = null!;
+  settings: AdvertisementSettings = {} as AdvertisementSettings;
 
   async mounted(): Promise<void> {
     this.countries = await this.api.countryAll();
