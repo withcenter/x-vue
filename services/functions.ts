@@ -91,10 +91,7 @@ export function getPageQueryString(): string {
  * @param questionMark  - `default true` it will add the ? on the start of the string
  * @returns
  */
-export function currentQueryToString(
-  query: Dictionary<string | (string | null)[]>,
-  questionMark = true
-): string {
+export function currentQueryToString(query: Dictionary<string | (string | null)[]>, questionMark = true): string {
   const arr: string[] = [];
 
   for (const q in query) {

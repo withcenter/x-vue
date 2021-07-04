@@ -175,10 +175,7 @@ export class ApiService {
         throw "error_error_string_from_php_backend";
       } else if (!res.data.response) {
         throw "error_malformed_response_from_php_backend";
-      } else if (
-        typeof res.data.response === "string" &&
-        res.data.response.indexOf("error_") === 0
-      ) {
+      } else if (typeof res.data.response === "string" && res.data.response.indexOf("error_") === 0) {
         // Backend error code
         if (res.data.response === Err.user_not_found_by_that_session_id) {
           console.log("User has wrong session id: This may happen on development.");
@@ -405,8 +402,7 @@ export class ApiService {
     if (params.taxonomy) form.append("taxonomy", params.taxonomy);
     if (params.entity) form.append("entity", params.entity.toString());
     if (params.code) form.append("code", params.code);
-    if (params.deletePreviousUpload)
-      form.append("deletePreviousUpload", params.deletePreviousUpload);
+    if (params.deletePreviousUpload) form.append("deletePreviousUpload", params.deletePreviousUpload);
 
     form.append("userfile", file);
 
