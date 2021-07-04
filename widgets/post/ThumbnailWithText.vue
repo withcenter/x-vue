@@ -2,10 +2,7 @@
   <section>
     <router-link class="d-flex justify-content-start" :to="post.relativeUrl || '#'">
       <div v-if="post.files.length">
-        <div
-          class="mr-3"
-          :style="'height:' + thumbnailHeight + 'px;width:' + thumbnailWidth + 'px'"
-        >
+        <div class="mr-3" :style="'height:' + thumbnailHeight + 'px;width:' + thumbnailWidth + 'px'">
           <b-img
             :width="thumbnailWidth"
             :style="'height:' + thumbnailHeight + 'px;'"

@@ -2,12 +2,7 @@
   <div v-if="posts.length">
     Latest Posts {{ categoryId }}
     <hr class="my-1" />
-    <router-link
-      class="d-block text-truncate pt-1 mb-1"
-      v-for="post of posts"
-      :key="post.idx"
-      :to="post.relativeUrl"
-    >
+    <router-link class="d-block text-truncate pt-1 mb-1" v-for="post of posts" :key="post.idx" :to="post.relativeUrl">
       {{ post.title }}
     </router-link>
   </div>

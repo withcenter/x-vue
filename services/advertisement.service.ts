@@ -1,10 +1,5 @@
 import { AdvertisementModel, CategoryBanners } from "../interfaces/advertisement.interface";
-import {
-  AdvertisementPointSetting,
-  AdvertisementSettings,
-  RequestData,
-  ResponseData,
-} from "../interfaces/interfaces";
+import { AdvertisementPointSetting, AdvertisementSettings, RequestData, ResponseData } from "../interfaces/interfaces";
 import { ApiService } from "./api.service";
 
 export class AdvertisementService {
@@ -38,9 +33,7 @@ export class AdvertisementService {
     const res = await this.api.request("advertisement.loadBanners", {
       cafeDomain: cafeDomain,
     });
-    const banners: AdvertisementModel[] = res.map((post: JSON) =>
-      new AdvertisementModel().fromJson(post)
-    );
+    const banners: AdvertisementModel[] = res.map((post: JSON) => new AdvertisementModel().fromJson(post));
 
     const _banners: CategoryBanners = {};
     if (banners && banners.length) {
@@ -92,9 +85,7 @@ export class AdvertisementService {
    */
   async advertisementSettings(): Promise<AdvertisementSettings> {
     if (this._advertisementSettings) return this._advertisementSettings;
-    this._advertisementSettings = (await this.api.request(
-      "advertisement.settings"
-    )) as AdvertisementSettings;
+    this._advertisementSettings = (await this.api.request("advertisement.settings")) as AdvertisementSettings;
     return this._advertisementSettings;
   }
 
@@ -117,9 +108,7 @@ export class AdvertisementService {
    * @returns
    */
   async advertisementGetBannerPoints(): Promise<Array<AdvertisementPointSetting>> {
-    return (await this.api.request(
-      "advertisement.getBannerPoints"
-    )) as Array<AdvertisementPointSetting>;
+    return (await this.api.request("advertisement.getBannerPoints")) as Array<AdvertisementPointSetting>;
   }
 
   async advertisementStart(data: RequestData): Promise<AdvertisementModel> {
