@@ -4,9 +4,7 @@ import { ApiService } from "./api.service";
 
 export class FirebaseService {
   private static _instance: FirebaseService;
-  private onMessage?: (
-    payload: Record<string, Record<string, unknown>>
-  ) => void;
+  private onMessage?: (payload: Record<string, Record<string, unknown>>) => void;
 
   public static get instance(): FirebaseService {
     if (!FirebaseService._instance) {
