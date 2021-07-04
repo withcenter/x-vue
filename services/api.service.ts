@@ -42,7 +42,7 @@ export class ApiService {
   private constructor() {
     /// 로딩 할 때, 바로 사용자 세션 값을 읽어 들여서 최대한 빠르게 사용자 로그인 여부를 판단한다.
     this.sessionId = this.getUserSessionId();
-    console.log("session id; ", this.sessionId);
+    // console.log("session id; ", this.sessionId);
     /// Add filter `t` for translating.
     /// This must be inside this constructor or somewhere it can be defined
     /// before Vue initialization.
@@ -185,7 +185,6 @@ export class ApiService {
       }
       return res.data.response;
     } catch (e) {
-      console.log("axios error; ", e.message);
       if (e.message === "Network Error") {
         throw Err.cannot_connect_to_server;
       } else {
@@ -203,11 +202,11 @@ export class ApiService {
    * then it will `refreshLoginUserProfile()` to refresh the user instance in store.state.
    */
   async initUserAuth(): Promise<void> {
-    console.log("==> ApiService::initUserAuth()");
-    console.log("==> ApiService::initUserAuth() ==> sessionId has set to: ", this.sessionId);
+    // console.log("==> ApiService::initUserAuth()");
+    // console.log("==> ApiService::initUserAuth() ==> sessionId has set to: ", this.sessionId);
     if (this.sessionId) {
       await this.refreshLoginUserProfile();
-      console.log("==> ApiService::initUserAuth() ==> refreshLoginUserProfile has done.");
+      // console.log("==> ApiService::initUserAuth() ==> refreshLoginUserProfile has done.");
     }
   }
 
@@ -586,6 +585,27 @@ export class ApiService {
   ///
   /// cafe
   ///
+
+  // Get cafe global settings
+  async loadCafeSettings(): Promise<CafeSettings> {
+    return (await this.request("cafe.settings", {
+      domain: this.domain,
+    })) as CafeSettings;
+  }
+
+  /**
+   * Returns login user's cafe list.
+   * @returns cafe list
+   */
+  async myCafeList(): Promise<CafeModel[]> {
+    if (this.loggedIn) {
+      const res = await this.request("cafe.mine");
+      return res.map((cafe: JSON) => new CafeModel().fromJson(cafe));
+    } else {
+      return [];
+    }
+  }
+
   async cafeCreate(data: RequestCafeCreate): Promise<CafeModel> {
     const res = await this.request("cafe.create", data);
     return new CafeModel().fromJson(res);
@@ -596,6 +616,7 @@ export class ApiService {
     return new CafeModel().fromJson(res);
   }
 
+  // Get a single cafe setting
   async cafeGet(data: RequestData): Promise<CafeModel> {
     const res = await this.request("cafe.get", data);
     return new CafeModel().fromJson(res);
@@ -641,26 +662,6 @@ export class ApiService {
     const re = localStorage.getItem(k);
     if (!re) return re;
     return JSON.parse(re);
-  }
-
-  // Get cafe global settings
-  async loadCafeSettings(): Promise<CafeSettings> {
-    return (await this.request("cafe.settings", {
-      domain: this.domain,
-    })) as CafeSettings;
-  }
-
-  /**
-   * Returns login user's cafe list.
-   * @returns cafe list
-   */
-  async myCafeList(): Promise<CafeModel[]> {
-    if (this.loggedIn) {
-      const res = await this.request("cafe.mine");
-      return res.map((cafe: JSON) => new CafeModel().fromJson(cafe));
-    } else {
-      return [];
-    }
   }
 
   async saveToken(token: string, topic = ""): Promise<ResponseData> {

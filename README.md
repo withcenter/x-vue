@@ -20,6 +20,7 @@
 
   - `this.$store.state.user` can be used but must be read only.
   - `this.$store.commit('user', userModel)` to update user model data. To login, logout, refresh.
+  - One thing to remember is that the Vuex store must not have logic inside.
 
 - The parent must import and enable `vue-router` module, so `x-vue` can use to navigate inside.
 
@@ -70,16 +71,24 @@ onDialogCall() {
 }
 ```
 
-## Initialization
+## Api Service Initialization
 
-- The parent app must set
-
-  - `this.$store.state.user` as user model properties.
-  - `this.$router`. So the `x-vue` model can navigates between pages.
-  - `bootstrap 4.x` and `bootstrap 2.x` to work.
+- ApiService must not depend on parent app.
+  - It must not use any of parent's
+    - store
+    - route
+    - UI things
+    - logic
+    - And another other from parent's app.
+  
+- But `x-vue components` in `x-vue/components` may use some of the parent's app functionality.
+  - So, The parent app must set the following;
+    - `this.$store.state.user` as user model properties.
+    - `this.$router`. So the `x-vue` model can navigates between pages.
+    - `bootstrap 4.x` and `bootstrap 2.x` to work.
 
 - `ApiService` must be initialized before `Vue` initialization, Since `AppService` adds
-  some filters.
+  some filters like `t` for translation.
 
 - You can set
 
@@ -109,121 +118,11 @@ new Vue({
 }).$mount("#app");
 ```
 
+## t, translation filter
+
+- The filter `t` for translation is registered by the initialization of `ApiService`.
+
 ## User login and logout
-
-- Below are the example of `store/index.ts` which handles user state.
-
-```ts
-import { ApiService } from "@/x-vue/services/api.service";
-import { UserModel } from "@/x-vue/services/interfaces";
-import Vue from "vue";
-import Vuex from "vuex";
-
-Vue.use(Vuex);
-
-class App {
-  static alert(e: string): void {
-    alert(e);
-  }
-}
-
-export default new Vuex.Store({
-  state: {
-    user: new UserModel(),
-  },
-  mutations: {
-    login: async (state, form) => {
-      try {
-        state.user = await ApiService.instance.login(form);
-        console.log("state.user", state.user);
-      } catch (e) {
-        App.alert(e);
-      }
-    },
-  },
-  actions: {},
-  modules: {},
-});
-```
-
-# Style Guide
-
-## ApiService
-
-- ApiService must not depend on parent app.
-  - It must not use any of parent's
-    - store
-    - route
-    - UI things
-    - logic
-    - And another other from parent's app.
-
-## X-Vue components and widgets communication
-
-- See how the `x-vue` and `parent app` communicate. The logic is actually on `store`.
-
-```vue
-<template>
-  <div>
-    <h1>Login</h1>
-    <login @submit="onSubmit"></login>
-  </div>
-</template>
-
-<script lang="ts">
-import Vue from "vue";
-import Component from "vue-class-component";
-import Login from "@/x-vue/components/user/Login.vue";
-
-@Component({
-  components: {
-    Login,
-  },
-})
-export default class LoginView extends Vue {
-  onSubmit(event: Event, form: Request): void {
-    console.log("event; ", event);
-    console.log("form; ", form);
-    this.$store.commit("login", form);
-  }
-}
-</script>
-```
-
-- Below is the `store/index.ts`. The logic is in the `store action`. So, the `x-vue` and `parent app` are completely isolated.
-
-```ts
-import { ApiService } from "@/x-vue/services/api.service";
-import { UserModel } from "@/x-vue/services/interfaces";
-import Vue from "vue";
-import Vuex from "vuex";
-
-Vue.use(Vuex);
-
-class App {
-  static alert(e: string): void {
-    alert(e);
-  }
-}
-
-export default new Vuex.Store({
-  state: {
-    user: new UserModel(),
-  },
-  mutations: {
-    login: async (state, form) => {
-      try {
-        state.user = await ApiService.instance.login(form);
-        console.log("state.user", state.user);
-      } catch (e) {
-        App.alert(e);
-      }
-    },
-  },
-  actions: {},
-  modules: {},
-});
-```
 
 - Below is the login form component from `x-vue`.
   - It may login and emit an event of success or failure to parent app.
@@ -233,7 +132,7 @@ export default new Vuex.Store({
 
 ```vue
 <template>
-  <div data-cy="login-form">
+  <div>
     <h1>User Login</h1>
     <form @submit.prevent="$emit('submit', $event, form)">
       <div class="form-group">
@@ -293,6 +192,6 @@ export default class Login extends Vue {
 - It is important to let developers customize their own design while they can use main logic.
   - For instance, `x-vue-default` project has a `views/Forum.vue` that has all the child components to make the forum functionalities.
     - Developer can simply change(or re-make) one of the components if he want to change the design.
-    - Developer can change its design within the `Forum.vue` component.
+    - Developer can change its design within the single `Forum.vue` component.
 
 

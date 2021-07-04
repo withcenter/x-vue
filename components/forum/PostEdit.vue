@@ -10,51 +10,24 @@
       <form class="mt-3" @submit.prevent="onSubmit">
         {{ "title" | t }}
         <div class="form-group">
-          <input
-            class="w-100 form-control"
-            v-model="form.title"
-            type="text"
-            name="title"
-          />
+          <input class="w-100 form-control" v-model="form.title" type="text" name="title" />
         </div>
         {{ "content" | t }}
         <div class="form-group">
-          <textarea
-            class="w-100 form-control"
-            v-model="form.content"
-            type="text"
-            name="content"
-          />
+          <textarea class="w-100 form-control" v-model="form.content" type="text" name="content" />
         </div>
         <div class="d-flex align-center">
-          <upload-button
-            @success="onFileUploaded"
-            @progress="uploadProgress = $event"
-          ></upload-button>
+          <upload-button @success="onFileUploaded" @progress="uploadProgress = $event"></upload-button>
           <span class="flex-grow-1 mt-2 mr-2">
-            <b-progress
-              :value="uploadProgress"
-              max="100"
-              class="mb-3"
-              v-if="uploadProgress"
-            ></b-progress>
+            <b-progress :value="uploadProgress" max="100" class="mb-3" v-if="uploadProgress"></b-progress>
           </span>
           <button type="submit" class="btn btn-success" v-if="!submitted">
             {{ "submit" | t }}
           </button>
-          <b-spinner
-            class="mx-2"
-            type="grow"
-            variant="success"
-            v-if="submitted"
-          ></b-spinner>
+          <b-spinner class="mx-2" type="grow" variant="success" v-if="submitted"></b-spinner>
         </div>
         <!-- file display -->
-        <file-display
-          :files="form.files"
-          :showDelete="true"
-          @file-deleted="onFileDeleted"
-        ></file-display>
+        <file-display :files="form.files" :showDelete="true" @file-deleted="onFileDeleted"></file-display>
       </form>
     </div>
     <login-first v-if="!loading"></login-first>
