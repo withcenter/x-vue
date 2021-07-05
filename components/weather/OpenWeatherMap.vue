@@ -41,7 +41,7 @@
 <script lang="ts">
 import { ApiService } from "@/x-vue/services/api.service";
 import { ResponseData } from "@/x-vue/interfaces/interfaces";
-import Service from "@/x-vue/services/x-vue.service";
+import Service from "@/x-vue/services/component.service";
 import dayjs from "dayjs";
 import Vue from "vue";
 

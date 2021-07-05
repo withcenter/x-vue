@@ -14,7 +14,7 @@ import Component from "vue-class-component";
 import { Prop } from "vue-property-decorator";
 import { FileModel } from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
-import Service from "@/x-vue/services/x-vue.service";
+import Service from "@/x-vue/services/component.service";
 import FileEdit from "@/x-vue/components/file/FileEdit.vue";
 import { CommentModel, PostModel } from "@/x-vue/interfaces/forum.interface";
 import { deleteByComma } from "@/x-vue/services/functions";
@@ -40,7 +40,7 @@ export default class FileDisplay extends Vue {
     }
   }
 
-  onFileDelete(idx: string): void {
+  onFileDelete(idx: number): void {
     const index = this.post.files.findIndex((file) => file.idx == idx);
     console.log("index; ", index);
     this.post.files.splice(index, 1);

@@ -5,7 +5,7 @@
 </template>
 <script lang="ts">
 import { ApiService } from "@/x-vue/services/api.service";
-import ComponentService from "@/x-vue/services/x-vue.service";
+import ComponentService from "@/x-vue/services/component.service";
 import Vue from "vue";
 import Component from "vue-class-component";
 import UploadButton from "@/x-vue/components/buttons/UploadButton.vue";

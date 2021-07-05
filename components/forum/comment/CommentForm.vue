@@ -44,7 +44,7 @@ import UploadButton from "@/x-vue/components/UploadButton.vue";
 import FileDisplay from "@/x-vue/components/forum/FileDisplay.vue";
 import { ApiService } from "@/x-vue/services/api.service";
 import { addByComma, deleteByComma } from "@/x-vue/services/functions";
-import Service from "@/x-vue/services/x-vue.service";
+import Service from "@/x-vue/services/component.service";
 import { CommentEditModel, CommentModel, PostModel } from "@/x-vue/interfaces/forum.interface";
 
 @Component({

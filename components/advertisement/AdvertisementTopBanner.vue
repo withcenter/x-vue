@@ -7,7 +7,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import Service from "@/x-vue/services/x-vue.service";
+import Service from "@/x-vue/services/component.service";
 import { Banner, Banners } from "@/x-vue/interfaces/advertisement.interface";
 
 @Component({

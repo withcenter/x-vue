@@ -64,7 +64,7 @@ import { CategoryModel } from "@/x-vue/interfaces/interfaces";
 import AdminCategoryCreate from "@/x-vue/components/admin/category/AdminCategoryCreate.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
-import Service from "../../../services/x-vue.service";
+import Service from "../../../services/component.service";
 
 @Component({
   components: {

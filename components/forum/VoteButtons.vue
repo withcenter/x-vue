@@ -19,7 +19,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { ApiService } from "@/x-vue/services/api.service";
-import Service from "@/x-vue/services/x-vue.service";
+import Service from "@/x-vue/services/component.service";
 import { CommentModel, PostModel } from "@/x-vue/interfaces/forum.interface";
 
 @Component({

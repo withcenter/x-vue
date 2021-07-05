@@ -48,7 +48,7 @@
 <script lang="ts">
 import { ApiService } from "@/x-vue/services/api.service";
 import { CountryCurrenciesModel } from "@/x-vue/interfaces/interfaces";
-import Service from "@/x-vue/services/x-vue.service";
+import Service from "@/x-vue/services/component.service";
 
 import { Vue, Prop, Component } from "vue-property-decorator";
 

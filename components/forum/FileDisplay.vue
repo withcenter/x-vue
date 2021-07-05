@@ -20,7 +20,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { FileModel } from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
-import Service from "@/x-vue/services/x-vue.service";
+import Service from "@/x-vue/services/component.service";
 import TrashSvg from "@/x-vue/components/svg/TrashSvg.vue";
 
 @Component({
@@ -33,7 +33,7 @@ export default class FileDisplay extends Vue {
 
   api = ApiService.instance;
 
-  async onClickDelete(idx: string): Promise<void> {
+  async onClickDelete(idx: number): Promise<void> {
     const conf = await Service.instance.confirm("Title", "Are you sure you want to delete this file?");
     if (!conf) return;
 

@@ -2,11 +2,11 @@
   <div class="two-by-two-thumbnail-with-text-bottom w-100">
     <div class="top d-flex">
       <ThumbnailWithTextBottom :post="posts[0]"></ThumbnailWithTextBottom>
-      <ThumbnailWithTextBottom class="pl-1" :post="posts[0]"></ThumbnailWithTextBottom>
+      <ThumbnailWithTextBottom class="pl-1" :post="posts[1]"></ThumbnailWithTextBottom>
     </div>
     <div class="mt-1 bottom d-flex">
-      <ThumbnailWithTextBottom :post="posts[0]"></ThumbnailWithTextBottom>
-      <ThumbnailWithTextBottom class="pl-1" :post="posts[0]"></ThumbnailWithTextBottom>
+      <ThumbnailWithTextBottom :post="posts[2]"></ThumbnailWithTextBottom>
+      <ThumbnailWithTextBottom class="pl-1" :post="posts[3]"></ThumbnailWithTextBottom>
     </div>
   </div>
 </template>
@@ -15,7 +15,7 @@
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { ApiService } from "@/x-vue/services/api.service";
-import ComponentService from "@/x-vue/services/x-vue.service";
+import ComponentService from "@/x-vue/services/component.service";
 
 import ThumbnailWithTextBottom from "./ThumbnailWithTextBottom.vue";
 import { PostModel } from "@/x-vue/interfaces/forum.interface";

@@ -173,7 +173,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 
 import { ApiService } from "@/x-vue/services/api.service";
-import ComponentService from "@/x-vue/services/x-vue.service";
+import ComponentService from "@/x-vue/services/component.service";
 import PreDefined from "./AdminSettingPreDefined.vue";
 @Component({
   components: { PreDefined },

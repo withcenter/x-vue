@@ -27,6 +27,7 @@
 
 <script lang="ts">
 import { PostModel } from "@/x-vue/interfaces/forum.interface";
+import ComponentService from "@/x-vue/services/component.service";
 import Vue from "vue";
 
 import { Component, Prop } from "vue-property-decorator";
@@ -34,19 +35,7 @@ import { Component, Prop } from "vue-property-decorator";
 @Component({})
 export default class ThumbnailWithInlineText extends Vue {
   @Prop({
-    default: () => {
-      return new PostModel().fromJson({
-        idx: 1,
-        title:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        files: [
-          {
-            url: "https://symbols.getvecta.com/stencil_82/45_google-icon.d8d982f8a1.svg",
-          },
-        ],
-        relativeUrl: "#",
-      });
-    },
+    default: () => ComponentService.instance.temporaryPost(),
   })
   post!: PostModel;
 

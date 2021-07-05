@@ -141,7 +141,7 @@ import { Component } from "vue-property-decorator";
 import CameraSvg from "@/x-vue/components/svg/CameraSvg.vue";
 import UploadButton from "@/x-vue/components/buttons/UploadButton.vue";
 import FileUploadButton from "@/x-vue/components/file/FileUploadButton.vue";
-import ComponentService from "@/x-vue/services/x-vue.service";
+import ComponentService from "@/x-vue/services/component.service";
 import { FileModel } from "@/x-vue/interfaces/interfaces";
 import LatestText from "@/x-vue/widgets/post/LatestText.vue";
 

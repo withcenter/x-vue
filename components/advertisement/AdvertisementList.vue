@@ -38,8 +38,8 @@ import { RequestData } from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
 import AdvertisementPreview from "./AdvertisementPreview.vue";
 import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
-import Service from "@/x-vue/services/x-vue.service";
-import ComponentService from "@/x-vue/services/x-vue.service";
+import Service from "@/x-vue/services/component.service";
+import ComponentService from "@/x-vue/services/component.service";
 import { AdvertisementModel } from "@/x-vue/interfaces/advertisement.interface";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 
