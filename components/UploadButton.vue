@@ -11,7 +11,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { ApiService } from "../services/api.service";
-import ComponentService from "../services/x-vue.service";
+import ComponentService from "../services/component.service";
 import CameraSvg from "./svg/CameraSvg.vue";
 
 interface HTMLInputEvent extends Event {

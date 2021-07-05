@@ -17,7 +17,7 @@ import { ApiService } from "@/x-vue/services/api.service";
 import { Component, Prop } from "vue-property-decorator";
 
 import ThumbnailWithInlineText from "./ThumbnailWithInlineText.vue";
-import ComponentService from "@/x-vue/services/x-vue.service";
+import ComponentService from "@/x-vue/services/component.service";
 import { PostModel } from "@/x-vue/interfaces/forum.interface";
 
 @Component({

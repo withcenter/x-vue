@@ -7,7 +7,7 @@
 <script lang="ts">
 import { CommentModel } from "@/x-vue/interfaces/forum.interface";
 import { ApiService } from "@/x-vue/services/api.service";
-import ComponentService from "@/x-vue/services/x-vue.service";
+import ComponentService from "@/x-vue/services/component.service";
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 @Component({})

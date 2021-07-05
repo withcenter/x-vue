@@ -12,7 +12,7 @@
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { ApiService } from "@/x-vue/services/api.service";
-import ComponentService from "@/x-vue/services/x-vue.service";
+import ComponentService from "@/x-vue/services/component.service";
 import { PostModel } from "@/x-vue/interfaces/forum.interface";
 
 @Component({})

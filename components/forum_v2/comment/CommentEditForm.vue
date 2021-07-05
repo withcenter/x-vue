@@ -34,7 +34,7 @@ import FileEditList from "@/x-vue/components/file/FileEditList.vue";
 
 import autosize from "autosize";
 import { ApiService } from "@/x-vue/services/api.service";
-import ComponentService from "@/x-vue/services/x-vue.service";
+import ComponentService from "@/x-vue/services/component.service";
 
 @Component({
   components: {

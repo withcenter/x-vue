@@ -186,7 +186,7 @@ import { ApiService } from "@/x-vue/services/api.service";
 import { RequestData, UserModel } from "@/x-vue/interfaces/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
-import Service from "../../../services/x-vue.service";
+import Service from "../../../services/component.service";
 @Component({
   components: {},
 })

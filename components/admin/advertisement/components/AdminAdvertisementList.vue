@@ -31,7 +31,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import Service from "@/x-vue/services/x-vue.service";
+import Service from "@/x-vue/services/component.service";
 import { ApiService } from "@/x-vue/services/api.service";
 import { RequestData } from "@/x-vue/interfaces/interfaces";
 import AdvertisementPreview from "@/x-vue/components/advertisement/AdvertisementPreview.vue";

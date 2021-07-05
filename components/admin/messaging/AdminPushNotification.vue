@@ -171,7 +171,7 @@ import { DEFAULT_TOPIC } from "@/x-vue/services/defines";
 import { RequestData, ResponseData } from "@/x-vue/interfaces/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
-import Service from "../../../services/x-vue.service";
+import Service from "../../../services/component.service";
 
 @Component({})
 export default class AdminPushNotification extends Vue {

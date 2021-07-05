@@ -1,4 +1,5 @@
 import router from "@/router";
+import { PostModel } from "../interfaces/forum.interface";
 export interface ConfirmToast {
   title: string;
   message: string;
@@ -99,5 +100,15 @@ export default class ComponentService {
   }
   open(path: string): void {
     router.push(path);
+  }
+
+  tempIdx = 0;
+  temporaryPost(): PostModel {
+    return new PostModel().fromJson({
+      idx: ++this.tempIdx,
+      relativeUrl: "#",
+      title:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    });
   }
 }

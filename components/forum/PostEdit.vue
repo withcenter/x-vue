@@ -46,7 +46,7 @@ import { ApiService } from "@/x-vue/services/api.service";
 import { FileModel } from "@/x-vue/interfaces/interfaces";
 import { addByComma, deleteByComma } from "@/x-vue/services/functions";
 
-import ComponentService from "@/x-vue/services/x-vue.service";
+import ComponentService from "@/x-vue/services/component.service";
 import UploadButton from "@/x-vue/components/UploadButton.vue";
 import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
 import FileDisplay from "@/x-vue/components/forum/FileDisplay.vue";

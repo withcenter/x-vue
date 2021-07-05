@@ -25,7 +25,7 @@ import PostEditTitle from "./PostEditTitle.vue";
 import PostEditContent from "./PostEditContent.vue";
 import PostEditSubmitButton from "./PostEditSubmitButton.vue";
 import { ApiService } from "@/x-vue/services/api.service";
-import ComponentService from "@/x-vue/services/x-vue.service";
+import ComponentService from "@/x-vue/services/component.service";
 import FileUploadButton from "@/x-vue/components/file/FileUploadButton.vue";
 import FileEditList from "@/x-vue/components/file/FileEditList.vue";
 import { ForumInterface, PostModel } from "@/x-vue/interfaces/forum.interface";
