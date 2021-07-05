@@ -5,18 +5,25 @@
     <div class="ml-2 d-flex w-100">
       <div class="w-100">
         <router-link :to="toPostView()">
-          <span>No. {{ post.idx }} - </span>
-          <span data-cy="post-title">{{ post.title || "no title" }}</span>
-          <span class="ml-1" v-if="post.noOfComments"> ({{ post.noOfComments }}) </span>
+          <b>
+            <span>No. {{ post.idx }} - </span>
+            <span data-cy="post-title">{{ post.title || "no title" }}</span>
+            <span class="ml-1" v-if="post.noOfComments"> ({{ post.noOfComments }}) </span>
+          </b>
+          <div>
+            <i class="text-muted" v-if="post.comments.length">
+              {{ post.comments[0].user.displayName }}: "{{ post.comments[0].content }}"
+            </i>
+            <i class="text-muted" v-if="!post.comments.length"> No comments yet .. </i>
+          </div>
         </router-link>
-        <div>
-          <i class="text-muted" v-if="post.comments.length">
-            {{ post.comments[0].user.displayName }}: "{{ post.comments[0].content }}"
-          </i>
-          <i class="text-muted" v-if="!post.comments.length"> No comments yet .. </i>
-        </div>
       </div>
-      <post-meta-component class="d-block" style="width: 120px" :showName="true" :post="post"></post-meta-component>
+      <post-meta-component
+        class="ml-1 d-block"
+        style="width: 120px"
+        :showName="true"
+        :post="post"
+      ></post-meta-component>
     </div>
   </article>
 </template>
