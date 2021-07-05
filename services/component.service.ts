@@ -104,11 +104,17 @@ export default class ComponentService {
 
   tempIdx = 0;
   temporaryPost(): PostModel {
+    this.tempIdx++;
     return new PostModel().fromJson({
-      idx: ++this.tempIdx,
+      idx: this.tempIdx,
       relativeUrl: "#",
-      title:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      title: `${this.tempIdx} - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
+      content: `Ut enim ad minim veniam,\nquis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\n\nExcepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\n${this.tempIdx}.`,
+      files: [
+        {
+          url: "https://symbols.getvecta.com/stencil_82/45_google-icon.d8d982f8a1.svg",
+        },
+      ],
     });
   }
 }

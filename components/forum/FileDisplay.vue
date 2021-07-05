@@ -33,7 +33,7 @@ export default class FileDisplay extends Vue {
 
   api = ApiService.instance;
 
-  async onClickDelete(idx: string): Promise<void> {
+  async onClickDelete(idx: number): Promise<void> {
     const conf = await Service.instance.confirm("Title", "Are you sure you want to delete this file?");
     if (!conf) return;
 
