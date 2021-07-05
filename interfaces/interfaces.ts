@@ -119,6 +119,9 @@ export class UserModel {
   address = "";
   zipcode = "";
   block = false;
+
+  createdAt = 0;
+  updatedAt = 0;
   // domain = "";
 
   nicknameOrName = "";
@@ -164,7 +167,8 @@ export class UserModel {
     this.zipcode = map.zipcode;
     this.block = map.block == "Y" ? true : false;
     this.nicknameOrName = map.nicknameOrName;
-
+    this.createdAt = map.createdAt;
+    this.updatedAt = map.updatedAt;
     return this;
   }
 }
@@ -347,4 +351,45 @@ export interface RequestCafeCreate {
   countryCode: string;
   domain: string;
   rootDomain: string;
+}
+
+export class PointHistoryModel {
+  idx = 0;
+  action = "";
+  taxonomy = "";
+  categoryIdx = 0;
+  entity = 0;
+  fromUserIdx = 0;
+  fromUserPointAfter = 0;
+  fromUserPointApply = 0;
+  toUserIdx = 0;
+  toUserPointAfter = 0;
+  toUserPointApply = 0;
+
+  createdAt = 0;
+  updatedAt = 0;
+
+  // createdAtShortDate = "";
+  // updatedAtShortDate = "";
+  fromJson(map: ResponseData): PointHistoryModel {
+    this.idx = map.idx;
+    this.action = map.action;
+    this.categoryIdx = map.categoryIdx;
+    this.entity = map.entity;
+    this.fromUserIdx = map.fromUserIdx;
+    this.fromUserPointAfter = map.fromUserPointAfter;
+    this.fromUserPointApply = map.fromUserPointApply;
+    this.taxonomy = map.taxonomy;
+    this.toUserIdx = map.toUserIdx;
+    this.toUserPointAfter = map.toUserPointAfter;
+    this.toUserPointApply = map.toUserPointApply;
+
+    this.createdAt = map.createdAt;
+    this.updatedAt = map.updatedAt;
+
+    // this.createdAtShortDate = map.createdAtShortDate;
+    // this.updatedAtShortDate = map.updatedAtShortDate;
+
+    return this;
+  }
 }
