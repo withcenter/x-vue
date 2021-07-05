@@ -52,7 +52,7 @@ export interface MainCafeSettings {
  * This setting has all the cafe settings.
  */
 export interface CafeSettings {
-  mainDomains: string[];
+  mainCafeDomains: string[];
   countryDomains: string[];
   mainCafeSettings: { [index: string]: MainCafeSettings };
   mainMenus: string[];
