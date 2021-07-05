@@ -6,6 +6,7 @@
 
 <script lang="ts">
 import { PostModel } from "@/x-vue/interfaces/forum.interface";
+import ComponentService from "@/x-vue/services/component.service";
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 @Component({
@@ -13,11 +14,7 @@ import { Component, Prop } from "vue-property-decorator";
 })
 export default class Samples extends Vue {
   @Prop({
-    default: () => {
-      return new PostModel().fromJson({
-        title: "This is the default post title text.",
-      });
-    },
+    default: () => ComponentService.instance.temporaryPost(),
   })
   post!: PostModel;
 }

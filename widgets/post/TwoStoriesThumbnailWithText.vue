@@ -15,6 +15,7 @@
 import { Vue, Component, Prop } from "vue-property-decorator";
 import ThumbnailWithText from "@/x-vue/widgets/post/ThumbnailWithText.vue";
 import { PostModel } from "@/x-vue/interfaces/forum.interface";
+import ComponentService from "@/x-vue/services/component.service";
 
 @Component({
   components: {
@@ -26,39 +27,9 @@ export default class TwoStoriesThumbnailWithText extends Vue {
     type: Array,
     default: () => {
       const posts: PostModel[] = [];
-      posts.push(
-        new PostModel().fromJson({
-          title: "1st Story Title will be here",
-          content: "1st Story Content will be here",
-          files: [
-            {
-              url: "https://symbols.getvecta.com/stencil_82/45_google-icon.d8d982f8a1.svg",
-            },
-          ],
-        })
-      );
-      posts.push(
-        new PostModel().fromJson({
-          title: "2nd Story Title will be here",
-          content: "2nd Story Content will be here",
-          // files: [
-          //   {
-          //     url: "https://symbols.getvecta.com/stencil_82/45_google-icon.d8d982f8a1.svg",
-          //   },
-          // ],
-        })
-      );
-      posts.push(
-        new PostModel().fromJson({
-          title: "2nd Story Title will be here",
-          content: "2nd Story Content will be here",
-          // files: [
-          //   {
-          //     url: "https://symbols.getvecta.com/stencil_82/45_google-icon.d8d982f8a1.svg",
-          //   },
-          // ],
-        })
-      );
+      posts.push(ComponentService.instance.temporaryPost());
+      posts.push(ComponentService.instance.temporaryPost());
+      posts.push(ComponentService.instance.temporaryPost());
       return posts;
     },
   })
