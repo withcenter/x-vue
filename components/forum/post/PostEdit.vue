@@ -26,7 +26,7 @@
           </button>
           <b-spinner class="mx-2" type="grow" variant="success" v-if="submitted"></b-spinner>
         </div>
-        <FileEditList class="px-2" :post="form" @deleted="onFileDeleted"></FileEditList>
+        <FileEditList :post="form" @deleted="onFileDeleted"></FileEditList>
       </form>
     </div>
     <login-first v-if="!loading"></login-first>
