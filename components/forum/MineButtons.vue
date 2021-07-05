@@ -5,8 +5,10 @@
     </button>
 
     <b-popover placement="bottomleft" ref="popover" :target="'mine-button-popover-' + parent.idx" triggers="click blur">
-      <button data-cy="mine-edit-button" class="btn btn-sm btn-success" @click="onClickEdit">Edit</button>
-      <button data-cy="mine-delete-button" class="ml-2 btn btn-sm btn-danger" @click="onClickDelete">Delete</button>
+      <button data-cy="mine-edit-button" class="btn btn-sm btn-success" @click="onClickEdit">{{ "edit" | t }}</button>
+      <button data-cy="mine-delete-button" class="ml-2 btn btn-sm btn-danger" @click="onClickDelete">
+        {{ "delete" | t }}
+      </button>
     </b-popover>
   </div>
 </template>

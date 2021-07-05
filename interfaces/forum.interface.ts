@@ -82,6 +82,7 @@ export class CommentEditModel {
   rootIdx = 0;
   parentIdx = 0;
   fileIdxes = "";
+  files: FileModel[] = [];
 }
 
 export class PostRootModel {
