@@ -88,6 +88,7 @@ export default class extends Vue {
         this.post.insertComment(edited);
         this.parent.inReply = false;
       }
+      this.$emit("edited", edited);
     } catch (e) {
       ComponentService.instance.error(e);
     }

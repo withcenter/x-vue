@@ -103,6 +103,8 @@ export default class CommentForm extends Vue {
       this.form.content = "";
       this.uploadedFiles = [];
       this.submitted = false;
+
+      this.$emit("edited", res);
     } catch (e) {
       this.submitted = false;
       Service.instance.error(e);

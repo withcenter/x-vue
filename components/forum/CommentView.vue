@@ -20,7 +20,12 @@
         <file-display :files="comment.files"></file-display>
         <!-- comment edit mode -->
       </div>
-      <comment-form-component v-if="comment.inEdit" :root="post" :comment="comment"></comment-form-component>
+      <comment-form-component
+        v-if="comment.inEdit"
+        :root="post"
+        :comment="comment"
+        @edited="$emit('edited', $event)"
+      ></comment-form-component>
       <!-- comment buttons -->
       <hr class="my-2" />
       <div class="mt-2 d-flex" v-if="!comment.inEdit">
@@ -40,6 +45,7 @@
       :root="post"
       :parent="comment"
       v-if="comment.inReply"
+      @edited="$emit('edited', $event)"
     ></comment-form-component>
   </section>
 </template>

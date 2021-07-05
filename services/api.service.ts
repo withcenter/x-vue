@@ -178,7 +178,10 @@ export class ApiService {
       } else if (typeof res.data.response === "string" && res.data.response.indexOf("error_") === 0) {
         // Backend error code
         if (res.data.response === Err.user_not_found_by_that_session_id) {
-          console.log("User has wrong session id: This may happen on development.");
+          console.log("@ignore User has wrong session id: This may happen on development.");
+          this.logout();
+        } else if (res.data.response === Err.wrong_session_id) {
+          console.log("@ignore User has wrong session id: This may happen on development.");
           this.logout();
         }
         throw res.data.response;
