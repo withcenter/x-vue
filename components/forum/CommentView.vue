@@ -24,6 +24,7 @@
         v-if="comment.inEdit"
         :root="post"
         :comment="comment"
+        @edited="$emit('edited', $event)"
       ></comment-form-component>
       <!-- comment buttons -->
       <hr class="my-2" />
@@ -34,10 +35,7 @@
         </div>
         <span class="flex-grow-1"></span>
         <!-- mine buttons -->
-        <mine-buttons-component
-          data-cy="comment-mine-button"
-          :parent="comment"
-        ></mine-buttons-component>
+        <mine-buttons-component data-cy="comment-mine-button" :parent="comment"></mine-buttons-component>
       </div>
     </div>
 
@@ -47,6 +45,7 @@
       :root="post"
       :parent="comment"
       v-if="comment.inReply"
+      @edited="$emit('edited', $event)"
     ></comment-form-component>
   </section>
 </template>

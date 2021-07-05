@@ -48,6 +48,7 @@
         class="mt-2"
         :parent="post"
         :root="post"
+        @edited="$emit('edited', $event)"
       ></comment-form-component>
       <!-- comments -->
       <div class="comments" v-if="post.comments.length">
@@ -63,6 +64,7 @@
             :data-cy="'comment-' + index"
             :post="post"
             :comment="comment"
+            @edited="$emit('edited', $event)"
           ></comment-view-component>
         </div>
       </div>
