@@ -1,5 +1,4 @@
 <template>
-  <!-- TODO: Move colors to global Css -->
   <div class="d-flex">
     <button class="btn btn-sm" @click="onClickVote('Y')" style="color: green">
       Like
@@ -37,6 +36,7 @@ export default class VoteButtonsComponent extends Vue {
         choice: choice,
       });
       this.parent.updateVoteCount(res);
+      this.$emit("voted");
     } catch (e) {
       Service.instance.error(e);
     }

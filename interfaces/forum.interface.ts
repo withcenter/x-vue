@@ -33,12 +33,22 @@ export class ForumInterface {
   noMore = false;
   categoryId = "";
 
+  userIdx = 0;
+  subCategory = "";
+  comments = 0;
+
   get searchOptions(): PostSearchRequest {
-    return {
+    const opts: PostSearchRequest = {
       categoryId: this.categoryId,
       page: this.page,
       limit: this.limit,
     };
+
+    if (this.subCategory) opts.subcategory = this.subCategory;
+    if (this.comments) opts.comments = this.comments;
+    if (this.userIdx) opts.userIdx = this.userIdx;
+
+    return opts;
   }
 
   get canLoad(): boolean {

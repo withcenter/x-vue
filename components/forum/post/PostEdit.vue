@@ -67,6 +67,22 @@ export default class PostEdit extends Vue {
   submitted = false;
   uploadProgress = 0;
 
+  mounted(): void {
+    const idxOrCategory = this.$route.params.idxOrCategory;
+    if (isNaN(parseInt(idxOrCategory))) {
+      this.form.categoryId = idxOrCategory;
+
+      // add subcategory if it exist on route.query
+      if (this.$route.query.sc) {
+        this.form.subcategory = this.$route.query.sc as string;
+      }
+    } else {
+      this.form.idx = parseInt(idxOrCategory);
+      this.loadPost();
+    }
+    console.log("PostEdit::mounted", this.form);
+  }
+
   async loadPost(): Promise<void> {
     this.loading = true;
     try {
@@ -77,23 +93,6 @@ export default class PostEdit extends Vue {
       this.loading = false;
     }
     // console.log("Update form: ", this.form);
-  }
-
-  mounted(): void {
-    const idxOrCategory = this.$route.params.idxOrCategory;
-    if (isNaN(parseInt(idxOrCategory))) {
-      this.form.categoryId = idxOrCategory;
-
-      // add subcategory if it exist on route.query
-      if (this.$route.query.sc) {
-        this.form.subcategory = this.$route.query.sc as string;
-      }
-
-      console.log(this.form);
-    } else {
-      this.form.idx = parseInt(idxOrCategory);
-      this.loadPost();
-    }
   }
 
   async onSubmit(): Promise<void> {

@@ -92,11 +92,13 @@ export default class CommentForm extends Vue {
       const res = await this.api.commentEdit(this.form);
       if (this.comment) {
         // comment update
+        res.depth = this.comment.depth;
         Object.assign(this.comment, res);
         this.comment.inEdit = false;
       } else {
         // comment create
         res.depth = this.parent.depth ? +this.parent.depth + 1 : 1;
+        this.parent.inReply = false;
         this.root.insertComment(res);
       }
 
