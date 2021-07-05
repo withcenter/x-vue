@@ -125,11 +125,7 @@
           <tr>
             <td>{{ "day_count_limit" | t }}</td>
             <td>
-              <input
-                class="w-25 form-control"
-                type="number"
-                v-model="category.createDailyLimitCount"
-              />
+              <input class="w-25 form-control" type="number" v-model="category.createDailyLimitCount" />
             </td>
           </tr>
 

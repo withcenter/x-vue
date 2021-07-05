@@ -3,8 +3,8 @@
     <h4>Admin Settings</h4>
 
     <div class="mt-2 alert alert-warning">
-      Admin settings are <b>optional</b>. If you create the option, then the option can affect the
-      app. Please read README.md of `matrix`.
+      Admin settings are <b>optional</b>. If you create the option, then the option can affect the app. Please read
+      README.md of `matrix`.
     </div>
 
     <div class="mt-2 alert alert-info" v-if="Object.keys(settings).length">
@@ -121,28 +121,19 @@
     <div class="alert alert-secondary">
       <h4>Dynamic admin settings</h4>
       <small class=""
-        >You can create, update, delete custom settings. You can create custom settings for the need
-        of the client app.</small
+        >You can create, update, delete custom settings. You can create custom settings for the need of the client
+        app.</small
       >
       <form @submit.prevent="onCreate">
         <div class="row">
           <div class="col">
             <div class="form-group">
-              <input
-                class="form-control"
-                placeholder="Admin setting code(key)"
-                v-model="form.code"
-              />
+              <input class="form-control" placeholder="Admin setting code(key)" v-model="form.code" />
             </div>
           </div>
           <div class="col">
             <div class="form-group">
-              <textarea
-                class="form-control"
-                rows="1"
-                placeholder="Data(value)"
-                v-model="form.data"
-              ></textarea>
+              <textarea class="form-control" rows="1" placeholder="Data(value)" v-model="form.data"></textarea>
             </div>
           </div>
           <div class="col">
@@ -167,9 +158,7 @@
               </div>
               <div class="col">
                 <button class="btn btn-primary">Update</button>
-                <button type="button" class="ml-2 btn btn-danger" @click="onDelete(code)">
-                  Delete
-                </button>
+                <button type="button" class="ml-2 btn btn-danger" @click="onDelete(code)">Delete</button>
               </div>
             </div>
           </form>
@@ -259,10 +248,7 @@ export default class AdminSettings extends Vue {
   }
   async onDelete(code: string): Promise<void> {
     try {
-      const re = await this.cs.confirm(
-        "Admin settings",
-        `Do you want to delete the ${code} settigns?`
-      );
+      const re = await this.cs.confirm("Admin settings", `Do you want to delete the ${code} settigns?`);
       if (re === false) return;
       await this.api.deleteConfig(code);
       await this.cs.alert("Admin settings", `${code} has been deleted.`);

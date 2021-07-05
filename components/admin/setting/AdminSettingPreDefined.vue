@@ -4,25 +4,14 @@
 
     <div v-if="type == 'textarea' || type == 'number'">
       <div class="d-flex">
-        <textarea
-          class="form-control"
-          :rows="rows"
-          v-model="v"
-          v-if="type == 'textarea'"
-        ></textarea>
+        <textarea class="form-control" :rows="rows" v-model="v" v-if="type == 'textarea'"></textarea>
         <input class="form-control" type="number" v-model="v" v-if="type == 'number'" />
         <button class="ml-2 btn btn-primary" @click="$emit('update', code, v)">Update</button>
       </div>
       <small class="form-text">{{ description }}</small>
     </div>
 
-    <b-form-checkbox
-      v-model="checked"
-      name="check-button"
-      @change="onChange"
-      switch
-      v-if="type == 'switch'"
-    >
+    <b-form-checkbox v-model="checked" name="check-button" @change="onChange" switch v-if="type == 'switch'">
       {{ description }}
     </b-form-checkbox>
   </div>

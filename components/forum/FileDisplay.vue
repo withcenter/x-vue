@@ -1,12 +1,7 @@
 <template>
   <div class="file-display grid">
     <div class="row">
-      <div
-        class="position-relative p-1 col-3"
-        v-for="file of files"
-        :key="file.idx"
-        style="height: 150px"
-      >
+      <div class="position-relative p-1 col-3" v-for="file of files" :key="file.idx" style="height: 150px">
         <div
           class="icon-lg position-absolute m-2 bg-light circle-center pointer"
           v-if="showDelete"
@@ -39,10 +34,7 @@ export default class FileDisplay extends Vue {
   api = ApiService.instance;
 
   async onClickDelete(idx: string): Promise<void> {
-    const conf = await Service.instance.confirm(
-      "Title",
-      "Are you sure you want to delete this file?"
-    );
+    const conf = await Service.instance.confirm("Title", "Are you sure you want to delete this file?");
     if (!conf) return;
 
     try {

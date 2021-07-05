@@ -10,10 +10,7 @@
     <div class="mt-2">{{ comment.content }}</div>
     <file-display :files="comment.files"></file-display>
     <hr class="my-2" />
-    <router-link
-      class="d-flex justify-content-between btn btn-outline-info w-100"
-      :to="`/${comment.rootIdx}`"
-    >
+    <router-link class="d-flex justify-content-between btn btn-outline-info w-100" :to="`/${comment.rootIdx}`">
       Open Post
       <img class="icon-md" src="@/assets/svg/external-link.svg" />
     </router-link>

@@ -41,9 +41,7 @@
             :id="key + '-option'"
             v-model="options[key]"
           />
-          <label class="custom-control-label text-capitalize" :for="key + '-option'">{{
-            key
-          }}</label>
+          <label class="custom-control-label text-capitalize" :for="key + '-option'">{{ key }}</label>
         </div>
       </div>
       <section class="overflow-auto">
@@ -51,12 +49,7 @@
           <thead class="thead-dark">
             <tr>
               <th class="align-middle" scope="col">#</th>
-              <th
-                class="align-middle"
-                data-cy="firebaseUid-col-header"
-                scope="col"
-                v-if="options.email"
-              >
+              <th class="align-middle" data-cy="firebaseUid-col-header" scope="col" v-if="options.email">
                 {{ "email" | t }}
               </th>
               <th class="align-middle" scope="col" v-if="options.firebaseUid">
@@ -74,12 +67,7 @@
               <th class="align-middle" scope="col" v-if="options.phoneNo">
                 {{ "phone_no" | t }}
               </th>
-              <th
-                class="align-middle"
-                data-cy="gender-col-header"
-                scope="col"
-                v-if="options.gender"
-              >
+              <th class="align-middle" data-cy="gender-col-header" scope="col" v-if="options.gender">
                 {{ "gender" | t }}
               </th>
               <th class="align-middle" scope="col" v-if="options.birthdate">

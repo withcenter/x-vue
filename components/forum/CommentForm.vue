@@ -2,11 +2,7 @@
   <div class="w-100">
     <form class="comment-form p-2 d-flex" @submit.prevent="onCommentSubmit">
       <div class="mr-2">
-        <upload-button
-          :size="35"
-          @success="onFileUploaded"
-          @progress="uploadProgress = $event"
-        ></upload-button>
+        <upload-button :size="35" @success="onFileUploaded" @progress="uploadProgress = $event"></upload-button>
       </div>
       <textarea
         data-cy="comment-input"
@@ -19,21 +15,12 @@
       ></textarea>
       <div class="ml-2 d-flex" v-if="canSubmit || comment">
         <div v-if="comment || parent.idx != root.idx">
-          <button
-            class="btn btn-sm btn-danger h-100"
-            type="button"
-            @click="onClickCancel"
-            v-if="!submitted"
-          >
+          <button class="btn btn-sm btn-danger h-100" type="button" @click="onClickCancel" v-if="!submitted">
             Cancel
           </button>
         </div>
         <div v-if="!submitted && canSubmit">
-          <button
-            data-cy="comment-submit-button"
-            class="w-100 ml-2 btn btn-sm btn-success h-100"
-            type="submit"
-          >
+          <button data-cy="comment-submit-button" class="w-100 ml-2 btn btn-sm btn-success h-100" type="submit">
             Submit
           </button>
         </div>
@@ -43,18 +30,9 @@
       </div>
     </form>
     <!-- upload progress bar -->
-    <b-progress
-      :value="uploadProgress"
-      max="100"
-      class="mb-3 ml-2 mr-3"
-      v-if="uploadProgress"
-    ></b-progress>
+    <b-progress :value="uploadProgress" max="100" class="mb-3 ml-2 mr-3" v-if="uploadProgress"></b-progress>
     <!-- file display -->
-    <file-display
-      :files="uploadedFiles"
-      :showDelete="true"
-      @file-deleted="onFileDeleted"
-    ></file-display>
+    <file-display :files="uploadedFiles" :showDelete="true" @file-deleted="onFileDeleted"></file-display>
   </div>
 </template>
 

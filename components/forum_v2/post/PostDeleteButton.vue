@@ -16,10 +16,7 @@ export default class PostDeleteButton extends Vue {
   @Prop() post!: PostModel;
   async onDelete(): Promise<void> {
     try {
-      const re = await ComponentService.instance.confirm(
-        "Post delete",
-        "Do you want to delete this post?"
-      );
+      const re = await ComponentService.instance.confirm("Post delete", "Do you want to delete this post?");
       if (re === false) return;
       await ApiService.instance.postDelete(this.post.idx);
       this.post.markDeleted();

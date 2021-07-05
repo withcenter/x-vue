@@ -5,20 +5,12 @@
       <div class="d-flex text-center mb-2">
         <div class="w-100 mr-2">
           <div>{{ "from" | t }}</div>
-          <b-form-select
-            v-model="fromCode"
-            :options="currencies.selectOptions"
-            @change="onSubmit()"
-          ></b-form-select>
+          <b-form-select v-model="fromCode" :options="currencies.selectOptions" @change="onSubmit()"></b-form-select>
         </div>
 
         <div class="w-100">
           <div>{{ "to" | t }}</div>
-          <b-form-select
-            v-model="toCode"
-            :options="currencies.selectOptions"
-            @change="onSubmit()"
-          ></b-form-select>
+          <b-form-select v-model="toCode" :options="currencies.selectOptions" @change="onSubmit()"></b-form-select>
         </div>
       </div>
 

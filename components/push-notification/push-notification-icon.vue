@@ -1,11 +1,6 @@
 <template>
   <div class="push-notification-icon">
-    <b-form-checkbox
-      v-model="data[postTopic]"
-      name="check-button"
-      switch
-      @change="onChangeSubscribeOrUnsubscribeTopic"
-    >
+    <b-form-checkbox v-model="data[postTopic]" name="check-button" switch @change="onChangeSubscribeOrUnsubscribeTopic">
       <span>{{ title | t }}</span>
     </b-form-checkbox>
   </div>

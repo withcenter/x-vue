@@ -1,15 +1,8 @@
 <template>
   <div class="pr-2 position-relative overflow-hidden pointer">
-    <camera-svg
-      class="pointer"
-      :style="{ width: `${defaultSize}px`, height: `${defaultSize}px` }"
-    ></camera-svg>
+    <camera-svg class="pointer" :style="{ width: `${defaultSize}px`, height: `${defaultSize}px` }"></camera-svg>
 
-    <input
-      class="h-100 top right position-absolute fs-lg opacity-0 pointer"
-      type="file"
-      @change="onFileChange"
-    />
+    <input class="h-100 top right position-absolute fs-lg opacity-0 pointer" type="file" @change="onFileChange" />
   </div>
 </template>
 

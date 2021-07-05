@@ -16,12 +16,7 @@
           <i class="text-muted" v-if="!post.comments.length"> No comments yet .. </i>
         </div>
       </div>
-      <post-meta-component
-        class="d-block"
-        style="width: 120px"
-        :showName="true"
-        :post="post"
-      ></post-meta-component>
+      <post-meta-component class="d-block" style="width: 120px" :showName="true" :post="post"></post-meta-component>
     </div>
   </article>
 </template>

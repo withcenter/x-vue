@@ -22,13 +22,7 @@
       </b-form-group>
 
       <b-form-group class="mb-2" :label="'name' | t" label-for="name">
-        <b-form-input
-          id="name"
-          v-model="form.name"
-          type="text"
-          :placeholder="'enter_name' | t"
-          required
-        ></b-form-input>
+        <b-form-input id="name" v-model="form.name" type="text" :placeholder="'enter_name' | t" required></b-form-input>
       </b-form-group>
 
       <button type="submit" class="btn btn-primary px-5">

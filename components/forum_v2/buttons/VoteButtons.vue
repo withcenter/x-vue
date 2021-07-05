@@ -1,9 +1,7 @@
 <template>
   <div>
     <button class="btn btn-secondary btn-sm mr-2" @click="post.like()">Like {{ post.Y }}</button>
-    <button class="btn btn-secondary btn-sm mr-2" @click="post.dislike()">
-      Dislike {{ post.N }}
-    </button>
+    <button class="btn btn-secondary btn-sm mr-2" @click="post.dislike()">Dislike {{ post.N }}</button>
   </div>
 </template>
 <script lang="ts">

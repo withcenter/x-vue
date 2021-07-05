@@ -4,22 +4,9 @@
       <img class="icon-v grey" src="@/assets/svg/ellipsis-v.svg" />
     </button>
 
-    <b-popover
-      placement="bottomleft"
-      ref="popover"
-      :target="'mine-button-popover-' + parent.idx"
-      triggers="click blur"
-    >
-      <button data-cy="mine-edit-button" class="btn btn-sm btn-success" @click="onClickEdit">
-        Edit
-      </button>
-      <button
-        data-cy="mine-delete-button"
-        class="ml-2 btn btn-sm btn-danger"
-        @click="onClickDelete"
-      >
-        Delete
-      </button>
+    <b-popover placement="bottomleft" ref="popover" :target="'mine-button-popover-' + parent.idx" triggers="click blur">
+      <button data-cy="mine-edit-button" class="btn btn-sm btn-success" @click="onClickEdit">Edit</button>
+      <button data-cy="mine-delete-button" class="ml-2 btn btn-sm btn-danger" @click="onClickDelete">Delete</button>
     </b-popover>
   </div>
 </template>

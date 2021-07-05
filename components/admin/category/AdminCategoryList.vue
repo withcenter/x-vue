@@ -27,9 +27,7 @@
                 <router-link :to="'/forum/' + category.id">{{ category.idx }}</router-link>
               </th>
               <td>
-                <router-link :to="'/admin/category/edit/' + category.id"
-                  >{{ category.id }}
-                </router-link>
+                <router-link :to="'/admin/category/edit/' + category.id">{{ category.id }} </router-link>
               </td>
               <td>
                 <span>{{ category.title }}</span>

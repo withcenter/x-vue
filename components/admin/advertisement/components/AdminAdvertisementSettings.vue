@@ -5,28 +5,18 @@
     <form class="mb-3" @submit.prevent="onSubmit">
       <div class="form-group">
         <label for="maximum-advertisement-days">Maximum Advertisement Days</label>
-        <input
-          type="number"
-          class="form-control"
-          id="maximum-advertisement-days"
-          v-model="maximumAdvertisementDays"
-        />
+        <input type="number" class="form-control" id="maximum-advertisement-days" v-model="maximumAdvertisementDays" />
         <small class="form-text text-muted">
-          Users cannot set advertisement end-date later than this day. For instance, if it is set to
-          5 days, user can set his advertisement only for 5 days from today.
+          Users cannot set advertisement end-date later than this day. For instance, if it is set to 5 days, user can
+          set his advertisement only for 5 days from today.
         </small>
       </div>
       <div class="form-group">
         <label for="advertisementCategories">Categories</label>
-        <input
-          type="text"
-          class="form-control"
-          id="advertisementCategories"
-          v-model="advertisementCategories"
-        />
+        <input type="text" class="form-control" id="advertisementCategories" v-model="advertisementCategories" />
         <small class="form-text text-muted">
-          Only these categories can display banners. These will appear on banner edit form. It can
-          have many categories separating by comma(,). For instance, "qna,discussion,job"
+          Only these categories can display banners. These will appear on banner edit form. It can have many categories
+          separating by comma(,). For instance, "qna,discussion,job"
         </small>
       </div>
 
@@ -62,8 +52,7 @@
         </div>
       </div>
       <div class="mt-2 alert alert-info">
-        Don't input countryCode for default banner point. countryCode 에 빈 문자열을 입력하면
-        default setting 이 됨.
+        Don't input countryCode for default banner point. countryCode 에 빈 문자열을 입력하면 default setting 이 됨.
       </div>
     </form>
 
@@ -107,11 +96,7 @@
 
 <script lang="ts">
 import { ApiService } from "@/x-vue/services/api.service";
-import {
-  AdvertisementPointSetting,
-  RequestData,
-  ResponseData,
-} from "@/x-vue/interfaces/interfaces";
+import { AdvertisementPointSetting, RequestData, ResponseData } from "@/x-vue/interfaces/interfaces";
 import Vue from "vue";
 import Component from "vue-class-component";
 import Service from "@/x-vue/services/x-vue.service";

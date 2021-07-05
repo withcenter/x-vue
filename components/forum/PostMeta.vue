@@ -1,10 +1,6 @@
 <template>
   <div class="post-meta text-truncate">
-    <user-displayname
-      class="mr-2 font-weight-bold"
-      :parent="post"
-      v-if="showName"
-    ></user-displayname>
+    <user-displayname class="mr-2 font-weight-bold" :parent="post" v-if="showName"></user-displayname>
     <span class="mr-2" v-if="!showName">No. {{ post.idx }}</span>
     <span class="text-muted" v-if="post.shortDate">
       {{ post.shortDate }}

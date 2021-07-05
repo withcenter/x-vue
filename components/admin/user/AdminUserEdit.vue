@@ -6,41 +6,19 @@
         <div class="form-row">
           <div class="form-group col-6">
             <label for="idx">IDX</label>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="IDX"
-              name="idx"
-              id="idx"
-              v-model="user.idx"
-              disabled
-            />
+            <input type="text" class="form-control" placeholder="IDX" name="idx" id="idx" v-model="user.idx" disabled />
           </div>
 
           <div class="form-group col-6">
             <label for="point">{{ "point" | t }}</label>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="point"
-              name="point"
-              id="point"
-              v-model="user.point"
-            />
+            <input type="text" class="form-control" placeholder="point" name="point" id="point" v-model="user.point" />
           </div>
         </div>
 
         <div class="form-row">
           <div class="form-group col-6">
             <label for="email">{{ "email" | t }}</label>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="email"
-              name="email"
-              id="email"
-              v-model="user.email"
-            />
+            <input type="text" class="form-control" placeholder="email" name="email" id="email" v-model="user.email" />
           </div>
           <div class="form-group col-6">
             <label for="firebaseUid">firebaseUid</label>
@@ -58,14 +36,7 @@
         <div class="form-row">
           <div class="form-group col-6">
             <label for="name">{{ "name" | t }}</label>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="name"
-              name="name"
-              id="name"
-              v-model="user.name"
-            />
+            <input type="text" class="form-control" placeholder="name" name="name" id="name" v-model="user.name" />
           </div>
 
           <div class="form-group col-6">
@@ -184,16 +155,8 @@
           <div class="form-group col-6">
             <label for="block">{{ "block" | t }}</label>
             <div class="custom-control custom-checkbox">
-              <input
-                type="checkbox"
-                class="custom-control-input"
-                id="block"
-                name="block"
-                v-model="user.block"
-              />
-              <label class="custom-control-label" for="block">{{
-                "block_user_for_posting" | t
-              }}</label>
+              <input type="checkbox" class="custom-control-input" id="block" name="block" v-model="user.block" />
+              <label class="custom-control-label" for="block">{{ "block_user_for_posting" | t }}</label>
             </div>
           </div>
         </div>

@@ -8,16 +8,10 @@
       <div class="d-flex justify-content-between">
         <img :src="'https://openweathermap.org/img/wn/' + weather.weather[0].icon + '@2x.png'" />
 
-        <div class="fs-xxl mt-2">
-          {{ Math.round(weather.main.temp) }}<span class="fs-xxs valign-super">℃</span>
-        </div>
+        <div class="fs-xxl mt-2">{{ Math.round(weather.main.temp) }}<span class="fs-xxs valign-super">℃</span></div>
         <div class="mt-4 pl-3">
-          <div>
-            L {{ Math.round(weather.main.temp_min) }}<span class="fs-xs valign-super">℃</span>
-          </div>
-          <div>
-            H {{ Math.round(weather.main.temp_max) }}<span class="fs-xs valign-super">℃</span>
-          </div>
+          <div>L {{ Math.round(weather.main.temp_min) }}<span class="fs-xs valign-super">℃</span></div>
+          <div>H {{ Math.round(weather.main.temp_max) }}<span class="fs-xs valign-super">℃</span></div>
         </div>
       </div>
     </div>

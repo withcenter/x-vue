@@ -6,12 +6,7 @@
       <!-- title -->
       <h3 class="mt-2" id="post-title">{{ advertisement.title }}</h3>
       <!-- content -->
-      <div
-        id="post-content"
-        class="mt-3 p-2 rounded"
-        style="background-color: #f1f1f1"
-        v-if="!advertisement.deletedAt"
-      >
+      <div id="post-content" class="mt-3 p-2 rounded" style="background-color: #f1f1f1" v-if="!advertisement.deletedAt">
         {{ advertisement.content }}
       </div>
       <hr class="my-3" />

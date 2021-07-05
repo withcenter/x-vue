@@ -4,13 +4,7 @@
       {{ parent.user.displayName }}
     </div>
 
-    <b-popover
-      placement="bottomright"
-      ref="popover"
-      :target="id"
-      triggers="click blur"
-      v-if="parent && parent.idx"
-    >
+    <b-popover placement="bottomright" ref="popover" :target="id" triggers="click blur" v-if="parent && parent.idx">
       <user-menu :user="parent.user"></user-menu>
     </b-popover>
   </div>

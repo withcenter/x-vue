@@ -10,9 +10,7 @@
           </router-link>
         </div>
       </div>
-      <div class="mt-3 p-2 text-center" v-if="!posts.length && !loadingPosts">
-        No Advertisements ..
-      </div>
+      <div class="mt-3 p-2 text-center" v-if="!posts.length && !loadingPosts">No Advertisements ..</div>
       <div class="p-3 text-center rounded" v-if="loadingPosts">
         <b-spinner small class="mx-2" type="grow" variant="info"></b-spinner>
         Loading Advertisements ...
