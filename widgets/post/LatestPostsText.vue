@@ -29,14 +29,7 @@ export default class LatestPostsText extends Vue {
   mounted(): void {
     if (!this.categoryId) {
       for (let i = 1; i <= this.limit; i++) {
-        this.posts.push(
-          new PostModel().fromJson({
-            idx: Math.floor(Math.random() * 100),
-            relativeUrl: "#",
-            title:
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-          })
-        );
+        this.posts.push(ComponentService.instance.temporaryPost());
       }
     } else {
       this.loadPosts();

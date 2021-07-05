@@ -16,25 +16,14 @@
 
 <script lang="ts">
 import { PostModel } from "@/x-vue/interfaces/forum.interface";
+import ComponentService from "@/x-vue/services/component.service";
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 
 @Component({})
 export default class ThumbnailWithTextBottom extends Vue {
   @Prop({
-    default: () => {
-      return new PostModel().fromJson({
-        idx: 1,
-        title:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        files: [
-          {
-            url: "https://spaceplace.nasa.gov/nebula/en/nebula3.en.jpg",
-          },
-        ],
-        relativeUrl: "#",
-      });
-    },
+    default: () => ComponentService.instance.temporaryPost(),
   })
   post!: PostModel;
 

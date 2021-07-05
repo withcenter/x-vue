@@ -52,7 +52,7 @@ export interface MainCafeSettings {
  * This setting has all the cafe settings.
  */
 export interface CafeSettings {
-  mainDomains: string[];
+  mainCafeDomains: string[];
   countryDomains: string[];
   mainCafeSettings: { [index: string]: MainCafeSettings };
   mainMenus: string[];
@@ -174,22 +174,24 @@ export class UserModel {
 }
 
 export class FileModel {
-  idx = "";
+  idx = 0;
   url = "";
+  thumbnailUrl = "";
   name = "";
   path = "";
-  size = "";
+  size = 0;
   code = "";
   type = "";
-  entity = "";
-  userIdx = "";
+  entity = 0;
+  userIdx = 0;
   taxonomy = "";
-  createdAt = "";
-  updatedAt = "";
+  createdAt = 0;
+  updatedAt = 0;
 
   fromJson(map: ResponseData): FileModel {
     this.idx = map.idx;
     this.url = map.url;
+    this.thumbnailUrl = map.thumbnailUrl;
     this.name = map.name;
     this.path = map.path;
     this.size = map.size;

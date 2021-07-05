@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="mt-2">{{ comment.content }}</div>
-    <file-display :files="comment.files"></file-display>
+    <FileList :post="comment"></FileList>
     <hr class="my-2" />
     <router-link class="d-flex justify-content-between btn btn-outline-info w-100" :to="`/${comment.rootIdx}`">
       Open Post
@@ -22,7 +22,8 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import UserAvatar from "@/x-vue/components/forum/UserAvatar.vue";
 import UserDisplayName from "@/x-vue/components/forum/UserDisplayName.vue";
-import FileDisplay from "@/x-vue/components/forum/FileDisplay.vue";
+import FileList from "@/x-vue/components/file/FileList.vue";
+
 import { CommentModel } from "@/x-vue/interfaces/forum.interface";
 
 @Component({
@@ -30,7 +31,7 @@ import { CommentModel } from "@/x-vue/interfaces/forum.interface";
   components: {
     UserAvatar,
     UserDisplayName,
-    FileDisplay,
+    FileList,
   },
 })
 export default class CommentPreview extends Vue {

@@ -1,9 +1,9 @@
 <template>
-  <div class="file-edit">
+  <div class="h-100 file-edit">
     <div class="trash" @click="$emit('delete', file)">
       <trash-svg></trash-svg>
     </div>
-    <img :src="file.url" :alt="file.name" />
+    <img class="h-100" :src="file.url" :alt="file.name" />
   </div>
 </template>
 <style lang="scss" scoped>

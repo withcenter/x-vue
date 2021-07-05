@@ -441,9 +441,9 @@ export class ApiService {
    * it will return `idx` when successful.
    *
    * @param idx file idx
-   * @returns string - file idx
+   * @returns number - file idx
    */
-  async fileDelete(idx: string): Promise<string> {
+  async fileDelete(idx: number): Promise<string> {
     const deletedFile = await this.request("file.delete", { idx });
     return deletedFile.idx;
   }

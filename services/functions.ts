@@ -37,7 +37,8 @@ export function getRootDomain(hostname: string): string {
   }
 }
 
-export function addByComma(orgValue: string, newValue: string): string {
+export function addByComma(orgValue: string, newValue: number | string): string {
+  if (typeof newValue === "number") newValue = newValue.toString();
   const arr = orgValue.split(",");
   if (arr.indexOf(newValue) >= 0) return orgValue; // already exists.
   arr.push(newValue);
@@ -48,7 +49,8 @@ export function addByComma(orgValue: string, newValue: string): string {
     .join(",");
 }
 
-export function deleteByComma(orgValue: string, val: string): string {
+export function deleteByComma(orgValue: string, val: number | string): string {
+  if (typeof val === "number") val = val.toString();
   const arr = orgValue.split(",");
   const i = arr.indexOf(val); // fix, since `num` is not same as `string` it will return `-1`.
   if (i >= 0) {

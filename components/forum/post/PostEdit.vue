@@ -26,14 +26,13 @@
           </button>
           <b-spinner class="mx-2" type="grow" variant="success" v-if="submitted"></b-spinner>
         </div>
-        <!-- file display -->
-        <file-display :files="form.files" :showDelete="true" @file-deleted="onFileDeleted"></file-display>
+        <FileEditList :post="form" @deleted="onFileDeleted"></FileEditList>
       </form>
     </div>
     <login-first v-if="!loading"></login-first>
     <div class="p-3 text-center rounded" v-if="loading">
       <b-spinner small class="mx-2" type="grow" variant="info"></b-spinner>
-      Please wait while loading the post ...
+      {{ "loading" | t }}
     </div>
   </section>
 </template>
@@ -44,19 +43,19 @@ import Component from "vue-class-component";
 
 import { ApiService } from "@/x-vue/services/api.service";
 import { FileModel } from "@/x-vue/interfaces/interfaces";
+import { PostModel } from "@/x-vue/interfaces/forum.interface";
 import { addByComma, deleteByComma } from "@/x-vue/services/functions";
 
 import ComponentService from "@/x-vue/services/component.service";
 import UploadButton from "@/x-vue/components/UploadButton.vue";
 import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
-import FileDisplay from "@/x-vue/components/forum/FileDisplay.vue";
-import { PostModel } from "@/x-vue/interfaces/forum.interface";
+import FileEditList from "@/x-vue/components/file/FileEditList.vue";
 
 @Component({
   components: {
     LoginFirst,
     UploadButton,
-    FileDisplay,
+    FileEditList,
   },
 })
 export default class PostEdit extends Vue {
@@ -66,6 +65,22 @@ export default class PostEdit extends Vue {
   loading = false;
   submitted = false;
   uploadProgress = 0;
+
+  mounted(): void {
+    const idxOrCategory = this.$route.params.idxOrCategory;
+    if (isNaN(parseInt(idxOrCategory))) {
+      this.form.categoryId = idxOrCategory;
+
+      // add subcategory if it exist on route.query
+      if (this.$route.query.sc) {
+        this.form.subcategory = this.$route.query.sc as string;
+      }
+    } else {
+      this.form.idx = parseInt(idxOrCategory);
+      this.loadPost();
+    }
+    console.log("PostEdit::mounted", this.form);
+  }
 
   async loadPost(): Promise<void> {
     this.loading = true;
@@ -77,23 +92,6 @@ export default class PostEdit extends Vue {
       this.loading = false;
     }
     // console.log("Update form: ", this.form);
-  }
-
-  mounted(): void {
-    const idxOrCategory = this.$route.params.idxOrCategory;
-    if (isNaN(parseInt(idxOrCategory))) {
-      this.form.categoryId = idxOrCategory;
-
-      // add subcategory if it exist on route.query
-      if (this.$route.query.sc) {
-        this.form.subcategory = this.$route.query.sc as string;
-      }
-
-      console.log(this.form);
-    } else {
-      this.form.idx = parseInt(idxOrCategory);
-      this.loadPost();
-    }
   }
 
   async onSubmit(): Promise<void> {

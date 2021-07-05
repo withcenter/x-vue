@@ -5,8 +5,10 @@
     </button>
 
     <b-popover placement="bottomleft" ref="popover" :target="'mine-button-popover-' + parent.idx" triggers="click blur">
-      <button data-cy="mine-edit-button" class="btn btn-sm btn-success" @click="onClickEdit">Edit</button>
-      <button data-cy="mine-delete-button" class="ml-2 btn btn-sm btn-danger" @click="onClickDelete">Delete</button>
+      <button data-cy="mine-edit-button" class="btn btn-sm btn-success" @click="onClickEdit">{{ "edit" | t }}</button>
+      <button data-cy="mine-delete-button" class="ml-2 btn btn-sm btn-danger" @click="onClickDelete">
+        {{ "delete" | t }}
+      </button>
     </b-popover>
   </div>
 </template>
@@ -15,9 +17,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { ApiService } from "@/x-vue/services/api.service";
-import Service from "@/x-vue/services/component.service";
 import { CommentModel, PostModel } from "@/x-vue/interfaces/forum.interface";
-// import store from "@/store";
 
 @Component({
   props: ["parent"],
@@ -31,30 +31,12 @@ export default class MineButtonsComponent extends Vue {
   }
   onClickEdit(): void {
     this.hidePopup();
-    if (this.parent.isPost) {
-      Service.instance.open(`/edit/${this.parent.idx}` + location.search);
-    } else {
-      this.parent.inEdit = true;
-    }
+    this.$emit("edit", this.parent);
   }
+
   async onClickDelete(): Promise<void> {
     this.hidePopup();
-    const conf = await Service.instance.confirm(
-      "Title",
-      `Are you sure you want to delete this comment? [IDX]: ${this.parent.idx}`
-    );
-    if (!conf) return;
-    try {
-      let res;
-      if (this.parent.isPost) {
-        res = await this.api.postDelete(this.parent.idx);
-      } else {
-        res = await this.api.commentDelete(this.parent.idx);
-      }
-      this.parent = Object.assign(this.parent, res);
-    } catch (e) {
-      Service.instance.error(e);
-    }
+    this.$emit("delete", this.parent);
   }
 }
 </script>

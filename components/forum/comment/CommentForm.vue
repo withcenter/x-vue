@@ -32,26 +32,27 @@
     <!-- upload progress bar -->
     <b-progress :value="uploadProgress" max="100" class="mb-3 ml-2 mr-3" v-if="uploadProgress"></b-progress>
     <!-- file display -->
-    <file-display :files="uploadedFiles" :showDelete="true" @file-deleted="onFileDeleted"></file-display>
+    <FileEditList :post="form" @deleted="onFileDeleted"></FileEditList>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+import Service from "@/x-vue/services/component.service";
 import { FileModel } from "@/x-vue/interfaces/interfaces";
-import UploadButton from "@/x-vue/components/UploadButton.vue";
-import FileDisplay from "@/x-vue/components/forum/FileDisplay.vue";
 import { ApiService } from "@/x-vue/services/api.service";
 import { addByComma, deleteByComma } from "@/x-vue/services/functions";
-import Service from "@/x-vue/services/component.service";
 import { CommentEditModel, CommentModel, PostModel } from "@/x-vue/interfaces/forum.interface";
+
+import UploadButton from "@/x-vue/components/UploadButton.vue";
+import FileEditList from "@/x-vue/components/file/FileEditList.vue";
 
 @Component({
   props: ["root", "parent", "comment"],
   components: {
     UploadButton,
-    FileDisplay,
+    FileEditList,
   },
 })
 export default class CommentForm extends Vue {
@@ -75,6 +76,7 @@ export default class CommentForm extends Vue {
     if (this.comment) {
       this.form.idx = this.comment.idx;
       this.form.content = this.comment.content;
+      this.form.files = this.comment.files;
       this.form.fileIdxes = this.comment.files.map((file) => `${file.idx}`).join(",");
 
       this.uploadedFiles = this.comment.files;
@@ -92,11 +94,13 @@ export default class CommentForm extends Vue {
       const res = await this.api.commentEdit(this.form);
       if (this.comment) {
         // comment update
+        res.depth = this.comment.depth;
         Object.assign(this.comment, res);
         this.comment.inEdit = false;
       } else {
         // comment create
         res.depth = this.parent.depth ? +this.parent.depth + 1 : 1;
+        this.parent.inReply = false;
         this.root.insertComment(res);
       }
 
