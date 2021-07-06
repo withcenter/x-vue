@@ -36,7 +36,8 @@ export default class PhotoTextBottom extends Vue {
 
   get src(): string {
     if (!this.post.files.length) return "";
-    return this.post.files[0].url;
+    // return this.post.files[0].url;
+    return this.post.files[0].thumbnailUrl ? this.post.files[0].thumbnailUrl : this.post.files[0].url;
   }
 }
 </script>
