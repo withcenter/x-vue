@@ -4,11 +4,21 @@
       {{ title }}
       <hr class="my-1" />
     </div>
-    <router-link class="d-block text-truncate mb-2" v-for="post of posts" :key="post.idx" :to="post.relativeUrl">
+    <router-link class="d-block text-truncate" v-for="post of posts" :key="post.idx" :to="post.relativeUrl">
       {{ post.title }}
     </router-link>
   </div>
 </template>
+
+<style lang="scss" scoped>
+a {
+  margin-bottom: 0.5em;
+}
+
+a:last-child {
+  margin: 0;
+}
+</style>
 
 <script lang="ts">
 import Vue from "vue";

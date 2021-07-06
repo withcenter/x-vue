@@ -1,7 +1,7 @@
 <template>
   <div>
     <PhotoWithTextsAtRight :categoryId="categoryIdTop"></PhotoWithTextsAtRight>
-    <FourPhotosWithTextBottom :categoryId="categoryIdBottom"></FourPhotosWithTextBottom>
+    <FourPhotosWithTextBottom class="mt-2" :categoryId="categoryIdBottom"></FourPhotosWithTextBottom>
   </div>
 </template>
 
