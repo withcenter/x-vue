@@ -70,7 +70,7 @@
           @property - limit number (10 default)
         </p>
         <hr />
-        <LatestPostsText></LatestPostsText>
+        <LatestPostsText :title="'Latest Post'"></LatestPostsText>
       </div>
     </div>
 
@@ -127,6 +127,32 @@
         <TwoByTwoThumbnailInlineText></TwoByTwoThumbnailInlineText>
       </div>
     </div>
+
+    <div class="card mb-2">
+      <div class="card-body">
+        <h5 class="card-title">PhotoWithTextsAtRight</h5>
+        <p class="card-text">
+          Displays 1 Photo on left and several post as text on right.
+          <br />
+          @property - categoryId string
+        </p>
+        <hr />
+        <PhotoWithTextsAtRight></PhotoWithTextsAtRight>
+      </div>
+    </div>
+
+    <div class="card mb-2">
+      <div class="card-body">
+        <h5 class="card-title">FourPhotosWithTextBottom</h5>
+        <p class="card-text">
+          Displays 4 Photo on with text at bottom.
+          <br />
+          @property - categoryId string
+        </p>
+        <hr />
+        <FourPhotosWithTextBottom></FourPhotosWithTextBottom>
+      </div>
+    </div>
   </div>
 </template>
 <style lang="scss">
@@ -152,6 +178,8 @@ import TwoByTwoThumbnailInlineText from "@/x-vue/widgets/post/TwoByTwoThumbnailI
 import TwoByTwoThumbnailWithTextBottom from "@/x-vue/widgets/post/TwoByTwoThumbnailWithTextBottom.vue";
 import ThumbnailWithText from "@/x-vue/widgets/post/ThumbnailWithText.vue";
 import TwoStoriesThumbnailWithText from "@/x-vue/widgets/post/TwoStoriesThumbnailWithText.vue";
+import PhotoWithTextsAtRight from "@/x-vue/widgets/post/PhotoWithTextsAtRight.vue";
+import FourPhotosWithTextBottom from "@/x-vue/widgets/post/FourPhotosWithTextBottom.vue";
 
 @Component({
   components: {
@@ -166,6 +194,8 @@ import TwoStoriesThumbnailWithText from "@/x-vue/widgets/post/TwoStoriesThumbnai
     TwoByTwoThumbnailWithTextBottom,
     ThumbnailWithText,
     TwoStoriesThumbnailWithText,
+    PhotoWithTextsAtRight,
+    FourPhotosWithTextBottom,
   },
 })
 export default class Samples extends Vue {
