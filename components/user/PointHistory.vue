@@ -119,22 +119,22 @@ export default class PointHistory extends Vue {
     return;
   }
 
-  pointApply(h: PointHistoryModel) {
+  pointApply(h: PointHistoryModel): number {
     if (h.fromUserIdx == this.$app.user.idx) return h.fromUserPointApply;
     if (h.toUserIdx == this.$app.user.idx) return h.toUserPointApply;
     return 0;
   }
-  pointAfter(h: PointHistoryModel) {
+  pointAfter(h: PointHistoryModel): number {
     if (h.fromUserIdx == this.$app.user.idx) return h.fromUserPointAfter;
     if (h.toUserIdx == this.$app.user.idx) return h.toUserPointAfter;
     return 0;
   }
 
-  date(s: number) {
+  date(s: number): string {
     return yymmddhma(s);
   }
 
-  getAction(h: PointHistoryModel) {
+  getAction(h: PointHistoryModel): string {
     if (h.action == "dislike" && h.toUserIdx == this.$app.user.idx) return "dislike deduction";
     return h.action;
   }
