@@ -70,61 +70,114 @@
           @property - limit number (10 default)
         </p>
         <hr />
-        <LatestPostsText></LatestPostsText>
+        <LatestPostsText :title="'Latest Post'"></LatestPostsText>
       </div>
     </div>
 
     <div class="card mb-2">
       <div class="card-body">
-        <h5 class="card-title">ThumbnailWithTextBottom</h5>
+        <h5 class="card-title">PhotoTextBottom</h5>
         <p class="card-text">
           Displays thumbnail with text at bottom of image.
           <br />
           @property - post PostModel
+          <br />
+          @property - imageHeight number (200 default)
         </p>
         <hr />
-        <ThumbnailWithTextBottom></ThumbnailWithTextBottom>
+        <PhotoTextBottom></PhotoTextBottom>
       </div>
     </div>
 
     <div class="card mb-2">
       <div class="card-body">
-        <h5 class="card-title">TwoByTwoThumbnailWithTextBottom</h5>
+        <h5 class="card-title">TwoByTwoPhotoTextBottom</h5>
         <p class="card-text">
           Displays 4 post thumbnail with texts at bottom.
           <br />
           @property - categoryId string
+          <br />
+          @property - imageHeight number (200 default)
         </p>
         <hr />
-        <TwoByTwoThumbnailWithTextBottom></TwoByTwoThumbnailWithTextBottom>
+        <TwoByTwoPhotoTextBottom></TwoByTwoPhotoTextBottom>
       </div>
     </div>
 
     <div class="card mb-2">
       <div class="card-body">
-        <h5 class="card-title">ThumbnailWithInlineText</h5>
+        <h5 class="card-title">PhotoInlineTextBottom</h5>
         <p class="card-text">
           Displays thumbnail with inline text.
           <br />
           @property - post PostModel
+          <br />
+          @property - imageHeight number (200 default)
         </p>
         <hr />
-        <ThumbnailWithInlineText></ThumbnailWithInlineText>
+        <PhotoInlineTextBottom></PhotoInlineTextBottom>
       </div>
     </div>
 
     <div class="card mb-2">
       <div class="card-body">
-        <h5 class="card-title">TwoByTwoThumbnailInlineText</h5>
+        <h5 class="card-title">TwoByTwoPhotoInlineTextBottom</h5>
         <p class="card-text">
           Displays 4 post thumbnail with inline texts.
           <br />
           @property - categoryId string
           <br />
-          @property - itemHeight number (150px default)
+          @property - itemHeight number (200px default)
         </p>
         <hr />
-        <TwoByTwoThumbnailInlineText></TwoByTwoThumbnailInlineText>
+        <TwoByTwoPhotoInlineTextBottom></TwoByTwoPhotoInlineTextBottom>
+      </div>
+    </div>
+
+    <div class="card mb-2">
+      <div class="card-body">
+        <h5 class="card-title">PhotoWithTextsAtRight</h5>
+        <p class="card-text">
+          Displays 1 Photo on left and several post as text on right.
+          <br />
+          @property - categoryId string
+          <br />
+          @property - imageHeight number (215 default)
+          <br />
+          @property - limit number (7 default)
+        </p>
+        <hr />
+        <PhotoWithTextsAtRight></PhotoWithTextsAtRight>
+      </div>
+    </div>
+
+    <div class="card mb-2">
+      <div class="card-body">
+        <h5 class="card-title">FourPhotosWithTextBottom</h5>
+        <p class="card-text">
+          Displays 4 Photo on with text at bottom.
+          <br />
+          @property - categoryId string
+          <br />
+          @property - itemHeight number (200px default)
+        </p>
+        <hr />
+        <FourPhotosWithTextBottom></FourPhotosWithTextBottom>
+      </div>
+    </div>
+
+    <div class="card mb-2">
+      <div class="card-body">
+        <h5 class="card-title">PhotoTextsTopPhotosBottom</h5>
+        <p class="card-text">
+          Displays 1 photo with text at right on top and 4 photo with text at bottom.
+          <br />
+          @property - categoryIdTop string
+          <br />
+          @property - categoryIdBottom string
+        </p>
+        <hr />
+        <PhotoTextsTopPhotosBottom></PhotoTextsTopPhotosBottom>
       </div>
     </div>
   </div>
@@ -146,12 +199,15 @@ import { FileModel } from "@/x-vue/interfaces/interfaces";
 import LatestText from "@/x-vue/widgets/post/LatestText.vue";
 
 import LatestPostsText from "@/x-vue/widgets/post/LatestPostsText.vue";
-import ThumbnailWithTextBottom from "@/x-vue/widgets/post/ThumbnailWithTextBottom.vue";
-import ThumbnailWithInlineText from "@/x-vue/widgets/post/ThumbnailWithInlineText.vue";
-import TwoByTwoThumbnailInlineText from "@/x-vue/widgets/post/TwoByTwoThumbnailInlineText.vue";
-import TwoByTwoThumbnailWithTextBottom from "@/x-vue/widgets/post/TwoByTwoThumbnailWithTextBottom.vue";
+import PhotoTextBottom from "@/x-vue/widgets/post/PhotoTextBottom.vue";
+import PhotoInlineTextBottom from "@/x-vue/widgets/post/PhotoInlineTextBottom.vue";
+import TwoByTwoPhotoInlineTextBottom from "@/x-vue/widgets/post/TwoByTwoPhotoInlineTextBottom.vue";
+import TwoByTwoPhotoTextBottom from "@/x-vue/widgets/post/TwoByTwoPhotoTextBottom.vue";
 import ThumbnailWithText from "@/x-vue/widgets/post/ThumbnailWithText.vue";
 import TwoStoriesThumbnailWithText from "@/x-vue/widgets/post/TwoStoriesThumbnailWithText.vue";
+import PhotoWithTextsAtRight from "@/x-vue/widgets/post/PhotoWithTextsAtRight.vue";
+import FourPhotosWithTextBottom from "@/x-vue/widgets/post/FourPhotosWithTextBottom.vue";
+import PhotoTextsTopPhotosBottom from "@/x-vue/widgets/post/PhotoTextsTopPhotosBottom.vue";
 
 @Component({
   components: {
@@ -160,12 +216,15 @@ import TwoStoriesThumbnailWithText from "@/x-vue/widgets/post/TwoStoriesThumbnai
     FileUploadButton,
     LatestText,
     LatestPostsText,
-    ThumbnailWithTextBottom,
-    ThumbnailWithInlineText,
-    TwoByTwoThumbnailInlineText,
-    TwoByTwoThumbnailWithTextBottom,
+    PhotoTextBottom,
+    PhotoInlineTextBottom,
+    TwoByTwoPhotoInlineTextBottom,
+    TwoByTwoPhotoTextBottom,
     ThumbnailWithText,
     TwoStoriesThumbnailWithText,
+    PhotoWithTextsAtRight,
+    FourPhotosWithTextBottom,
+    PhotoTextsTopPhotosBottom,
   },
 })
 export default class Samples extends Vue {

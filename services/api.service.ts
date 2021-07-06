@@ -341,7 +341,9 @@ export class ApiService {
    * @returns posts
    */
   async postSearch(data: PostSearchRequest): Promise<Array<PostModel>> {
+    console.log("postSearch::data", data);
     const res = await this.request("post.search", data);
+    console.log("postSearch::res", res);
     return res.map((post: JSON) => new PostModel().fromJson(post));
   }
 

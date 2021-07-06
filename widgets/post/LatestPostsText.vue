@@ -1,8 +1,10 @@
 <template>
-  <div v-if="posts.length">
-    Latest Posts {{ categoryId }}
-    <hr class="my-1" />
-    <router-link class="d-block text-truncate pt-1 mb-1" v-for="post of posts" :key="post.idx" :to="post.relativeUrl">
+  <div class="latest-posts-text" v-if="posts.length">
+    <div v-if="title">
+      {{ title }}
+      <hr class="my-1" />
+    </div>
+    <router-link class="d-block text-truncate mb-2" v-for="post of posts" :key="post.idx" :to="post.relativeUrl">
       {{ post.title }}
     </router-link>
   </div>
@@ -17,6 +19,8 @@ import { PostModel } from "@/x-vue/interfaces/forum.interface";
 
 @Component({})
 export default class LatestPostsText extends Vue {
+  @Prop({})
+  title!: string;
   @Prop({})
   categoryId!: string;
   @Prop({

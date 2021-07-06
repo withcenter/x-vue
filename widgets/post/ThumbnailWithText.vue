@@ -13,7 +13,7 @@
           ></b-img>
         </div>
       </div>
-      <div class="flex-grow-1">
+      <div class="flex-grow-1 overflow-hidden">
         <div class="font-weight-bold text-truncate">{{ post.title }}</div>
         <div class="text-truncate-2line">{{ post.content }}</div>
       </div>

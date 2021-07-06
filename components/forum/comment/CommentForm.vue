@@ -4,24 +4,28 @@
       <div class="mr-2">
         <upload-button :size="35" @success="onFileUploaded" @progress="uploadProgress = $event"></upload-button>
       </div>
-      <textarea
+      <b-form-textarea
         data-cy="comment-input"
         class="w-100 form-control"
         type="text"
         name="content"
         v-model="form.content"
         placeholder="Comment .."
-        style="height: 40px"
-      ></textarea>
-      <div class="ml-2 d-flex" v-if="canSubmit || comment">
-        <div v-if="comment || parent.idx != root.idx">
-          <button class="btn btn-sm btn-danger h-100" type="button" @click="onClickCancel" v-if="!submitted">
-            Cancel
+        rows="1"
+        max-rows="5"
+      ></b-form-textarea>
+      <div class="ml-2" v-if="canSubmit || comment">
+        <div v-if="!submitted">
+          <button class="w-100 mb-1 btn btn-sm btn-danger h-100" type="button" @click="onClickCancel" v-if="canCancel">
+            {{ "cancel" | t }}
           </button>
-        </div>
-        <div v-if="!submitted && canSubmit">
-          <button data-cy="comment-submit-button" class="w-100 ml-2 btn btn-sm btn-success h-100" type="submit">
-            Submit
+          <button
+            data-cy="comment-submit-button"
+            class="w-100 btn btn-sm btn-success h-100"
+            type="submit"
+            v-if="canSubmit"
+          >
+            {{ "submit" | t }}
           </button>
         </div>
         <div class="my-1 mx-2" v-if="submitted">
@@ -30,7 +34,7 @@
       </div>
     </form>
     <!-- upload progress bar -->
-    <b-progress :value="uploadProgress" max="100" class="mb-3 ml-2 mr-3" v-if="uploadProgress"></b-progress>
+    <b-progress :value="uploadProgress" max="100" class="mb-3 ml-2 mr-2" v-if="uploadProgress"></b-progress>
     <!-- file display -->
     <FileEditList :post="form" @deleted="onFileDeleted"></FileEditList>
   </div>
@@ -69,6 +73,13 @@ export default class CommentForm extends Vue {
   get canSubmit(): boolean {
     if (this.uploadedFiles.length) return true;
     if (this.form.content.trim().length) return true;
+    return false;
+  }
+
+  get canCancel(): boolean {
+    if (this.comment) return true;
+    if (this.parent.idx != this.root.idx) return true;
+    if (this.submitted) return false;
     return false;
   }
 

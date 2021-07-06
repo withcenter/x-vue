@@ -10,11 +10,20 @@
       <form class="mt-3" @submit.prevent="onSubmit">
         {{ "title" | t }}
         <div class="form-group">
-          <input class="w-100 form-control" v-model="form.title" type="text" name="title" />
+          <input :placeholder="'title' | t" class="w-100 form-control" v-model="form.title" type="text" name="title" />
         </div>
         {{ "content" | t }}
         <div class="form-group">
-          <textarea class="w-100 form-control" v-model="form.content" type="text" name="content" />
+          <b-form-textarea
+            :placeholder="'content' | t"
+            class="w-100 form-control"
+            v-model="form.content"
+            type="text"
+            name="content"
+            rows="5"
+            max-rows="15"
+          >
+          </b-form-textarea>
         </div>
         <div class="d-flex align-center">
           <upload-button @success="onFileUploaded" @progress="uploadProgress = $event"></upload-button>
