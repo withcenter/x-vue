@@ -34,7 +34,7 @@
       </div>
     </form>
     <!-- upload progress bar -->
-    <b-progress :value="uploadProgress" max="100" class="mb-3 ml-2 mr-3" v-if="uploadProgress"></b-progress>
+    <b-progress :value="uploadProgress" max="100" class="mb-3 ml-2 mr-2" v-if="uploadProgress"></b-progress>
     <!-- file display -->
     <FileEditList :post="form" @deleted="onFileDeleted"></FileEditList>
   </div>
