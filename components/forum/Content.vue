@@ -4,7 +4,8 @@
 
 <style lang="scss" scoped>
 .content {
-  white-space: pre;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 </style>
 
