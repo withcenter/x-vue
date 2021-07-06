@@ -1,9 +1,14 @@
 <template>
-  <div class="d-flex">
-    <user-avatar :parent="comment" :size="2.8"></user-avatar>
-    <div class="ml-2 text-truncate">
-      <user-display-name class="font-weight-bold" :parent="comment"></user-display-name>
-      <div>No. {{ comment.idx }} • {{ comment.shortDate }}</div>
+  <div>
+    <div class="text-truncate text-muted" v-if="comment.deletedAt">
+      {{ "comment_deleted" | t }}
+    </div>
+    <div class="d-flex" v-if="!comment.deletedAt">
+      <user-avatar :parent="comment" :size="2.8"></user-avatar>
+      <div class="ml-2 text-truncate">
+        <user-display-name class="font-weight-bold" :parent="comment"></user-display-name>
+        <div>No. {{ comment.idx }} • {{ comment.shortDate }}</div>
+      </div>
     </div>
   </div>
 </template>
