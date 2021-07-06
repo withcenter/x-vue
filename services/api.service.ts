@@ -300,7 +300,7 @@ export class ApiService {
   }
 
   async otherUserProfile(idx: string): Promise<UserModel> {
-    const res = await this.request("user.otherUserProfile", { idx });
+    const res = await this.request("user.get", { idx });
     return new UserModel().fromJson(res);
   }
 
