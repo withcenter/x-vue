@@ -75,7 +75,7 @@ export default class AdminCategoryList extends Vue {
   categories: Array<CategoryModel> = [];
   s = Service.instance;
 
-  limit = 5;
+  limit = 50;
   noOfPages = 10;
   currentPage = "1";
   total = 0;

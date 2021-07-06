@@ -13,6 +13,7 @@ import {
   MapStringAny,
   RequestCafeCreate,
   FileUploadRequest,
+  PointHistoryModel,
 } from "../interfaces/interfaces";
 
 import Cookies from "js-cookie";
@@ -552,6 +553,11 @@ export class ApiService {
   async userCount(data: RequestData): Promise<number> {
     const res = await this.request("user.count", data);
     return res && res.count ? res.count : 0;
+  }
+
+  async userPointHistory(): Promise<Array<PointHistoryModel>> {
+    const res = await this.request("user.point");
+    return res.map((point: JSON) => new PointHistoryModel().fromJson(point));
   }
 
   ///

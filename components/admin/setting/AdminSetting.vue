@@ -39,7 +39,30 @@
         rows="2"
         @update="onChildUpdate"
       ></pre-defined>
+      <hr />
 
+      <h3>Reigster and login</h3>
+
+      <pre-defined
+        type="number"
+        code="register"
+        :data="settings"
+        label="Register point"
+        description="The point that user will get on register. It must be 0 or bigger than 0."
+        @update="onChildUpdate"
+      ></pre-defined>
+
+      <pre-defined
+        type="number"
+        code="login"
+        :data="settings"
+        label="Login point"
+        description="The point that user will get on every login. It must be 0 or bigger than 0."
+        @update="onChildUpdate"
+      ></pre-defined>
+
+      <hr />
+      <h3>Like and dislike</h3>
       <pre-defined
         code="enableLike"
         :data="settings"

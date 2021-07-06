@@ -113,8 +113,8 @@
               <td v-if="options.city">{{ user.city }}</td>
               <td v-if="options.address">{{ user.address }}</td>
               <td v-if="options.zipcode">{{ user.zipcode }}</td>
-              <td v-if="options.createdAt">{{ user.createdAt }}</td>
-              <td v-if="options.updatedAt">{{ user.updatedAt }}</td>
+              <td v-if="options.createdAt">{{ user.createdAtShortDate }}</td>
+              <td v-if="options.updatedAt">{{ user.updatedAtShortDate }}</td>
               <td>
                 <router-link
                   data-cy="user-info-edit-button"
