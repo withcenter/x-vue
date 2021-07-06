@@ -1,7 +1,7 @@
 <template>
   <router-link :to="post.relativeUrl" v-if="post && post.idx">
     <div class="thumbnail-with-inline-text w-100 position-relative h-100">
-      <img class="image h-100 w-100" :src="src" />
+      <b-img class="image w-100" :src="src" :style="{ height: imageHeight + 'px' }"> </b-img>
       <div class="title position-absolute w-100">
         <b>{{ post.title }}</b>
       </div>
@@ -33,11 +33,15 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 
 @Component({})
-export default class ThumbnailWithInlineText extends Vue {
+export default class PhotoInlineTextBottom extends Vue {
   @Prop({
     default: () => ComponentService.instance.temporaryPost(),
   })
   post!: PostModel;
+  @Prop({
+    default: 200,
+  })
+  imageHeight!: number;
 
   get src(): string {
     if (!this.post.files.length) return "";

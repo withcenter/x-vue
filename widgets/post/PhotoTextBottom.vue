@@ -1,8 +1,10 @@
 <template>
-  <router-link class="thumbnail-with-text-bottom" v-if="post && post.idx" :to="post.relativeUrl">
-    <img class="image w-100" :src="src" />
-    <div class="p-2 title w-100 overflow-hidden">
-      <b>{{ post.title }}</b>
+  <router-link v-if="post && post.idx" :to="post.relativeUrl">
+    <div class="photo-text-bottom">
+      <b-img class="image w-100" :src="src" :style="{ height: imageHeight + 'px' }"> </b-img>
+      <div class="p-2 title w-100 overflow-hidden">
+        <b>{{ post.title }}</b>
+      </div>
     </div>
   </router-link>
 </template>
@@ -21,7 +23,7 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 
 @Component({})
-export default class ThumbnailWithTextBottom extends Vue {
+export default class PhotoTextBottom extends Vue {
   @Prop({
     default: () => ComponentService.instance.temporaryPost(),
   })

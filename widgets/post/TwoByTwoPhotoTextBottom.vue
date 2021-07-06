@@ -1,12 +1,12 @@
 <template>
   <div class="two-by-two-thumbnail-with-text-bottom w-100">
     <div class="top d-flex">
-      <ThumbnailWithTextBottom :post="posts[0]"></ThumbnailWithTextBottom>
-      <ThumbnailWithTextBottom class="pl-1" :post="posts[1]"></ThumbnailWithTextBottom>
+      <PhotoTextBottom :imageHeight="imageHeight" :post="posts[0]"></PhotoTextBottom>
+      <PhotoTextBottom :imageHeight="imageHeight" class="pl-1" :post="posts[1]"></PhotoTextBottom>
     </div>
     <div class="mt-1 bottom d-flex">
-      <ThumbnailWithTextBottom :post="posts[2]"></ThumbnailWithTextBottom>
-      <ThumbnailWithTextBottom class="pl-1" :post="posts[3]"></ThumbnailWithTextBottom>
+      <PhotoTextBottom :imageHeight="imageHeight" :post="posts[2]"></PhotoTextBottom>
+      <PhotoTextBottom :imageHeight="imageHeight" class="pl-1" :post="posts[3]"></PhotoTextBottom>
     </div>
   </div>
 </template>
@@ -17,17 +17,22 @@ import { Component, Prop } from "vue-property-decorator";
 import { ApiService } from "@/x-vue/services/api.service";
 import ComponentService from "@/x-vue/services/component.service";
 
-import ThumbnailWithTextBottom from "./ThumbnailWithTextBottom.vue";
+import PhotoTextBottom from "./PhotoTextBottom.vue";
 import { PostModel } from "@/x-vue/interfaces/forum.interface";
 
 @Component({
   components: {
-    ThumbnailWithTextBottom,
+    PhotoTextBottom,
   },
 })
-export default class TwoByTwoThumbnailWithTextBottom extends Vue {
+export default class TwoByTwoPhotoTextBottom extends Vue {
   @Prop({})
   categoryId!: string;
+
+  @Prop({
+    default: 200,
+  })
+  imageHeight!: number;
 
   posts: PostModel[] = [];
 

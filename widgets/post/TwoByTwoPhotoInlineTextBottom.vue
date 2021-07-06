@@ -1,12 +1,12 @@
 <template>
   <div class="two-by-two-thumbnail-with-text-bottom">
-    <div class="top d-flex" :style="{ height: itemHeight + 'px' }">
-      <ThumbnailWithInlineText class="w-50" :post="posts[0]"></ThumbnailWithInlineText>
-      <ThumbnailWithInlineText class="pl-1 w-50" :post="posts[1]"></ThumbnailWithInlineText>
+    <div class="top d-flex">
+      <PhotoInlineTextBottom :imageHeight="imageHeight" class="w-50" :post="posts[0]"></PhotoInlineTextBottom>
+      <PhotoInlineTextBottom :imageHeight="imageHeight" class="pl-1 w-50" :post="posts[1]"></PhotoInlineTextBottom>
     </div>
-    <div class="mt-1 bottom d-flex" :style="{ height: itemHeight + 'px' }">
-      <ThumbnailWithInlineText class="w-50" :post="posts[2]"></ThumbnailWithInlineText>
-      <ThumbnailWithInlineText class="pl-1 w-50" :post="posts[3]"></ThumbnailWithInlineText>
+    <div class="mt-1 bottom d-flex">
+      <PhotoInlineTextBottom :imageHeight="imageHeight" class="w-50" :post="posts[2]"></PhotoInlineTextBottom>
+      <PhotoInlineTextBottom :imageHeight="imageHeight" class="pl-1 w-50" :post="posts[3]"></PhotoInlineTextBottom>
     </div>
   </div>
 </template>
@@ -16,22 +16,22 @@ import Vue from "vue";
 import { ApiService } from "@/x-vue/services/api.service";
 import { Component, Prop } from "vue-property-decorator";
 
-import ThumbnailWithInlineText from "./ThumbnailWithInlineText.vue";
+import PhotoInlineTextBottom from "./PhotoInlineTextBottom.vue";
 import ComponentService from "@/x-vue/services/component.service";
 import { PostModel } from "@/x-vue/interfaces/forum.interface";
 
 @Component({
   components: {
-    ThumbnailWithInlineText,
+    PhotoInlineTextBottom,
   },
 })
-export default class TwoByTwoThumbnailInlineText extends Vue {
+export default class TwoByTwoPhotoInlineTextBottom extends Vue {
   @Prop({})
   categoryId!: string;
   @Prop({
-    default: 150,
+    default: 200,
   })
-  itemHeight!: number;
+  imageHeight!: number;
 
   posts: PostModel[] = [];
 
