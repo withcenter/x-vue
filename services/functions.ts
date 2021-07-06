@@ -104,3 +104,7 @@ export function currentQueryToString(query: Dictionary<string | (string | null)[
 
   // return window.location.search;
 }
+
+export function yymmddhma(s: number): string {
+  return dayjs(s * 1000).format("YY-MM-DD h:ma");
+}

@@ -36,7 +36,7 @@
             {{ getAction(history) }}
           </td>
           <td>
-            {{ history.taxonomy }}
+            <router-link :to="'/' + history.entity">{{ history.taxonomy }}</router-link>
           </td>
           <td>
             {{ pointApply(history) }}
@@ -57,6 +57,7 @@
 <script lang="ts">
 import { PointHistoryModel } from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
+import { yymmddhma } from "@/x-vue/services/functions";
 import dayjs from "dayjs";
 import { Component, Vue } from "vue-property-decorator";
 
@@ -87,10 +88,10 @@ export default class PointHistory extends Vue {
   }
 
   async search(): Promise<void> {
-    console.log(".diff(dayjs(", dayjs(this.options.beginDate).diff(dayjs(this.options.endDate), "d"));
+    // console.log(".diff(dayjs(", dayjs(this.options.beginDate).diff(dayjs(this.options.endDate), "d"));
     //return if endDate is earlier than the beginDate
     if (dayjs(this.options.beginDate).diff(dayjs(this.options.endDate), "d") > 0) return;
-    console.log("search():", this.options);
+    // console.log("search():", this.options);
     try {
       this.pointHistories = await ApiService.instance.userPointHistory(this.options);
       this.summary.total_point_apply_increase = 0;
@@ -111,7 +112,7 @@ export default class PointHistory extends Vue {
         }
       }
 
-      console.log(this.summary);
+      // console.log(this.pointHistories);
     } catch (e) {
       this.$emit("error", e);
     }
@@ -130,7 +131,7 @@ export default class PointHistory extends Vue {
   }
 
   date(s: number) {
-    return dayjs(s * 1000).format("YY-MM-DD h:ma");
+    return yymmddhma(s);
   }
 
   getAction(h: PointHistoryModel) {
