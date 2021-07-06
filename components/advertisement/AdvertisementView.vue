@@ -1,10 +1,10 @@
 <template>
   <div v-if="advertisement">
     <article data-cy="advertisement-view" class="post-view px-2 py-4">
-      <!-- content image -->
-      <img class="w-100" :src="contentBanner.url" v-if="contentBanner" />
       <!-- title -->
-      <h3 class="mt-2" id="post-title">{{ advertisement.title }}</h3>
+      <h3 id="post-title">{{ advertisement.title }}</h3>
+      <!-- content image -->
+      <img class="mt-3 w-100" :src="contentBanner.url" v-if="contentBanner" />
       <!-- content -->
       <div id="post-content" class="mt-3 p-2 rounded" style="background-color: #f1f1f1" v-if="!advertisement.deletedAt">
         {{ advertisement.content }}
