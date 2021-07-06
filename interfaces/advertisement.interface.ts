@@ -49,7 +49,7 @@ export class AdvertisementModel extends PostModel {
       countryCode: this.countryCode,
       beginDate: this.beginDate,
       endDate: this.endDate,
-      files: this.fileIdxes,
+      fileIdxes: this.fileIdxes,
       clickUrl: this.clickUrl,
     };
   }
