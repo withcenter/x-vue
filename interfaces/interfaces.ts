@@ -395,3 +395,14 @@ export class PointHistoryModel {
     return this;
   }
 }
+
+export class UserActivityModel extends PointHistoryModel {
+  fromUser = new UserModel();
+  toUser = new UserModel();
+  fromJson(map: ResponseData): UserActivityModel {
+    this.fromUser = new UserModel().fromJson(map.fromUser);
+    this.toUser = new UserModel().fromJson(map.toUser);
+    super.fromJson(map);
+    return this;
+  }
+}

@@ -14,6 +14,7 @@ import {
   RequestCafeCreate,
   FileUploadRequest,
   PointHistoryModel,
+  UserActivityModel,
 } from "../interfaces/interfaces";
 
 import Cookies from "js-cookie";
@@ -555,9 +556,14 @@ export class ApiService {
     return res && res.count ? res.count : 0;
   }
 
-  async userPointHistory(): Promise<Array<PointHistoryModel>> {
-    const res = await this.request("user.point");
+  async userPointHistory(data: RequestData): Promise<Array<PointHistoryModel>> {
+    const res = await this.request("user.point", data);
     return res.map((point: JSON) => new PointHistoryModel().fromJson(point));
+  }
+
+  async userActivityList(data: RequestData): Promise<Array<UserActivityModel>> {
+    const res = await this.request("user-activity.list", data);
+    return res.map((activity: JSON) => new UserActivityModel().fromJson(activity));
   }
 
   ///

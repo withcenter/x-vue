@@ -12,6 +12,9 @@
       <router-link class="btn btn-link" to="/admin/file">
         {{ "file" | t }}
       </router-link>
+      <router-link class="btn btn-link" to="/admin/user-activity">
+        {{ "user_activity" | t }}
+      </router-link>
       <router-link class="btn btn-link" to="/admin/messaging">
         {{ "messaging" | t }}
       </router-link>
