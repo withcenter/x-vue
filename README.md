@@ -121,7 +121,14 @@ new Vue({
 ## t, translation filter
 
 - The filter `t` for translation is registered by the initialization of `ApiService`.
+  - You can use like `{{ 'abc' | t }}` where `abc` is the text code.
 
+- You can also use `translate` function from `functions.ts`.
+
+```ts
+export default class UploadImage extends Vue {
+  confirmDelete = translate("do_you_want_to_delete");
+```
 ## User login and logout
 
 - Below is the login form component from `x-vue`.
@@ -166,6 +173,9 @@ export default class Login extends Vue {
   - For instance, a `post-list` comopnent is the core part of post list page. so, it should go into `x-vue/components`.
 - If a component is not a part of specific page(screen), and it can be used in any places, then it goes into `x-vue/widgets`.
   - For instance, `latest-posts` component can be displayed in sidebar area and it is not belonging to a single page(screen), so it should go into `x-vue/widgets`.
+
+
+- 각 컴포넌트의 설명은 주석으로 해 놓는다.
 
 
 

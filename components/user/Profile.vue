@@ -1,14 +1,16 @@
 <template>
   <section class="box">
-    <div class="p-3 text-center rounded" v-if="fetching">
+    <div class="p-3 text-center rounded" v-if="!user.idx">
       <b-spinner small class="mx-2" type="grow" variant="info"></b-spinner>
       {{ "loading_profile" | t }}
     </div>
-    <div v-if="!fetching && api._user.loggedIn">
+    <div v-if="api._user.loggedIn">
       <div class="d-flex justify-content-center">
-        <b-avatar :src="user.photuUrl" size="8rem"></b-avatar>
+        <b-avatar :src="user.photoUrl" size="8rem"></b-avatar>
+
+        <!-- <upload-image taxonomy="posts" :entity="banner.idx" code="banner" @uploaded="onFileUpload"></upload-image> -->
       </div>
-      <form @submit.prevent="onSubmit($event)" v-if="isMe">
+      <form @submit.prevent="onSubmit($event)">
         <div role="group">
           <label for="point">{{ "point" | t }}</label>
           <b-form-input disabled id="point" v-model="user.point" :placeholder="'point' | t"></b-form-input>
@@ -82,11 +84,18 @@
         </div>
       </form>
     </div>
-    <login-first v-if="!fetching"></login-first>
   </section>
 </template>
 
 <script lang="ts">
+/**
+ * 회원 정보(프로필) 보기 또는 수정 페이지
+ *
+ * 서버에서 새로운 정보를 가져와서 보여준다.
+ * - 최신 정보를 보여주기도 하고,
+ * - 사용자 정보를 FORM 데이터 컨테이너로 그대로 사용하기 때문.
+ *
+ */
 import Vue from "vue";
 import Component from "vue-class-component";
 import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
@@ -102,32 +111,14 @@ export default class Profile extends Vue {
   user: UserModel = {} as UserModel;
   api: ApiService = ApiService.instance;
 
-  fetching = true;
-
   async mounted(): Promise<void> {
-    if (this.api._user.notLoggedIn) {
-      this.fetching = false;
-      return;
-    }
-
     const idx = this.$route.params.idx;
 
     try {
-      if (!idx) {
-        this.user = await this.api.userProfile();
-      } else {
-        this.user = await this.api.otherUserProfile(idx);
-      }
-      this.fetching = false;
-      // console.log(this.user);
+      this.user = await this.api.userProfile();
     } catch (e) {
       this.$emit("error", e);
-      this.fetching = false;
     }
-  }
-
-  get isMe(): boolean {
-    return this.user.idx == this.api._user.idx;
   }
 
   onSubmit($event: Event): void {

@@ -7,8 +7,14 @@
     </div>
   </div>
 </template>
-
 <script lang="ts">
+/**
+ * (게시판 전용)
+ *
+ * 사진(파일)을 나열하고, 삭제 버튼을 클릭하면 삭제한다.
+ *
+ * 삭제 후, fileIdxes 에 글 번호를 없앤다. 이러한 코드가 게시판 전용이므로, 이 위젯은 게시판 전용이다.
+ */
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Prop } from "vue-property-decorator";

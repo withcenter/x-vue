@@ -21,6 +21,13 @@
 }
 </style>
 <script lang="ts">
+/**
+ * (공용 위젯)
+ *
+ * 사진(파일)을 보여주고, 삭제 버튼을 보여준다.
+ * 삭제 버튼을 클릭하면, 이벤트를 상위로 전달한다.
+ *
+ */
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Prop } from "vue-property-decorator";
