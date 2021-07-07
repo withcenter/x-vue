@@ -16,12 +16,11 @@
       </div>
     </div>
 
-    <div class="d-flex flex-wrap justify-content-between">
-      <div class="text-capitalize">
-        {{ weather.weather[0].description }}
-      </div>
+    <div class="text-capitalize">
+      {{ weather.weather[0].description }}
+    </div>
+    <div class="d-flex flex-wrap justify-content-between fs-xs">
       <div>{{ "humidity" | t }} {{ weather.main.humidity }}%</div>
-
       <div>{{ "wind" | t }} {{ weather.wind.speed }}km/h</div>
       <div>{{ "sunrise" | t }} {{ sunrise }}</div>
       <div>{{ "sunset" | t }} {{ sunset }}</div>
