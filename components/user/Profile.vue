@@ -4,11 +4,15 @@
       <b-spinner small class="mx-2" type="grow" variant="info"></b-spinner>
       {{ "loading_profile" | t }}
     </div>
-    <div v-if="api._user.loggedIn">
+    <div v-if="user.idx">
       <div class="d-flex justify-content-center">
-        <b-avatar :src="user.photoUrl" size="8rem"></b-avatar>
-
-        <!-- <upload-image taxonomy="posts" :entity="banner.idx" code="banner" @uploaded="onFileUpload"></upload-image> -->
+        <UploadImage
+          ui="circle"
+          :userIdx="user.idx"
+          code="photoUrl"
+          @uploaded="profilePhotoChanged"
+          @deleted="profilePhotoChanged"
+        ></UploadImage>
       </div>
       <form @submit.prevent="onSubmit($event)">
         <div role="group">
@@ -101,10 +105,13 @@ import Component from "vue-class-component";
 import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
 import { ApiService } from "@/x-vue/services/api.service";
 import { RequestData, UserModel } from "@/x-vue/interfaces/interfaces";
+import UploadImage from "@/x-vue/components/file/UploadImage.vue";
+import store from "@/store";
 
 @Component({
   components: {
     LoginFirst,
+    UploadImage,
   },
 })
 export default class Profile extends Vue {
@@ -112,13 +119,15 @@ export default class Profile extends Vue {
   api: ApiService = ApiService.instance;
 
   async mounted(): Promise<void> {
-    const idx = this.$route.params.idx;
-
     try {
       this.user = await this.api.userProfile();
     } catch (e) {
       this.$emit("error", e);
     }
+  }
+
+  async profilePhotoChanged(): Promise<void> {
+    store.commit("user", await this.api.userProfile());
   }
 
   onSubmit($event: Event): void {

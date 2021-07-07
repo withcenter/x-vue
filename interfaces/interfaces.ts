@@ -322,28 +322,40 @@ export class CountryCurrencyModel {
  */
 export class CountryCurrenciesModel {
   countryCurrency: CountryCurrency = {};
-  selectOptions: Array<{ value: string; text: string }> = [];
+  // selectOptionsCurrencyCode: Array<{ value: string; text: string }> = [];
+
+  selectOptionsCountryName: Array<{ value: string; text: string }> = [];
 
   fromJson(countries: ResponseData): CountryCurrenciesModel {
     this.countryCurrency = countries;
-
-    const obj: { [index: string]: boolean } = {};
-    // filter unique and skip empty code
     for (const c in this.countryCurrency) {
+      //Skip if country dont have currencyCode.
       if (!this.countryCurrency[c].currencyCode) {
         continue;
       }
-      obj[this.countryCurrency[c].currencyCode] = true;
-    }
-    // sort keys
-    const sorted = Object.keys(obj).sort();
-    // format selectOptions
-    for (const i in sorted) {
-      this.selectOptions.push({
-        value: sorted[i],
-        text: sorted[i],
+      this.selectOptionsCountryName.push({
+        value: c,
+        text: c,
       });
     }
+
+    // const obj: { [index: string]: boolean } = {};
+    // // filter unique and skip empty code
+    // for (const c in this.countryCurrency) {
+    //   if (!this.countryCurrency[c].currencyCode) {
+    //     continue;
+    //   }
+    //   obj[this.countryCurrency[c].currencyCode] = true;
+    // }
+    // // sort keys
+    // const sorted = Object.keys(obj).sort();
+    // // format selectOptions
+    // for (const i in sorted) {
+    //   this.selectOptionsCurrencyCode.push({
+    //     value: sorted[i],
+    //     text: sorted[i],
+    //   });
+    // }
 
     return this;
   }

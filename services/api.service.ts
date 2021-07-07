@@ -725,7 +725,7 @@ export class ApiService {
   }
 
   async getCountryCurrencies(): Promise<CountryCurrenciesModel> {
-    const res = await this.request("country.currencies");
+    const res = await this.request("country.currencies", { ln: "ko" });
     return new CountryCurrenciesModel().fromJson(res);
   }
 

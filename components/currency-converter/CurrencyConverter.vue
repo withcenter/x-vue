@@ -2,33 +2,42 @@
   <section class="currency-converter" v-if="Object.keys(currencies).length">
     <form @submit.prevent="onSubmit">
       <div class="d-flex">
-        <div class="w-100 mr-2">
-          <b-form-select v-model="fromCode" :options="currencies.selectOptions" @change="onSubmit()"></b-form-select>
+        <div class="w-100 mr-1">
+          <b-form-select
+            size="sm"
+            v-model="fromCountry"
+            :options="currencies.selectOptionsCountryName"
+            @change="onSubmit()"
+          ></b-form-select>
+          <b-input-group size="sm" class="mt-1" :prepend="currency1Symbol">
+            <b-form-input
+              id="amount"
+              v-model="amount"
+              :placeholder="'amount' | t"
+              @keyup="onCompute(first)"
+            ></b-form-input>
+          </b-input-group>
         </div>
+        <button class="btn px-1" v-if="miniSwitchButton" @click="onSwitch">&#8644;</button>
+        <div class="w-100 ml-1">
+          <b-form-select
+            size="sm"
+            v-model="toCountry"
+            :options="currencies.selectOptionsCountryName"
+            @change="onSubmit()"
+          ></b-form-select>
 
-        <div class="w-100">
-          <b-form-select v-model="toCode" :options="currencies.selectOptions" @change="onSubmit()"></b-form-select>
+          <b-input-group size="sm" class="mt-1" :prepend="currency2Symbol">
+            <b-form-input
+              id="converted"
+              v-model="convertedAmount"
+              :placeholder="'converted' | t"
+              @keyup="onCompute(second)"
+            ></b-form-input>
+          </b-input-group>
         </div>
       </div>
 
-      <div class="d-flex mt-1">
-        <div role="group" class="mr-2">
-          <b-form-input
-            id="amount"
-            v-model="amount"
-            :placeholder="'amount' | t"
-            @keyup="onCompute(first)"
-          ></b-form-input>
-        </div>
-        <div>
-          <b-form-input
-            id="converted"
-            v-model="convertedAmount"
-            :placeholder="'converted' | t"
-            @keyup="onCompute(second)"
-          ></b-form-input>
-        </div>
-      </div>
       <div class="d-flex justify-content-between mt-1" v-if="buttons">
         <button class="btn btn-success">{{ "convert" | t }}</button>
 
@@ -48,45 +57,71 @@ import Service from "@/x-vue/services/component.service";
 import { Vue, Prop, Component } from "vue-property-decorator";
 
 /**
- * Usage by default the `from` is 'USD' and `to` is 'KRW'
+ * Usage by default the `from` is 'United States' and `to` is 'South Korea'
  * 
  *  
     <currency-converter
-      from="USD"
-      to="PHP"
+      from="United States"
+      to="South Korea"
       @error="app.error($event)"
     ></currency-converter>
  */
 @Component({})
 export default class CurrencyConverter extends Vue {
   currencies: CountryCurrenciesModel = new CountryCurrenciesModel();
-  @Prop({ default: "USD" }) from!: string;
-  @Prop({ default: "KRW" }) to!: string;
+  @Prop({ default: "미국" }) from!: string;
+  @Prop({ default: "대한민국" }) to!: string;
   @Prop({ default: false }) buttons!: boolean;
+  @Prop({ default: false }) miniSwitchButton!: boolean;
   amount = "1";
   convertedAmount = "0";
 
-  fromCode = "";
-  toCode = "";
+  fromCountry = "";
+  toCountry = "";
+
+  rate: { [index: string]: number } = {};
+
+  getCountryCode(country: string): string {
+    return this.currencies.countryCurrency[country].currencyCode;
+  }
+
+  getCurrencySymbol(country: string): string {
+    return this.currencies.countryCurrency[country]?.currencySymbol || "";
+  }
+
+  get currency1(): string {
+    return this.getCountryCode(this.fromCountry);
+  }
+
+  get currency2(): string {
+    return this.getCountryCode(this.toCountry);
+  }
+
+  get currency1Symbol(): string {
+    return this.getCurrencySymbol(this.fromCountry);
+  }
+
+  get currency2Symbol(): string {
+    return this.getCurrencySymbol(this.toCountry);
+  }
 
   // get first convertion pattern
   get first(): string {
-    return `${this.fromCode}_${this.toCode}`;
+    return `${this.currency1}_${this.currency2}`;
   }
 
   // get the reverse conversion pattern
   get second(): string {
-    return `${this.toCode}_${this.fromCode}`;
+    return `${this.currency2}_${this.currency1}`;
   }
-
-  rate: { [index: string]: number } = {};
 
   // get country currencies and display to select options
   async mounted(): Promise<void> {
-    this.fromCode = this.from;
-    this.toCode = this.to;
+    this.fromCountry = this.from;
+    this.toCountry = this.to;
     try {
       this.currencies = await ApiService.instance.getCountryCurrencies();
+      // console.log("this.currencies);", this.currencies);
       this.onSubmit();
     } catch (e) {
       Service.instance.error(e);
@@ -95,11 +130,11 @@ export default class CurrencyConverter extends Vue {
 
   // get exchange rate base from currency then compute current amount to converted amount
   async onSubmit(): Promise<void> {
-    if (this.fromCode == this.toCode) return;
+    if (this.fromCountry == this.toCountry) return;
     try {
       this.rate = await ApiService.instance.getExchangeRate({
-        currency1: this.fromCode,
-        currency2: this.toCode,
+        currency1: this.currency1,
+        currency2: this.currency2,
       });
       this.onCompute(this.first);
     } catch (e) {
@@ -119,9 +154,9 @@ export default class CurrencyConverter extends Vue {
 
   // switch the currency position
   onSwitch(): void {
-    const temp = this.fromCode;
-    this.fromCode = this.toCode;
-    this.toCode = temp;
+    const temp = this.fromCountry;
+    this.fromCountry = this.toCountry;
+    this.toCountry = temp;
     this.onCompute(this.first);
   }
 }

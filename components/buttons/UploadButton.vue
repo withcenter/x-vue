@@ -31,7 +31,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 
-import CameraSvg from "@/x-vue/components/svg/CameraSvg.vue";
+import CameraSvg from "@/x-vue/svg/CameraSvg.vue";
 
 @Component({
   components: { CameraSvg },

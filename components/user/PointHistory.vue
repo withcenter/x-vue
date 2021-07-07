@@ -49,14 +49,16 @@
           </td>
         </tr>
       </tbody>
-      <!-- <div class="my-3 alert alert-info">{{ "point_history_help" | t }}</div> -->
     </table>
+
+    <div class="alert alert-info" v-if="!pointHistories.length">No records found.</div>
   </section>
 </template>
 
 <script lang="ts">
 import { PointHistoryModel } from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
+import ComponentService from "@/x-vue/services/component.service";
 import { yymmddhma } from "@/x-vue/services/functions";
 import dayjs from "dayjs";
 import { Component, Vue } from "vue-property-decorator";
@@ -65,17 +67,15 @@ import { Component, Vue } from "vue-property-decorator";
 export default class PointHistory extends Vue {
   pointHistories: Array<PointHistoryModel> = [];
 
-  beginAtMin = dayjs()
-    .hour(-90 * 24)
-    .format("YYYY-MM-DD");
-  beginAtMax = dayjs().hour(23).format("YYYY-MM-DD");
+  beginAtMin = "";
+  beginAtMax = dayjs().format("YYYY-MM-DD");
 
-  endAtMin = this.beginAtMin;
+  endAtMin = "";
   endAtMax = this.beginAtMax;
 
   options = {
-    beginDate: dayjs().hour(0).format("YYYY-MM-DD"),
-    endDate: dayjs().hour(23).format("YYYY-MM-DD"),
+    beginDate: dayjs().hour(-24).format("YYYY-MM-DD"),
+    endDate: this.beginAtMax,
   };
 
   summary = {
@@ -88,10 +88,15 @@ export default class PointHistory extends Vue {
   }
 
   async search(): Promise<void> {
-    // console.log(".diff(dayjs(", dayjs(this.options.beginDate).diff(dayjs(this.options.endDate), "d"));
-    //return if endDate is earlier than the beginDate
-    if (dayjs(this.options.beginDate).diff(dayjs(this.options.endDate), "d") > 0) return;
-    // console.log("search():", this.options);
+    // get the days difference
+    // negative - end date is lower than the begin date
+    // return if the end date is lower than the begin date
+    let days = dayjs(this.options.endDate).diff(dayjs(this.options.beginDate), "d");
+    if (days < 0) return;
+
+    // show error if days difference is morethan 90days
+    if (days > 90) ComponentService.instance.alert("date range", "error_more_than_90days_date_difference");
+
     try {
       this.pointHistories = await ApiService.instance.userPointHistory(this.options);
       this.summary.total_point_apply_increase = 0;
@@ -135,7 +140,7 @@ export default class PointHistory extends Vue {
   }
 
   getAction(h: PointHistoryModel): string {
-    if (h.action == "dislike" && h.toUserIdx == this.$app.user.idx) return "dislike deduction";
+    if (h.action == "dislike" && h.fromUserIdx == this.$app.user.idx) return "dislike_deduction";
     return h.action;
   }
 }
