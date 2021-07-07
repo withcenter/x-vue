@@ -43,24 +43,30 @@
     </div>
 
     <div class="alert alert-info">
-      <h2>LatestText</h2>
+      <h2>PostTitle</h2>
       Display the title of a post
       <b-card>
-        <LatestText></LatestText>
+        <PostTitle></PostTitle>
       </b-card>
     </div>
 
     <div class="alert alert-info">
       <h2>ThumbnailWithText</h2>
-      Display thumbnail and title and content from a post
+      Display thumbnail and title and content from a post. It uses bootstrap vue 'b-img'. So, you can customize the
+      thumbanil with the same option of bootstrap vue.
       <div>Props</div>
       <ul>
         <li>post: PostModel</li>
+        <li>thumbnail: boolean - same option of bootstrap-vue</li>
         <li>thumbnailWidth: number</li>
         <li>thumbnailHeight: number</li>
       </ul>
       <b-card>
         <thumbnail-with-text :thumbnailHeight="50" :thumbnailWidth="50"></thumbnail-with-text>
+      </b-card>
+      <b-card class="mt-1">
+        <b-card-title>With thumbnail</b-card-title>
+        <thumbnail-with-text :thumbnail="true" :thumbnailHeight="50" :thumbnailWidth="50"></thumbnail-with-text>
       </b-card>
     </div>
 
@@ -71,11 +77,12 @@
       <div>Props</div>
       <ul>
         <li>posts: PostModel[]</li>
+        <li>thumbnail: boolean - same option of bootstrap-vue</li>
         <li>thumbnailWidth: number</li>
         <li>thumbnailHeight: number</li>
       </ul>
       <b-card>
-        <two-stories-thumbnail-with-text></two-stories-thumbnail-with-text>
+        <two-stories-thumbnail-with-text :thumbnail="true"></two-stories-thumbnail-with-text>
       </b-card>
     </div>
 
@@ -218,7 +225,7 @@ import UploadButton from "@/x-vue/components/buttons/UploadButton.vue";
 import FileUploadButton from "@/x-vue/components/file/FileUploadButton.vue";
 import ComponentService from "@/x-vue/services/component.service";
 import { FileModel } from "@/x-vue/interfaces/interfaces";
-import LatestText from "@/x-vue/widgets/post/LatestText.vue";
+import PostTitle from "@/x-vue/widgets/post/PostTitle.vue";
 
 import LatestPostsText from "@/x-vue/widgets/post/LatestPostsText.vue";
 import PhotoTextBottom from "@/x-vue/widgets/post/PhotoTextBottom.vue";
@@ -236,7 +243,7 @@ import PhotoTextsTopPhotosBottom from "@/x-vue/widgets/post/PhotoTextsTopPhotosB
     CameraSvg,
     UploadButton,
     FileUploadButton,
-    LatestText,
+    PostTitle,
     LatestPostsText,
     PhotoTextBottom,
     PhotoInlineTextBottom,
