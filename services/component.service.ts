@@ -106,14 +106,20 @@ export default class ComponentService {
   temporaryPost(): PostModel {
     this.tempIdx++;
     const file = { url: "", thumbnailurl: "" };
+    const user = { nicknameOrName: `user-${this.tempIdx}` };
+    let categoryId = "";
     if (this.tempIdx % 4 == 0) {
       file.url = "https://via.placeholder.com/600/92c952";
+      categoryId = "apple";
     } else if (this.tempIdx % 4 == 1) {
       file.url = "https://via.placeholder.com/300x400/000/fff.png?text=Yo, Narrow";
+      categoryId = "banana";
     } else if (this.tempIdx % 4 == 2) {
       file.url = "https://via.placeholder.com/600/51aa97";
+      categoryId = "cherry";
     } else if (this.tempIdx % 4 == 3) {
       file.url = "https://via.placeholder.com/600x300.png?text=Yo, Wide";
+      categoryId = "dragon";
     }
     file.thumbnailurl = file.url;
     return new PostModel().fromJson({
@@ -122,6 +128,9 @@ export default class ComponentService {
       title: `${this.tempIdx} - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
       content: `Ut enim ad minim veniam,\nquis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\n\nExcepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\n${this.tempIdx}.`,
       files: [file],
+      user: user,
+      categoryId: categoryId,
+      shortDate: "01-01-01",
     });
   }
 }

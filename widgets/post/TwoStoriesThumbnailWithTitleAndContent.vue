@@ -1,28 +1,28 @@
 <template>
   <section>
-    <thumbnail-with-text
+    <ThumbnailWithTitleAndContent
       class="mb-3"
       v-for="(post, index) of posts.slice(0, limit)"
       :key="index"
       :post="post"
       :thumbnailWidth="thumbnailWidth"
       :thumbnailHeight="thumbnailHeight"
-    ></thumbnail-with-text>
+    ></ThumbnailWithTitleAndContent>
   </section>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import ThumbnailWithText from "@/x-vue/widgets/post/ThumbnailWithText.vue";
+import ThumbnailWithTitleAndContent from "@/x-vue/widgets/post/ThumbnailWithTitleAndContent.vue";
 import { PostModel } from "@/x-vue/interfaces/forum.interface";
 import ComponentService from "@/x-vue/services/component.service";
 
 @Component({
   components: {
-    ThumbnailWithText,
+    ThumbnailWithTitleAndContent,
   },
 })
-export default class TwoStoriesThumbnailWithText extends Vue {
+export default class TwoStoriesThumbnailWithTitleAndContent extends Vue {
   @Prop({
     type: Array,
     default: () => {
@@ -45,7 +45,7 @@ export default class TwoStoriesThumbnailWithText extends Vue {
   limit!: number;
 
   mounted(): void {
-    console.log("TwoStoriesThumbnailWithText", this.posts);
+    console.log("TwoStoriesThumbnailWithTitleAndContent", this.posts);
   }
 }
 </script>

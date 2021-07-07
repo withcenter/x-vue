@@ -49,12 +49,10 @@ export default class PhotoWithTextsAtRight extends Vue {
   post: PostModel = new PostModel();
 
   mounted(): void {
-    console.log("PhotoWithTextsAtRight");
     if (this.categoryId) {
       this.loadPost();
     } else {
       this.post = ComponentService.instance.temporaryPost();
-      console.log(this.post);
     }
   }
 

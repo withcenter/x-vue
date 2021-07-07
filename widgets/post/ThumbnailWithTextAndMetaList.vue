@@ -1,32 +1,30 @@
 <template>
-  <div class="latest-posts-text" v-if="posts.length">
-    <div v-if="title">
-      {{ title }}
-      <hr class="my-1" />
+  <div>
+    <div class="mt-2" v-for="post of posts" :key="post.idx">
+      <ThumbnailWithTextAndMeta :post="post"></ThumbnailWithTextAndMeta>
     </div>
-    <PostsTitleList :posts="posts"></PostsTitleList>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import { ApiService } from "@/x-vue/services/api.service";
-import ComponentService from "@/x-vue/services/component.service";
-import { PostModel } from "@/x-vue/interfaces/forum.interface";
 
-import PostsTitleList from "./PostsTitleList.vue";
+import { PostModel } from "@/x-vue/interfaces/forum.interface";
+import ComponentService from "@/x-vue/services/component.service";
+
+import ThumbnailWithTextAndMeta from "./ThumbnailWithTextAndMeta.vue";
+import { ApiService } from "@/x-vue/services/api.service";
 
 @Component({
-  components: { PostsTitleList },
+  components: { ThumbnailWithTextAndMeta },
 })
-export default class LatestPostsText extends Vue {
-  @Prop({})
-  title!: string;
-  @Prop({})
+export default class ThumbnailWithTextAndMetaList extends Vue {
+  @Prop()
   categoryId!: string;
+
   @Prop({
-    default: 10,
+    default: 5,
   })
   limit!: number;
 
@@ -44,11 +42,7 @@ export default class LatestPostsText extends Vue {
 
   async loadPosts(): Promise<void> {
     try {
-      const res = await ApiService.instance.postSearch({
-        categoryId: this.categoryId,
-        limit: this.limit,
-      });
-      this.posts = res;
+      this.posts = await ApiService.instance.postSearch({ categoryId: this.categoryId, limit: this.limit, files: "Y" });
     } catch (e) {
       ComponentService.instance.error(e);
     }
