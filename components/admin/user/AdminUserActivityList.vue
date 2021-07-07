@@ -156,7 +156,7 @@ export default class AdminUserActivityList extends Vue {
     return;
   }
 
-  date(s: number) {
+  date(s: number): string {
     return yymmddhma(s);
   }
 }
