@@ -8,7 +8,7 @@
       <div class="d-flex justify-content-center">
         <b-avatar :src="user.photoUrl" size="8rem"></b-avatar>
 
-        <!-- <upload-image taxonomy="posts" :entity="banner.idx" code="banner" @uploaded="onFileUpload"></upload-image> -->
+        <UploadImage taxonomy="users" :entity="user.idx" code="photoUrl" @uploaded="onProfilePhotoUpload"></UploadImage>
       </div>
       <form @submit.prevent="onSubmit($event)">
         <div role="group">
@@ -101,10 +101,13 @@ import Component from "vue-class-component";
 import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
 import { ApiService } from "@/x-vue/services/api.service";
 import { RequestData, UserModel } from "@/x-vue/interfaces/interfaces";
+import UploadImage from "@/x-vue/components/file/UploadImage.vue";
+import store from "@/store";
 
 @Component({
   components: {
     LoginFirst,
+    UploadImage,
   },
 })
 export default class Profile extends Vue {
@@ -119,6 +122,10 @@ export default class Profile extends Vue {
     } catch (e) {
       this.$emit("error", e);
     }
+  }
+
+  async onProfilePhotoUpload(): Promise<void> {
+    store.commit("user", await this.api.userProfile());
   }
 
   onSubmit($event: Event): void {
