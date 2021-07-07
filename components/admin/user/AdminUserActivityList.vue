@@ -100,7 +100,7 @@
         </tbody>
       </table>
 
-      <div class="alert alert-info" v-if="!pointHistories.length">No Results.</div>
+      <div class="alert alert-info" v-if="!pointHistories.length">No records found.</div>
     </section>
   </section>
 </template>
@@ -117,14 +117,14 @@ export default class AdminUserActivityList extends Vue {
   pointHistories: Array<UserActivityModel> = [];
 
   beginAtMin = "";
-  beginAtMax = dayjs().hour(23).format("YYYY-MM-DD");
+  beginAtMax = dayjs().format("YYYY-MM-DD");
 
   endAtMin = this.beginAtMin;
   endAtMax = this.beginAtMax;
 
   options = {
-    beginDate: dayjs().hour(0).format("YYYY-MM-DD"),
-    endDate: dayjs().hour(23).format("YYYY-MM-DD"),
+    beginDate: dayjs().hour(-24).format("YYYY-MM-DD"),
+    endDate: this.beginAtMax,
   };
 
   fields = {
@@ -156,7 +156,7 @@ export default class AdminUserActivityList extends Vue {
     return;
   }
 
-  date(s: number) {
+  date(s: number): string {
     return yymmddhma(s);
   }
 }
