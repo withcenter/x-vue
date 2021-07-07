@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { Dictionary } from "vue-router/types/router";
+import { ApiService } from "./api.service";
 
 // /**
 //  * @deprecated
@@ -107,4 +108,13 @@ export function currentQueryToString(query: Dictionary<string | (string | null)[
 
 export function yymmddhma(s: number): string {
   return dayjs(s * 1000).format("YY-MM-DD h:ma");
+}
+
+export function translate(code: string): string {
+  if (!code) return "";
+  const texts = ApiService.instance.texts;
+  if (!ApiService.instance.texts) return code;
+  if (!texts[code]) return code;
+  if (!texts[code][ApiService.instance.userLanguage]) return code;
+  return texts[code][ApiService.instance.userLanguage];
 }
