@@ -1,32 +1,37 @@
 <template>
   <div class="admin-advertisement-list w-100">
-    <div class="mt-3 w-100" v-if="advertisements.length">
-      <div class="box d-flex p-2 mb-2" v-for="advertisement of advertisements" :key="advertisement.idx">
-        <div class="col-10 p-0">
-          <router-link :to="`/advertisement/view/${advertisement.idx}`">
-            <advertisement-preview :advertisement="advertisement"></advertisement-preview>
-          </router-link>
-        </div>
-        <div class="ml-1 px-2 py-0 text-center border-left col-2">
-          <b-avatar tabindex="0" class="center" :src="advertisement.user.src" :size="'4em'"></b-avatar>
-          <div class="w-100 text-truncate">
-            {{ advertisement.user.displayName }}
+    <div v-if="advertisements.length">
+      <div class="mt-3 w-100">
+        <div class="box d-flex p-2 mb-2" v-for="advertisement of advertisements" :key="advertisement.idx">
+          <div class="col-10 p-0">
+            <router-link :to="`/advertisement/view/${advertisement.idx}`">
+              <advertisement-preview :advertisement="advertisement"></advertisement-preview>
+            </router-link>
+          </div>
+          <div class="ml-1 px-2 py-0 text-center border-left col-2">
+            <b-avatar tabindex="0" class="center" :src="advertisement.user.src" :size="'4em'"></b-avatar>
+            <div class="w-100 text-truncate">
+              {{ advertisement.user.displayName }}
+            </div>
           </div>
         </div>
       </div>
+      <div class="p-3 text-center rounded" v-if="loading">
+        <b-spinner small class="mx-2" type="grow" variant="info"></b-spinner>
+        Loading Advertisements ...
+      </div>
+      <div class="d-flex overflow-auto justify-content-center">
+        <b-pagination-nav
+          :link-gen="linkGen"
+          :number-of-pages="noOfPages"
+          v-model="options.page"
+          v-on:change="onPageChanged"
+          use-router
+        ></b-pagination-nav>
+      </div>
     </div>
-    <div class="p-3 text-center rounded" v-if="loading">
-      <b-spinner small class="mx-2" type="grow" variant="info"></b-spinner>
-      Loading Advertisements ...
-    </div>
-    <div class="d-flex overflow-auto justify-content-center">
-      <b-pagination-nav
-        :link-gen="linkGen"
-        :number-of-pages="noOfPages"
-        v-model="options.page"
-        v-on:change="onPageChanged"
-        use-router
-      ></b-pagination-nav>
+    <div class="box text-center mb-2" v-if="!advertisements.length">
+      {{ "no_advertisements" | t }}
     </div>
   </div>
 </template>

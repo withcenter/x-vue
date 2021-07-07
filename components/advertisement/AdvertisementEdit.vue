@@ -422,7 +422,7 @@ export default class Advertisement extends Vue {
     let d = dayjs();
     if (this.banner.beginDate) d = dayjs(this.banner.beginDate);
     if (this.settings.maximumAdvertisementDays > 0) {
-      return d.add(this.settings.maximumAdvertisementDays, "d").format("YYYY-MM-DD");
+      return d.add(this.settings.maximumAdvertisementDays - 1, "d").format("YYYY-MM-DD");
     }
     return "";
   }
