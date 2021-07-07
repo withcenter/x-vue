@@ -174,7 +174,7 @@
               <option value="" selected>
                 {{ "global" | t }}
               </option>
-              <option v-for="category in settings.categories" :key="category">
+              <option v-for="category in settings.categoryArray" :key="category">
                 {{ category }}
               </option>
             </select>

@@ -1,11 +1,13 @@
 <template>
-  <div class="admin-advertisement-list">
-    <div class="mt-3" v-if="advertisements.length">
+  <div class="admin-advertisement-list w-100">
+    <div class="mt-3 w-100" v-if="advertisements.length">
       <div class="box d-flex p-2 mb-2" v-for="advertisement of advertisements" :key="advertisement.idx">
-        <router-link class="w-100" :to="`/advertisement/view/${advertisement.idx}`">
-          <advertisement-preview :advertisement="advertisement"></advertisement-preview>
-        </router-link>
-        <div class="ml-1 px-2 text-center border-left">
+        <div class="col-10 p-0">
+          <router-link :to="`/advertisement/view/${advertisement.idx}`">
+            <advertisement-preview :advertisement="advertisement"></advertisement-preview>
+          </router-link>
+        </div>
+        <div class="ml-1 px-2 py-0 text-center border-left col-2">
           <b-avatar tabindex="0" class="center" :src="advertisement.user.src" :size="'4em'"></b-avatar>
           <div class="w-100 text-truncate">
             {{ advertisement.user.displayName }}

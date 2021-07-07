@@ -124,7 +124,7 @@ export default class AdminAdvertisement extends Vue {
       // this.maximumAdvertisementDays = re.data ? re.data : 0;
       this.maximumAdvertisementDays = settings.maximumAdvertisementDays;
       // re = await this.api.getConfig("advertisementCategories");
-      this.advertisementCategories = settings.categories.join(",");
+      this.advertisementCategories = settings.categoryArray.join(",");
 
       // this.points = await AdvertisementService.instance.advertisementGetBannerPoints();
       this.points = Object.keys(settings.point).map((k) => {
