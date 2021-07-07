@@ -4,11 +4,15 @@
       <b-spinner small class="mx-2" type="grow" variant="info"></b-spinner>
       {{ "loading_profile" | t }}
     </div>
-    <div v-if="api._user.loggedIn">
+    <div v-if="user.idx">
       <div class="d-flex justify-content-center">
-        <b-avatar :src="user.photoUrl" size="8rem"></b-avatar>
-
-        <UploadImage taxonomy="users" :entity="user.idx" code="photoUrl" @uploaded="onProfilePhotoUpload"></UploadImage>
+        <UploadImage
+          ui="circle"
+          :userIdx="user.idx"
+          code="photoUrl"
+          @uploaded="profilePhotoChanged"
+          @deleted="profilePhotoChanged"
+        ></UploadImage>
       </div>
       <form @submit.prevent="onSubmit($event)">
         <div role="group">
@@ -115,8 +119,6 @@ export default class Profile extends Vue {
   api: ApiService = ApiService.instance;
 
   async mounted(): Promise<void> {
-    const idx = this.$route.params.idx;
-
     try {
       this.user = await this.api.userProfile();
     } catch (e) {
@@ -124,7 +126,7 @@ export default class Profile extends Vue {
     }
   }
 
-  async onProfilePhotoUpload(): Promise<void> {
+  async profilePhotoChanged(): Promise<void> {
     store.commit("user", await this.api.userProfile());
   }
 

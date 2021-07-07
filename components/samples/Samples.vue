@@ -1,5 +1,27 @@
 <template>
   <div class="pb-5">
+    <h1>CSS Samples</h1>
+    <div class="p-3 bg-white">
+      <div>
+        <h4>box</h4>
+        <p>Boxes are useful for contents wrapping.</p>
+        css class: .box
+        <div class="box">box</div>
+
+        css class: .box > .box-title
+        <div class="box">
+          <div class="box-title">box title</div>
+          box contents
+        </div>
+
+        css class: .box > .box-title.line
+        <div class="box">
+          <div class="box-title line">box title</div>
+          box contents
+        </div>
+      </div>
+    </div>
+    <hr />
     <h1>Samples of Components and Widgets</h1>
 
     <div class="alert alert-info">
@@ -191,7 +213,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-import CameraSvg from "@/x-vue/components/svg/CameraSvg.vue";
+import CameraSvg from "@/x-vue/svg/CameraSvg.vue";
 import UploadButton from "@/x-vue/components/buttons/UploadButton.vue";
 import FileUploadButton from "@/x-vue/components/file/FileUploadButton.vue";
 import ComponentService from "@/x-vue/services/component.service";
