@@ -12,7 +12,14 @@
       </div>
     </section>
     <section class="upload-image-circle" v-if="ui == 'circle'">
-      <b-avatar :src="$store.state.user.photoUrl" size="8rem"></b-avatar>
+      <div class="base">
+        <b-avatar :src="file.url" size="8rem"></b-avatar>
+        <CameraSvg class="camera"></CameraSvg>
+        <input type="file" @change="onFileChangeImage($event, 'banner')" />
+      </div>
+      <div class="trash" @click="onClickDeleteImage">
+        <TrashSvg class="trash-icon"></TrashSvg>
+      </div>
     </section>
   </div>
 </template>
@@ -22,12 +29,15 @@
  * 공용 위젯
  *
  * 이미 업로드 된 경우, [file] property 로 업로드된 파일을 전달 할 수 있고,
- * [taxonomy], [entity], [code] 로 업로드하는 파일이 어느 entity 에 귀속되는지 지정하고,
+ * [taxonomy], [entity], [code], [userIdx] 로 업로드하는 파일이 어느 entity 에 귀속되는지 지정하고,
  * 기존에 존재하는 파일을 삭제하는 등, 완전한 업로드 기능을 한다.
  *
  * 다만, 로직은 동일한데, "회원 사진 업로드", "쇼핑몰 사진 업로드", "광고 배너 업로드" 등
  * 디자인의 변경이 많이 있을 수 있어,
  * 이 컴포넌트에서는 하나의 템플릿에 여러개의 디자인을 담도록 한다.
+ *
+ * 사용 예) 회원 프로필 사진을 수정하려면, 아래와 같이 userIdx 와 code 값만 전달하면 된다.
+ * <UploadImage ui="circle" :userIdx="user.idx" code="photoUrl" @uploaded="onProfilePhotoUpload"></UploadImage>
  *
  */
 import Vue from "vue";
@@ -35,29 +45,41 @@ import { FileModel } from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
 import { translate } from "@/x-vue/services/functions";
 import { Component, Prop } from "vue-property-decorator";
+import CameraSvg from "@/x-vue/svg/CameraSvg.vue";
+import TrashSvg from "@/x-vue/svg/TrashSvg.vue";
 
-@Component({})
+@Component({
+  components: { CameraSvg, TrashSvg },
+})
 export default class UploadImage extends Vue {
   @Prop({ default: "linear" }) ui!: "linear" | "circle";
   @Prop() taxonomy!: string;
   @Prop() entity!: number;
   @Prop() code!: string;
+  @Prop() userIdx!: number;
   percent = 0;
   file: FileModel = {} as FileModel;
   confirmDelete = translate("do_you_want_to_delete");
   api: ApiService = ApiService.instance;
   async mounted(): Promise<void> {
     try {
-      if (this.entity) {
-        this.file = await this.api.fileGet({
+      if (this.entity || this.code || this.userIdx) {
+        const req = {
           taxonomy: this.taxonomy,
           entity: this.entity,
           code: this.code,
-        });
+          userIdx: this.userIdx,
+        };
+
+        console.log("req;; ", req);
+        this.file = await this.api.fileGet(req);
+        console.log("file;", this.file);
       }
     } catch (e) {
       if (e !== "error_entity_not_found") {
         this.$emit("error", e);
+      } else {
+        console.log("e; ", e);
       }
     }
   }
@@ -131,5 +153,42 @@ export default class UploadImage extends Vue {
   cursor: pointer;
   font-weight: bold;
   font-size: 18px;
+}
+.upload-image-circle {
+  position: relative;
+  overflow: hidden;
+  ::-webkit-file-upload-button {
+    cursor: pointer;
+  }
+  .base {
+    position: relative;
+    overflow: hidden;
+    input {
+      position: absolute;
+      left: 0;
+      font-size: 10em;
+      opacity: 0.0001;
+    }
+  }
+  .camera {
+    position: absolute;
+    width: 32px;
+    padding: 0.25em;
+    box-sizing: content-box;
+    left: 0;
+    bottom: 0;
+  }
+  .trash {
+    position: absolute;
+    right: 0;
+    bottom: 1px;
+    padding: 0.25em;
+    box-sizing: content-box;
+    cursor: pointer;
+    .trash-icon {
+      width: 24px;
+      fill: rgb(87, 87, 87);
+    }
+  }
 }
 </style>
