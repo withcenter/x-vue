@@ -19,7 +19,7 @@ import {
 
 import Cookies from "js-cookie";
 import { Keys, Err } from "./defines";
-import { getRootDomain } from "./functions";
+import { getRootDomain, translate } from "./functions";
 import Vue from "vue";
 import { CommentModel, PostModel, PostSearchRequest } from "../interfaces/forum.interface";
 
@@ -48,14 +48,7 @@ export class ApiService {
     /// Add filter `t` for translating.
     /// This must be inside this constructor or somewhere it can be defined
     /// before Vue initialization.
-    Vue.filter("t", (code: string): string => {
-      if (!code) return "";
-      const texts = ApiService.instance.texts;
-      if (!ApiService.instance.texts) return code;
-      if (!texts[code]) return code;
-      if (!texts[code][ApiService.instance.userLanguage]) return code;
-      return texts[code][ApiService.instance.userLanguage];
-    });
+    Vue.filter("t", translate);
   }
   // Singletone
   private static _instance: ApiService;
@@ -301,7 +294,7 @@ export class ApiService {
   }
 
   async otherUserProfile(idx: string): Promise<UserModel> {
-    const res = await this.request("user.otherUserProfile", { idx });
+    const res = await this.request("user.get", { idx });
     return new UserModel().fromJson(res);
   }
 
@@ -341,9 +334,9 @@ export class ApiService {
    * @returns posts
    */
   async postSearch(data: PostSearchRequest): Promise<Array<PostModel>> {
-    console.log("postSearch::data", data);
+    // console.log("postSearch::data", data);
     const res = await this.request("post.search", data);
-    console.log("postSearch::res", res);
+    // console.log("postSearch::res", res);
     return res.map((post: JSON) => new PostModel().fromJson(post));
   }
 

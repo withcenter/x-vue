@@ -1,15 +1,15 @@
 <template>
   <div class="four-photos-with-text-bottom m-0 row" v-if="posts">
-    <div class="col-3 pr-1">
+    <div class="w-25 pr-1">
       <PhotoTextBottom :imageHeight="imageHeight" :post="posts[0]"></PhotoTextBottom>
     </div>
-    <div class="col-3 pr-1">
+    <div class="w-25 pr-1">
       <PhotoTextBottom :imageHeight="imageHeight" :post="posts[1]"></PhotoTextBottom>
     </div>
-    <div class="col-3 pr-1">
+    <div class="w-25 pr-1">
       <PhotoTextBottom :imageHeight="imageHeight" :post="posts[2]"></PhotoTextBottom>
     </div>
-    <div class="col-3">
+    <div class="w-25">
       <PhotoTextBottom :imageHeight="imageHeight" :post="posts[3]"></PhotoTextBottom>
     </div>
   </div>
@@ -38,7 +38,7 @@ export default class FourPhotosWithTextBottom extends Vue {
   @Prop({})
   categoryId!: string;
   @Prop({
-    default: 200,
+    default: 150,
   })
   imageHeight!: number;
 

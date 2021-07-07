@@ -1,29 +1,34 @@
 <template>
-  <article class="post-preview d-flex" v-if="post">
-    <user-avatar :parent="post"></user-avatar>
-    <!-- <b-avatar :src="post.user.photoUrl" size="3em"></b-avatar> -->
-    <div class="ml-2 d-flex w-100">
-      <div class="w-100">
-        <router-link :to="toPostView()">
-          <b>
-            <span>No. {{ post.idx }} - </span>
-            <span data-cy="post-title">{{ post.title || "no title" }}</span>
-            <span class="ml-1" v-if="post.noOfComments"> ({{ post.noOfComments }}) </span>
-          </b>
-          <div>
-            <i class="text-muted" v-if="post.comments.length">
-              {{ post.comments[0].user.displayName }}: "{{ post.comments[0].content }}"
-            </i>
-            <i class="text-muted" v-if="!post.comments.length"> No comments yet .. </i>
-          </div>
-        </router-link>
+  <article class="post-preview" v-if="post">
+    <div class="d-flex" v-if="!post.deletedAt">
+      <user-avatar :parent="post"></user-avatar>
+      <!-- <b-avatar :src="post.user.photoUrl" size="3em"></b-avatar> -->
+      <div class="ml-2 d-flex w-100">
+        <div class="w-100">
+          <router-link :to="toPostView()">
+            <b>
+              <span>No. {{ post.idx }} - </span>
+              <span data-cy="post-title">{{ post.title || "no title" }}</span>
+              <span class="ml-1" v-if="post.noOfComments"> ({{ post.noOfComments }}) </span>
+            </b>
+            <div>
+              <i class="text-muted" v-if="post.comments.length">
+                {{ post.comments[0].user.displayName }}: "{{ post.comments[0].content }}"
+              </i>
+              <i class="text-muted" v-if="!post.comments.length"> No comments yet .. </i>
+            </div>
+          </router-link>
+        </div>
+        <post-meta-component
+          class="ml-1 d-block"
+          style="width: 120px"
+          :showName="true"
+          :post="post"
+        ></post-meta-component>
       </div>
-      <post-meta-component
-        class="ml-1 d-block"
-        style="width: 120px"
-        :showName="true"
-        :post="post"
-      ></post-meta-component>
+    </div>
+    <div v-if="post.deletedAt">
+      {{ "post_deleted" | t }}
     </div>
   </article>
 </template>

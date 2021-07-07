@@ -1,6 +1,10 @@
-import { AdvertisementModel, CategoryBanners } from "../interfaces/advertisement.interface";
+import { AdvertisementModel, Banner, CategoryBanners } from "../interfaces/advertisement.interface";
 import { AdvertisementPointSetting, AdvertisementSettings, RequestData, ResponseData } from "../interfaces/interfaces";
 import { ApiService } from "./api.service";
+
+interface AdvertisementServiceOptions {
+  open?: (advertisement: Banner) => void;
+}
 
 export class AdvertisementService {
   // Singletone
@@ -15,9 +19,15 @@ export class AdvertisementService {
   api = ApiService.instance;
   //
 
+  options: AdvertisementServiceOptions = {};
+
   private _advertisementSettings?: AdvertisementSettings;
   //
   private categoryBanners: CategoryBanners = {};
+
+  init(options: AdvertisementServiceOptions): void {
+    this.options = options;
+  }
 
   /**
    * Get banners from backend.
@@ -53,7 +63,7 @@ export class AdvertisementService {
     }
 
     this.categoryBanners = _banners;
-    // console.log("loadBanners", this.categoryBanners);
+    console.log("loadBanners", this.categoryBanners);
     return this.categoryBanners;
   }
 
@@ -124,5 +134,13 @@ export class AdvertisementService {
   async advertisementDelete(idx: number): Promise<AdvertisementModel> {
     const res = await this.api.request("advertisement.delete", { idx: idx });
     return new AdvertisementModel().fromJson(res);
+  }
+
+  openAdvertisement(banner: Banner): void {
+    if (this.options.open) {
+      this.options.open(banner);
+    } else {
+      console.log("No open option set for Advertisement service.");
+    }
   }
 }

@@ -14,8 +14,8 @@
 <script lang="ts">
 import Component from "vue-class-component";
 import Vue from "vue";
-import Service from "@/x-vue/services/component.service";
 import { Banner, Banners } from "@/x-vue/interfaces/advertisement.interface";
+import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 
 @Component({
   props: ["banners"],
@@ -28,13 +28,7 @@ export default class AdvertisementSquareBanners extends Vue {
   }
 
   onClick(banner: Banner): void {
-    if (banner.clickUrl) {
-      window.open(banner.clickUrl, "_newtab");
-    }
-    if (banner.idx) {
-      const path = "/advertisement/view/" + banner.idx;
-      Service.instance.open(path);
-    }
+    AdvertisementService.instance.openAdvertisement(banner);
   }
 }
 </script>

@@ -76,7 +76,7 @@ export interface AdvertisementSettings {
     default: AdvertisementPointSetting;
     [index: string]: AdvertisementPointSetting;
   };
-  categories: string[];
+  categoryArray: string[];
   maximumAdvertisementDays: number;
 }
 

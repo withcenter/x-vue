@@ -159,7 +159,7 @@
           <br />
           @property - categoryId string
           <br />
-          @property - itemHeight number (200px default)
+          @property - itemHeight number (150px default)
         </p>
         <hr />
         <FourPhotosWithTextBottom></FourPhotosWithTextBottom>

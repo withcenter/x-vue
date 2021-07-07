@@ -124,7 +124,7 @@ export default class AdminAdvertisement extends Vue {
       // this.maximumAdvertisementDays = re.data ? re.data : 0;
       this.maximumAdvertisementDays = settings.maximumAdvertisementDays;
       // re = await this.api.getConfig("advertisementCategories");
-      this.advertisementCategories = settings.categories.join(",");
+      this.advertisementCategories = settings.categoryArray.join(",");
 
       // this.points = await AdvertisementService.instance.advertisementGetBannerPoints();
       this.points = Object.keys(settings.point).map((k) => {
@@ -144,7 +144,7 @@ export default class AdminAdvertisement extends Vue {
       await AdvertisementService.instance.advertisementSetBannerPoint(data);
       this.points = await AdvertisementService.instance.advertisementGetBannerPoints();
       this.add = {};
-      this.s.alert("Points ", "Point setting updated!");
+      this.s.alert("Success", "Point setting updated!");
     } catch (e) {
       this.s.error(e);
     }
@@ -153,7 +153,7 @@ export default class AdminAdvertisement extends Vue {
   async onDelete(data: RequestData): Promise<void> {
     // console.log("onDelete::data", data);
 
-    const conf = await this.s.confirm("Title", `Delete point settings for ${data.countryCode}?`);
+    const conf = await this.s.confirm("Confirm", `Delete point settings for ${data.countryCode}?`);
     if (!conf) return;
     try {
       await AdvertisementService.instance.advertisementDeleteBannerPoint(data.idx);

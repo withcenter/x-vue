@@ -1,22 +1,18 @@
 <template>
   <section class="currency-converter" v-if="Object.keys(currencies).length">
-    <div class="text-center">{{ "currency_converter" | t }}</div>
     <form @submit.prevent="onSubmit">
-      <div class="d-flex text-center mb-2">
+      <div class="d-flex">
         <div class="w-100 mr-2">
-          <div>{{ "from" | t }}</div>
           <b-form-select v-model="fromCode" :options="currencies.selectOptions" @change="onSubmit()"></b-form-select>
         </div>
 
         <div class="w-100">
-          <div>{{ "to" | t }}</div>
           <b-form-select v-model="toCode" :options="currencies.selectOptions" @change="onSubmit()"></b-form-select>
         </div>
       </div>
 
-      <div class="d-flex text-center mb-2">
+      <div class="d-flex mt-1">
         <div role="group" class="mr-2">
-          <label for="amount">{{ "amount" | t }}</label>
           <b-form-input
             id="amount"
             v-model="amount"
@@ -25,7 +21,6 @@
           ></b-form-input>
         </div>
         <div>
-          <label for="converted">{{ "converted" | t }}</label>
           <b-form-input
             id="converted"
             v-model="convertedAmount"
@@ -34,7 +29,7 @@
           ></b-form-input>
         </div>
       </div>
-      <div class="d-flex justify-content-between">
+      <div class="d-flex justify-content-between mt-1" v-if="buttons">
         <button class="btn btn-success">{{ "convert" | t }}</button>
 
         <button type="button" class="btn btn-info" @click="onSwitch">
@@ -67,6 +62,7 @@ export default class CurrencyConverter extends Vue {
   currencies: CountryCurrenciesModel = new CountryCurrenciesModel();
   @Prop({ default: "USD" }) from!: string;
   @Prop({ default: "KRW" }) to!: string;
+  @Prop({ default: false }) buttons!: boolean;
   amount = "1";
   convertedAmount = "0";
 

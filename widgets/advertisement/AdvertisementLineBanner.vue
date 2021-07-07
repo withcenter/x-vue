@@ -10,8 +10,8 @@
 <script lang="ts">
 import Component from "vue-class-component";
 import Vue from "vue";
-import Service from "@/x-vue/services/component.service";
 import { Banner, Banners } from "@/x-vue/interfaces/advertisement.interface";
+import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 
 @Component({
   props: ["banners"],
@@ -42,13 +42,7 @@ export default class AdvertisementLineBanner extends Vue {
   }
 
   onClick(): void {
-    if (this.currentBanner.clickUrl) {
-      window.open(this.currentBanner.clickUrl, "_newtab");
-    }
-    if (this.currentBanner.idx) {
-      const path = "/advertisement/view/" + this.currentBanner.idx;
-      Service.instance.open(path);
-    }
+    AdvertisementService.instance.openAdvertisement(this.currentBanner);
   }
 }
 </script>
