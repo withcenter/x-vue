@@ -19,6 +19,11 @@
           <div class="box-title line">box title</div>
           box contents
         </div>
+        css class: .box.no-border > .box-title.line
+        <div class="box no-border bg-primary">
+          <div class="box-title line">box title</div>
+          box contents
+        </div>
       </div>
     </div>
     <hr />
@@ -109,6 +114,19 @@
       </div>
     </div>
 
+    <div class="card mb-2">
+      <div class="card-body">
+        <h5 class="card-title">LatestPostsTextOnly</h5>
+        <h5 class="card-title">LatestPostsTextOnly</h5>
+        <p class="card-text">
+          Displays list of latest posts only in text.
+          <br />
+          @property - limit number (10 default)
+        </p>
+        <hr />
+        <LatestPostsTextOnly></LatestPostsTextOnly>
+      </div>
+    </div>
     <div class="card mb-2">
       <div class="card-body">
         <h5 class="card-title">LatestPostsText</h5>
@@ -410,6 +428,7 @@ import TwoColumnStoryGroupA from "@/x-vue/widgets/post/TwoColumnStoryGroupA.vue"
 import ThumbnailWithTextListTopTextsBottom from "@/x-vue/widgets/post/ThumbnailWithTextListTopTextsBottom.vue";
 import PhotoTextBottomTopThumbnailTextListBottom from "@/x-vue/widgets/post/PhotoTextBottomTopThumbnailTextListBottom.vue";
 
+import LatestPostsTextOnly from "@/x-vue/widgets/post/LatestPostsTextOnly.vue";
 @Component({
   components: {
     CameraSvg,
@@ -438,6 +457,7 @@ import PhotoTextBottomTopThumbnailTextListBottom from "@/x-vue/widgets/post/Phot
     TwoColumnStoryGroupA,
     ThumbnailWithTextListTopTextsBottom,
     PhotoTextBottomTopThumbnailTextListBottom,
+    LatestPostsTextOnly,
   },
 })
 export default class Samples extends Vue {

@@ -133,17 +133,15 @@ export class UserModel {
     return !this.loggedIn;
   }
 
-  /**
-   * @deprecated use nicknameOrName
-   */
   get displayName(): string {
-    if (this.name) return this.name;
-    if (this.nickname) return this.nickname;
-    let account;
-    if (this.email) account = this.email.split("@").shift();
-    if (!account) return this.idx + "xxx";
-    const first = account.substring(0, account.length - 3);
-    return first + "xxx";
+    return this.nicknameOrName;
+    // if (this.name) return this.name;
+    // if (this.nickname) return this.nickname;
+    // let account;
+    // if (this.email) account = this.email.split("@").shift();
+    // if (!account) return this.idx + "xxx";
+    // const first = account.substring(0, account.length - 3);
+    // return first + "xxx";
   }
 
   fromJson(map: ResponseData): UserModel {
