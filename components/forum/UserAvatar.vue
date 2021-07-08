@@ -1,6 +1,12 @@
 <template>
   <div class="d-flex">
-    <b-avatar tabindex="0" :id="id" class="pointer" :src="parent.user.src" :size="defaultSize + 'em'"></b-avatar>
+    <b-avatar
+      tabindex="0"
+      :id="id"
+      class="pointer"
+      :src="parent.user.src || parent.user.photoUrl"
+      :size="defaultSize + 'em'"
+    ></b-avatar>
 
     <b-popover
       placement="bottomright"
