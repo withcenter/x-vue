@@ -101,7 +101,7 @@ export class PostRootModel {
   subcategory = "";
 
   noOfViews = "";
-  noOfComments = "0";
+  noOfComments = 0;
 
   comments: Array<CommentModel> = [];
 
