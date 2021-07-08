@@ -5,7 +5,7 @@
       class="mt-2"
       :isMultiLine="true"
       :categoryId="secondCategoryId"
-      :limit="secondLimit"
+      :limit="listLimit"
       :isTextCentered="false"
     ></ThumbnailWithTextAtRightList>
   </div>
@@ -26,6 +26,6 @@ export default class PhotoTextBottomTopThumbnailTextListBottom extends Vue {
 
   @Prop() secondCategoryId!: string;
   @Prop({ default: 7 })
-  secondLimit!: number;
+  listLimit!: number;
 }
 </script>

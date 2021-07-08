@@ -6,7 +6,7 @@
       :limit="firstLimit"
       :isTextCentered="false"
     ></ThumbnailWithTextAtRightList>
-    <PostsTitleList class="mt-2" :categoryId="secondCategoryId" :limit="secondLimit"></PostsTitleList>
+    <PostsTitleList class="mt-2" :categoryId="secondCategoryId" :limit="secondLimit" :bulleted="true"></PostsTitleList>
   </div>
 </template>
 
