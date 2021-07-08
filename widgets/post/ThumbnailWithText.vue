@@ -6,7 +6,7 @@
           <b-img
             :width="thumbnailWidth"
             :style="'height:' + thumbnailHeight + 'px;'"
-            thumbnail
+            :thumbnail="thumbnail"
             fluid
             rounded="0"
             :src="post.files[0].url"
@@ -48,6 +48,8 @@ export default class ThumbnailWithText extends Vue {
 
   @Prop({ default: 70 })
   thumbnailHeight!: number;
+
+  @Prop({ default: false }) thumbnail!: boolean;
 
   mounted(): void {
     console.log("ThubnailWithText", this.post);

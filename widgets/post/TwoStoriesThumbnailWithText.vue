@@ -7,6 +7,7 @@
       :post="post"
       :thumbnailWidth="thumbnailWidth"
       :thumbnailHeight="thumbnailHeight"
+      :thumbnail="thumbnail"
     ></thumbnail-with-text>
   </section>
 </template>
@@ -43,6 +44,8 @@ export default class TwoStoriesThumbnailWithText extends Vue {
 
   @Prop({ default: 2 })
   limit!: number;
+
+  @Prop({ default: false }) thumbnail!: boolean;
 
   mounted(): void {
     console.log("TwoStoriesThumbnailWithText", this.posts);

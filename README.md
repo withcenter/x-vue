@@ -87,11 +87,13 @@ onDialogCall() {
     - `this.$router`. So the `x-vue` model can navigates between pages.
     - `bootstrap 4.x` and `bootstrap 2.x` to work.
 
-- `ApiService` must be initialized before `Vue` initialization, Since `AppService` adds
-  some filters like `t` for translation.
+- `ApiService` must be initialized before `Vue` initialization.
+  - Since when `Vue` initialize, `App.vue` will be mounted immediately before the `ApiService` initialization.
+    - It will leads any `ApiService` call from `App.vue` will fail.
+    - If you have `AppService` and if it depends on `ApiService`, then `ApiService` must be initialized first before `AppService` initialization. Or api call from `AppService` construction will be failed.
+  - And, `ApiService` adds some filters like `t` for translation.
 
 - You can set
-
   - `serverUrl` to point where is the `Matrix` restful api endpoint.
   - `userChanges` callback event handler that will be called on every user change(login/logout/profile update, etc)
   - `apiKey` to access the backend if needed.

@@ -207,8 +207,8 @@ export class FileModel {
 }
 
 export class CategoryModel {
-  idx = "";
-  userIdx = "";
+  idx = 0;
+  userIdx = 0;
   id = "";
   title = "";
   description = "";
