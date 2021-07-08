@@ -51,14 +51,9 @@
     </div>
 
     <div class="alert alert-info">
-<<<<<<< HEAD
-      <h2>ThumbnailWithTitleAndContent</h2>
-      Display thumbnail and title and content from a post
-=======
       <h2>ThumbnailWithText</h2>
       Display thumbnail and title and content from a post. It uses bootstrap vue 'b-img'. So, you can customize the
       thumbanil with the same option of bootstrap vue.
->>>>>>> 55881a92d90dfebecbcdb1fddc4477a5c685aab2
       <div>Props</div>
       <ul>
         <li>post: PostModel</li>
@@ -87,11 +82,7 @@
         <li>thumbnailHeight: number</li>
       </ul>
       <b-card>
-<<<<<<< HEAD
-        <TwoStoriesThumbnailWithTitleAndContent></TwoStoriesThumbnailWithTitleAndContent>
-=======
         <two-stories-thumbnail-with-text :thumbnail="true"></two-stories-thumbnail-with-text>
->>>>>>> 55881a92d90dfebecbcdb1fddc4477a5c685aab2
       </b-card>
     </div>
 
@@ -365,7 +356,7 @@ import PhotoInlineTextBottom from "@/x-vue/widgets/post/PhotoInlineTextBottom.vu
 import TwoByTwoPhotoInlineTextBottom from "@/x-vue/widgets/post/TwoByTwoPhotoInlineTextBottom.vue";
 import TwoByTwoPhotoTextBottom from "@/x-vue/widgets/post/TwoByTwoPhotoTextBottom.vue";
 import ThumbnailWithTitleAndContent from "@/x-vue/widgets/post/ThumbnailWithTitleAndContent.vue";
-import TwoStoriesThumbnailWithTitleAndContent from "@/x-vue/widgets/post/TwoStoriesThumbnailWithTitleAndContent.vue";
+import TwoStoriesThumbnailWithText from "@/x-vue/widgets/post/TwoStoriesThumbnailWithText.vue";
 import PhotoWithTextsAtRight from "@/x-vue/widgets/post/PhotoWithTextsAtRight.vue";
 import FourPhotosWithTextBottom from "@/x-vue/widgets/post/FourPhotosWithTextBottom.vue";
 import PhotoTextsTopPhotosBottom from "@/x-vue/widgets/post/PhotoTextsTopPhotosBottom.vue";
@@ -391,7 +382,7 @@ import TextsTopTwoThumbnailTextBottom from "@/x-vue/widgets/post/TextsTopTwoThum
     TwoByTwoPhotoInlineTextBottom,
     TwoByTwoPhotoTextBottom,
     ThumbnailWithTitleAndContent,
-    TwoStoriesThumbnailWithTitleAndContent,
+    TwoStoriesThumbnailWithText,
     PhotoWithTextsAtRight,
     FourPhotosWithTextBottom,
     PhotoTextsTopPhotosBottom,
