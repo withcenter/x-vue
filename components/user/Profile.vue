@@ -107,6 +107,7 @@ import { ApiService } from "@/x-vue/services/api.service";
 import { RequestData, UserModel } from "@/x-vue/interfaces/interfaces";
 import UploadImage from "@/x-vue/components/file/UploadImage.vue";
 import store from "@/store";
+import ComponentService from "@/x-vue/services/component.service";
 
 @Component({
   components: {
@@ -130,7 +131,7 @@ export default class Profile extends Vue {
     store.commit("user", await this.api.userProfile());
   }
 
-  onSubmit($event: Event): void {
+  async onSubmit($event: Event): Promise<void> {
     let form: RequestData = {
       idx: this.user.idx,
       email: this.user.email,
@@ -147,7 +148,13 @@ export default class Profile extends Vue {
       zipcode: this.user.zipcode,
     };
 
-    this.$emit("submit", $event, form);
+    try {
+      const user = await this.api.profileUpdate(form);
+      store.commit("user", user);
+      this.$emit("submit", $event, form);
+    } catch (e) {
+      ComponentService.instance.error(e);
+    }
   }
 }
 </script>

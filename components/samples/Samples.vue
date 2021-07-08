@@ -19,6 +19,11 @@
           <div class="box-title line">box title</div>
           box contents
         </div>
+        css class: .box.no-border > .box-title.line
+        <div class="box no-border bg-primary">
+          <div class="box-title line">box title</div>
+          box contents
+        </div>
       </div>
     </div>
     <hr />
@@ -90,6 +95,18 @@
     <p>..</p>
     <p>..</p>
 
+    <div class="card mb-2">
+      <div class="card-body">
+        <h5 class="card-title">LatestPostsTextOnly</h5>
+        <p class="card-text">
+          Displays list of latest posts only in text.
+          <br />
+          @property - limit number (10 default)
+        </p>
+        <hr />
+        <LatestPostsTextOnly></LatestPostsTextOnly>
+      </div>
+    </div>
     <div class="card mb-2">
       <div class="card-body">
         <h5 class="card-title">LatestPostsText</h5>
@@ -237,7 +254,7 @@ import TwoStoriesThumbnailWithText from "@/x-vue/widgets/post/TwoStoriesThumbnai
 import PhotoWithTextsAtRight from "@/x-vue/widgets/post/PhotoWithTextsAtRight.vue";
 import FourPhotosWithTextBottom from "@/x-vue/widgets/post/FourPhotosWithTextBottom.vue";
 import PhotoTextsTopPhotosBottom from "@/x-vue/widgets/post/PhotoTextsTopPhotosBottom.vue";
-
+import LatestPostsTextOnly from "@/x-vue/widgets/post/LatestPostsTextOnly.vue";
 @Component({
   components: {
     CameraSvg,
@@ -254,6 +271,7 @@ import PhotoTextsTopPhotosBottom from "@/x-vue/widgets/post/PhotoTextsTopPhotosB
     PhotoWithTextsAtRight,
     FourPhotosWithTextBottom,
     PhotoTextsTopPhotosBottom,
+    LatestPostsTextOnly,
   },
 })
 export default class Samples extends Vue {
