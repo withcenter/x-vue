@@ -62,7 +62,7 @@
         <li>thumbnailHeight: number</li>
       </ul>
       <b-card>
-        <ThumbnailWithTitleAndContent :thumbnailHeight="50" :thumbnailWidth="50"></ThumbnailWithTitleAndContent>
+        <thumbnail-with-text :thumbnailHeight="50" :thumbnailWidth="50"></thumbnail-with-text>
       </b-card>
       <b-card class="mt-1">
         <b-card-title>With thumbnail</b-card-title>
@@ -325,10 +325,46 @@
 
     <div class="card mb-2">
       <div class="card-body">
-        <h5 class="card-title">TextsTopTwoThumbnailTextBottom</h5>
-        <p class="card-text">TextsTopTwoThumbnailTextBottom</p>
+        <h5 class="card-title">TextsTopThumbnailTextListBottom</h5>
+        <p class="card-text">TextsTopThumbnailTextListBottom</p>
         <hr />
-        <TextsTopTwoThumbnailTextBottom></TextsTopTwoThumbnailTextBottom>
+        <TextsTopThumbnailTextListBottom></TextsTopThumbnailTextListBottom>
+      </div>
+    </div>
+
+    <div class="card mb-2">
+      <div class="card-body">
+        <h5 class="card-title">TwoPhotoTopThumbnailsWithTextAndPhotoBottom</h5>
+        <p class="card-text">TwoPhotoTopThumbnailsWithTextAndPhotoBottom</p>
+        <hr />
+        <TwoPhotoTopThumbnailsWithTextAndPhotoBottom></TwoPhotoTopThumbnailsWithTextAndPhotoBottom>
+      </div>
+    </div>
+
+    <div class="card mb-2">
+      <div class="card-body">
+        <h5 class="card-title">TwoColumnStoryGroupA</h5>
+        <p class="card-text">TwoColumnStoryGroupA</p>
+        <hr />
+        <TwoColumnStoryGroupA></TwoColumnStoryGroupA>
+      </div>
+    </div>
+
+    <div class="card mb-2">
+      <div class="card-body">
+        <h5 class="card-title">ThumbnailWithTextListTopTextsBottom</h5>
+        <p class="card-text">ThumbnailWithTextListTopTextsBottom</p>
+        <hr />
+        <ThumbnailWithTextListTopTextsBottom></ThumbnailWithTextListTopTextsBottom>
+      </div>
+    </div>
+
+    <div class="card mb-2">
+      <div class="card-body">
+        <h5 class="card-title">PhotoTextBottomTopThumbnailTextListBottom</h5>
+        <p class="card-text">PhotoTextBottomTopThumbnailTextListBottom</p>
+        <hr />
+        <PhotoTextBottomTopThumbnailTextListBottom></PhotoTextBottomTopThumbnailTextListBottom>
       </div>
     </div>
     <!--  -->
@@ -355,7 +391,7 @@ import PhotoTextBottom from "@/x-vue/widgets/post/PhotoTextBottom.vue";
 import PhotoInlineTextBottom from "@/x-vue/widgets/post/PhotoInlineTextBottom.vue";
 import TwoByTwoPhotoInlineTextBottom from "@/x-vue/widgets/post/TwoByTwoPhotoInlineTextBottom.vue";
 import TwoByTwoPhotoTextBottom from "@/x-vue/widgets/post/TwoByTwoPhotoTextBottom.vue";
-import ThumbnailWithTitleAndContent from "@/x-vue/widgets/post/ThumbnailWithTitleAndContent.vue";
+import ThumbnailWithText from "@/x-vue/widgets/post/ThumbnailWithText.vue";
 import TwoStoriesThumbnailWithText from "@/x-vue/widgets/post/TwoStoriesThumbnailWithText.vue";
 import PhotoWithTextsAtRight from "@/x-vue/widgets/post/PhotoWithTextsAtRight.vue";
 import FourPhotosWithTextBottom from "@/x-vue/widgets/post/FourPhotosWithTextBottom.vue";
@@ -368,7 +404,11 @@ import OneByOnePhotoWithTextsAtBottom from "@/x-vue/widgets/post/OneByOnePhotoWi
 
 import ThumbnailWithTextAtRight from "@/x-vue/widgets/post/ThumbnailWithTextAtRight.vue";
 import ThumbnailWithTextAtRightList from "@/x-vue/widgets/post/ThumbnailWithTextAtRightList.vue";
-import TextsTopTwoThumbnailTextBottom from "@/x-vue/widgets/post/TextsTopTwoThumbnailTextBottom.vue";
+import TextsTopThumbnailTextListBottom from "@/x-vue/widgets/post/TextsTopThumbnailTextListBottom.vue";
+import TwoPhotoTopThumbnailsWithTextAndPhotoBottom from "@/x-vue/widgets/post/TwoPhotoTopThumbnailsWithTextAndPhotoBottom.vue";
+import TwoColumnStoryGroupA from "@/x-vue/widgets/post/TwoColumnStoryGroupA.vue";
+import ThumbnailWithTextListTopTextsBottom from "@/x-vue/widgets/post/ThumbnailWithTextListTopTextsBottom.vue";
+import PhotoTextBottomTopThumbnailTextListBottom from "@/x-vue/widgets/post/PhotoTextBottomTopThumbnailTextListBottom.vue";
 
 @Component({
   components: {
@@ -381,7 +421,7 @@ import TextsTopTwoThumbnailTextBottom from "@/x-vue/widgets/post/TextsTopTwoThum
     PhotoInlineTextBottom,
     TwoByTwoPhotoInlineTextBottom,
     TwoByTwoPhotoTextBottom,
-    ThumbnailWithTitleAndContent,
+    ThumbnailWithText,
     TwoStoriesThumbnailWithText,
     PhotoWithTextsAtRight,
     FourPhotosWithTextBottom,
@@ -393,7 +433,11 @@ import TextsTopTwoThumbnailTextBottom from "@/x-vue/widgets/post/TextsTopTwoThum
     OneByOnePhotoWithTextsAtBottom,
     ThumbnailWithTextAtRight,
     ThumbnailWithTextAtRightList,
-    TextsTopTwoThumbnailTextBottom,
+    TextsTopThumbnailTextListBottom,
+    TwoPhotoTopThumbnailsWithTextAndPhotoBottom,
+    TwoColumnStoryGroupA,
+    ThumbnailWithTextListTopTextsBottom,
+    PhotoTextBottomTopThumbnailTextListBottom,
   },
 })
 export default class Samples extends Vue {

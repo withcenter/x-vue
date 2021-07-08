@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mt-2" v-for="post of posts" :key="post.idx">
+    <div :class="index > 0 ? 'mt-2' : ''" v-for="(post, index) of posts" :key="post.idx">
       <ThumbnailWithTextAndMeta :post="post"></ThumbnailWithTextAndMeta>
     </div>
   </div>

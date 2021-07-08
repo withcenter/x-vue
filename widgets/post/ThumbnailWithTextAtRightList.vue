@@ -1,24 +1,16 @@
 <template>
   <div>
     <ThumbnailWithTextAtRight
-      class="mt-2"
-      v-for="post of posts"
+      :class="index > 0 ? 'mt-2' : ''"
+      v-for="(post, index) of posts"
       :key="post.idx"
       :post="post"
-      :isTwoLine="isTwoLine"
+      :isMultiLine="isMultiLine"
+      :height="itemHeight"
+      :isCenterAligned="isTextCentered"
     ></ThumbnailWithTextAtRight>
   </div>
 </template>
-
-<style lang="scss" scoped>
-.story {
-  height: 70px;
-}
-
-.title {
-  max-height: 3em;
-}
-</style>
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
@@ -38,8 +30,14 @@ export default class ThumbnailWithTextAtRightList extends Vue {
   @Prop({ default: 2 })
   limit!: number;
 
+  @Prop({ default: 70 })
+  itemHeight!: number;
+
   @Prop({ default: false })
-  isTwoLine!: boolean;
+  isMultiLine!: boolean;
+
+  @Prop({ default: true })
+  isTextCentered!: boolean;
 
   posts: PostModel[] = [];
 

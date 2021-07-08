@@ -3,7 +3,11 @@
     <div class="border px-2">
       <PostsTitleList :categoryId="firstCategoryId" :limit="firstLimit" :bulleted="true"></PostsTitleList>
     </div>
-    <ThumbnailWithTextAtRightList :categoryId="secondCategoryId" :limit="secondLimit"></ThumbnailWithTextAtRightList>
+    <ThumbnailWithTextAtRightList
+      class="mt-2"
+      :categoryId="secondCategoryId"
+      :limit="secondLimit"
+    ></ThumbnailWithTextAtRightList>
   </div>
 </template>
 
@@ -17,7 +21,7 @@ import ThumbnailWithTextAtRightList from "./ThumbnailWithTextAtRightList.vue";
 @Component({
   components: { PostsTitleList, ThumbnailWithTextAtRightList },
 })
-export default class TextsTopTwoThumbnailTextBottom extends Vue {
+export default class TextsTopThumbnailTextListBottom extends Vue {
   @Prop()
   firstCategoryId!: string;
   @Prop()

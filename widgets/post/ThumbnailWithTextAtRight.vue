@@ -1,8 +1,13 @@
 <template>
-  <router-link class="story d-flex align-items-center" :to="post.relativeUrl">
+  <router-link
+    class="d-flex"
+    :to="post.relativeUrl"
+    :style="{ height: height + 'px' }"
+    :class="isCenterAligned ? 'align-items-center' : ''"
+  >
     <b-img class="col-3 p-0 h-100" :src="post.files[0].url"></b-img>
     <div class="overflow-hidden">
-      <div class="ml-2 title font-weight-bold" :class="isTwoLine ? '' : 'text-truncate'">
+      <div class="ml-2 title font-weight-bold" :class="isMultiLine ? '' : 'text-truncate'">
         {{ post.title }}
       </div>
     </div>
@@ -10,12 +15,8 @@
 </template>
 
 <style lang="scss" scoped>
-.story {
-  height: 70px;
-}
-
 .title {
-  max-height: 3em;
+  max-height: 4.5em;
 }
 </style>
 
@@ -32,7 +33,13 @@ export default class ThumbnailWithTextAtRight extends Vue {
   })
   post!: PostModel;
 
+  @Prop({ default: 70 })
+  height!: number;
+
   @Prop({ default: false })
-  isTwoLine!: boolean;
+  isMultiLine!: boolean;
+
+  @Prop({ default: true })
+  isCenterAligned!: boolean;
 }
 </script>

@@ -17,22 +17,16 @@ import { ApiService } from "@/x-vue/services/api.service";
 
 // TODO: update UI
 @Component({
-  components: {
-    PostsTitleList,
-  },
+  components: { PostsTitleList },
 })
 export default class PhotoWithTextsAtBottom extends Vue {
   @Prop()
   categoryId!: string;
 
-  @Prop({
-    default: 200,
-  })
+  @Prop({ default: 200 })
   imageHeight!: number;
 
-  @Prop({
-    default: 5,
-  })
+  @Prop({ default: 5 })
   limit!: number;
 
   get src(): string {

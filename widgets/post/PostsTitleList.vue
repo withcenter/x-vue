@@ -34,13 +34,10 @@ import { ApiService } from "@/x-vue/services/api.service";
 export default class PostsTitleList extends Vue {
   @Prop() categoryId!: string;
   @Prop() posts!: PostModel[];
-  @Prop({
-    default: 5,
-  })
+
+  @Prop({ default: 5 })
   limit!: number;
-  @Prop({
-    default: false,
-  })
+  @Prop({ default: false })
   bulleted!: boolean;
 
   postsList: PostModel[] = [];
