@@ -37,7 +37,10 @@ import { CommentModel, PostModel, PostSearchRequest } from "../interfaces/forum.
  *   - Don't move
  *   - Don't save anything.
  *
+ * Don't include `store` for user state magement.
  * It manages user login state in cookie.
+ *
+ *
  *
  */
 export class ApiService {
@@ -78,7 +81,7 @@ export class ApiService {
   // User change callback
   //
   // This will be called on user activities like
-  // - register login, logout, profile update.
+  // - register, login, logout, profile update. But not for profile read.
   //
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   public userChanges: any;
@@ -161,8 +164,6 @@ export class ApiService {
     data.route = route;
     if (this.sessionId) data.sessionId = this.sessionId;
     data.apiKey = this.apiKey;
-
-    console.log("endpoint; ", this.endpoint);
 
     /// try/catch 를 통해서, axios 자체에서 발생하는 에러를 처리하기 위해 사용.
     /// 예) 네트워크 접속 에러 등 처리.
@@ -550,6 +551,10 @@ export class ApiService {
     return new UserModel().fromJson(user);
   }
 
+  /**
+   * Get user profile
+   * @returns User model
+   */
   async userProfile(): Promise<UserModel> {
     const user = await this.request("user.profile");
     return new UserModel().fromJson(user);

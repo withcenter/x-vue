@@ -10,6 +10,7 @@
           ui="circle"
           :userIdx="user.idx"
           code="photoUrl"
+          :defaultImageUrl="user.photoUrl"
           @uploaded="profilePhotoChanged"
           @deleted="profilePhotoChanged"
         ></UploadImage>
@@ -149,9 +150,8 @@ export default class Profile extends Vue {
     };
 
     try {
-      const user = await this.api.profileUpdate(form);
-      store.commit("user", user);
-      this.$emit("submit", $event, form);
+      await this.api.profileUpdate(form);
+      this.$emit("update", $event, form);
     } catch (e) {
       ComponentService.instance.error(e);
     }

@@ -17,7 +17,7 @@
         <CameraSvg class="camera"></CameraSvg>
         <input type="file" @change="onFileChangeImage($event, 'banner')" />
       </div>
-      <div class="trash" @click="onClickDeleteImage">
+      <div class="trash" @click="onClickDeleteImage" v-if="file.idx">
         <TrashSvg class="trash-icon"></TrashSvg>
       </div>
     </section>
@@ -39,6 +39,10 @@
  * 사용 예) 회원 프로필 사진을 수정하려면, 아래와 같이 userIdx 와 code 값만 전달하면 된다.
  * <UploadImage ui="circle" :userIdx="user.idx" code="photoUrl" @uploaded="onProfilePhotoUpload"></UploadImage>
  *
+ * [defaultImageUrl] 은 사진을 업로드 하지 않았을 때, 보여 줄 기본 이미지이다.
+ *   - 카카오톡이나 구글 등 소셜 로그인을 하면, 그 소셜 로그인의 프로필 사진이 사용자 photoUrl 필드에 저장되는데,
+ *     만약, 프로필 사진을 업로드 하지 않았다면, 그 photoUrl 사진을 defaultIamgeUrl 로 넘겨 기본 이미지로
+ *     보여 줄 수 있다.
  */
 import Vue from "vue";
 import { FileModel } from "@/x-vue/interfaces/interfaces";
@@ -57,12 +61,15 @@ export default class UploadImage extends Vue {
   @Prop() entity!: number;
   @Prop() code!: string;
   @Prop() userIdx!: number;
+  @Prop({ default: "" }) defaultImageUrl!: string;
   percent = 0;
-  file: FileModel = {} as FileModel;
+  file: FileModel = new FileModel();
   confirmDelete = translate("do_you_want_to_delete");
   api: ApiService = ApiService.instance;
   async mounted(): Promise<void> {
+    console.log("defaultImageUrl;", this.defaultImageUrl);
     try {
+      // 사진을 백엔드에서 가져온다.
       if (this.entity || this.code || this.userIdx) {
         const req = {
           taxonomy: this.taxonomy,
@@ -73,12 +80,16 @@ export default class UploadImage extends Vue {
 
         console.log("req;; ", req);
         this.file = await this.api.fileGet(req);
+
         console.log("file;", this.file);
       }
     } catch (e) {
       if (e !== "error_entity_not_found") {
         this.$emit("error", e);
       } else {
+        this.file.url = this.defaultImageUrl;
+        // this.$set(this.file, "url", this.defaultImageUrl);
+        // console.log("this.file;, ", this.file);
         console.log("e; ", e);
       }
     }
@@ -92,7 +103,8 @@ export default class UploadImage extends Vue {
     try {
       await this.api.fileDelete(this.file.idx);
       this.$emit("deleted", this.file.idx);
-      this.file = {} as FileModel;
+      this.file = new FileModel();
+      if (this.defaultImageUrl) this.file.url = this.defaultImageUrl;
     } catch (e) {
       this.$emit("error", e);
     }
