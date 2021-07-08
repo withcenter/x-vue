@@ -2,7 +2,7 @@
   <div class="d-flex">
     <div class="col-8 p-0 pr-2">
       <TwoPhotoTopThumbnailsWithTextAndPhotoBottom
-        :topImageHeight="255"
+        :topImageHeight="215"
         :firstCategoryId="firstCategories[0]"
         :secondCategoryId="firstCategories[1]"
         :thirdCategoryId="firstCategories[2]"
@@ -13,7 +13,7 @@
       <TextsTopThumbnailTextListBottom
         :firstCategoryId="secondCategories[0]"
         :secondCategoryId="secondCategories[1]"
-        :firstLimit="8"
+        :firstLimit="7"
       ></TextsTopThumbnailTextListBottom>
     </div>
   </div>

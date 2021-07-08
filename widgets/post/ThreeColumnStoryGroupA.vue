@@ -12,7 +12,7 @@
         <PhotoTextBottom class="p-0" :imageHeight="100" :isMultiLine="false"></PhotoTextBottom>
       </div>
       <PostsTitleList class="mt-2" :bulleted="true" :limit="2"></PostsTitleList>
-      <ThumbnailWithTextAtRight class="border-bottom pb-2"></ThumbnailWithTextAtRight>
+      <ThumbnailWithTextAtRight class="border-bottom mt-2 pb-1"></ThumbnailWithTextAtRight>
       <div class="d-flex mt-2">
         <PhotoTextBottom :imageHeight="100" class="mr-2"></PhotoTextBottom>
         <PhotoTextBottom :imageHeight="100"></PhotoTextBottom>

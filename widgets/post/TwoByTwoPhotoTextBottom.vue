@@ -8,7 +8,7 @@
         :isMultiLine="isMultilineText"
       ></PhotoTextBottom>
       <PhotoTextBottom
-        class="w-50 pl-1"
+        class="w-50 ml-1"
         :imageHeight="imageHeight"
         :post="posts[1]"
         :isMultiLine="isMultilineText"
@@ -22,7 +22,7 @@
         :isMultiLine="isMultilineText"
       ></PhotoTextBottom>
       <PhotoTextBottom
-        class="w-50 pl-1"
+        class="w-50 ml-1"
         :imageHeight="imageHeight"
         :post="posts[3]"
         :isMultiLine="isMultilineText"

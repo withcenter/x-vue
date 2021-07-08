@@ -7,7 +7,7 @@
       :imageHeight="imageHeight"
     ></PhotoWithTextsAtBottom>
     <PhotoWithTextsAtBottom
-      class="ml-1 w-50"
+      class="w-50"
       :categoryId="firstCategoryId"
       :limit="limit"
       :imageHeight="imageHeight"

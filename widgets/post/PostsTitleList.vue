@@ -1,14 +1,24 @@
 <template>
   <div class="posts-title-list">
     <ul class="p-0 m-0" v-if="bulleted">
-      <li class="post-text mb-2 text-truncate" v-for="post of postsList" :key="post.idx">
+      <li
+        class="post-text text-truncate"
+        v-for="(post, index) of postsList"
+        :key="post.idx"
+        :class="index > 0 ? 'mt-2' : ''"
+      >
         <router-link :to="post.relativeUrl">
           {{ post.title }}
         </router-link>
       </li>
     </ul>
     <div v-if="!bulleted">
-      <div class="post-text mb-2 text-truncate" v-for="post of postsList" :key="post.idx">
+      <div
+        class="post-text text-truncate"
+        v-for="(post, index) of postsList"
+        :key="post.idx"
+        :class="index > 0 ? 'mt-2' : ''"
+      >
         <router-link :to="post.relativeUrl">
           {{ post.title }}
         </router-link>

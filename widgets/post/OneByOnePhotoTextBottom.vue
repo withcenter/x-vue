@@ -7,7 +7,7 @@
       :isMultiLine="isMultilineText"
     ></PhotoTextBottom>
     <PhotoTextBottom
-      class="ml-1 w-50"
+      class="w-50"
       :post="postList[1]"
       :imageHeight="imageHeight"
       :isMultiLine="isMultilineText"

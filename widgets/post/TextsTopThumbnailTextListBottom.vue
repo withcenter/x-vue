@@ -1,7 +1,7 @@
 <template>
   <div>
     <PostsTitleList
-      class="border px-2"
+      class="border px-1"
       :categoryId="firstCategoryId"
       :limit="firstLimit"
       :bulleted="true"
