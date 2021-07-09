@@ -49,6 +49,19 @@ export interface MainCafeSettings {
 }
 
 /**
+ * Admin settings
+ */
+export interface Settings {
+  enableLike: "" | "Y" | "N";
+  disableLike: "" | "Y" | "N";
+  privacyPolicy: string;
+  searchCategories: string;
+  termsAndConditions: string;
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  [index: string]: any;
+}
+
+/**
  * cafe settings
  *
  * This setting has all the cafe settings.

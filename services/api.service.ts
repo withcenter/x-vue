@@ -15,6 +15,7 @@ import {
   FileUploadRequest,
   PointHistoryModel,
   UserActivityModel,
+  Settings,
 } from "../interfaces/interfaces";
 
 import Cookies from "js-cookie";
@@ -75,6 +76,10 @@ export class ApiService {
 
   //
   private countries?: ResponseData;
+
+  // 관리자 전체 설정
+  // 앱이 실행 될 때마다 다운로드를 해야 한다.
+  private _settings?: Settings;
 
   public texts: MapStringAny = {};
 
@@ -795,7 +800,7 @@ export class ApiService {
   }
 
   /**
-   * 관리자 설저응ㄹ 삭제한다.
+   * 관리자 설정을 삭제한다.
    * @param code 삭제 할 관리자 설정 코드
    * @returns 에러이면, Exception throw, 성공이면, code
    */
@@ -805,9 +810,14 @@ export class ApiService {
 
   /**
    * 전체 관리자 설정을 가져온다.
+   *
+   * ! It memory-caches.
+   *
    * @returns 전체 관리자 설정
    */
-  settings(): Promise<ResponseData> {
-    return this.request("app.settings");
+  async settings(): Promise<Settings> {
+    if (this._settings) return this._settings;
+    this._settings = (await this.request("app.settings")) as Settings;
+    return this._settings;
   }
 }

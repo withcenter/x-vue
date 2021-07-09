@@ -39,6 +39,11 @@
       <ProductHuntSvg></ProductHuntSvg>
       <SearchSvg></SearchSvg>
       <TrashSvg></TrashSvg>
+
+      <UpArrowSvg></UpArrowSvg>
+      <LeftArrowSvg></LeftArrowSvg>
+      <RightArrowSvg></RightArrowSvg>
+      <DownArrowSvg></DownArrowSvg>
     </div>
 
     <hr />
@@ -574,6 +579,10 @@ import MenuSvg from "@/x-vue/svg/MenuSvg.vue";
 import ProductHuntSvg from "@/x-vue/svg/ProductHuntSvg.vue";
 import SearchSvg from "@/x-vue/svg/SearchSvg.vue";
 import TrashSvg from "@/x-vue/svg/TrashSvg.vue";
+import UpArrowSvg from "@/x-vue/svg/UpArrowSvg.vue";
+import LeftArrowSvg from "@/x-vue/svg/LeftArrowSvg.vue";
+import RightArrowSvg from "@/x-vue/svg/RightArrowSvg.vue";
+import DownArrowSvg from "@/x-vue/svg/DownArrowSvg.vue";
 
 @Component({
   components: {
@@ -587,6 +596,10 @@ import TrashSvg from "@/x-vue/svg/TrashSvg.vue";
     ProductHuntSvg,
     SearchSvg,
     TrashSvg,
+    UpArrowSvg,
+    LeftArrowSvg,
+    RightArrowSvg,
+    DownArrowSvg,
     UploadButton,
     FileUploadButton,
     PostTitle,
