@@ -87,7 +87,7 @@
         <li>thumbnailHeight: number</li>
       </ul>
       <b-card>
-        <thumbnail-with-text :thumbnailHeight="50" :thumbnailWidth="50"></thumbnail-with-text>
+        <thumbnail-with-text :thumbnailHeight="75" :thumbnailWidth="75"></thumbnail-with-text>
       </b-card>
       <b-card class="mt-1">
         <b-card-title>With thumbnail</b-card-title>

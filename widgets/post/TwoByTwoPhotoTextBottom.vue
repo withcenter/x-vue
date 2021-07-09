@@ -2,7 +2,7 @@
   <div class="two-by-two-thumbnail-with-text-bottom w-100">
     <div class="top d-flex">
       <PhotoTextBottom
-        class="w-50"
+        class="w-50 mr-1"
         :imageHeight="imageHeight"
         :post="posts[0]"
         :isMultiLine="isMultilineText"
@@ -16,7 +16,7 @@
     </div>
     <div class="mt-1 bottom d-flex">
       <PhotoTextBottom
-        class="w-50"
+        class="w-50 mr-1"
         :imageHeight="imageHeight"
         :post="posts[2]"
         :isMultiLine="isMultilineText"
