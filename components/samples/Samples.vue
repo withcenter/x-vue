@@ -387,7 +387,11 @@
           isTwoLine boolean (false default) - if true, 2 lines of text will be shown if it can't fit in one line.
         </p>
         <hr />
+        Single line
         <ThumbnailWithTextAtRight></ThumbnailWithTextAtRight>
+        <hr />
+        Multi line
+        <ThumbnailWithTextAtRight :isMultiLine="true"></ThumbnailWithTextAtRight>
       </div>
     </div>
 
