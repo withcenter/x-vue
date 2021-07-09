@@ -1,5 +1,6 @@
 import router from "@/router";
 import { PostModel } from "../interfaces/forum.interface";
+import { translate } from "./functions";
 export interface ConfirmToast {
   title: string;
   message: string;
@@ -59,14 +60,14 @@ export default class ComponentService {
 
   alert(title: string, message: string): Promise<void> {
     if (this.options.alert) {
-      return this.options.alert(title, message);
+      return this.options.alert(translate(title), translate(message));
     } else {
-      alert(title + "\n" + message);
+      alert(translate(title) + "\n" + translate(message));
       return Promise.resolve();
     }
   }
   error(e: string): Promise<void> {
-    return this.alert("Error", e);
+    return this.alert("error", e);
   }
   confirm(title: string, message: string): Promise<boolean | null> {
     if (this.options.confirm) {

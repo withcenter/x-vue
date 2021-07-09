@@ -127,6 +127,8 @@ new Vue({
 
 - You can also use `translate` function from `functions.ts`.
 
+- `ComponentService.alert` is using `translate` function by default. So, if you are using it directly or from helpers, you don't have to manually call `translate` any more.
+
 ```ts
 export default class UploadImage extends Vue {
   confirmDelete = translate("do_you_want_to_delete");

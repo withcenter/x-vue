@@ -112,6 +112,7 @@ export function yymmddhma(s: number): string {
 
 export function translate(code: string): string {
   if (!code) return "";
+
   const texts = ApiService.instance.texts;
   if (!ApiService.instance.texts) return code;
   if (!texts[code]) return code;
