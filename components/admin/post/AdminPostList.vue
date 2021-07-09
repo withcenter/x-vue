@@ -56,7 +56,6 @@
         <template #cell(user)="row">
           <div class="d-flex">
             <UserAvatar :parent="row.item"></UserAvatar>
-            <!-- <b-avatar class="mr-1" :src="row.item.user.photoUrl"></b-avatar> -->
             <router-link :to="'/admin/user/edit/' + row.item.user.idx">
               <div>{{ row.item.user.name }}</div>
               <div>idx: {{ row.item.user.idx }}</div>

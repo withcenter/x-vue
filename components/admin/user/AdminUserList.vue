@@ -1,28 +1,26 @@
 <template>
   <div>
     <h4>{{ "Users" | t }}</h4>
-    <div class="d-flex justify-content-end mb-3">
-      <div class="mt-2 fw-700">{{ "no_of_users" | t }}: {{ total }}</div>
-
-      <span class="flex-grow-1"></span>
-
+    <div class="mb-3">
+      <div class="my-2 fw-700">{{ "no_of_users" | t }}: {{ total }}</div>
       <form @submit.prevent="onSubmitSearch">
-        <div class="form-row align-items-center">
-          <div class="col-auto">
-            <input
-              type="text"
-              class="form-control mb-2"
-              name="searchKey"
-              :placeholder="'enter_email_address_or_name' | t"
-              v-model="searchKey"
-            />
-          </div>
-          <div class="col-auto">
-            <button type="submit" class="btn btn-primary mb-2">
-              {{ "submit" | t }}
-            </button>
-          </div>
-        </div>
+        <b-row no-gutters>
+          <b-col>
+            <b-input-group class="pr-2" size="sm" prepend="limit">
+              <b-form-input id="limit" v-model="limit" placeholder="limit"></b-form-input> </b-input-group
+          ></b-col>
+          <b-col cols="8">
+            <b-input-group class="pr-2" size="sm" prepend="searchkey">
+              <b-form-input
+                id="searchKey"
+                v-model="searchKey"
+                :placeholder="'enter_email_address_or_name' | t"
+              ></b-form-input> </b-input-group
+          ></b-col>
+          <b-col>
+            <b-button type="submit" class="w-100" size="sm" variant="primary">{{ "submit" | t }}</b-button></b-col
+          >
+        </b-row>
       </form>
     </div>
 
@@ -48,9 +46,54 @@
           :items="users"
           :fields="visibleFields"
           :busy="loading"
-          :bordered="true"
+          :bordered="false"
           responsive="true"
         >
+          <template #head()="scope">
+            <div class="text-nowrap">{{ scope.label | t }}</div>
+          </template>
+          <template #cell(user)="row">
+            <div class="d-flex align-items-center">
+              <b-avatar class="mr-1" :src="row.item.photoUrl"></b-avatar>
+              <router-link :to="'/admin/user/edit/' + row.item.idx">
+                <div>({{ row.item.idx }}) {{ row.item.name }}</div>
+                <div>{{ row.item.email }}</div>
+              </router-link>
+            </div>
+          </template>
+
+          <template #cell(block)="row">
+            {{ row.item.block ? "block" : "active" | t }}
+          </template>
+
+          <template #cell(action)="row">
+            <div class="d-flex align-item-center text-nowrap">
+              <button class="btn btn-sm btn-secondary mr-1" @click="row.toggleDetails">&#128462;</button>
+              <router-link class="btn btn-sm btn-outline-primary" :to="editLink(row.item)">&#9999;</router-link>
+            </div>
+          </template>
+
+          <template #row-details="row">
+            <b-card class="p-0 text-left">
+              <b-row cols="4">
+                <b-col>idx: {{ row.item.idx }}</b-col>
+                <b-col>name: {{ row.item.name }}</b-col>
+                <b-col>nickname: {{ row.item.nickname }}</b-col>
+                <b-col>email: {{ row.item.email }}</b-col>
+              </b-row>
+              <b-row cols="4">
+                <b-col>phone: {{ row.item.phone }}</b-col>
+                <b-col>gender: {{ row.item.gender }}</b-col>
+                <b-col>birthdate: {{ row.item.birthdate }}</b-col>
+                <b-col>countryCode: {{ row.item.countryCode }}</b-col>
+              </b-row>
+              <div>city: {{ row.item.city }}</div>
+              <div>address: {{ row.item.address }}</div>
+              <div>createdAt: {{ row.item.createdAt }}</div>
+              <div>updatedAt: {{ row.item.updatedAt }}</div>
+            </b-card>
+          </template>
+
           <template #table-busy>
             <div class="text-center text-danger my-2">
               <b-spinner class="align-middle mr-2"></b-spinner>
@@ -61,14 +104,7 @@
       </section>
     </div>
 
-    <!-- <router-link
-                  data-cy="user-info-edit-button"
-                  class="btn btn-sm btn-outline-primary"
-                  :to="editLink(user)"
-                >
-                  {{ "edit" | t }}
-                </router-link> -->
-    <div class="overflow-auto">
+    <div class="overflow-auto" v-if="noOfPages > 0">
       <b-pagination-nav
         :link-gen="linkGen"
         :number-of-pages="noOfPages"
@@ -101,24 +137,22 @@ export default class AdminUserList extends Vue {
   loading = false;
 
   fields: Array<{ [index: string]: unknown }> = [
-    { key: "email", visible: true },
+    { key: "user", visible: true },
     { key: "firebaseUid", visible: false },
-    { key: "name", visible: true },
     { key: "nickname", visible: true },
-    { key: "point", visible: true },
+    { key: "point", visible: true, sortable: true },
     { key: "phoneNo", visible: true },
-    { key: "gender", visible: true },
+    { key: "gender", visible: false },
     { key: "birthdate", visible: false },
-    { key: "countryCode", visible: false },
+    { key: "countryCode", label: "country_code", visible: false },
+    { key: "province", visible: false },
     { key: "city", visible: false },
     { key: "address", visible: false },
     { key: "zipcode", visible: false },
-    { key: "createdAt", visible: false },
-    { key: "updatedAt", visible: false },
-    {
-      key: "action",
-      visible: true,
-    },
+    { key: "createdAt", label: "Registered", visible: false },
+    { key: "updatedAt", label: "Updated", visible: false },
+    { key: "block", label: "Status", visible: true },
+    { key: "action", visible: true },
   ];
 
   get visibleFields(): Array<{ [index: string]: unknown }> {

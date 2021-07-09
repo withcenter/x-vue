@@ -2,6 +2,8 @@
  * @see README 참고
  */
 
+import { PostModel } from "./forum.interface";
+
 //
 export interface MapStringAny {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -186,6 +188,12 @@ export class FileModel {
   createdAt = 0;
   updatedAt = 0;
 
+  shortDate = "";
+
+  user: UserModel = {} as UserModel;
+
+  post: PostModel = {} as PostModel;
+
   fromJson(map: ResponseData): FileModel {
     this.idx = map.idx;
     this.url = map.url;
@@ -200,6 +208,18 @@ export class FileModel {
     this.taxonomy = map.taxonomy;
     this.createdAt = map.createdAt;
     this.updatedAt = map.updatedAt;
+
+    this.shortDate = map.shortDate;
+
+    // user
+    if (map.user) {
+      this.user = new UserModel().fromJson(map.user);
+    }
+
+    // post with idx, title, content
+    if (map.post) {
+      this.post = new PostModel().fromJson(map.post);
+    }
     return this;
   }
 }
