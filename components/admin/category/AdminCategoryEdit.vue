@@ -370,6 +370,7 @@ export default class AdminCategoryEdit extends Vue {
 
   async onSubmit(): Promise<void> {
     let options: RequestData = {
+      idx: this.category.idx,
       id: this.category.id,
       title: this.category.title,
       description: this.category.description,

@@ -27,78 +27,57 @@
     </form>
 
     <div class="p-1 mb-3 border-radius-sm" style="border: 1px solid #e8e8e8">
-      <div class="m-2">{{ "Fields" | t }}</div>
-      <div
-        class="custom-control custom-checkbox custom-control-inline m-2 fs-sm align-middle"
-        v-for="(field, key) in fields"
-        :key="key"
+      <b-checkbox
+        size="sm"
+        :disabled="visibleFields.length == 1 && field.visible"
+        v-for="field in fields"
+        :key="field.key"
+        v-model="field.visible"
+        inline
       >
-        <input
-          :data-cy="key + '-field'"
-          type="checkbox"
-          class="custom-control-input"
-          :id="key + '-field'"
-          v-model="fields[key]"
-        />
-        <label class="custom-control-label text-capitalize" :for="key + '-field'">{{ key }}</label>
-      </div>
+        {{ field.label || field.key | t }}
+      </b-checkbox>
     </div>
-    <section class="overflow-auto">
-      <table class="table table-striped mt-2 text-center">
-        <thead class="thead-dark">
-          <tr class="fs-sm">
-            <th scope="col" v-if="fields.idx">{{ "idx" | t }}</th>
-            <th scope="col" v-if="fields.action">{{ "action" | t }}</th>
-            <th scope="col" v-if="fields.taxonomy">{{ "taxonomy" | t }}</th>
-            <th scope="col" v-if="fields.from_user">{{ "from_user" | t }}</th>
-            <th scope="col" v-if="fields.from_point_apply">{{ "from_point_apply" | t }}</th>
-            <th scope="col" v-if="fields.from_point_after">{{ "from_point_after" | t }}</th>
-            <th scope="col" v-if="fields.to_user">{{ "to_user" | t }}</th>
-            <th scope="col" v-if="fields.to_point_apply">{{ "to_point_apply" | t }}</th>
-            <th scope="col" v-if="fields.to_point_after">{{ "to_point_after" | t }}</th>
-            <th scope="col" v-if="fields.date">{{ "Date" | t }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="history of pointHistories" :key="history.idx">
-            <td v-if="fields.idx">
-              {{ history.idx }}
-            </td>
-            <td v-if="fields.action">
-              {{ history.action }}
-            </td>
-            <td v-if="fields.taxonomy">
-              <a target="__blank" :href="'/' + history.entity">{{ history.taxonomy }}</a>
-            </td>
-            <td v-if="fields.from_user">
-              <router-link :to="'/admin/user/edit/' + history.fromUserIdx">
-                ({{ history.fromUserIdx }}) {{ history.fromUser.nickname }}
-              </router-link>
-            </td>
-            <td v-if="fields.from_point_apply">
-              {{ history.fromUserPointApply }}
-            </td>
-            <td v-if="fields.from_point_after">
-              {{ history.fromUserPointAfter }}
-            </td>
-            <td v-if="fields.to_user">
-              <router-link :to="'/admin/user/edit/' + history.toUserIdx">
-                ({{ history.toUserIdx }}) {{ history.toUser.nickname }}
-              </router-link>
-            </td>
-            <td v-if="fields.to_point_apply">
-              {{ history.toUserPointApply }}
-            </td>
-            <td v-if="fields.to_point_after">
-              {{ history.toUserPointAfter }}
-            </td>
 
-            <td v-if="fields.date">
-              {{ date(history.createdAt) }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <section class="overflow-auto mb-3">
+      <b-table
+        small
+        striped
+        hover
+        :items="pointHistories"
+        :fields="visibleFields"
+        :busy="loading"
+        :bordered="true"
+        responsive="true"
+      >
+        <template #head()="scope">
+          <div class="text-nowrap">{{ scope.label | t }}</div>
+        </template>
+
+        <template #cell(taxonomy)="row">
+          <a target="__blank" :href="'/' + row.item.entity">{{ row.item.taxonomy }}</a>
+        </template>
+
+        <template #cell(fromUser)="row">
+          <router-link v-if="row.item.fromUserIdx" :to="'/admin/user/edit/' + row.item.fromUserIdx">
+            ({{ row.item.fromUserIdx }}) {{ row.item.fromUser.nickname }}
+          </router-link>
+        </template>
+
+        <template #cell(toUser)="row">
+          <router-link :to="'/admin/user/edit/' + row.item.toUserIdx">
+            ({{ row.item.toUserIdx }}) {{ row.item.toUser.nickname }}
+          </router-link>
+        </template>
+
+        <template #cell(createdAt)="row">
+          {{ date(row.item.createdAt) }}
+        </template>
+
+        <template #table-busy>
+          <Loading></Loading>
+        </template>
+      </b-table>
 
       <div class="alert alert-info" v-if="!pointHistories.length">No records found.</div>
     </section>
@@ -112,7 +91,12 @@ import { yymmddhma } from "@/x-vue/services/functions";
 import dayjs from "dayjs";
 import { Component, Vue } from "vue-property-decorator";
 
-@Component({})
+import Loading from "@/x-vue/widgets/common/Loading.vue";
+@Component({
+  components: {
+    Loading,
+  },
+})
 export default class AdminUserActivityList extends Vue {
   pointHistories: Array<UserActivityModel> = [];
 
@@ -127,18 +111,24 @@ export default class AdminUserActivityList extends Vue {
     endDate: this.beginAtMax,
   };
 
-  fields = {
-    idx: false,
-    action: true,
-    taxonomy: true,
-    from_user: true,
-    from_point_apply: true,
-    from_point_after: false,
-    to_user: true,
-    to_point_apply: true,
-    to_point_after: false,
-    date: true,
-  };
+  loading = false;
+
+  fields: Array<{ [index: string]: unknown }> = [
+    { key: "idx", visible: false },
+    { key: "action", visible: true },
+    { key: "taxonomy", visible: true },
+    { key: "fromUser", visible: true, class: "text-nowrap" },
+    { key: "fromUserPointApply", label: "From point apply", visible: true },
+    { key: "fromUserPointAfter", visible: false },
+    { key: "toUser", visible: true, class: "text-nowrap" },
+    { key: "toUserPointApply", label: "To point apply", visible: true },
+    { key: "toUserPointAfter", visible: false },
+    { key: "createdAt", label: "Date", visible: true },
+  ];
+
+  get visibleFields(): Array<{ [index: string]: unknown }> {
+    return this.fields.filter((field) => field.visible);
+  }
 
   mounted(): void {
     this.search();
@@ -146,6 +136,9 @@ export default class AdminUserActivityList extends Vue {
 
   async search(): Promise<void> {
     if (dayjs(this.options.beginDate).diff(dayjs(this.options.endDate), "d") > 0) return;
+
+    if (this.loading) return;
+    this.loading = true;
     // console.log("search():", this.options);
     try {
       this.pointHistories = await ApiService.instance.userActivityList(this.options);
@@ -153,7 +146,7 @@ export default class AdminUserActivityList extends Vue {
     } catch (e) {
       this.$emit("error", e);
     }
-    return;
+    this.loading = false;
   }
 
   date(s: number): string {

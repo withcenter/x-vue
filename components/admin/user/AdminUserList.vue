@@ -1,135 +1,111 @@
 <template>
   <div>
     <h4>{{ "Users" | t }}</h4>
-    <div class="d-flex justify-content-end mb-3">
-      <div class="mt-2 fw-700">{{ "no_of_users" | t }}: {{ total }}</div>
-
-      <span class="flex-grow-1"></span>
-
+    <div class="mb-3">
+      <div class="my-2 fw-700">{{ "no_of_users" | t }}: {{ total }}</div>
       <form @submit.prevent="onSubmitSearch">
-        <div class="form-row align-items-center">
-          <div class="col-auto">
-            <input
-              type="text"
-              class="form-control mb-2"
-              name="searchKey"
-              :placeholder="'enter_email_address_or_name' | t"
-              v-model="searchKey"
-            />
-          </div>
-          <div class="col-auto">
-            <button type="submit" class="btn btn-primary mb-2">
-              {{ "submit" | t }}
-            </button>
-          </div>
-        </div>
+        <b-row no-gutters>
+          <b-col>
+            <b-input-group class="pr-2" size="sm" prepend="limit">
+              <b-form-input id="limit" v-model="limit" placeholder="limit"></b-form-input> </b-input-group
+          ></b-col>
+          <b-col cols="8">
+            <b-input-group class="pr-2" size="sm" prepend="searchkey">
+              <b-form-input
+                id="searchKey"
+                v-model="searchKey"
+                :placeholder="'enter_email_address_or_name' | t"
+              ></b-form-input> </b-input-group
+          ></b-col>
+          <b-col>
+            <b-button type="submit" class="w-100" size="sm" variant="primary">{{ "submit" | t }}</b-button></b-col
+          >
+        </b-row>
       </form>
     </div>
 
-    <div v-if="users">
+    <div>
       <div class="p-1 mb-3 border-radius-sm" style="border: 1px solid #e8e8e8">
-        <div class="m-2">{{ "Fields" | t }}</div>
-        <div
-          class="custom-control custom-checkbox custom-control-inline m-2 fs-sm align-middle"
-          v-for="(option, key) in options"
-          :key="key"
+        <b-checkbox
+          size="sm"
+          :disabled="visibleFields.length == 1 && field.visible"
+          v-for="field in fields"
+          :key="field.key"
+          v-model="field.visible"
+          inline
         >
-          <input
-            :data-cy="key + '-option'"
-            type="checkbox"
-            class="custom-control-input"
-            :id="key + '-option'"
-            v-model="options[key]"
-          />
-          <label class="custom-control-label text-capitalize" :for="key + '-option'">{{ key }}</label>
-        </div>
+          {{ field.label || field.key | t }}
+        </b-checkbox>
       </div>
-      <section class="overflow-auto">
-        <table class="table table-striped fs-sm">
-          <thead class="thead-dark">
-            <tr>
-              <th class="align-middle" scope="col">#</th>
-              <th class="align-middle" data-cy="firebaseUid-col-header" scope="col" v-if="options.email">
-                {{ "email" | t }}
-              </th>
-              <th class="align-middle" scope="col" v-if="options.firebaseUid">
-                {{ "firebase_uid" | t }}
-              </th>
-              <th class="align-middle" scope="col" v-if="options.name">
-                {{ "name" | t }}
-              </th>
-              <th class="align-middle" scope="col" v-if="options.nickname">
-                {{ "nickname" | t }}
-              </th>
-              <th class="align-middle" scope="col" v-if="options.point">
-                {{ "point" | t }}
-              </th>
-              <th class="align-middle" scope="col" v-if="options.phoneNo">
-                {{ "phone_no" | t }}
-              </th>
-              <th class="align-middle" data-cy="gender-col-header" scope="col" v-if="options.gender">
-                {{ "gender" | t }}
-              </th>
-              <th class="align-middle" scope="col" v-if="options.birthdate">
-                {{ "birthdate" | t }}
-              </th>
-              <th class="align-middle" scope="col" v-if="options.countryCode">
-                {{ "country_code" | t }}
-              </th>
-              <th class="align-middle" scope="col" v-if="options.province">
-                {{ "province" | t }}
-              </th>
-              <th class="align-middle" scope="col" v-if="options.city">
-                {{ "city" | t }}
-              </th>
-              <th class="align-middle" scope="col" v-if="options.address">
-                {{ "address" | t }}
-              </th>
-              <th class="align-middle" scope="col" v-if="options.zipcode">
-                {{ "zipcode" | t }}
-              </th>
-              <th class="align-middle" scope="col" v-if="options.createdAt">
-                {{ "created_at" | t }}
-              </th>
-              <th class="align-middle" scope="col" v-if="options.updatedAt">
-                {{ "updated_at" | t }}
-              </th>
-              <th class="align-middle" scope="col">{{ "edit" | t }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="user of users" :key="user.idx">
-              <th scope="row">{{ user.idx }}</th>
-              <td v-if="options.email">{{ user.email }}</td>
-              <td v-if="options.firebaseUid">{{ user.firebaseUid }}</td>
-              <td v-if="options.name">{{ user.name }}</td>
-              <td v-if="options.nickname">{{ user.nickname }}</td>
-              <td v-if="options.point">{{ user.point }}</td>
-              <td v-if="options.phoneNo">{{ user.phoneNo }}</td>
-              <td v-if="options.gender">{{ user.gender }}</td>
-              <td v-if="options.birthdate">{{ user.birthdate }}</td>
-              <td v-if="options.countryCode">{{ user.countryCode }}</td>
-              <td v-if="options.province">{{ user.province }}</td>
-              <td v-if="options.city">{{ user.city }}</td>
-              <td v-if="options.address">{{ user.address }}</td>
-              <td v-if="options.zipcode">{{ user.zipcode }}</td>
-              <td v-if="options.createdAt">{{ user.createdAtShortDate }}</td>
-              <td v-if="options.updatedAt">{{ user.updatedAtShortDate }}</td>
-              <td>
-                <router-link
-                  data-cy="user-info-edit-button"
-                  class="btn btn-sm btn-outline-primary"
-                  :to="editLink(user)"
-                >
-                  {{ "edit" | t }}
-                </router-link>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <section class="overflow-auto mb-3">
+        <b-table
+          small
+          striped
+          hover
+          :items="users"
+          :fields="visibleFields"
+          :busy="loading"
+          :bordered="true"
+          responsive="true"
+        >
+          <template #head()="scope">
+            <div class="text-nowrap">{{ scope.label | t }}</div>
+          </template>
+          <template #cell(user)="row">
+            <div class="d-flex align-items-center">
+              <b-avatar class="mr-1" :src="row.item.photoUrl"></b-avatar>
+              <router-link :to="'/admin/user/edit/' + row.item.idx">
+                <div>({{ row.item.idx }}) {{ row.item.name }}</div>
+                <div>{{ row.item.email }}</div>
+              </router-link>
+            </div>
+          </template>
+
+          <template #cell(block)="row">
+            {{ row.item.block ? "block" : "active" | t }}
+          </template>
+
+          <template #cell(action)="row">
+            <div class="d-flex justify-content-around text-nowrap">
+              <button class="btn btn-sm btn-outline-info mr-1" @click="row.toggleDetails">
+                {{ row.detailsShowing ? "&#11161;" : "&#11163;" }}
+              </button>
+              <router-link class="btn btn-sm btn-outline-primary" :to="editLink(row.item)">&#9999;</router-link>
+            </div>
+          </template>
+
+          <template #row-details="row">
+            <b-card body-class="p-1 text-left">
+              <b-row>
+                <b-col>idx: {{ row.item.idx }}</b-col>
+                <b-col>name: {{ row.item.name }}</b-col>
+                <b-col>nickname: {{ row.item.nickname }}</b-col>
+              </b-row>
+              <b-row>
+                <b-col>email: {{ row.item.email }}</b-col>
+                <b-col>phone: {{ row.item.phone }}</b-col>
+                <b-col>gender: {{ row.item.gender }}</b-col>
+              </b-row>
+
+              <b-row>
+                <b-col>city: {{ row.item.city }}</b-col>
+                <b-col>countryCode: {{ row.item.countryCode }}</b-col>
+                <b-col>birthdate: {{ row.item.birthdate }}</b-col>
+              </b-row>
+              <div>address: {{ row.item.address }}</div>
+              <div>createdAt: {{ row.item.createdAt }}</div>
+              <div>updatedAt: {{ row.item.updatedAt }}</div>
+            </b-card>
+          </template>
+
+          <template #table-busy>
+            <Loading variant="danger"></Loading>
+          </template>
+        </b-table>
       </section>
     </div>
-    <div class="overflow-auto">
+
+    <div class="overflow-auto" v-if="noOfPages > 0">
       <b-pagination-nav
         :link-gen="linkGen"
         :number-of-pages="noOfPages"
@@ -148,7 +124,12 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import Service from "../../../services/component.service";
 
-@Component({})
+import Loading from "@/x-vue/widgets/common/Loading.vue";
+@Component({
+  components: {
+    Loading,
+  },
+})
 export default class AdminUserList extends Vue {
   s = Service.instance;
   users: Array<UserModel> = [];
@@ -159,23 +140,30 @@ export default class AdminUserList extends Vue {
   noOfPages = 10;
   currentPage = "1";
 
-  options = {
-    email: true,
-    firebaseUid: false,
-    name: true,
-    nickname: true,
-    point: true,
-    phoneNo: true,
-    gender: false,
-    birthdate: false,
-    countryCode: false,
-    province: false,
-    city: false,
-    address: false,
-    zipcode: false,
-    createdAt: false,
-    updatedAt: false,
-  };
+  loading = false;
+
+  fields: Array<{ [index: string]: unknown }> = [
+    { key: "user", visible: true },
+    { key: "firebaseUid", visible: false },
+    { key: "nickname", visible: true },
+    { key: "point", visible: true, sortable: true },
+    { key: "phoneNo", visible: true },
+    { key: "gender", visible: false },
+    { key: "birthdate", visible: false },
+    { key: "countryCode", label: "country_code", visible: false },
+    { key: "province", visible: false },
+    { key: "city", visible: false },
+    { key: "address", visible: false },
+    { key: "zipcode", visible: false },
+    { key: "createdAt", label: "Registered", visible: false },
+    { key: "updatedAt", label: "Updated", visible: false },
+    { key: "block", label: "Status", visible: true, sortable: true },
+    { key: "action", visible: true, class: "text-center" },
+  ];
+
+  get visibleFields(): Array<{ [index: string]: unknown }> {
+    return this.fields.filter((field) => field.visible);
+  }
 
   editLink(user: UserModel): string {
     return "/admin/user/edit/" + user.idx + window.location.search;
@@ -197,6 +185,8 @@ export default class AdminUserList extends Vue {
   }
 
   async onSubmitSearch(): Promise<void> {
+    if (this.loading) return;
+    this.loading = true;
     try {
       this.users = await ApiService.instance.userSearch({
         searchKey: this.searchKey,
@@ -212,6 +202,7 @@ export default class AdminUserList extends Vue {
     } catch (e) {
       this.s.error(e);
     }
+    this.loading = false;
   }
 }
 </script>

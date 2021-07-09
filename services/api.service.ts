@@ -746,6 +746,16 @@ export class ApiService {
     return new FileModel().fromJson(res);
   }
 
+  async fileSearch(data: RequestData): Promise<FileModel[]> {
+    const res = await this.request("file.search", data);
+    return res.map((file: JSON) => new FileModel().fromJson(file));
+  }
+
+  async fileCount(data: RequestData): Promise<number> {
+    const res = await this.request("file.count", data);
+    return res && res.count ? res.count : 0;
+  }
+
   openWeatherMap(): Promise<ResponseData> {
     return this.request("open-weather-map.current");
   }
