@@ -1,9 +1,9 @@
 <template>
-  <div class="text-center">
+  <router-link class="text-center" :to="story.relativeUrl">
     <h3 class="title overflow-hidden">{{ story.title }}</h3>
     <h5 class="content text-truncate">{{ story.content }}</h5>
     <b-img class="w-100 mt-2" :src="src" :style="{ height: imageHeight + 'px' }"></b-img>
-  </div>
+  </router-link>
 </template>
 
 <style lang="scss" scoped>
