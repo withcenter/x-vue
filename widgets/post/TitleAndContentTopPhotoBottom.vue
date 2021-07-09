@@ -8,7 +8,7 @@
 
 <style lang="scss" scoped>
 .title {
-  max-height: 2.5em;
+  max-height: 2.4em;
 }
 </style>
 
@@ -23,7 +23,7 @@ import ComponentService from "@/x-vue/services/component.service";
 export default class TitleAndContentTopPhotoBottom extends Vue {
   @Prop() categoryId!: string;
 
-  @Prop({ default: 200 }) imageHeight!: string;
+  @Prop({ default: 210 }) imageHeight!: string;
 
   @Prop({ default: () => ComponentService.instance.temporaryPost() })
   post!: PostModel;

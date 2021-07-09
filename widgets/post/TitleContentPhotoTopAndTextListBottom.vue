@@ -34,6 +34,6 @@ export default class TitleContentPhotoTopAndTextListBottom extends Vue {
   @Prop() firstCategoryId!: string;
   @Prop() secondCategoryId!: string;
   @Prop({ default: 3 }) bottomListLimit!: number;
-  @Prop({ default: 208 }) imageHeight!: number;
+  @Prop({ default: 210 }) imageHeight!: number;
 }
 </script>
