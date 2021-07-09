@@ -14,14 +14,9 @@
   </router-link>
 </template>
 
-<style lang="scss" scoped>
-.title {
-  max-height: 4.5em;
-}
-</style>
-
 <script lang="ts">
 import { PostModel } from "@/x-vue/interfaces/forum.interface";
+import { ApiService } from "@/x-vue/services/api.service";
 import ComponentService from "@/x-vue/services/component.service";
 import { Vue, Component, Prop } from "vue-property-decorator";
 
@@ -33,13 +28,30 @@ export default class ThumbnailWithTextAtRight extends Vue {
   })
   post!: PostModel;
 
-  @Prop({ default: 70 })
-  height!: number;
+  @Prop() categoryId!: string;
+  @Prop({ default: 70 }) height!: number;
+  @Prop({ default: false }) isMultiLine!: boolean;
+  @Prop({ default: true }) isCenterAligned!: boolean;
 
-  @Prop({ default: false })
-  isMultiLine!: boolean;
+  story: PostModel = new PostModel();
 
-  @Prop({ default: true })
-  isCenterAligned!: boolean;
+  mounted(): void {
+    if (this.post) {
+      this.story = this.post;
+    } else if (this.categoryId) {
+      this.loadPosts();
+    } else {
+      this.story = ComponentService.instance.temporaryPost();
+    }
+  }
+
+  async loadPosts(): Promise<void> {
+    try {
+      const res = await ApiService.instance.postSearch({ categoryId: this.categoryId, limit: 1, files: "Y" });
+      this.story = res[0];
+    } catch (e) {
+      ComponentService.instance.error(e);
+    }
+  }
 }
 </script>

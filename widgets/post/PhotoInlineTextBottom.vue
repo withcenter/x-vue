@@ -36,18 +36,17 @@ export default class PhotoInlineTextBottom extends Vue {
   @Prop() categoryId!: string;
   @Prop({ default: 200 }) imageHeight!: number;
   @Prop({ default: true }) isMultiLine!: boolean;
-  @Prop({
-    default: () => ComponentService.instance.temporaryPost(),
-  })
-  post!: PostModel;
+  @Prop() post!: PostModel;
 
   story: PostModel = new PostModel();
 
   mounted(): void {
-    if (this.categoryId) {
+    if (this.post) {
+      this.story = this.post;
+    } else if (this.categoryId) {
       this.loadPost();
     } else {
-      this.story = this.post;
+      this.story = ComponentService.instance.temporaryPost();
     }
   }
 

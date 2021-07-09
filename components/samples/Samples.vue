@@ -116,13 +116,13 @@
         <p class="card-text">
           Display list of post title.
           <br />
-          @property - categoryId string
+          categoryId string
           <br />
-          @property - limit number (5 default)
+          limit number (5 default)
           <br />
-          @property - posts PostModel[]
+          posts PostModel[]
           <br />
-          @property - bulleted boolean (true default)
+          bulleted boolean (true default)
         </p>
         <hr />
         Without Bullet
@@ -139,7 +139,7 @@
         <p class="card-text">
           Displays list of latest posts only in text.
           <br />
-          @property - limit number (10 default)
+          limit number (10 default)
         </p>
         <hr />
         <LatestPostsTextOnly></LatestPostsTextOnly>
@@ -151,7 +151,7 @@
         <p class="card-text">
           Displays list of latest posts only in text.
           <br />
-          @property - limit number (10 default)
+          limit number (10 default)
         </p>
         <hr />
         <LatestPostsText :title="'Latest Post'"></LatestPostsText>
@@ -164,9 +164,9 @@
         <p class="card-text">
           Displays thumbnail with text at bottom of image.
           <br />
-          @property - post PostModel
+          post PostModel
           <br />
-          @property - imageHeight number (200 default)
+          imageHeight number (200 default)
         </p>
         <hr />
         <PhotoTextBottom></PhotoTextBottom>
@@ -179,9 +179,9 @@
         <p class="card-text">
           Displays 4 post thumbnail with texts at bottom.
           <br />
-          @property - categoryId string
+          categoryId string
           <br />
-          @property - imageHeight number (200 default)
+          imageHeight number (200 default)
         </p>
         <hr />
         <TwoByTwoPhotoTextBottom></TwoByTwoPhotoTextBottom>
@@ -194,9 +194,9 @@
         <p class="card-text">
           Displays thumbnail with inline text.
           <br />
-          @property - post PostModel
+          post PostModel
           <br />
-          @property - imageHeight number (200 default)
+          imageHeight number (200 default)
         </p>
         <hr />
         <PhotoInlineTextBottom></PhotoInlineTextBottom>
@@ -209,9 +209,9 @@
         <p class="card-text">
           Displays 4 post thumbnail with inline texts.
           <br />
-          @property - categoryId string
+          categoryId string
           <br />
-          @property - itemHeight number (200px default)
+          itemHeight number (200px default)
         </p>
         <hr />
         <TwoByTwoPhotoInlineTextBottom></TwoByTwoPhotoInlineTextBottom>
@@ -224,11 +224,11 @@
         <p class="card-text">
           Displays 1 Photo on left and several post as text on right.
           <br />
-          @property - categoryId string
+          categoryId string
           <br />
-          @property - imageHeight number (215 default)
+          imageHeight number (215 default)
           <br />
-          @property - limit number (7 default)
+          limit number (7 default)
         </p>
         <hr />
         <PhotoWithTextsAtRight></PhotoWithTextsAtRight>
@@ -241,9 +241,9 @@
         <p class="card-text">
           Displays 4 Photo on with text at bottom.
           <br />
-          @property - categoryId string
+          categoryId string
           <br />
-          @property - itemHeight number (150px default)
+          itemHeight number (150px default)
         </p>
         <hr />
         <FourPhotosWithTextBottom></FourPhotosWithTextBottom>
@@ -256,9 +256,9 @@
         <p class="card-text">
           Displays 1 photo with text at right on top and 4 photo with text at bottom.
           <br />
-          @property - categoryIdTop string
+          categoryIdTop string
           <br />
-          @property - categoryIdBottom string
+          categoryIdBottom string
         </p>
         <hr />
         <PhotoTextsTopPhotosBottom></PhotoTextsTopPhotosBottom>
@@ -271,7 +271,7 @@
         <p class="card-text">
           Displays 1 photo with text and meta information.
           <br />
-          @property - post PostModel
+          post PostModel
         </p>
         <hr />
         <ThumbnailWithTextAndMeta></ThumbnailWithTextAndMeta>
@@ -284,9 +284,9 @@
         <p class="card-text">
           Display list of `ThumbnailWithTextAndMeta` widget.
           <br />
-          @property - categoryId string
+          categoryId string
           <br />
-          @property - limit number (5 default)
+          limit number (5 default)
         </p>
         <hr />
         <ThumbnailWithTextAndMetaList></ThumbnailWithTextAndMetaList>
@@ -299,11 +299,11 @@
         <p class="card-text">
           ThumbnailWithTextAndMetaAtBottom
           <br />
-          @property - categoryId string
+          categoryId string
           <br />
-          @property - post PostModel
+          post PostModel
           <br />
-          @property - imageHeight number (200 default)
+          imageHeight number (200 default)
         </p>
         <hr />
         <ThumbnailWithTextAndMetaAtBottom></ThumbnailWithTextAndMetaAtBottom>
@@ -316,11 +316,11 @@
         <p class="card-text">
           Display 2 colump of a photo with texts at bottom
           <br />
-          @property - firstCategoryId string
+          firstCategoryId string
           <br />
-          @property - secondCategoryId string
+          secondCategoryId string
           <br />
-          @property - imageHeight number (200 default)
+          imageHeight number (200 default)
         </p>
         <hr />
         <OneByOneThumbnailWithTextAndMetaAtBottom></OneByOneThumbnailWithTextAndMetaAtBottom>
@@ -333,11 +333,11 @@
         <p class="card-text">
           Display 2 Photo with inline text
           <br />
-          @property - categoryId string
+          categoryId string
           <br />
-          @property - imageHeight number (200 default)
+          imageHeight number (200 default)
           <br />
-          @property - isMultilineText boolean (false default)
+          isMultilineText boolean (false default)
         </p>
         <hr />
         <OneByOnePhotoInlineText></OneByOnePhotoInlineText>
@@ -350,11 +350,11 @@
         <p class="card-text">
           Display 2 Photo with text at bottom
           <br />
-          @property - categoryId string
+          categoryId string
           <br />
-          @property - imageHeight number (200 default)
+          imageHeight number (200 default)
           <br />
-          @property - isMultilineText boolean (false default)
+          isMultilineText boolean (false default)
         </p>
         <hr />
         <OneByOnePhotoTextBottom></OneByOnePhotoTextBottom>
@@ -366,11 +366,11 @@
         <p class="card-text">
           Display 2 Photo with text at bottom on top, Posts list text on middle and 4 Photo with text bottom on bottom.
           <br />
-          @property - firstCategoryId string
+          firstCategoryId string
           <br />
-          @property - secondCategoryId string
+          secondCategoryId string
           <br />
-          @property - thirdCategoryId string
+          thirdCategoryId string
         </p>
         <hr />
         <TwoPhotosTopTextsMiddleFourPhotosBottom></TwoPhotosTopTextsMiddleFourPhotosBottom>
@@ -383,10 +383,8 @@
         <p class="card-text">
           Displays thumbnail on left and text (title) on right.
           <br />
-          @property post PostModel
-          <br />
-          @property isTwoLine boolean (false default) - if true, 2 lines of text will be shown if it can't fit in one
-          line.
+          post PostModel <br />
+          isTwoLine boolean (false default) - if true, 2 lines of text will be shown if it can't fit in one line.
         </p>
         <hr />
         <ThumbnailWithTextAtRight></ThumbnailWithTextAtRight>
@@ -399,12 +397,9 @@
         <p class="card-text">
           Display list of `ThumbnailWithTextAtRight` depending on the limit provided
           <br />
-          @property categoryId string
-          <br />
-          @property limit number (2 default)
-          <br />
-          @property isTwoLine boolean (false default) - if true, 2 lines of text will be shown if it can't fit in one
-          line.
+          categoryId string <br />
+          limit number (2 default) <br />
+          isTwoLine boolean (false default) - if true, 2 lines of text will be shown if it can't fit in one line.
         </p>
         <hr />
         <ThumbnailWithTextAtRightList></ThumbnailWithTextAtRightList>
@@ -417,13 +412,10 @@
         <p class="card-text">
           Display list of post title text on top, and list of thumbnail with text on bottom.
           <br />
-          @property firstCategoryId string
-          <br />
-          @property firstLimit number (3 default)
-          <br />
-          @property secondCategoryId string
-          <br />
-          @property secondLimit number (7 default)
+          firstCategoryId string <br />
+          firstLimit number (3 default) <br />
+          secondCategoryId string <br />
+          secondLimit number (7 default)
         </p>
         <hr />
         <TextsTopThumbnailTextListBottom></TextsTopThumbnailTextListBottom>
@@ -436,17 +428,12 @@
         <p class="card-text">
           Displays a combination of Photo with inline text and Thumbnail with text
           <br />
-          @property topImageHeight number (255 default)
-          <br />
-          @property textListLimit number (8 default) - limit for the post text list panel.
-          <br />
-          @property firstCategory string
-          <br />
-          @property secondCategory string
-          <br />
-          @property thirdCategory string
-          <br />
-          @property fourthCategory string
+          topImageHeight number (255 default) <br />
+          textListLimit number (8 default) - limit for the post text list panel. <br />
+          firstCategory string <br />
+          secondCategory string <br />
+          thirdCategory string <br />
+          fourthCategory string
         </p>
         <hr />
         <TwoPhotoTopThumbnailsWithTextAndPhotoBottom></TwoPhotoTopThumbnailsWithTextAndPhotoBottom>
@@ -460,9 +447,8 @@
           Displays a combination of Photo with inline text and Thumbnail with text on the left panel, and List of post
           title and thumbnail with text right panel.
           <br />
-          @property firstCategories string[] - first set of categories for the left panel.
-          <br />
-          @property secondCategories string[] - second set of categories for the right panel.
+          firstCategories string[] - first set of categories for the left panel. <br />
+          secondCategories string[] - second set of categories for the right panel.
         </p>
         <hr />
         <TwoColumnStoryGroupA></TwoColumnStoryGroupA>
@@ -475,13 +461,10 @@
         <p class="card-text">
           Displays list of thumbnail with text at right on top, and list of post title on the bottom.
           <br />
-          @property firstCategoryId string
-          <br />
-          @property firstLimit number (3 default)
-          <br />
-          @property secondCategoryId string
-          <br />
-          @property secondLimit number (7 default)
+          firstCategoryId string <br />
+          firstLimit number (3 default) <br />
+          secondCategoryId string <br />
+          secondLimit number (7 default)
         </p>
         <hr />
         <ThumbnailWithTextListTopTextsBottom></ThumbnailWithTextListTopTextsBottom>
@@ -494,11 +477,9 @@
         <p class="card-text">
           Displays Photo with text at bottom and List of thumbnail with text at right on the bottom part.
           <br />
-          @property firstCategoryId string
-          <br />
-          @property secondCategoryId string
-          <br />
-          @property listLimit number (7 default) - default limit for the bottom list.
+          firstCategoryId string <br />
+          secondCategoryId string <br />
+          listLimit number (7 default) - default limit for the bottom list.
         </p>
         <hr />
         <PhotoTextBottomTopThumbnailTextListBottom></PhotoTextBottomTopThumbnailTextListBottom>
@@ -508,7 +489,12 @@
     <div class="card mb-2">
       <div class="card-body">
         <h5 class="card-title">ThreeColumnStoryGroupA</h5>
-        <p class="card-text">ThreeColumnStoryGroupA</p>
+        <p class="card-text">
+          leftCategories string[] - 2 categories <br />
+          leftPhotoheight number (150 default)<br />
+          secondCategories string[] - 2 categories <br />
+          thirdCategories string[] - 4 categories <br />
+        </p>
         <hr />
         <ThreeColumnStoryGroupA></ThreeColumnStoryGroupA>
       </div>
@@ -517,7 +503,15 @@
     <div class="card mb-2">
       <div class="card-body">
         <h5 class="card-title">TitleAndContentTopPhotoBottom</h5>
-        <p class="card-text">TitleAndContentTopPhotoBottom</p>
+        <p class="card-text">
+          categoryId string <br />
+          post Postmodel <br />
+          imageHeight number<br />
+          -<br />
+          @note: If `categoryId` is provided, it will fetch a post, if `post` is provided it will use the post. <br />
+          if `categoryId` and `post` is both provided, it will prioritize to use the `post` instead of fetching. <br />
+          if both `categoryId` and `post` is not provided, it will use mock post data.
+        </p>
         <hr />
         <TitleAndContentTopPhotoBottom></TitleAndContentTopPhotoBottom>
       </div>
@@ -526,7 +520,13 @@
     <div class="card mb-2">
       <div class="card-body">
         <h5 class="card-title">ThumbnailTextListTopTextMiddleTextsBottom</h5>
-        <p class="card-text">ThumbnailTextListTopTextMiddleTextsBottom</p>
+        <p class="card-text">
+          firstCategoryId string <br />
+          secondCategoryId string <br />
+          thirdCategoryId string <br />
+          topListLimit number (3 default)<br />
+          bottomListLimit number (3 default)
+        </p>
         <hr />
         <ThumbnailTextListTopTextMiddleTextsBottom></ThumbnailTextListTopTextMiddleTextsBottom>
       </div>
@@ -535,15 +535,23 @@
     <div class="card mb-2">
       <div class="card-body">
         <h5 class="card-title">TitleContentPhotoTopAndTextListBottom</h5>
-        <p class="card-text">TitleContentPhotoTopAndTextListBottom</p>
+        <p class="card-text">
+          firstCategoryId string <br />
+          secondCategoryId string <br />
+          bottomListLimit number (3 default); imageHeight number (210 default)
+        </p>
         <hr />
         <TitleContentPhotoTopAndTextListBottom></TitleContentPhotoTopAndTextListBottom>
       </div>
     </div>
+
     <div class="card mb-2">
       <div class="card-body">
         <h5 class="card-title">TwoColumnStoryGroupB</h5>
-        <p class="card-text">TwoColumnStoryGroupB</p>
+        <p class="card-text">
+          leftCategories string[] - 2 categories <br />
+          rightCategories string[] - 3 categories
+        </p>
         <hr />
         <TwoColumnStoryGroupB></TwoColumnStoryGroupB>
       </div>

@@ -1,7 +1,27 @@
 <template>
   <div class="d-flex">
-    <TitleContentPhotoTopAndTextListBottom class="left mr-2"></TitleContentPhotoTopAndTextListBottom>
-    <ThumbnailTextListTopTextMiddleTextsBottom class="right"></ThumbnailTextListTopTextMiddleTextsBottom>
+    <TitleContentPhotoTopAndTextListBottom
+      :firstCategoryId="leftCategories[0]"
+      :secondCategoryId="leftCategories[1]"
+      class="left mr-2"
+    ></TitleContentPhotoTopAndTextListBottom>
+    <ThumbnailTextListTopTextMiddleTextsBottom
+      :firstCategoryId="rightCategories[0]"
+      :secondCategoryId="rightCategories[1]"
+      :thirdCategoryId="rightCategories[2]"
+      class="right"
+    ></ThumbnailTextListTopTextMiddleTextsBottom>
+    <!-- <TitleContentPhotoTopAndTextListBottom
+      :firstCategoryId="firstCategoryId"
+      :secondCategoryId="secondCategoryId"
+      class="left mr-2"
+    ></TitleContentPhotoTopAndTextListBottom>
+    <ThumbnailTextListTopTextMiddleTextsBottom
+      :firstCategoryId="thirdCategoryId"
+      :secondCategoryId="fourthCategoryId"
+      :thirdCategoryId="fifthCategoryId"
+      class="right"
+    ></ThumbnailTextListTopTextMiddleTextsBottom> -->
   </div>
 </template>
 
@@ -25,6 +45,12 @@ import TitleContentPhotoTopAndTextListBottom from "./TitleContentPhotoTopAndText
   components: { ThumbnailTextListTopTextMiddleTextsBottom, TitleContentPhotoTopAndTextListBottom },
 })
 export default class TwoColumnStoryGroupB extends Vue {
+  // @Prop() firstCategoryId!: string;
+  // @Prop() secondCategoryId!: string;
+  // @Prop() thirdCategoryId!: string;
+  // @Prop() fourthCategoryId!: string;
+  // @Prop() fifthCategoryId!: string;
+
   @Prop({ default: () => [] })
   leftCategories!: string[];
 

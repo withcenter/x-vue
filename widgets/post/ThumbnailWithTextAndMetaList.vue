@@ -20,13 +20,8 @@ import { ApiService } from "@/x-vue/services/api.service";
   components: { ThumbnailWithTextAndMeta },
 })
 export default class ThumbnailWithTextAndMetaList extends Vue {
-  @Prop()
-  categoryId!: string;
-
-  @Prop({
-    default: 5,
-  })
-  limit!: number;
+  @Prop() categoryId!: string;
+  @Prop({ default: 5 }) limit!: number;
 
   posts: PostModel[] = [];
 

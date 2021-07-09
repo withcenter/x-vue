@@ -46,23 +46,25 @@ import { PostModel } from "@/x-vue/interfaces/forum.interface";
   },
 })
 export default class TwoByTwoPhotoTextBottom extends Vue {
-  @Prop({})
-  categoryId!: string;
-
+  @Prop() categoryId!: string;
   @Prop({ default: 200 }) imageHeight!: number;
-
   @Prop({ default: true }) isMultilineText!: boolean;
 
   posts: PostModel[] = [];
 
-  async mounted(): Promise<void> {
-    if (!this.categoryId) return;
+  mounted(): void {
+    if (!this.categoryId) {
+      for (let i = 1; i <= 4; i++) {
+        this.posts.push(ComponentService.instance.temporaryPost());
+      }
+    } else {
+      this.loadPosts();
+    }
+  }
+
+  async loadPosts(): Promise<void> {
     try {
-      this.posts = await ApiService.instance.postSearch({
-        categoryId: this.categoryId,
-        limit: 4,
-        files: "Y",
-      });
+      this.posts = await ApiService.instance.postSearch({ categoryId: this.categoryId, files: "Y", limit: 4 });
     } catch (e) {
       ComponentService.instance.error(e);
     }

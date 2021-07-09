@@ -24,20 +24,11 @@ import ThumbnailWithTextAtRight from "./ThumbnailWithTextAtRight.vue";
   components: { ThumbnailWithTextAtRight },
 })
 export default class ThumbnailWithTextAtRightList extends Vue {
-  @Prop({})
-  categoryId!: string;
-
-  @Prop({ default: 2 })
-  limit!: number;
-
-  @Prop({ default: 70 })
-  itemHeight!: number;
-
-  @Prop({ default: false })
-  isMultiLine!: boolean;
-
-  @Prop({ default: true })
-  isTextCentered!: boolean;
+  @Prop({}) categoryId!: string;
+  @Prop({ default: 2 }) limit!: number;
+  @Prop({ default: 70 }) itemHeight!: number;
+  @Prop({ default: false }) isMultiLine!: boolean;
+  @Prop({ default: true }) isTextCentered!: boolean;
 
   posts: PostModel[] = [];
 

@@ -1,14 +1,14 @@
 <template>
   <div class="photo-with-texts-at-bottom">
-    <router-link :to="post.relativeUrl">
+    <router-link :to="story.relativeUrl">
       <b-img class="w-100" :src="src" :style="{ height: imageHeight + 'px' }"></b-img>
       <div class="text-meta mt-2">
-        <div class="category">{{ post.categoryId }}</div>
-        <div class="title text-truncate">{{ post.title }}</div>
-        <div class="content">{{ post.content }}</div>
+        <div class="category">{{ story.categoryId }}</div>
+        <div class="title text-truncate">{{ story.title }}</div>
+        <div class="content">{{ story.content }}</div>
         <div class="author">
-          <span>{{ post.user.nicknameOrName }}</span>
-          <span class="text-muted"> ∙ {{ post.shortDate }}</span>
+          <span>{{ story.user.nicknameOrName }}</span>
+          <span class="text-muted"> ∙ {{ story.shortDate }}</span>
         </div>
       </div>
     </router-link>
@@ -41,24 +41,19 @@ import { ApiService } from "@/x-vue/services/api.service";
   components: { PostsTitleList },
 })
 export default class ThumbnailWithTextAndMetaAtBottom extends Vue {
-  @Prop()
-  categoryId!: string;
-
-  @Prop({ default: 200 })
-  imageHeight!: number;
-
-  @Prop({
-    default: () => ComponentService.instance.temporaryPost(),
-  })
-  post!: PostModel;
+  @Prop() categoryId!: string;
+  @Prop() post!: PostModel;
+  @Prop({ default: 200 }) imageHeight!: number;
 
   story: PostModel = new PostModel();
 
   mounted(): void {
-    if (this.categoryId) {
+    if (this.post) {
+      this.story = this.post;
+    } else if (this.categoryId) {
       this.loadPost();
     } else {
-      this.story = this.post;
+      this.story = ComponentService.instance.temporaryPost();
     }
   }
 

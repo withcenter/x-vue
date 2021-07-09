@@ -37,10 +37,12 @@ export default class PhotoTextBottom extends Vue {
   story: PostModel = new PostModel();
 
   mounted(): void {
-    if (this.categoryId) {
+    if (this.post) {
+      this.story = this.post;
+    } else if (this.categoryId) {
       this.loadPost();
     } else {
-      this.story = this.post;
+      this.story = ComponentService.instance.temporaryPost();
     }
   }
 

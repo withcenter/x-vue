@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="post.relativeUrl">{{ post.title }}</router-link>
+  <router-link :to="story.relativeUrl">{{ story.title }}</router-link>
 </template>
 
 <script lang="ts">
@@ -14,17 +14,17 @@ import ComponentService from "@/x-vue/services/component.service";
 })
 export default class Samples extends Vue {
   @Prop() categoryId!: string;
-
-  @Prop({ default: () => ComponentService.instance.temporaryPost() })
-  post!: PostModel;
+  @Prop() post!: PostModel;
 
   story: PostModel = new PostModel();
 
   mounted(): void {
-    if (this.categoryId) {
+    if (this.post) {
+      this.story = this.post;
+    } else if (this.categoryId) {
       this.loadPost();
     } else {
-      this.story = this.post;
+      this.story = ComponentService.instance.temporaryPost();
     }
   }
 

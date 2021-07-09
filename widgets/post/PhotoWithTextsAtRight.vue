@@ -1,11 +1,11 @@
 <template>
-  <div class="photo-with-text-right" v-if="post.idx">
-    <router-link :to="post.relativeUrl">
-      <h3 class="text-truncate">{{ post.title }}</h3>
+  <div class="photo-with-text-right" v-if="story">
+    <router-link :to="story.relativeUrl">
+      <h3 class="text-truncate">{{ story.title }}</h3>
     </router-link>
     <div class="d-flex">
-      <router-link :to="post.relativeUrl">
-        <b-img class="photo" :src="post.files[0].url" :style="{ height: imageHeight + 'px' }"> </b-img>
+      <router-link :to="story.relativeUrl">
+        <b-img class="photo" :src="src" :style="{ height: imageHeight + 'px' }"> </b-img>
       </router-link>
       <LatestPostsText class="ml-2 text-truncate" :categoryId="categoryId" :limit="limit"></LatestPostsText>
     </div>
@@ -35,31 +35,32 @@ import LatestPostsText from "./LatestPostsText.vue";
   },
 })
 export default class PhotoWithTextsAtRight extends Vue {
-  @Prop({})
-  categoryId!: string;
-  @Prop({
-    default: 215,
-  })
-  imageHeight!: number;
-  @Prop({
-    default: 8,
-  })
-  limit!: number;
+  @Prop() categoryId!: string;
+  @Prop() post!: PostModel;
+  @Prop({ default: 8 }) limit!: number;
+  @Prop({ default: 215 }) imageHeight!: number;
 
-  post: PostModel = new PostModel();
+  story: PostModel = new PostModel();
 
   mounted(): void {
-    if (this.categoryId) {
+    if (this.post) {
+      this.story = this.post;
+    } else if (this.categoryId) {
       this.loadPost();
     } else {
-      this.post = ComponentService.instance.temporaryPost();
+      this.story = ComponentService.instance.temporaryPost();
     }
+  }
+
+  get src(): string {
+    if (!this.story.files.length) return "";
+    return this.story.files[0].thumbnailUrl ? this.story.files[0].thumbnailUrl : this.story.files[0].url;
   }
 
   async loadPost(): Promise<void> {
     try {
       const res = await ApiService.instance.postSearch({ categoryId: this.categoryId, limit: 1, files: "Y" });
-      this.post = res[0];
+      this.story = res[0];
     } catch (e) {
       ComponentService.instance.error(e);
     }

@@ -1,24 +1,32 @@
 <template>
   <div class="d-flex">
     <div class="w-33 mr-2">
-      <PhotoTextBottomTopThumbnailTextListBottom :listLimit="3"></PhotoTextBottomTopThumbnailTextListBottom>
+      <PhotoTextBottomTopThumbnailTextListBottom
+        :firstCategoryId="leftCategories[0]"
+        :secondCategoryId="leftCategories[1]"
+        :imageHeight="leftPhotoheight"
+        :listLimit="3"
+      >
+      </PhotoTextBottomTopThumbnailTextListBottom>
     </div>
     <div class="w-33 mr-2">
-      <ThumbnailWithTextListTopTextsBottom></ThumbnailWithTextListTopTextsBottom>
+      <ThumbnailWithTextListTopTextsBottom
+        :firstCategoryId="centerCategories[0]"
+        :secondCategoryId="centerCategories[1]"
+      ></ThumbnailWithTextListTopTextsBottom>
     </div>
     <div class="w-33">
-      <div class="d-flex">
-        <PhotoTextBottom class="p-0 mr-2" :imageHeight="100" :isMultiLine="false"></PhotoTextBottom>
-        <PhotoTextBottom class="p-0" :imageHeight="100" :isMultiLine="false"></PhotoTextBottom>
-      </div>
+      <OneByOnePhotoTextBottom :categoryId="rightCategories[0]" :imageHeight="100"></OneByOnePhotoTextBottom>
       <div class="border-top border-bottom py-2">
-        <PostsTitleList :bulleted="true" :limit="2"></PostsTitleList>
-        <ThumbnailWithTextAtRight class="mt-2"></ThumbnailWithTextAtRight>
+        <PostsTitleList :categoryId="rightCategories[1]" :bulleted="true" :limit="2"></PostsTitleList>
+        <ThumbnailWithTextAtRight :categoryId="rightCategories[2]" class="mt-2"></ThumbnailWithTextAtRight>
       </div>
-      <div class="d-flex mt-2">
-        <PhotoTextBottom :imageHeight="100" class="mr-2"></PhotoTextBottom>
-        <PhotoTextBottom :imageHeight="100"></PhotoTextBottom>
-      </div>
+      <OneByOnePhotoTextBottom
+        class="d-flex mt-2"
+        :categoryId="rightCategories[3]"
+        :imageHeight="100"
+        :isMultilineText="true"
+      ></OneByOnePhotoTextBottom>
     </div>
   </div>
 </template>
@@ -36,7 +44,7 @@ import { Component, Prop } from "vue-property-decorator";
 import PhotoTextBottomTopThumbnailTextListBottom from "./PhotoTextBottomTopThumbnailTextListBottom.vue";
 import ThumbnailWithTextListTopTextsBottom from "./ThumbnailWithTextListTopTextsBottom.vue";
 
-import PhotoTextBottom from "./PhotoTextBottom.vue";
+import OneByOnePhotoTextBottom from "./OneByOnePhotoTextBottom.vue";
 import PostsTitleList from "./PostsTitleList.vue";
 import ThumbnailWithTextAtRight from "./ThumbnailWithTextAtRight.vue";
 
@@ -44,13 +52,16 @@ import ThumbnailWithTextAtRight from "./ThumbnailWithTextAtRight.vue";
   components: {
     PhotoTextBottomTopThumbnailTextListBottom,
     ThumbnailWithTextListTopTextsBottom,
-    PhotoTextBottom,
+    OneByOnePhotoTextBottom,
     PostsTitleList,
     ThumbnailWithTextAtRight,
   },
 })
 export default class ThreeColumnStoryGroupA extends Vue {
-  @Prop({ default: () => [] }) firstCategories!: string[];
-  @Prop({ default: () => [] }) secondCategories!: string[];
+  @Prop({ default: () => [] }) leftCategories!: string[];
+  @Prop({ default: 150 }) leftPhotoheight!: number;
+
+  @Prop({ default: () => [] }) centerCategories!: string[];
+  @Prop({ default: () => [] }) rightCategories!: string[];
 }
 </script>

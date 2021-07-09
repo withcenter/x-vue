@@ -26,13 +26,9 @@ import ThumbnailWithTextAtRightList from "./ThumbnailWithTextAtRightList.vue";
   components: { PostsTitleList, ThumbnailWithTextAtRightList },
 })
 export default class TextsTopThumbnailTextListBottom extends Vue {
-  @Prop()
-  firstCategoryId!: string;
-  @Prop()
-  secondCategoryId!: string;
-  @Prop({ default: 8 })
-  firstLimit!: number;
-  @Prop({ default: 2 })
-  secondLimit!: number;
+  @Prop() firstCategoryId!: string;
+  @Prop() secondCategoryId!: string;
+  @Prop({ default: 8 }) firstLimit!: number;
+  @Prop({ default: 2 }) secondLimit!: number;
 }
 </script>
