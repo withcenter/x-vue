@@ -141,11 +141,22 @@ export default class ComponentService {
     }
     file.thumbnailurl = file.url;
 
+    let title =
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+    let content =
+      "Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.";
+    if (this.tempIdx % 2 == 1) {
+      title =
+        "보배를 군영과 것은 그러므로 두손을 뿐이다. 살 때까지 앞이 얼마나 대중을 있다. 투명하되 얼음이 대한 아름다우냐? 그들은 희망의 작고 따뜻한 황금시대다.";
+      content =
+        "보배를 군영과 것은 그러므로 두손을 뿐이다. 살 때까지 앞이 얼마나 대중을 있다. 투명하되 얼음이 대한 아름다우냐? 그들은 희망의 작고 따뜻한 황금시대다. 영원히 인생을 예수는 풍부하게 행복스럽고 뜨고, 이상을 것이다. 남는 너의 피에 이상은 심장의 그들은 넣는 뜨고, 청춘의 쓸쓸하랴? 앞이 그와 예수는 듣는다. 더운지라 위하여서, 노년에게서 돋고, 바로 풀이 것이다. 그림자는 따뜻한 속에 실현에 인도하겠다는 꽃이 교향악이다. 길지 것이 무엇을 뜨거운지라, 아니다";
+    }
+
     return new PostModel().fromJson({
       idx: this.tempIdx,
       relativeUrl: "#",
-      title: `${this.tempIdx} - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
-      content: `Ut enim ad minim veniam,\nquis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\n\nExcepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\n${this.tempIdx}.`,
+      title: `${this.tempIdx} - ${title}`,
+      content: `${content}.. \n\n${this.tempIdx}.`,
       files: [file],
       user: user,
       categoryId: categoryId,

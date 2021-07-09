@@ -1,44 +1,31 @@
 <template>
-  <router-link :to="story.relativeUrl" v-if="story && story.idx">
-    <div class="thumbnail-with-inline-text w-100 position-relative h-100">
-      <b-img class="image w-100" :src="src" :style="{ height: imageHeight + 'px' }"> </b-img>
-      <div class="title position-absolute w-100" :class="isMultiLine ? '' : 'text-truncate'">
-        <b>{{ story.title }}</b>
-      </div>
-    </div>
-  </router-link>
+  <div class="text-center">
+    <h3 class="title overflow-hidden">{{ story.title }}</h3>
+    <h5 class="content text-truncate">{{ story.content }}</h5>
+    <b-img class="w-100 mt-2" :src="src" :style="{ height: imageHeight + 'px' }"></b-img>
+  </div>
 </template>
 
 <style lang="scss" scoped>
-.thumbnail-with-inline-text {
-  overflow: hidden;
-
-  .title {
-    background-color: rgba(1, 1, 1, 0.3) !important;
-    max-height: 3.7em;
-    padding: 0.5em;
-    color: white;
-    bottom: 0;
-  }
+.title {
+  max-height: 2.5em;
 }
 </style>
 
 <script lang="ts">
+import Vue from "vue";
+import { Component, Prop } from "vue-property-decorator";
 import { PostModel } from "@/x-vue/interfaces/forum.interface";
 import { ApiService } from "@/x-vue/services/api.service";
 import ComponentService from "@/x-vue/services/component.service";
-import Vue from "vue";
-
-import { Component, Prop } from "vue-property-decorator";
 
 @Component({})
-export default class PhotoInlineTextBottom extends Vue {
+export default class TitleAndContentTopPhotoBottom extends Vue {
   @Prop() categoryId!: string;
-  @Prop({ default: 200 }) imageHeight!: number;
-  @Prop({ default: true }) isMultiLine!: boolean;
-  @Prop({
-    default: () => ComponentService.instance.temporaryPost(),
-  })
+
+  @Prop({ default: 200 }) imageHeight!: string;
+
+  @Prop({ default: () => ComponentService.instance.temporaryPost() })
   post!: PostModel;
 
   story: PostModel = new PostModel();

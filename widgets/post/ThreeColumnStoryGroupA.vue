@@ -1,12 +1,12 @@
 <template>
   <div class="d-flex">
-    <div class="col-4 p-0 pr-2">
+    <div class="w-33 mr-2">
       <PhotoTextBottomTopThumbnailTextListBottom :listLimit="3"></PhotoTextBottomTopThumbnailTextListBottom>
     </div>
-    <div class="col-4 p-0">
+    <div class="w-33 mr-2">
       <ThumbnailWithTextListTopTextsBottom></ThumbnailWithTextListTopTextsBottom>
     </div>
-    <div class="col-4 p-0">
+    <div class="w-33">
       <div class="d-flex border-bottom">
         <PhotoTextBottom class="p-0 mr-2" :imageHeight="100" :isMultiLine="false"></PhotoTextBottom>
         <PhotoTextBottom class="p-0" :imageHeight="100" :isMultiLine="false"></PhotoTextBottom>
@@ -20,6 +20,12 @@
     </div>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.w-33 {
+  width: 33%;
+}
+</style>
 
 <script lang="ts">
 import Vue from "vue";

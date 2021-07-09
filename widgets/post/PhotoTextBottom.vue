@@ -1,16 +1,15 @@
 <template>
-  <router-link class="overflow-hidden" v-if="post && post.idx" :to="post.relativeUrl">
+  <router-link class="overflow-hidden" v-if="story && story.idx" :to="post.relativeUrl">
     <b-img class="image w-100" :src="src" :style="{ height: imageHeight + 'px' }"> </b-img>
-    <div class="p-2 title w-" :class="isMultiLine ? 'overflow-hidden' : 'text-truncate'">
-      <b>{{ post.title }}</b>
+    <div class="p-2 title" :class="isMultiLine ? 'overflow-hidden' : 'text-truncate'">
+      <b>{{ story.title }}</b>
     </div>
   </router-link>
 </template>
 
 <style lang="scss" scoped>
 .title {
-  max-height: 3.8em;
-  font-size: 1em;
+  max-height: 3.6em;
 }
 </style>
 
@@ -46,8 +45,8 @@ export default class PhotoTextBottom extends Vue {
   }
 
   get src(): string {
-    if (!this.post.files.length) return "";
-    return this.post.files[0].thumbnailUrl ? this.post.files[0].thumbnailUrl : this.post.files[0].url;
+    if (!this.story.files.length) return "";
+    return this.story.files[0].thumbnailUrl ? this.story.files[0].thumbnailUrl : this.story.files[0].url;
   }
 
   async loadPost(): Promise<void> {

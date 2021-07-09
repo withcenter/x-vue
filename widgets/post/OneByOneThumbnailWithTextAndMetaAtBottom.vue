@@ -1,17 +1,15 @@
 <template>
   <div class="d-flex">
-    <PhotoWithTextsAtBottom
+    <ThumbnailWithTextAndMetaAtBottom
       class="mr-1 w-50"
       :categoryId="firstCategoryId"
-      :limit="limit"
       :imageHeight="imageHeight"
-    ></PhotoWithTextsAtBottom>
-    <PhotoWithTextsAtBottom
+    ></ThumbnailWithTextAndMetaAtBottom>
+    <ThumbnailWithTextAndMetaAtBottom
       class="w-50"
       :categoryId="firstCategoryId"
-      :limit="limit"
       :imageHeight="imageHeight"
-    ></PhotoWithTextsAtBottom>
+    ></ThumbnailWithTextAndMetaAtBottom>
   </div>
 </template>
 
@@ -19,23 +17,20 @@
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 
-import PhotoWithTextsAtBottom from "./PhotoWithTextsAtBottom.vue";
+import ThumbnailWithTextAndMetaAtBottom from "./ThumbnailWithTextAndMetaAtBottom.vue";
 
 @Component({
-  components: { PhotoWithTextsAtBottom },
+  components: { ThumbnailWithTextAndMetaAtBottom },
 })
-export default class OneByOnePhotoWithTextsAtBottom extends Vue {
+export default class OneByOneThumbnailWithTextAndMetaAtBottom extends Vue {
   @Prop()
   firstCategoryId!: string;
   @Prop()
   secondCategoryId!: string;
-  @Prop({
-    default: 5,
-  })
+
+  @Prop({ default: 5 })
   limit!: string;
-  @Prop({
-    default: 200,
-  })
+  @Prop({ default: 200 })
   imageHeight!: string;
 }
 </script>

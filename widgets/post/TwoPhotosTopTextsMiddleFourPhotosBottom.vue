@@ -2,7 +2,11 @@
   <div>
     <OneByOnePhotoInlineText :imageHeight="topImageHeight"></OneByOnePhotoInlineText>
     <PostsTitleList class="mt-2" :limit="listLimit"></PostsTitleList>
-    <TwoByTwoPhotoTextBottom :imageHeight="bottomImageHeight" :isMultilineText="false"></TwoByTwoPhotoTextBottom>
+    <TwoByTwoPhotoTextBottom
+      class="mt-2"
+      :imageHeight="bottomImageHeight"
+      :isMultilineText="false"
+    ></TwoByTwoPhotoTextBottom>
   </div>
 </template>
 

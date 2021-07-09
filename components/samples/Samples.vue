@@ -276,22 +276,24 @@
 
     <div class="card mb-2">
       <div class="card-body">
-        <h5 class="card-title">PhotoWithTextsAtBottom</h5>
+        <h5 class="card-title">ThumbnailWithTextAndMetaAtBottom</h5>
         <p class="card-text">
-          PhotoWithTextsAtBottom
+          ThumbnailWithTextAndMetaAtBottom
+          <br />
+          @property - categoryId string
           <br />
           @property - post PostModel
           <br />
           @property - imageHeight number (200 default)
         </p>
         <hr />
-        <PhotoWithTextsAtBottom></PhotoWithTextsAtBottom>
+        <ThumbnailWithTextAndMetaAtBottom></ThumbnailWithTextAndMetaAtBottom>
       </div>
     </div>
 
     <div class="card mb-2">
       <div class="card-body">
-        <h5 class="card-title">OneByOnePhotoWithTextsAtBottom</h5>
+        <h5 class="card-title">OneByOneThumbnailWithTextAndMetaAtBottom</h5>
         <p class="card-text">
           Display 2 colump of a photo with texts at bottom
           <br />
@@ -299,12 +301,10 @@
           <br />
           @property - secondCategoryId string
           <br />
-          @property - limit number (5 default)
-          <br />
           @property - imageHeight number (200 default)
         </p>
         <hr />
-        <OneByOnePhotoWithTextsAtBottom></OneByOnePhotoWithTextsAtBottom>
+        <OneByOneThumbnailWithTextAndMetaAtBottom></OneByOneThumbnailWithTextAndMetaAtBottom>
       </div>
     </div>
 
@@ -494,6 +494,41 @@
         <ThreeColumnStoryGroupA></ThreeColumnStoryGroupA>
       </div>
     </div>
+
+    <div class="card mb-2">
+      <div class="card-body">
+        <h5 class="card-title">TitleAndContentTopPhotoBottom</h5>
+        <p class="card-text">TitleAndContentTopPhotoBottom</p>
+        <hr />
+        <TitleAndContentTopPhotoBottom></TitleAndContentTopPhotoBottom>
+      </div>
+    </div>
+
+    <div class="card mb-2">
+      <div class="card-body">
+        <h5 class="card-title">ThumbnailTextListTopTextMiddleTextsBottom</h5>
+        <p class="card-text">ThumbnailTextListTopTextMiddleTextsBottom</p>
+        <hr />
+        <ThumbnailTextListTopTextMiddleTextsBottom></ThumbnailTextListTopTextMiddleTextsBottom>
+      </div>
+    </div>
+
+    <div class="card mb-2">
+      <div class="card-body">
+        <h5 class="card-title">TitleContentPhotoTopAndTextListBottom</h5>
+        <p class="card-text">TitleContentPhotoTopAndTextListBottom</p>
+        <hr />
+        <TitleContentPhotoTopAndTextListBottom></TitleContentPhotoTopAndTextListBottom>
+      </div>
+    </div>
+    <div class="card mb-2">
+      <div class="card-body">
+        <h5 class="card-title">TwoColumnStoryGroupB</h5>
+        <p class="card-text">TwoColumnStoryGroupB</p>
+        <hr />
+        <TwoColumnStoryGroupB></TwoColumnStoryGroupB>
+      </div>
+    </div>
     <!--  -->
   </div>
 </template>
@@ -526,8 +561,8 @@ import PhotoTextsTopPhotosBottom from "@/x-vue/widgets/post/PhotoTextsTopPhotosB
 import ThumbnailWithTextAndMeta from "@/x-vue/widgets/post/ThumbnailWithTextAndMeta.vue";
 import ThumbnailWithTextAndMetaList from "@/x-vue/widgets/post/ThumbnailWithTextAndMetaList.vue";
 import PostsTitleList from "@/x-vue/widgets/post/PostsTitleList.vue";
-import PhotoWithTextsAtBottom from "@/x-vue/widgets/post/PhotoWithTextsAtBottom.vue";
-import OneByOnePhotoWithTextsAtBottom from "@/x-vue/widgets/post/OneByOnePhotoWithTextsAtBottom.vue";
+import ThumbnailWithTextAndMetaAtBottom from "@/x-vue/widgets/post/ThumbnailWithTextAndMetaAtBottom.vue";
+import OneByOneThumbnailWithTextAndMetaAtBottom from "@/x-vue/widgets/post/OneByOneThumbnailWithTextAndMetaAtBottom.vue";
 import OneByOnePhotoInlineText from "@/x-vue/widgets/post/OneByOnePhotoInlineText.vue";
 import OneByOnePhotoTextBottom from "@/x-vue/widgets/post/OneByOnePhotoTextBottom.vue";
 import TwoPhotosTopTextsMiddleFourPhotosBottom from "@/x-vue/widgets/post/TwoPhotosTopTextsMiddleFourPhotosBottom.vue";
@@ -540,6 +575,10 @@ import TwoColumnStoryGroupA from "@/x-vue/widgets/post/TwoColumnStoryGroupA.vue"
 import ThumbnailWithTextListTopTextsBottom from "@/x-vue/widgets/post/ThumbnailWithTextListTopTextsBottom.vue";
 import PhotoTextBottomTopThumbnailTextListBottom from "@/x-vue/widgets/post/PhotoTextBottomTopThumbnailTextListBottom.vue";
 import ThreeColumnStoryGroupA from "@/x-vue/widgets/post/ThreeColumnStoryGroupA.vue";
+import TitleAndContentTopPhotoBottom from "@/x-vue/widgets/post/TitleAndContentTopPhotoBottom.vue";
+import ThumbnailTextListTopTextMiddleTextsBottom from "@/x-vue/widgets/post/ThumbnailTextListTopTextMiddleTextsBottom.vue";
+import TitleContentPhotoTopAndTextListBottom from "@/x-vue/widgets/post/TitleContentPhotoTopAndTextListBottom.vue";
+import TwoColumnStoryGroupB from "@/x-vue/widgets/post/TwoColumnStoryGroupB.vue";
 
 import LatestPostsTextOnly from "@/x-vue/widgets/post/LatestPostsTextOnly.vue";
 @Component({
@@ -561,8 +600,8 @@ import LatestPostsTextOnly from "@/x-vue/widgets/post/LatestPostsTextOnly.vue";
     ThumbnailWithTextAndMeta,
     ThumbnailWithTextAndMetaList,
     PostsTitleList,
-    PhotoWithTextsAtBottom,
-    OneByOnePhotoWithTextsAtBottom,
+    ThumbnailWithTextAndMetaAtBottom,
+    OneByOneThumbnailWithTextAndMetaAtBottom,
     OneByOnePhotoInlineText,
     OneByOnePhotoTextBottom,
     TwoPhotosTopTextsMiddleFourPhotosBottom,
@@ -575,6 +614,10 @@ import LatestPostsTextOnly from "@/x-vue/widgets/post/LatestPostsTextOnly.vue";
     PhotoTextBottomTopThumbnailTextListBottom,
     LatestPostsTextOnly,
     ThreeColumnStoryGroupA,
+    TitleAndContentTopPhotoBottom,
+    ThumbnailTextListTopTextMiddleTextsBottom,
+    TitleContentPhotoTopAndTextListBottom,
+    TwoColumnStoryGroupB,
   },
 })
 export default class Samples extends Vue {
