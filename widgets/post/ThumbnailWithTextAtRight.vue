@@ -7,7 +7,7 @@
   >
     <b-img class="col-3 p-0 h-100" :src="post.files[0].url"></b-img>
     <div class="overflow-hidden">
-      <div class="ml-2 title font-weight-bold" :class="isMultiLine ? '' : 'text-truncate'">
+      <div class="ml-2 title" :class="isMultiLine ? '' : 'text-truncate'">
         {{ post.title }}
       </div>
     </div>

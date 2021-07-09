@@ -6,12 +6,13 @@
       :isMultiLine="true"
       :isTextCentered="false"
     ></ThumbnailWithTextAtRightList>
-    <div class="mt-2 border-top border-bottom p-2">
-      <b> <PostTitle :categoryId="secondCategoryId" class="text-truncate text-centered"></PostTitle></b>
+    <div class="mt-2 border-top border-bottom p-2 text-truncate text-centered">
+      <b><PostTitle :categoryId="secondCategoryId"></PostTitle></b>
     </div>
     <div class="mt-2">
       <div class="third-category-header py-2 px-3 d-inline-block">
         <b>{{ thirdCategoryId || "Third Category" }}</b>
+        <div></div>
       </div>
       <div class="bottom">
         <PostsTitleList :categoryId="thirdCategoryId" :limit="bottomListLimit" :bulleted="true"></PostsTitleList>
@@ -24,6 +25,10 @@
 .third-category-header {
   color: white;
   background-color: rgb(42, 42, 248);
+
+  div {
+    border-top: rgb(42, 42, 248) 1px solid;
+  }
 }
 
 .bottom {

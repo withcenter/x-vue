@@ -23,7 +23,7 @@ import ComponentService from "@/x-vue/services/component.service";
 export default class TitleAndContentTopPhotoBottom extends Vue {
   @Prop() categoryId!: string;
 
-  @Prop({ default: 210 }) imageHeight!: string;
+  @Prop({ default: 209 }) imageHeight!: string;
 
   @Prop({ default: () => ComponentService.instance.temporaryPost() })
   post!: PostModel;

@@ -1,5 +1,5 @@
 <template>
-  <div>{{ post.title }}</div>
+  <router-link :to="post.relativeUrl">{{ post.title }}</router-link>
 </template>
 
 <script lang="ts">

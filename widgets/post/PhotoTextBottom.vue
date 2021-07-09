@@ -2,7 +2,7 @@
   <router-link class="overflow-hidden" v-if="story && story.idx" :to="post.relativeUrl">
     <b-img class="image w-100" :src="src" :style="{ height: imageHeight + 'px' }"> </b-img>
     <div class="p-2 title" :class="isMultiLine ? 'overflow-hidden' : 'text-truncate'">
-      <b>{{ story.title }}</b>
+      {{ story.title }}
     </div>
   </router-link>
 </template>

@@ -8,18 +8,6 @@
   </div>
 </template>
 
-<style lang="scss" scoped>
-.third-category-header {
-  color: white;
-  background-color: rgb(42, 42, 248);
-}
-
-.bottom {
-  border-top: rgb(42, 42, 248) 1px solid;
-  padding-top: 0.25em;
-}
-</style>
-
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
