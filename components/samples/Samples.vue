@@ -27,6 +27,21 @@
       </div>
     </div>
     <hr />
+    <h1>Svg Icons</h1>
+    <div class="svgs">
+      <CameraSvg></CameraSvg>
+      <ChatBubbleSvg></ChatBubbleSvg>
+      <CoffeeBreakSvg></CoffeeBreakSvg>
+      <EllipsisVSvg></EllipsisVSvg>
+      <FacebookLogoSvg></FacebookLogoSvg>
+      <GoogleLogoSvg></GoogleLogoSvg>
+      <MenuSvg></MenuSvg>
+      <ProductHuntSvg></ProductHuntSvg>
+      <SearchSvg></SearchSvg>
+      <TrashSvg></TrashSvg>
+    </div>
+
+    <hr />
     <h1>Samples of Components and Widgets</h1>
 
     <div class="alert alert-info">
@@ -76,7 +91,7 @@
     </div>
 
     <div class="alert alert-info">
-      <h2>TwoStoriesThumbnailWithTitleAndContent</h2>
+      <h4>TwoStories Thumbnail With Title And Content</h4>
       Display two ThumbnailWithText from posts
 
       <div>Props</div>
@@ -502,11 +517,18 @@
   width: 32px;
   height: 32px;
 }
+.svgs {
+  svg {
+    padding: 1em;
+    box-sizing: content-box;
+    width: 32px;
+    height: 32px;
+  }
+}
 </style>
 <script lang="ts">
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-import CameraSvg from "@/x-vue/svg/CameraSvg.vue";
 import UploadButton from "@/x-vue/components/buttons/UploadButton.vue";
 import FileUploadButton from "@/x-vue/components/file/FileUploadButton.vue";
 import ComponentService from "@/x-vue/services/component.service";
@@ -542,9 +564,29 @@ import PhotoTextBottomTopThumbnailTextListBottom from "@/x-vue/widgets/post/Phot
 import ThreeColumnStoryGroupA from "@/x-vue/widgets/post/ThreeColumnStoryGroupA.vue";
 
 import LatestPostsTextOnly from "@/x-vue/widgets/post/LatestPostsTextOnly.vue";
+import CameraSvg from "@/x-vue/svg/CameraSvg.vue";
+import ChatBubbleSvg from "@/x-vue/svg/ChatBubbleSvg.vue";
+import CoffeeBreakSvg from "@/x-vue/svg/CoffeeBreakSvg.vue";
+import EllipsisVSvg from "@/x-vue/svg/EllipsisVSvg.vue";
+import FacebookLogoSvg from "@/x-vue/svg/FacebookLogoSvg.vue";
+import GoogleLogoSvg from "@/x-vue/svg/GoogleLogoSvg.vue";
+import MenuSvg from "@/x-vue/svg/MenuSvg.vue";
+import ProductHuntSvg from "@/x-vue/svg/ProductHuntSvg.vue";
+import SearchSvg from "@/x-vue/svg/SearchSvg.vue";
+import TrashSvg from "@/x-vue/svg/TrashSvg.vue";
+
 @Component({
   components: {
     CameraSvg,
+    ChatBubbleSvg,
+    CoffeeBreakSvg,
+    EllipsisVSvg,
+    FacebookLogoSvg,
+    GoogleLogoSvg,
+    MenuSvg,
+    ProductHuntSvg,
+    SearchSvg,
+    TrashSvg,
     UploadButton,
     FileUploadButton,
     PostTitle,

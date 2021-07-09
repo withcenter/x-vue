@@ -177,6 +177,61 @@
           </tr>
 
           <tr class="table-dark">
+            <td colspan="2">{{ "verified_user" | t }}</td>
+          </tr>
+
+          <tr class="table-light">
+            <td colspan="2">
+              <div class="hint">
+                {{ "verified_user_hint" | t }}
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>{{ "verified_user_create_post" | t }}</td>
+            <td>
+              <label>
+                <input type="radio" v-model="category.verifiedUserCreatePost" value="Y" />
+                {{ "yes" | t }}
+              </label>
+              &nbsp;
+              <label>
+                <input type="radio" v-model="category.verifiedUserCreatePost" value="N" />
+                {{ "no" | t }}
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ "verified_user_create_comment" | t }}</td>
+            <td>
+              <label>
+                <input type="radio" v-model="category.verifiedUserCreateComment" value="Y" />
+                {{ "yes" | t }}
+              </label>
+              &nbsp;
+              <label>
+                <input type="radio" v-model="category.verifiedUserCreateComment" value="N" />
+                {{ "no" | t }}
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ "verified_user_view" | t }}</td>
+            <td>
+              <label>
+                <input type="radio" v-model="category.verifiedUserView" value="Y" />
+                {{ "yes" | t }}
+              </label>
+              &nbsp;
+              <label>
+                <input type="radio" v-model="category.verifiedUserView" value="N" />
+                {{ "no" | t }}
+              </label>
+            </td>
+          </tr>
+
+          <tr class="table-dark">
             <td colspan="2">{{ "return_to" | t }}</td>
           </tr>
 
@@ -341,6 +396,9 @@ export default class AdminCategoryEdit extends Vue {
       noOfPostsPerPage: this.category.noOfPostsPerPage,
       noOfPagesOnNav: this.category.noOfPagesOnNav,
       domain: this.category.domain,
+      verifiedUserCreatePost: this.category.verifiedUserCreatePost,
+      verifiedUserCreateComment: this.category.verifiedUserCreateComment,
+      verifiedUserView: this.category.verifiedUserView,
     };
 
     try {
