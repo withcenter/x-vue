@@ -2,19 +2,19 @@
   <div class="d-flex">
     <div class="col-8 p-0 pr-2">
       <TwoPhotoTopThumbnailsWithTextAndPhotoBottom
-        :topImageHeight="255"
-        :firstCategoryId="categories[0]"
-        :secondCategoryId="categories[1]"
-        :thirdCategoryId="categories[2]"
-        :fourthCategoryId="categories[3]"
+        :topImageHeight="215"
+        :firstCategoryId="firstCategories[0]"
+        :secondCategoryId="firstCategories[1]"
+        :thirdCategoryId="firstCategories[2]"
+        :fourthCategoryId="firstCategories[3]"
       ></TwoPhotoTopThumbnailsWithTextAndPhotoBottom>
     </div>
     <div class="col-4 p-0">
-      <TextsTopTwoThumbnailTextBottom
-        :firstCategoryId="categories[4]"
-        :secondCategoryId="categories[5]"
-        :firstLimit="8"
-      ></TextsTopTwoThumbnailTextBottom>
+      <TextsTopThumbnailTextListBottom
+        :firstCategoryId="secondCategories[0]"
+        :secondCategoryId="secondCategories[1]"
+        :firstLimit="7"
+      ></TextsTopThumbnailTextListBottom>
     </div>
   </div>
 </template>
@@ -24,12 +24,13 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 
 import TwoPhotoTopThumbnailsWithTextAndPhotoBottom from "./TwoPhotoTopThumbnailsWithTextAndPhotoBottom.vue";
-import TextsTopTwoThumbnailTextBottom from "./TextsTopThumbnailTextListBottom.vue";
+import TextsTopThumbnailTextListBottom from "./TextsTopThumbnailTextListBottom.vue";
 
 @Component({
-  components: { TwoPhotoTopThumbnailsWithTextAndPhotoBottom, TextsTopTwoThumbnailTextBottom },
+  components: { TwoPhotoTopThumbnailsWithTextAndPhotoBottom, TextsTopThumbnailTextListBottom },
 })
 export default class TwoColumnStoryGroupA extends Vue {
-  @Prop({ default: () => [] }) categories!: string[];
+  @Prop({ default: () => [] }) firstCategories!: string[];
+  @Prop({ default: () => [] }) secondCategories!: string[];
 }
 </script>

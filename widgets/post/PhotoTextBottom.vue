@@ -1,10 +1,8 @@
 <template>
-  <router-link v-if="post && post.idx" :to="post.relativeUrl">
-    <div class="photo-text-bottom">
-      <b-img class="image w-100" :src="src" :style="{ height: imageHeight + 'px' }"> </b-img>
-      <div class="p-2 title w-100 overflow-hidden" :class="isMultiLine ? '' : 'text-truncate'">
-        <b>{{ post.title }}</b>
-      </div>
+  <router-link class="overflow-hidden" v-if="post && post.idx" :to="post.relativeUrl">
+    <b-img class="image w-100" :src="src" :style="{ height: imageHeight + 'px' }"> </b-img>
+    <div class="p-2 title w-" :class="isMultiLine ? 'overflow-hidden' : 'text-truncate'">
+      <b>{{ post.title }}</b>
     </div>
   </router-link>
 </template>

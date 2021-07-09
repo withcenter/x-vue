@@ -73,7 +73,7 @@ onDialogCall() {
 
 ## Api Service Initialization
 
-- ApiService must not depend on parent app.
+- **ApiService must not depend on parent app.**
   - It must not use any of parent's
     - store
     - route
@@ -127,11 +127,18 @@ new Vue({
 
 - You can also use `translate` function from `functions.ts`.
 
+- `ComponentService.alert` is using `translate` function by default. So, if you are using it directly or from helpers, you don't have to manually call `translate` any more.
+
 ```ts
 export default class UploadImage extends Vue {
   confirmDelete = translate("do_you_want_to_delete");
 ```
 ## User login and logout
+
+- 사용자 register, login, logout, and profile update 등을 하면,
+  `userChages` 콜백이 호출되는데, 이 곳에서 로그인/로그아웃 `store.commi('user', ...)` 와 같이 업데이트를 하면 된다.
+  이렇게 하면 매번 사용자 정보가 변경될 때 마다 `store.commi('user', ...)` 를 호출 할 필요 없다.
+  단, 회원 사진을 업로드하는 경우, `files` 테이블만 수정하기 때문에, 사용자 프로필을 읽고, `store.commi('user', ...)` 으로 업데이트를 해 주어야 한다.
 
 - Below is the login form component from `x-vue`.
   - It may login and emit an event of success or failure to parent app.

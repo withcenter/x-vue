@@ -1,18 +1,23 @@
 import firebase from "firebase/app";
 import "firebase/messaging";
+import "firebase/auth";
 import { ApiService } from "./api.service";
 
 export class FirebaseService {
   private static _instance: FirebaseService;
+  public auth!: firebase.auth.Auth;
   private onMessage?: (payload: Record<string, Record<string, unknown>>) => void;
 
   public static get instance(): FirebaseService {
     if (!FirebaseService._instance) {
       FirebaseService._instance = new FirebaseService();
     }
-
     return FirebaseService._instance;
   }
+
+  // private constructor() {
+  //   // this.auth = firebase.auth();
+  // }
 
   public token = "";
 
@@ -23,6 +28,7 @@ export class FirebaseService {
     }
   ): void {
     firebase.initializeApp(firebaseConfig);
+    this.auth = firebase.auth();
     this.pushMessageInit();
     this.onMessage = options.onMessage;
   }

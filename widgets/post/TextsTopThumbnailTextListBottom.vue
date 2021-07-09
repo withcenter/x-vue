@@ -1,8 +1,12 @@
 <template>
   <div>
-    <div class="border px-2">
-      <PostsTitleList :categoryId="firstCategoryId" :limit="firstLimit" :bulleted="true"></PostsTitleList>
-    </div>
+    <PostsTitleList
+      class="border px-1"
+      :categoryId="firstCategoryId"
+      :limit="firstLimit"
+      :bulleted="true"
+    ></PostsTitleList>
+
     <ThumbnailWithTextAtRightList
       class="mt-2"
       :categoryId="secondCategoryId"

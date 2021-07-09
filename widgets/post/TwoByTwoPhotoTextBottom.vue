@@ -1,12 +1,32 @@
 <template>
   <div class="two-by-two-thumbnail-with-text-bottom w-100">
     <div class="top d-flex">
-      <PhotoTextBottom class="w-50" :imageHeight="imageHeight" :post="posts[0]"></PhotoTextBottom>
-      <PhotoTextBottom class="w-50 pl-1" :imageHeight="imageHeight" :post="posts[1]"></PhotoTextBottom>
+      <PhotoTextBottom
+        class="w-50"
+        :imageHeight="imageHeight"
+        :post="posts[0]"
+        :isMultiLine="isMultilineText"
+      ></PhotoTextBottom>
+      <PhotoTextBottom
+        class="w-50 ml-1"
+        :imageHeight="imageHeight"
+        :post="posts[1]"
+        :isMultiLine="isMultilineText"
+      ></PhotoTextBottom>
     </div>
     <div class="mt-1 bottom d-flex">
-      <PhotoTextBottom class="w-50" :imageHeight="imageHeight" :post="posts[2]"></PhotoTextBottom>
-      <PhotoTextBottom class="w-50 pl-1" :imageHeight="imageHeight" :post="posts[3]"></PhotoTextBottom>
+      <PhotoTextBottom
+        class="w-50"
+        :imageHeight="imageHeight"
+        :post="posts[2]"
+        :isMultiLine="isMultilineText"
+      ></PhotoTextBottom>
+      <PhotoTextBottom
+        class="w-50 ml-1"
+        :imageHeight="imageHeight"
+        :post="posts[3]"
+        :isMultiLine="isMultilineText"
+      ></PhotoTextBottom>
     </div>
   </div>
 </template>
@@ -29,10 +49,9 @@ export default class TwoByTwoPhotoTextBottom extends Vue {
   @Prop({})
   categoryId!: string;
 
-  @Prop({
-    default: 200,
-  })
-  imageHeight!: number;
+  @Prop({ default: 200 }) imageHeight!: number;
+
+  @Prop({ default: true }) isMultilineText!: boolean;
 
   posts: PostModel[] = [];
 

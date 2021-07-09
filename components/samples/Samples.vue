@@ -27,6 +27,21 @@
       </div>
     </div>
     <hr />
+    <h1>Svg Icons</h1>
+    <div class="svgs">
+      <CameraSvg></CameraSvg>
+      <ChatBubbleSvg></ChatBubbleSvg>
+      <CoffeeBreakSvg></CoffeeBreakSvg>
+      <EllipsisVSvg></EllipsisVSvg>
+      <FacebookLogoSvg></FacebookLogoSvg>
+      <GoogleLogoSvg></GoogleLogoSvg>
+      <MenuSvg></MenuSvg>
+      <ProductHuntSvg></ProductHuntSvg>
+      <SearchSvg></SearchSvg>
+      <TrashSvg></TrashSvg>
+    </div>
+
+    <hr />
     <h1>Samples of Components and Widgets</h1>
 
     <div class="alert alert-info">
@@ -76,7 +91,7 @@
     </div>
 
     <div class="alert alert-info">
-      <h2>TwoStoriesThumbnailWithTitleAndContent</h2>
+      <h4>TwoStories Thumbnail With Title And Content</h4>
       Display two ThumbnailWithText from posts
 
       <div>Props</div>
@@ -116,7 +131,6 @@
 
     <div class="card mb-2">
       <div class="card-body">
-        <h5 class="card-title">LatestPostsTextOnly</h5>
         <h5 class="card-title">LatestPostsTextOnly</h5>
         <p class="card-text">
           Displays list of latest posts only in text.
@@ -294,9 +308,11 @@
       <div class="card-body">
         <h5 class="card-title">OneByOnePhotoWithTextsAtBottom</h5>
         <p class="card-text">
-          OneByOnePhotoWithTextsAtBottom
+          Display 2 colump of a photo with texts at bottom
           <br />
-          @property - post PostModel
+          @property - firstCategoryId string
+          <br />
+          @property - secondCategoryId string
           <br />
           @property - limit number (5 default)
           <br />
@@ -304,6 +320,56 @@
         </p>
         <hr />
         <OneByOnePhotoWithTextsAtBottom></OneByOnePhotoWithTextsAtBottom>
+      </div>
+    </div>
+
+    <div class="card mb-2">
+      <div class="card-body">
+        <h5 class="card-title">OneByOnePhotoInlineText</h5>
+        <p class="card-text">
+          Display 2 Photo with inline text
+          <br />
+          @property - categoryId string
+          <br />
+          @property - imageHeight number (200 default)
+          <br />
+          @property - isMultilineText boolean (false default)
+        </p>
+        <hr />
+        <OneByOnePhotoInlineText></OneByOnePhotoInlineText>
+      </div>
+    </div>
+
+    <div class="card mb-2">
+      <div class="card-body">
+        <h5 class="card-title">OneByOnePhotoTextBottom</h5>
+        <p class="card-text">
+          Display 2 Photo with text at bottom
+          <br />
+          @property - categoryId string
+          <br />
+          @property - imageHeight number (200 default)
+          <br />
+          @property - isMultilineText boolean (false default)
+        </p>
+        <hr />
+        <OneByOnePhotoTextBottom></OneByOnePhotoTextBottom>
+      </div>
+    </div>
+    <div class="card mb-2">
+      <div class="card-body">
+        <h5 class="card-title">TwoPhotosTopTextsMiddleFourPhotosBottom</h5>
+        <p class="card-text">
+          Display 2 Photo with text at bottom on top, Posts list text on middle and 4 Photo with text bottom on bottom.
+          <br />
+          @property - firstCategoryId string
+          <br />
+          @property - secondCategoryId string
+          <br />
+          @property - thirdCategoryId string
+        </p>
+        <hr />
+        <TwoPhotosTopTextsMiddleFourPhotosBottom></TwoPhotosTopTextsMiddleFourPhotosBottom>
       </div>
     </div>
 
@@ -344,7 +410,17 @@
     <div class="card mb-2">
       <div class="card-body">
         <h5 class="card-title">TextsTopThumbnailTextListBottom</h5>
-        <p class="card-text">TextsTopThumbnailTextListBottom</p>
+        <p class="card-text">
+          Display list of post title text on top, and list of thumbnail with text on bottom.
+          <br />
+          @property firstCategoryId string
+          <br />
+          @property firstLimit number (3 default)
+          <br />
+          @property secondCategoryId string
+          <br />
+          @property secondLimit number (7 default)
+        </p>
         <hr />
         <TextsTopThumbnailTextListBottom></TextsTopThumbnailTextListBottom>
       </div>
@@ -353,7 +429,21 @@
     <div class="card mb-2">
       <div class="card-body">
         <h5 class="card-title">TwoPhotoTopThumbnailsWithTextAndPhotoBottom</h5>
-        <p class="card-text">TwoPhotoTopThumbnailsWithTextAndPhotoBottom</p>
+        <p class="card-text">
+          Displays a combination of Photo with inline text and Thumbnail with text
+          <br />
+          @property topImageHeight number (255 default)
+          <br />
+          @property textListLimit number (8 default) - limit for the post text list panel.
+          <br />
+          @property firstCategory string
+          <br />
+          @property secondCategory string
+          <br />
+          @property thirdCategory string
+          <br />
+          @property fourthCategory string
+        </p>
         <hr />
         <TwoPhotoTopThumbnailsWithTextAndPhotoBottom></TwoPhotoTopThumbnailsWithTextAndPhotoBottom>
       </div>
@@ -362,7 +452,14 @@
     <div class="card mb-2">
       <div class="card-body">
         <h5 class="card-title">TwoColumnStoryGroupA</h5>
-        <p class="card-text">TwoColumnStoryGroupA</p>
+        <p class="card-text">
+          Displays a combination of Photo with inline text and Thumbnail with text on the left panel, and List of post
+          title and thumbnail with text right panel.
+          <br />
+          @property firstCategories string[] - first set of categories for the left panel.
+          <br />
+          @property secondCategories string[] - second set of categories for the right panel.
+        </p>
         <hr />
         <TwoColumnStoryGroupA></TwoColumnStoryGroupA>
       </div>
@@ -371,7 +468,17 @@
     <div class="card mb-2">
       <div class="card-body">
         <h5 class="card-title">ThumbnailWithTextListTopTextsBottom</h5>
-        <p class="card-text">ThumbnailWithTextListTopTextsBottom</p>
+        <p class="card-text">
+          Displays list of thumbnail with text at right on top, and list of post title on the bottom.
+          <br />
+          @property firstCategoryId string
+          <br />
+          @property firstLimit number (3 default)
+          <br />
+          @property secondCategoryId string
+          <br />
+          @property secondLimit number (7 default)
+        </p>
         <hr />
         <ThumbnailWithTextListTopTextsBottom></ThumbnailWithTextListTopTextsBottom>
       </div>
@@ -380,9 +487,26 @@
     <div class="card mb-2">
       <div class="card-body">
         <h5 class="card-title">PhotoTextBottomTopThumbnailTextListBottom</h5>
-        <p class="card-text">PhotoTextBottomTopThumbnailTextListBottom</p>
+        <p class="card-text">
+          Displays Photo with text at bottom and List of thumbnail with text at right on the bottom part.
+          <br />
+          @property firstCategoryId string
+          <br />
+          @property secondCategoryId string
+          <br />
+          @property listLimit number (7 default) - default limit for the bottom list.
+        </p>
         <hr />
         <PhotoTextBottomTopThumbnailTextListBottom></PhotoTextBottomTopThumbnailTextListBottom>
+      </div>
+    </div>
+
+    <div class="card mb-2">
+      <div class="card-body">
+        <h5 class="card-title">ThreeColumnStoryGroupA</h5>
+        <p class="card-text">ThreeColumnStoryGroupA</p>
+        <hr />
+        <ThreeColumnStoryGroupA></ThreeColumnStoryGroupA>
       </div>
     </div>
     <!--  -->
@@ -393,11 +517,18 @@
   width: 32px;
   height: 32px;
 }
+.svgs {
+  svg {
+    padding: 1em;
+    box-sizing: content-box;
+    width: 32px;
+    height: 32px;
+  }
+}
 </style>
 <script lang="ts">
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-import CameraSvg from "@/x-vue/svg/CameraSvg.vue";
 import UploadButton from "@/x-vue/components/buttons/UploadButton.vue";
 import FileUploadButton from "@/x-vue/components/file/FileUploadButton.vue";
 import ComponentService from "@/x-vue/services/component.service";
@@ -419,6 +550,9 @@ import ThumbnailWithTextAndMetaList from "@/x-vue/widgets/post/ThumbnailWithText
 import PostsTitleList from "@/x-vue/widgets/post/PostsTitleList.vue";
 import PhotoWithTextsAtBottom from "@/x-vue/widgets/post/PhotoWithTextsAtBottom.vue";
 import OneByOnePhotoWithTextsAtBottom from "@/x-vue/widgets/post/OneByOnePhotoWithTextsAtBottom.vue";
+import OneByOnePhotoInlineText from "@/x-vue/widgets/post/OneByOnePhotoInlineText.vue";
+import OneByOnePhotoTextBottom from "@/x-vue/widgets/post/OneByOnePhotoTextBottom.vue";
+import TwoPhotosTopTextsMiddleFourPhotosBottom from "@/x-vue/widgets/post/TwoPhotosTopTextsMiddleFourPhotosBottom.vue";
 
 import ThumbnailWithTextAtRight from "@/x-vue/widgets/post/ThumbnailWithTextAtRight.vue";
 import ThumbnailWithTextAtRightList from "@/x-vue/widgets/post/ThumbnailWithTextAtRightList.vue";
@@ -427,11 +561,32 @@ import TwoPhotoTopThumbnailsWithTextAndPhotoBottom from "@/x-vue/widgets/post/Tw
 import TwoColumnStoryGroupA from "@/x-vue/widgets/post/TwoColumnStoryGroupA.vue";
 import ThumbnailWithTextListTopTextsBottom from "@/x-vue/widgets/post/ThumbnailWithTextListTopTextsBottom.vue";
 import PhotoTextBottomTopThumbnailTextListBottom from "@/x-vue/widgets/post/PhotoTextBottomTopThumbnailTextListBottom.vue";
+import ThreeColumnStoryGroupA from "@/x-vue/widgets/post/ThreeColumnStoryGroupA.vue";
 
 import LatestPostsTextOnly from "@/x-vue/widgets/post/LatestPostsTextOnly.vue";
+import CameraSvg from "@/x-vue/svg/CameraSvg.vue";
+import ChatBubbleSvg from "@/x-vue/svg/ChatBubbleSvg.vue";
+import CoffeeBreakSvg from "@/x-vue/svg/CoffeeBreakSvg.vue";
+import EllipsisVSvg from "@/x-vue/svg/EllipsisVSvg.vue";
+import FacebookLogoSvg from "@/x-vue/svg/FacebookLogoSvg.vue";
+import GoogleLogoSvg from "@/x-vue/svg/GoogleLogoSvg.vue";
+import MenuSvg from "@/x-vue/svg/MenuSvg.vue";
+import ProductHuntSvg from "@/x-vue/svg/ProductHuntSvg.vue";
+import SearchSvg from "@/x-vue/svg/SearchSvg.vue";
+import TrashSvg from "@/x-vue/svg/TrashSvg.vue";
+
 @Component({
   components: {
     CameraSvg,
+    ChatBubbleSvg,
+    CoffeeBreakSvg,
+    EllipsisVSvg,
+    FacebookLogoSvg,
+    GoogleLogoSvg,
+    MenuSvg,
+    ProductHuntSvg,
+    SearchSvg,
+    TrashSvg,
     UploadButton,
     FileUploadButton,
     PostTitle,
@@ -450,6 +605,9 @@ import LatestPostsTextOnly from "@/x-vue/widgets/post/LatestPostsTextOnly.vue";
     PostsTitleList,
     PhotoWithTextsAtBottom,
     OneByOnePhotoWithTextsAtBottom,
+    OneByOnePhotoInlineText,
+    OneByOnePhotoTextBottom,
+    TwoPhotosTopTextsMiddleFourPhotosBottom,
     ThumbnailWithTextAtRight,
     ThumbnailWithTextAtRightList,
     TextsTopThumbnailTextListBottom,
@@ -458,6 +616,7 @@ import LatestPostsTextOnly from "@/x-vue/widgets/post/LatestPostsTextOnly.vue";
     ThumbnailWithTextListTopTextsBottom,
     PhotoTextBottomTopThumbnailTextListBottom,
     LatestPostsTextOnly,
+    ThreeColumnStoryGroupA,
   },
 })
 export default class Samples extends Vue {

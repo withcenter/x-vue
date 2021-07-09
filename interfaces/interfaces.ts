@@ -256,6 +256,11 @@ export class CategoryModel {
   // This domain is a root domain. Not subdomain. For cafe, the subdomain(complete domain) is the id.
   domain = "";
 
+  //
+  verifiedUserCreatePost: "" | "Y" | "N" = "";
+  verifiedUserCreateComment: "" | "Y" | "N" = "";
+  verifiedUserView: "" | "Y" | "N" = "";
+
   fromJson(map: ResponseData): CategoryModel {
     this.idx = map.idx;
     this.userIdx = map.userIdx;
@@ -284,6 +289,9 @@ export class CategoryModel {
     this.listOnView = map.listOnView;
     this.noOfPostsPerPage = map.noOfPostsPerPage;
     this.noOfPagesOnNav = map.noOfPagesOnNav;
+    this.verifiedUserCreatePost = map.verifiedUserCreatePost;
+    this.verifiedUserCreateComment = map.verifiedUserCreateComment;
+    this.verifiedUserView = map.verifiedUserView;
 
     this.domain = map.domain;
     return this;

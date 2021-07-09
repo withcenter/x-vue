@@ -37,7 +37,10 @@ import { CommentModel, PostModel, PostSearchRequest } from "../interfaces/forum.
  *   - Don't move
  *   - Don't save anything.
  *
+ * Don't include `store` for user state magement.
  * It manages user login state in cookie.
+ *
+ *
  *
  */
 export class ApiService {
@@ -77,7 +80,9 @@ export class ApiService {
 
   // User change callback
   //
-  // This will be called whenever user changes.
+  // This will be called on user activities like
+  // - register, login, logout, profile update. But not for profile read.
+  //
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   public userChanges: any;
 
@@ -224,6 +229,8 @@ export class ApiService {
   /**
    * Saves `sessionId` in cookie.
    *
+   * 여기서 user change 이벤트를 보낸다. 루트앱에서는 이 이벤트를 받아서 로그인 또는 로그아웃을 하면 된다.
+   *
    * @param sessionId string
    */
   setUserSessionId(res: ResponseData): UserModel {
@@ -231,10 +238,6 @@ export class ApiService {
     this.user = new UserModel().fromJson(res);
     this.setCookie(Keys.sessionId, this.user.sessionId);
     this.sessionId = this.user.sessionId;
-
-    // if (FirebaseService.instance.token) {
-    //   this.saveToken(FirebaseService.instance.token);
-    // }
 
     if (this.userChanges != null) this.userChanges(this.user);
 
@@ -277,19 +280,37 @@ export class ApiService {
    * @returns UserModel
    */
   async login(data: RequestData): Promise<UserModel> {
+    console.log("api login; ", data);
     const res = await this.request("user.login", data);
 
     return this.setUserSessionId(res);
   }
 
   /**
-   * Login with Kakao
+   * 카카오 로그인
+   *
+   * 카카오 로그인을 하면, 정보를 백엔드로 넘기고, 백엔드에서 회원 정보 및 세션 아이디를 받아
+   * 웹 브라우저에 보관하는 것으로 로그인이 된다.
+   * 즉, 로그인은 백엔드의 세션 아이디가 와야 한다.
+   *
    * @param data Kakao login data
    * @returns UserModel
    */
   async kakaoLogin(data: RequestData): Promise<UserModel> {
     const res = await this.request("user.kakaoLogin", data);
+    return this.setUserSessionId(res);
+  }
 
+  /**
+   * 파이어베이스 로그인
+   *
+   * Matrix README 참고
+   *
+   * @param data 파이어베이스 로그인 정보
+   * @returns 사용자 모델
+   */
+  async firebaseLogin(data: RequestData): Promise<UserModel> {
+    const res = await this.request("user.firebaseLogin", data);
     return this.setUserSessionId(res);
   }
 
@@ -308,6 +329,7 @@ export class ApiService {
     this.deleteUserSessionId();
     this.sessionId = undefined;
     this.user = new UserModel();
+    if (this.userChanges != null) this.userChanges(this.user);
   }
 
   /**
@@ -529,6 +551,10 @@ export class ApiService {
     return new UserModel().fromJson(user);
   }
 
+  /**
+   * Get user profile
+   * @returns User model
+   */
   async userProfile(): Promise<UserModel> {
     const user = await this.request("user.profile");
     return new UserModel().fromJson(user);

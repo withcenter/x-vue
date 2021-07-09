@@ -10,7 +10,10 @@
     </div>
     <div class="mt-2 d-flex">
       <div class="col-8 p-0 pr-2">
-        <ThumbnailWithTextAtRightList :categoryId="thirdCategoryId"></ThumbnailWithTextAtRightList>
+        <ThumbnailWithTextAtRightList
+          :categoryId="thirdCategoryId"
+          :limit="textListLimit"
+        ></ThumbnailWithTextAtRightList>
       </div>
       <div class="col-4 p-0">
         <PhotoInlineTextBottom :categoryId="fourthCategoryId" :imageHeight="150"></PhotoInlineTextBottom>
@@ -34,6 +37,7 @@ import PhotoInlineTextBottom from "./PhotoInlineTextBottom.vue";
 })
 export default class TwoPhotoTopThumbnailsWithTextAndPhotoBottom extends Vue {
   @Prop({ default: 255 }) topImageHeight!: number;
+  @Prop({ default: 2 }) textListLimit!: number;
   @Prop() firstCategoryId!: string;
   @Prop() secondCategoryId!: string;
   @Prop() thirdCategoryId!: string;
