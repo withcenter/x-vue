@@ -85,10 +85,7 @@
         </template>
 
         <template #table-busy>
-          <div class="text-center text-danger my-2">
-            <b-spinner class="align-middle mr-2"></b-spinner>
-            <strong>Loading...</strong>
-          </div>
+          <Loading></Loading>
         </template>
 
         <template #cell(action)="row">
@@ -126,6 +123,8 @@ import Content from "@/x-vue/components/forum/Content.vue";
 
 import PostMeta from "@/x-vue/components/forum/post/PostMeta.vue";
 import { Err } from "@/x-vue/services/defines";
+
+import Loading from "@/x-vue/widgets/common/Loading.vue";
 @Component({
   components: {
     UserDisplayName,
@@ -133,6 +132,7 @@ import { Err } from "@/x-vue/services/defines";
     FileList,
     Content,
     PostMeta,
+    Loading,
   },
 })
 export default class AdminPostList extends Vue {

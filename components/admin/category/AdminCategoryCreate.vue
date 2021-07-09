@@ -28,6 +28,7 @@ export default class AdminCategoryCreate extends Vue {
   description = "";
 
   async onSubmit(): Promise<void> {
+    if (!this.id.trim()) return;
     try {
       this;
 
@@ -35,7 +36,7 @@ export default class AdminCategoryCreate extends Vue {
         id: this.id,
       });
       console.log(this.category);
-      this.s.open(`/admin/category/edit/${this.category.id}`);
+      this.s.open(`/admin/category/edit/${this.category.idx}`);
     } catch (e) {
       if (e == "error_category_exists") {
         this.s.open(`/admin/category/edit/${this.id}`);

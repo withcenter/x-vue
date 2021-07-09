@@ -1,5 +1,5 @@
 <template>
-  <div class="px-3 bg-light">
+  <div class="pb-3">
     <h1>{{ "admin_dashboard" | t }}</h1>
     <div>
       <router-link class="btn btn-link" to="/admin/user">User</router-link>

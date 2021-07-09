@@ -2,6 +2,11 @@
   <section>
     <h4>File list</h4>
 
+    <b-form-select v-model="viewMode" class="mb-3 w-25">
+      <b-form-select-option value="table">Table</b-form-select-option>
+      <b-form-select-option value="gallery">Gallery</b-form-select-option>
+    </b-form-select>
+
     <div class="mb-3">
       <div class="my-2 fw-700">Total {{ total }} No of page {{ noOfPages }}</div>
       <form @submit.prevent="loadFiles">
@@ -48,13 +53,8 @@
       </form>
     </div>
 
-    <b-form-select v-model="viewMode" class="mb-3 w-25">
-      <b-form-select-option value="table">Table</b-form-select-option>
-      <b-form-select-option value="gallery">Gallery</b-form-select-option>
-    </b-form-select>
-
     <div class="mb-3" v-if="viewMode == 'gallery'">
-      <b-row align-content="stretch" no-gutters>
+      <b-row align-content="stretch" no-gutters v-if="!loading">
         <b-col cols="3" class="mb-2 pr-2" v-for="file in files" :key="file.idx">
           <b-card
             class="h-100"
@@ -64,10 +64,12 @@
             body-class="p-1"
           >
             <b-card-text>
-              <div class="d-flex align-items-center">
-                <b-avatar class="mr-1" :src="file.user.photoUrl"></b-avatar>
-                <router-link :to="'/admin/user/edit/' + file.user.idx">
-                  <div>({{ file.user.idx }}) {{ file.user.nicknameOrName }}</div>
+              <div @click.stop="">
+                <router-link :to="'/admin/user/edit/' + file.user.idx" class="d-flex align-items-center">
+                  <b-avatar class="mr-1" :src="file.user.photoUrl"></b-avatar>
+                  <div>
+                    <div>({{ file.user.idx }}) {{ file.user.nicknameOrName }}</div>
+                  </div>
                 </router-link>
               </div>
               <div><b>idx:</b> {{ file.idx }}</div>
@@ -78,17 +80,22 @@
                 <div>{{ file.post.content }}</div>
               </div>
             </b-card-text>
-            <b-button size="sm" class="position-absolute right top" variant="primary" @click.stop="fileDelete(file)"
-              >Delete</b-button
-            >
+            <div class="position-absolute right top">
+              <b-button variant="light" size="sm" @click.stop="fileDelete(file)" pill>
+                <TrashSvg style="width: 22px" class="trash-icon"></TrashSvg>
+                <!-- &#128465; -->
+              </b-button>
+              <!-- <b-button variant="light" size="sm" @click.stop="" pill>&#128193;</b-button> -->
+            </div>
           </b-card>
         </b-col>
       </b-row>
+
+      <Loading v-if="loading"></Loading>
     </div>
 
     <div v-if="viewMode == 'table'">
       <div class="p-1 mb-3 border-radius-sm" style="border: 1px solid #e8e8e8">
-        <!-- <div class="m-2">{{ "fields" | t }}</div> -->
         <b-checkbox
           size="sm"
           :disabled="visibleFields.length == 1 && field.visible"
@@ -108,7 +115,7 @@
           :items="files"
           :fields="visibleFields"
           :busy="loading"
-          :bordered="false"
+          :bordered="true"
           responsive="true"
         >
           <template #head()="scope">
@@ -145,10 +152,7 @@
           </template>
 
           <template #table-busy>
-            <div class="text-center text-danger my-2">
-              <b-spinner class="align-middle mr-2"></b-spinner>
-              <strong>Loading...</strong>
-            </div>
+            <Loading></Loading>
           </template>
         </b-table>
       </section>
@@ -173,7 +177,12 @@ import ComponentService from "@/x-vue/services/component.service";
 import Vue from "vue";
 import Component from "vue-class-component";
 
-@Component({})
+import TrashSvg from "@/x-vue/svg/TrashSvg.vue";
+
+import Loading from "@/x-vue/widgets/common/Loading.vue";
+@Component({
+  components: { TrashSvg, Loading },
+})
 export default class AdminFileList extends Vue {
   files: Array<FileModel> = [];
 

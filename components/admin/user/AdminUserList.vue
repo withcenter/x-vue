@@ -26,7 +26,6 @@
 
     <div>
       <div class="p-1 mb-3 border-radius-sm" style="border: 1px solid #e8e8e8">
-        <!-- <div class="m-2">{{ "fields" | t }}</div> -->
         <b-checkbox
           size="sm"
           :disabled="visibleFields.length == 1 && field.visible"
@@ -46,7 +45,7 @@
           :items="users"
           :fields="visibleFields"
           :busy="loading"
-          :bordered="false"
+          :bordered="true"
           responsive="true"
         >
           <template #head()="scope">
@@ -67,27 +66,32 @@
           </template>
 
           <template #cell(action)="row">
-            <div class="d-flex align-item-center text-nowrap">
-              <button class="btn btn-sm btn-secondary mr-1" @click="row.toggleDetails">&#128462;</button>
+            <div class="d-flex justify-content-around text-nowrap">
+              <button class="btn btn-sm btn-outline-info mr-1" @click="row.toggleDetails">
+                {{ row.detailsShowing ? "&#11161;" : "&#11163;" }}
+              </button>
               <router-link class="btn btn-sm btn-outline-primary" :to="editLink(row.item)">&#9999;</router-link>
             </div>
           </template>
 
           <template #row-details="row">
-            <b-card class="p-0 text-left">
-              <b-row cols="4">
+            <b-card body-class="p-1 text-left">
+              <b-row>
                 <b-col>idx: {{ row.item.idx }}</b-col>
                 <b-col>name: {{ row.item.name }}</b-col>
                 <b-col>nickname: {{ row.item.nickname }}</b-col>
-                <b-col>email: {{ row.item.email }}</b-col>
               </b-row>
-              <b-row cols="4">
+              <b-row>
+                <b-col>email: {{ row.item.email }}</b-col>
                 <b-col>phone: {{ row.item.phone }}</b-col>
                 <b-col>gender: {{ row.item.gender }}</b-col>
-                <b-col>birthdate: {{ row.item.birthdate }}</b-col>
-                <b-col>countryCode: {{ row.item.countryCode }}</b-col>
               </b-row>
-              <div>city: {{ row.item.city }}</div>
+
+              <b-row>
+                <b-col>city: {{ row.item.city }}</b-col>
+                <b-col>countryCode: {{ row.item.countryCode }}</b-col>
+                <b-col>birthdate: {{ row.item.birthdate }}</b-col>
+              </b-row>
               <div>address: {{ row.item.address }}</div>
               <div>createdAt: {{ row.item.createdAt }}</div>
               <div>updatedAt: {{ row.item.updatedAt }}</div>
@@ -95,10 +99,7 @@
           </template>
 
           <template #table-busy>
-            <div class="text-center text-danger my-2">
-              <b-spinner class="align-middle mr-2"></b-spinner>
-              <strong>Loading...</strong>
-            </div>
+            <Loading variant="danger"></Loading>
           </template>
         </b-table>
       </section>
@@ -123,7 +124,12 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import Service from "../../../services/component.service";
 
-@Component({})
+import Loading from "@/x-vue/widgets/common/Loading.vue";
+@Component({
+  components: {
+    Loading,
+  },
+})
 export default class AdminUserList extends Vue {
   s = Service.instance;
   users: Array<UserModel> = [];
@@ -151,8 +157,8 @@ export default class AdminUserList extends Vue {
     { key: "zipcode", visible: false },
     { key: "createdAt", label: "Registered", visible: false },
     { key: "updatedAt", label: "Updated", visible: false },
-    { key: "block", label: "Status", visible: true },
-    { key: "action", visible: true },
+    { key: "block", label: "Status", visible: true, sortable: true },
+    { key: "action", visible: true, class: "text-center" },
   ];
 
   get visibleFields(): Array<{ [index: string]: unknown }> {

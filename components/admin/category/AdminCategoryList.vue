@@ -5,55 +5,52 @@
       <div class="btn btn-sm btn-info" @click="checkDefaultCategory">Check Default Category</div>
     </div>
 
-    <div class="container">
-      <div class="row">
-        <section class="w-100">
-          <admin-category-create></admin-category-create>
-        </section>
+    <section class="w-100">
+      <admin-category-create></admin-category-create>
+    </section>
 
-        <table class="table table-striped mt-2">
-          <thead class="thead-dark">
-            <tr class="fs-sm">
-              <th scope="col">#</th>
-              <th scope="col">ID</th>
-              <th scope="col">{{ "title" | t }}</th>
-              <th scope="col">{{ "description" | t }}</th>
-              <th scope="col">{{ "action" | t }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="category of categories" :key="category.idx">
-              <th scope="row">
-                <router-link :to="'/forum/' + category.id">{{ category.idx }}</router-link>
-              </th>
-              <td>
-                <router-link :to="'/admin/category/edit/' + category.id">{{ category.id }} </router-link>
-              </td>
-              <td>
-                <span>{{ category.title }}</span>
-              </td>
-              <td>
-                <span>
-                  {{ category.description }}
-                </span>
-              </td>
-              <td class="justify-content-center">
-                <div class="btn btn-sm btn-outline-danger" @click="onClickDelete(category)">❌</div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <section class="overflow-auto mb-3">
+      <b-table
+        small
+        striped
+        hover
+        :items="categories"
+        :fields="visibleFields"
+        :busy="loading"
+        :bordered="true"
+        responsive="true"
+        head-variant="dark"
+      >
+        <template #head()="scope">
+          <div class="text-nowrap">{{ scope.label | t }}</div>
+        </template>
 
-        <div class="overflow-auto">
-          <b-pagination-nav
-            :link-gen="linkGen"
-            :number-of-pages="noOfPages"
-            v-model="currentPage"
-            v-on:change="onPageChanged"
-            use-router
-          ></b-pagination-nav>
-        </div>
-      </div>
+        <template #cell(idx)="row">
+          <router-link :to="'/forum/' + row.item.idx">{{ row.item.idx }}</router-link>
+        </template>
+
+        <template #cell(id)="row">
+          <router-link :to="'/admin/category/edit/' + row.item.idx">{{ row.item.id }}</router-link>
+        </template>
+
+        <template #cell(action)="row">
+          <div class="btn btn-sm btn-outline-danger" @click="onClickDelete(row.item)">❌</div>
+        </template>
+
+        <template #table-busy>
+          <Loading variant="primary"></Loading>
+        </template>
+      </b-table>
+    </section>
+
+    <div class="overflow-auto">
+      <b-pagination-nav
+        :link-gen="linkGen"
+        :number-of-pages="noOfPages"
+        v-model="currentPage"
+        v-on:change="onPageChanged"
+        use-router
+      ></b-pagination-nav>
     </div>
   </section>
 </template>
@@ -65,10 +62,13 @@ import AdminCategoryCreate from "@/x-vue/components/admin/category/AdminCategory
 import Vue from "vue";
 import Component from "vue-class-component";
 import Service from "../../../services/component.service";
+import ComponentService from "../../../services/component.service";
 
+import Loading from "@/x-vue/widgets/common/Loading.vue";
 @Component({
   components: {
     AdminCategoryCreate,
+    Loading,
   },
 })
 export default class AdminCategoryList extends Vue {
@@ -79,6 +79,20 @@ export default class AdminCategoryList extends Vue {
   noOfPages = 10;
   currentPage = "1";
   total = 0;
+
+  fields: Array<{ [index: string]: unknown }> = [
+    { key: "idx", visible: true },
+    { key: "id", visible: true },
+    { key: "title", visible: true },
+    { key: "description", visible: true },
+    { key: "action", visible: true, class: "text-center" },
+  ];
+
+  get visibleFields(): Array<{ [index: string]: unknown }> {
+    return this.fields.filter((field) => field.visible);
+  }
+
+  loading = false;
 
   linkGen(pageNum: number): string {
     return pageNum === 1 ? "?" : `?page=${pageNum}`;
@@ -94,6 +108,8 @@ export default class AdminCategoryList extends Vue {
   }
 
   async onSubmitSearch(): Promise<void> {
+    if (this.loading) return;
+    this.loading = true;
     try {
       this.categories = await ApiService.instance.categorySearch({
         limit: this.limit,
@@ -104,10 +120,11 @@ export default class AdminCategoryList extends Vue {
     } catch (e) {
       this.s.error(e);
     }
+    this.loading = false;
   }
 
   async onClickDelete(category: CategoryModel): Promise<void> {
-    const re = confirm("Delete the category?");
+    const re = await ComponentService.instance.confirm("Delete Category", "Do you want to delete the category?");
     if (!re) return;
     try {
       const cat = await ApiService.instance.categoryDelete({
@@ -136,6 +153,7 @@ export default class AdminCategoryList extends Vue {
         else error++;
       }
       this.s.alert("Default Menus: ", `${ok} Okay Menus. ${error} Error Menus`);
+      this.onSubmitSearch();
     } catch (e) {
       this.s.error(e);
     }
