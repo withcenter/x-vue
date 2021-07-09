@@ -29,7 +29,7 @@ export default class ThumbnailWithTextListTopTextsBottom extends Vue {
   firstLimit!: number;
 
   @Prop() secondCategoryId!: string;
-  @Prop({ default: 7 })
+  @Prop({ default: 8 })
   secondLimit!: number;
 }
 </script>

@@ -125,7 +125,11 @@
           @property - bulleted boolean (true default)
         </p>
         <hr />
+        Without Bullet
         <PostsTitleList></PostsTitleList>
+        <hr />
+        With Bullet
+        <PostsTitleList :bulleted="true"></PostsTitleList>
       </div>
     </div>
 

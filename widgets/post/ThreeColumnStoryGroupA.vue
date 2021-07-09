@@ -7,12 +7,14 @@
       <ThumbnailWithTextListTopTextsBottom></ThumbnailWithTextListTopTextsBottom>
     </div>
     <div class="w-33">
-      <div class="d-flex border-bottom">
+      <div class="d-flex">
         <PhotoTextBottom class="p-0 mr-2" :imageHeight="100" :isMultiLine="false"></PhotoTextBottom>
         <PhotoTextBottom class="p-0" :imageHeight="100" :isMultiLine="false"></PhotoTextBottom>
       </div>
-      <PostsTitleList class="mt-2" :bulleted="true" :limit="2"></PostsTitleList>
-      <ThumbnailWithTextAtRight class="border-bottom mt-2 pb-1"></ThumbnailWithTextAtRight>
+      <div class="border-top border-bottom py-2">
+        <PostsTitleList :bulleted="true" :limit="2"></PostsTitleList>
+        <ThumbnailWithTextAtRight class="mt-2"></ThumbnailWithTextAtRight>
+      </div>
       <div class="d-flex mt-2">
         <PhotoTextBottom :imageHeight="100" class="mr-2"></PhotoTextBottom>
         <PhotoTextBottom :imageHeight="100"></PhotoTextBottom>

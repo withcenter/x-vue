@@ -5,7 +5,7 @@
         class="post-text text-truncate"
         v-for="(post, index) of postsList"
         :key="post.idx"
-        :class="index > 0 ? 'mt-2' : ''"
+        :class="index > 0 ? 'mt-1' : ''"
       >
         <router-link :to="post.relativeUrl">
           {{ post.title }}
@@ -17,7 +17,7 @@
         class="post-text text-truncate"
         v-for="(post, index) of postsList"
         :key="post.idx"
-        :class="index > 0 ? 'mt-2' : ''"
+        :class="index > 0 ? 'mt-1' : ''"
       >
         <router-link :to="post.relativeUrl">
           {{ post.title }}

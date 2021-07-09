@@ -13,7 +13,7 @@
       <TextsTopThumbnailTextListBottom
         :firstCategoryId="secondCategories[0]"
         :secondCategoryId="secondCategories[1]"
-        :firstLimit="7"
+        :firstLimit="8"
       ></TextsTopThumbnailTextListBottom>
     </div>
   </div>

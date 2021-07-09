@@ -42,7 +42,7 @@ export default class PhotoWithTextsAtRight extends Vue {
   })
   imageHeight!: number;
   @Prop({
-    default: 7,
+    default: 8,
   })
   limit!: number;
 
