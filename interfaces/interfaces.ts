@@ -139,6 +139,8 @@ export class UserModel {
   updatedAt = 0;
   // domain = "";
 
+  verifier = "";
+
   nicknameOrName = "";
 
   get loggedIn(): boolean {
@@ -150,13 +152,10 @@ export class UserModel {
 
   get displayName(): string {
     return this.nicknameOrName;
-    // if (this.name) return this.name;
-    // if (this.nickname) return this.nickname;
-    // let account;
-    // if (this.email) account = this.email.split("@").shift();
-    // if (!account) return this.idx + "xxx";
-    // const first = account.substring(0, account.length - 3);
-    // return first + "xxx";
+  }
+
+  get verified(): boolean {
+    return this.verifier != "";
   }
 
   fromJson(map: ResponseData): UserModel {
@@ -182,6 +181,7 @@ export class UserModel {
     this.nicknameOrName = map.nicknameOrName;
     this.createdAt = map.createdAt;
     this.updatedAt = map.updatedAt;
+    this.verifier = map.verifier;
     return this;
   }
 }
