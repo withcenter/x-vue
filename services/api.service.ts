@@ -176,8 +176,8 @@ export class ApiService {
       /// 만약, 접속이나 axios 자체에서 발생하는 에러가 아닌, 프로그램적 에러는 절적한 에러 메시지 리턴.
       const res = await axios.post(this.endpoint, data);
       if (typeof res.data === "string") {
-        console.error(res.data);
-        throw "error_error_string_from_php_backend";
+        console.error(res);
+        throw "error_string_from_php_backend";
       } else if (!res.data.response) {
         throw "error_malformed_response_from_php_backend";
       } else if (typeof res.data.response === "string" && res.data.response.indexOf("error_") === 0) {
@@ -450,7 +450,7 @@ export class ApiService {
 
     if (typeof res.data === "string") {
       console.error(res);
-      throw "error_error_string_from_php_backend";
+      throw "error_string_from_php_backend";
     } else if (!res.data.response) {
       throw "error_malformed_response_from_php_backend";
     } else if (typeof res.data.response === "string" && res.data.response.indexOf("error_") === 0) {
