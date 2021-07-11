@@ -7,7 +7,7 @@
       README.md of `matrix`.
     </div>
 
-    <div class="mt-2 alert alert-info" v-if="Object.keys(settings).length">
+    <div class="mt-2 alert alert-info">
       <h4>Pre-defined codes</h4>
       <pre-defined
         code="admins"

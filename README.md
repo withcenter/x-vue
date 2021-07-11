@@ -216,6 +216,30 @@ export default class Login extends Vue {
 
 
 
+# 디버깅
+
+## Dev console 에서 Vue 앱에 접근하기 - `app.__vue__.$store.state;`
+
+
+`app.__vue__` 와 같이 접근하면 된다.
+`app.__vue__.$store.state;` 와 같이 하면 상태를 볼 수 있다.
+
+
+
+
+
+## Dev console 에서 async 함수 호출하고 결과 확인하기
+
+아래의 두 가지 방법으로 할 수 있다.
+```js
+app.__vue__.api.version().then(function(v) { console.log(v); });
+console.log(await app.__vue__.api.version());
+```
+
+
+
+
+
 # Test
 
 - For test loign, access `/test` route.
