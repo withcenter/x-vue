@@ -16,6 +16,7 @@ import {
   PointHistoryModel,
   UserActivityModel,
   Settings,
+  PassloginResponse,
 } from "../interfaces/interfaces";
 
 import Cookies from "js-cookie";
@@ -303,6 +304,35 @@ export class ApiService {
    */
   async kakaoLogin(data: RequestData): Promise<UserModel> {
     const res = await this.request("user.kakaoLogin", data);
+    return this.setUserSessionId(res);
+  }
+
+  /**
+   * "휴대폰번호 PASS 로그인" 콜백으로 받은 code 를 백엔드로 전송해서,
+   * 백엔드에서 "휴대폰번호 PASS 로그인" 의 사용자 정보를 받아, 리턴한다.
+   * 주의 할 점은, 백엔드에서 가입/로그인/업데이트를 하지 않고 오직 "휴대폰번호 PASS 로그인"의 사용자 정보만 받아 온다.
+   * @param data 패스 로그인 코드를 서버로 전송
+   * @returns PassloginResponse
+   */
+  async passloginCallback(data: RequestData): Promise<PassloginResponse> {
+    // const res =
+    return (await this.request("user.passloginCallback", data)) as PassloginResponse;
+    // return this.setUserSessionId(res);
+  }
+
+  /**
+   *
+   * - "휴대폰번호 PASS 로그인" 콜백으로 받은 code 를 백엔드로 전송해서,
+   * - 백엔드에서 "PASS 서버"에 접속해서 사용자 정보를 받은 다음,
+   *   -- 로그인을 했으면, "PASS 사용자 정보를" 업데이트
+   *   -- 아니면, 회원 가입 또는 로그인 후,
+   *   -- 회원 정보를 클라이언트로 리턴한다.
+   *
+   * @param data 패스로그인 코드
+   * @returns UserModel
+   */
+  async passlogin(data: RequestData): Promise<UserModel> {
+    const res = await this.request("user.passlogin", data);
     return this.setUserSessionId(res);
   }
 

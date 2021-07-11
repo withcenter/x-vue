@@ -51,8 +51,8 @@ export default class ThumbnailWithText extends Vue {
 
   @Prop({ default: false }) thumbnail!: boolean;
 
-  mounted(): void {
-    console.log("ThubnailWithText", this.post);
-  }
+  // mounted(): void {
+  //   console.log("ThubnailWithText", this.post);
+  // }
 }
 </script>

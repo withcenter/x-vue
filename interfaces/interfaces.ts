@@ -457,3 +457,16 @@ export class UserActivityModel extends PointHistoryModel {
     return this;
   }
 }
+
+export interface PassloginResponse {
+  agegroup: string;
+  autoStatusCheck: "Y" | "N";
+  birthdate: string;
+  ci: string;
+  foreign: string;
+  gender: "M" | "F";
+  name: string;
+  phoneNo: string;
+  plid: string;
+  telcoCd: string;
+}
