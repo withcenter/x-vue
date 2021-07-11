@@ -214,3 +214,14 @@ export default class Login extends Vue {
     - Developer can change its design within the single `Forum.vue` component.
 
 
+
+
+# Test
+
+- For test loign, access `/test` route.
+
+
+# Info
+
+- to see information of the app, access `/info`.
+

@@ -15,7 +15,7 @@
     <hr class="my-2" />
     <router-link class="d-flex justify-content-between btn btn-outline-info w-100" :to="`/${comment.rootIdx}`">
       Open Post
-      <img class="icon-md" src="@/assets/svg/external-link.svg" />
+      <ExternalLinkSvg class="icon-md"></ExternalLinkSvg>
     </router-link>
   </div>
 </template>
@@ -28,6 +28,7 @@ import UserDisplayName from "@/x-vue/components/forum/UserDisplayName.vue";
 import FileList from "@/x-vue/components/file/FileList.vue";
 
 import { CommentModel } from "@/x-vue/interfaces/forum.interface";
+import ExternalLinkSvg from "@/x-vue/svg/ExternalLinkSvg.vue";
 
 @Component({
   props: ["comment"],
@@ -35,6 +36,7 @@ import { CommentModel } from "@/x-vue/interfaces/forum.interface";
     UserAvatar,
     UserDisplayName,
     FileList,
+    ExternalLinkSvg,
   },
 })
 export default class CommentPreview extends Vue {

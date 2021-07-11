@@ -1,7 +1,8 @@
 <template>
   <div class="mine-buttons" v-if="api.isMine(parent)">
     <button data-cy="mine-button" :id="'mine-button-popover-' + parent.idx" class="btn btn-sm">
-      <img class="icon-v grey" src="@/assets/svg/ellipsis-v.svg" />
+      <!-- <img class="icon-v grey" src="@/assets/svg/ellipsis-v.svg" /> -->
+      <EllipsisVSvg class="icon-v grey"></EllipsisVSvg>
     </button>
 
     <b-popover placement="bottomleft" ref="popover" :target="'mine-button-popover-' + parent.idx" triggers="click blur">
@@ -18,8 +19,10 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { ApiService } from "@/x-vue/services/api.service";
 import { CommentModel, PostModel } from "@/x-vue/interfaces/forum.interface";
+import EllipsisVSvg from "@/x-vue/svg/EllipsisVSvg.vue";
 
 @Component({
+  components: { EllipsisVSvg },
   props: ["parent"],
 })
 export default class MineButtonsComponent extends Vue {
