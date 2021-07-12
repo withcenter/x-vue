@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="title-content-photo-top-and-text-list-bottom">
     <TitleAndContentTopPhotoBottom
       :categoryId="firstCategoryId"
       :imageHeight="imageHeight"

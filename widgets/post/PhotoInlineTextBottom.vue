@@ -1,7 +1,7 @@
 <template>
-  <router-link :to="story.relativeUrl" v-if="story && story.idx">
-    <div class="thumbnail-with-inline-text w-100 position-relative h-100">
-      <b-img class="image w-100" :src="src" :style="{ height: imageHeight + 'px' }"> </b-img>
+  <router-link class="thumbnail-with-inline-text" :to="story.relativeUrl" v-if="story && story.idx">
+    <div fluid class="w-100 position-relative h-100">
+      <b-img class="primary" :src="src"> </b-img>
       <div class="title position-absolute w-100" :class="isMultiLine ? '' : 'text-truncate'">
         <b>{{ story.title }}</b>
       </div>
@@ -34,7 +34,6 @@ import { Component, Prop } from "vue-property-decorator";
 @Component({})
 export default class PhotoInlineTextBottom extends Vue {
   @Prop() categoryId!: string;
-  @Prop({ default: 200 }) imageHeight!: number;
   @Prop({ default: true }) isMultiLine!: boolean;
   @Prop() post!: PostModel;
 

@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div class="two-photo-top-thumbnails-with-text-and-photo-bottom">
     <div class="d-flex">
       <div class="col-9 p-0 pr-2">
-        <PhotoInlineTextBottom :categoryId="fourthCategoryId" :imageHeight="topImageHeight"></PhotoInlineTextBottom>
+        <PhotoInlineTextBottom :categoryId="fourthCategoryId"></PhotoInlineTextBottom>
       </div>
       <div class="col-3 p-0">
-        <PhotoInlineTextBottom :categoryId="fourthCategoryId" :imageHeight="topImageHeight"></PhotoInlineTextBottom>
+        <PhotoInlineTextBottom :categoryId="fourthCategoryId"></PhotoInlineTextBottom>
       </div>
     </div>
     <div class="mt-2 d-flex">
@@ -16,7 +16,7 @@
         ></ThumbnailWithTextAtRightList>
       </div>
       <div class="col-4 p-0">
-        <PhotoInlineTextBottom :categoryId="fourthCategoryId" :imageHeight="150"></PhotoInlineTextBottom>
+        <PhotoInlineTextBottom :categoryId="fourthCategoryId"></PhotoInlineTextBottom>
       </div>
     </div>
   </div>

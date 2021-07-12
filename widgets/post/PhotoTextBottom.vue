@@ -1,6 +1,6 @@
 <template>
-  <router-link class="overflow-hidden" v-if="story && story.idx" :to="post.relativeUrl">
-    <b-img class="image w-100" :src="src" :style="{ height: imageHeight + 'px' }"> </b-img>
+  <router-link class="photo-text-bottom overflow-hidden" v-if="story && story.idx" :to="post.relativeUrl">
+    <b-img class="primary" :src="src"> </b-img>
     <div class="p-2 title" :class="isMultiLine ? 'overflow-hidden' : 'text-truncate'">
       {{ story.title }}
     </div>
@@ -23,16 +23,10 @@ import { Component, Prop } from "vue-property-decorator";
 @Component({})
 export default class PhotoTextBottom extends Vue {
   @Prop() categoryId!: string;
-  @Prop({
-    default: () => ComponentService.instance.temporaryPost(),
-  })
+  @Prop({ default: () => ComponentService.instance.temporaryPost() })
   post!: PostModel;
 
-  @Prop({ default: 150 })
-  imageHeight!: number;
-
-  @Prop({ default: true })
-  isMultiLine!: boolean;
+  @Prop({ default: true }) isMultiLine!: boolean;
 
   story: PostModel = new PostModel();
 

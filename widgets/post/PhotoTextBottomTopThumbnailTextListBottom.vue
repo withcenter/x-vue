@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="photo-text-bottom-top-thumbnail-text-list-bottom">
     <PhotoTextBottom :imageHeight="imageHeight" :categoryId="firstCategoryId"></PhotoTextBottom>
     <ThumbnailWithTextAtRightList
       class="mt-3"

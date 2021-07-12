@@ -1,7 +1,7 @@
 <template>
-  <div class="photo-with-texts-at-bottom">
+  <div class="thumbnail-with-text-and-meta-at-bottom">
     <router-link :to="story.relativeUrl">
-      <b-img class="w-100" :src="src" :style="{ height: imageHeight + 'px' }"></b-img>
+      <b-img fluid-grow :src="src"></b-img>
       <div class="text-meta mt-2">
         <div class="category">{{ story.categoryId }}</div>
         <div class="title text-truncate">{{ story.title }}</div>
@@ -19,9 +19,6 @@
 .category {
   font-weight: 700;
   color: rgb(182, 33, 182);
-}
-.title {
-  font-weight: 700;
 }
 .content {
   max-height: 3em;
@@ -43,7 +40,6 @@ import { ApiService } from "@/x-vue/services/api.service";
 export default class ThumbnailWithTextAndMetaAtBottom extends Vue {
   @Prop() categoryId!: string;
   @Prop() post!: PostModel;
-  @Prop({ default: 200 }) imageHeight!: number;
 
   story: PostModel = new PostModel();
 

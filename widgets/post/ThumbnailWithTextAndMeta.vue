@@ -1,7 +1,7 @@
 <template>
-  <router-link :to="story.relativeUrl" class="d-flex">
-    <b-img class="image col-3 p-0" :src="src"></b-img>
-    <div class="text-meta col-9">
+  <router-link class="thumbnail-with-text-and-meta d-flex" :to="story.relativeUrl">
+    <b-img class="primary" :src="src"></b-img>
+    <div class="text-meta ml-2 flex-grow-1 overflow-hidden">
       <div class="category">{{ story.categoryId }}</div>
       <div class="title text-truncate">{{ story.title }}</div>
       <div class="content">{{ story.content }}</div>
@@ -14,27 +14,9 @@
 </template>
 
 <style lang="scss" scoped>
-.image {
-  height: 130px;
-}
-
-.text-meta {
-  padding: 0 0 0 0.5em;
-}
-
-.category {
-  font-weight: 700;
-  color: rgb(2, 174, 2);
-}
-.title {
-  margin-top: 0.25em;
-  font-weight: 700;
-}
 .content {
-  margin-top: 0.25em;
   height: 3em;
   overflow: hidden;
-  font-weight: 500;
 }
 </style>
 <script lang="ts">

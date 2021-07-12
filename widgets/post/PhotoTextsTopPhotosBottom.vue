@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="photo-texts-top-photos-bottom">
     <PhotoWithTextsAtRight :categoryId="categoryIdTop"></PhotoWithTextsAtRight>
     <FourPhotosWithTextBottom class="mt-2" :categoryId="categoryIdBottom"></FourPhotosWithTextBottom>
   </div>

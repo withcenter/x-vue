@@ -1,7 +1,7 @@
 <template>
-  <div class="d-flex">
+  <div class="one-by-one-photo-text-bottom d-flex">
     <PhotoTextBottom
-      class="mr-1 w-50"
+      class="mr-2 w-50"
       :post="postList[0]"
       :imageHeight="imageHeight"
       :isMultiLine="isMultilineText"

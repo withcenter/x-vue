@@ -1,18 +1,21 @@
 <template>
   <router-link
-    class="d-flex"
+    class="thumbnail-with-text-at-right d-flex"
     :to="post.relativeUrl"
-    :style="{ height: height + 'px' }"
     :class="isCenterAligned ? 'align-items-center' : ''"
   >
-    <b-img class="col-3 p-0 h-100" :src="post.files[0].url"></b-img>
-    <div class="overflow-hidden">
-      <div class="ml-2 title" :class="isMultiLine ? '' : 'text-truncate'">
-        {{ post.title }}
-      </div>
+    <b-img class="primary" :src="post.files[0].url"></b-img>
+    <div class="ml-2 title overflow-hidden" :class="isMultiLine ? '' : 'text-truncate'">
+      {{ post.title }}
     </div>
   </router-link>
 </template>
+
+<style lang="scss" scoped>
+.title {
+  max-height: 3em;
+}
+</style>
 
 <script lang="ts">
 import { PostModel } from "@/x-vue/interfaces/forum.interface";
@@ -22,15 +25,11 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 
 @Component({})
 export default class ThumbnailWithTextAtRight extends Vue {
-  @Prop({
-    type: PostModel,
-    default: () => ComponentService.instance.temporaryPost(),
-  })
+  @Prop({ default: () => ComponentService.instance.temporaryPost() })
   post!: PostModel;
 
   @Prop() categoryId!: string;
-  @Prop({ default: 70 }) height!: number;
-  @Prop({ default: false }) isMultiLine!: boolean;
+  @Prop({ default: true }) isMultiLine!: boolean;
   @Prop({ default: true }) isCenterAligned!: boolean;
 
   story: PostModel = new PostModel();

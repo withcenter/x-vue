@@ -2,11 +2,11 @@
   <div class="two-by-two-thumbnail-with-text-bottom">
     <div class="top d-flex">
       <PhotoInlineTextBottom :imageHeight="imageHeight" class="w-50" :post="posts[0]"></PhotoInlineTextBottom>
-      <PhotoInlineTextBottom :imageHeight="imageHeight" class="pl-1 w-50" :post="posts[1]"></PhotoInlineTextBottom>
+      <PhotoInlineTextBottom :imageHeight="imageHeight" class="ml-2 w-50" :post="posts[1]"></PhotoInlineTextBottom>
     </div>
-    <div class="mt-1 bottom d-flex">
+    <div class="mt-2 bottom d-flex">
       <PhotoInlineTextBottom :imageHeight="imageHeight" class="w-50" :post="posts[2]"></PhotoInlineTextBottom>
-      <PhotoInlineTextBottom :imageHeight="imageHeight" class="pl-1 w-50" :post="posts[3]"></PhotoInlineTextBottom>
+      <PhotoInlineTextBottom :imageHeight="imageHeight" class="ml-2 w-50" :post="posts[3]"></PhotoInlineTextBottom>
     </div>
   </div>
 </template>

@@ -1,12 +1,12 @@
 <template>
   <div class="four-photos-with-text-bottom m-0 d-flex" v-if="posts">
-    <div class="w-25 mr-1">
+    <div class="w-25 mr-2">
       <PhotoTextBottom :imageHeight="imageHeight" :post="posts[0]"></PhotoTextBottom>
     </div>
-    <div class="w-25 mr-1">
+    <div class="w-25 mr-2">
       <PhotoTextBottom :imageHeight="imageHeight" :post="posts[1]"></PhotoTextBottom>
     </div>
-    <div class="w-25 mr-1">
+    <div class="w-25 mr-2">
       <PhotoTextBottom :imageHeight="imageHeight" :post="posts[2]"></PhotoTextBottom>
     </div>
     <div class="w-25">

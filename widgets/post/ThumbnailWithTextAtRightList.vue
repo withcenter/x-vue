@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="thumbnail-with-text-at-right-list">
     <ThumbnailWithTextAtRight
       :class="index > 0 ? 'mt-2' : ''"
       v-for="(post, index) of posts"
@@ -27,7 +27,7 @@ export default class ThumbnailWithTextAtRightList extends Vue {
   @Prop({}) categoryId!: string;
   @Prop({ default: 2 }) limit!: number;
   @Prop({ default: 70 }) itemHeight!: number;
-  @Prop({ default: false }) isMultiLine!: boolean;
+  @Prop({ default: true }) isMultiLine!: boolean;
   @Prop({ default: true }) isTextCentered!: boolean;
 
   posts: PostModel[] = [];

@@ -1,7 +1,7 @@
 <template>
-  <div class="d-flex">
+  <div class="one-by-one-thumbnail-with-text-and-meta-at-bottom d-flex">
     <ThumbnailWithTextAndMetaAtBottom
-      class="mr-1 w-50"
+      class="mr-2 w-50"
       :categoryId="firstCategoryId"
       :imageHeight="imageHeight"
     ></ThumbnailWithTextAndMetaAtBottom>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="thumbnail-with-text-list-top-texts-bottom">
     <ThumbnailWithTextAtRightList
       :isMultiLine="true"
       :categoryId="firstCategoryId"

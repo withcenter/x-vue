@@ -5,19 +5,12 @@
     </router-link>
     <div class="d-flex">
       <router-link :to="story.relativeUrl">
-        <b-img class="photo" :src="src" :style="{ height: imageHeight + 'px' }"> </b-img>
+        <b-img :src="src"> </b-img>
       </router-link>
       <LatestPostsText class="ml-2 text-truncate" :categoryId="categoryId" :limit="limit"></LatestPostsText>
     </div>
   </div>
 </template>
-
-<style lang="scss" scoped>
-.photo {
-  height: 215px;
-  max-width: 250px !important;
-}
-</style>
 
 <script lang="ts">
 import Vue from "vue";
@@ -38,7 +31,6 @@ export default class PhotoWithTextsAtRight extends Vue {
   @Prop() categoryId!: string;
   @Prop() post!: PostModel;
   @Prop({ default: 8 }) limit!: number;
-  @Prop({ default: 215 }) imageHeight!: number;
 
   story: PostModel = new PostModel();
 

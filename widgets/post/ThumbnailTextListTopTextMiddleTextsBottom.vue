@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="thumbnail-text-list-top-text-middle-texts-bottom">
     <ThumbnailWithTextAtRightList
       :categoryId="firstCategoryId"
       :limit="topListLimit"
@@ -10,7 +10,7 @@
       <b><PostTitle :categoryId="secondCategoryId"></PostTitle></b>
     </div>
     <div class="mt-2">
-      <div class="third-category-header py-2 px-3 d-inline-block">
+      <div class="third-category-header py-2 px-2 d-inline-block">
         <b>{{ thirdCategoryId || "Third Category" }}</b>
         <div></div>
       </div>

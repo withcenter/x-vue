@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="two-photos-top-texts-midle-four-photos-bottom">
     <OneByOnePhotoInlineText :imageHeight="topImageHeight"></OneByOnePhotoInlineText>
     <PostsTitleList class="mt-2" :limit="listLimit"></PostsTitleList>
     <TwoByTwoPhotoTextBottom

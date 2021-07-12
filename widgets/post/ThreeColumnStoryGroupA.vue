@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex">
+  <div class="three-column-story-group-a d-flex">
     <div class="w-33 mr-2">
       <PhotoTextBottomTopThumbnailTextListBottom
         :firstCategoryId="leftCategories[0]"
