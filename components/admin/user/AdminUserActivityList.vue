@@ -55,7 +55,7 @@
         </template>
 
         <template #cell(taxonomy)="row">
-          <a target="__blank" :href="'/' + row.item.entity">{{ row.item.taxonomy }}</a>
+          <router-link :to="'/' + row.item.entity">{{ row.item.taxonomy }}</router-link>
         </template>
 
         <template #cell(fromUser)="row">

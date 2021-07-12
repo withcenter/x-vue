@@ -26,15 +26,26 @@
         </template>
 
         <template #cell(idx)="row">
-          <router-link :to="'/forum/' + row.item.idx">{{ row.item.idx }}</router-link>
+          <router-link :to="'/forum/' + row.item.idx">
+            {{ row.item.idx }} <BoxArrowUpRightSvg></BoxArrowUpRightSvg>
+          </router-link>
         </template>
 
         <template #cell(id)="row">
-          <router-link :to="'/admin/category/edit/' + row.item.idx">{{ row.item.id }}</router-link>
+          <router-link :to="'/admin/category/edit/' + row.item.idx">
+            {{ row.item.id }} <BoxArrowUpRightSvg></BoxArrowUpRightSvg>
+          </router-link>
         </template>
 
         <template #cell(action)="row">
-          <div class="btn btn-sm btn-outline-danger" @click="onClickDelete(row.item)">❌</div>
+          <div class="d-flex justify-content-around">
+            <router-link :to="'/admin/category/edit/' + row.item.idx">
+              <PencilSvg class="trash-icon pointer"></PencilSvg>
+            </router-link>
+            <div @click="onClickDelete(row.item)">
+              <TrashSvg class="trash-icon pointer"></TrashSvg>
+            </div>
+          </div>
         </template>
 
         <template #table-busy>
@@ -55,6 +66,12 @@
   </section>
 </template>
 
+<style scoped>
+.trash-icon {
+  width: 1em;
+}
+</style>
+
 <script lang="ts">
 import { ApiService } from "@/x-vue/services/api.service";
 import { CategoryModel } from "@/x-vue/interfaces/interfaces";
@@ -63,12 +80,19 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import Service from "../../../services/component.service";
 import ComponentService from "../../../services/component.service";
+import BoxArrowUpRightSvg from "@/x-vue/svg/BoxArrowUpRightSvg.vue";
+
+import TrashSvg from "@/x-vue/svg/TrashSvg.vue";
+import PencilSvg from "@/x-vue/svg/PencilSvg.vue";
 
 import Loading from "@/x-vue/widgets/common/Loading.vue";
 @Component({
   components: {
     AdminCategoryCreate,
     Loading,
+    BoxArrowUpRightSvg,
+    TrashSvg,
+    PencilSvg,
   },
 })
 export default class AdminCategoryList extends Vue {
