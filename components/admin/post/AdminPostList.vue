@@ -30,6 +30,7 @@
     </div>
     <div class="overflow-auto">
       <b-table
+        table-class="text-center"
         small
         striped
         hover
@@ -38,33 +39,16 @@
         :busy="forum.loading"
         :bordered="true"
         responsive="true"
+        head-variant="dark"
       >
-        <template #row-details="row">
-          <b-card>
-            <div class="mt-2 d-flex">
-              <UserAvatar :parent="row.item"></UserAvatar>
-              <div class="ml-2">
-                <UserDisplayName class="font-weight-bold" :parent="row.item"></UserDisplayName>
-                <PostMeta data-cy="post-view-meta" :post="row.item"></PostMeta>
-              </div>
-            </div>
-            <Content class="mt-2" :parent="row.item"> </Content>
-            <FileList class="mt-2" :post="row.item"></FileList>
-          </b-card>
-        </template>
-
         <template #cell(user)="row">
-          <div class="d-flex">
-            <UserAvatar :parent="row.item"></UserAvatar>
-            <router-link :to="'/admin/user/edit/' + row.item.user.idx">
-              <div>{{ row.item.user.name }}</div>
-              <div>idx: {{ row.item.user.idx }}</div>
-            </router-link>
-          </div>
+          <UserAvatarWithInfo class="text-left" :user="row.item.user"></UserAvatarWithInfo>
         </template>
 
         <template #cell(idx)="row">
-          <router-link :to="row.item.relativeUrl">{{ row.item.idx }}</router-link>
+          <router-link :to="row.item.relativeUrl"
+            >{{ row.item.idx }} <BoxArrowUpRightSvg></BoxArrowUpRightSvg
+          ></router-link>
         </template>
 
         <template #cell(title)="row">
@@ -89,10 +73,33 @@
         </template>
 
         <template #cell(action)="row">
-          <button class="btn btn-sm btn-secondary" @click="row.toggleDetails">preview</button>
+          <div class="d-flex justify-content-around">
+            <div class="pointer px-1" @click="row.toggleDetails">
+              <BoxArrowInUpSvg class="trash-icon" v-if="row.detailsShowing"></BoxArrowInUpSvg>
+              <BoxArrowInDownSvg v-else></BoxArrowInDownSvg>
+            </div>
+            <div @click="onClickDelete(row.item)">
+              <TrashSvg class="trash-icon pointer"></TrashSvg>
+            </div>
+          </div>
         </template>
 
-        <!-- <template #table-caption>This is a table caption.</template> -->
+        <template #row-details="row">
+          <b-card class="text-left">
+            <div class="d-flex justify-content-between">
+              <h3 id="post-title">{{ row.item.title }}</h3>
+            </div>
+            <div class="mt-2 d-flex">
+              <UserAvatar :parent="row.item"></UserAvatar>
+              <div class="ml-2">
+                <UserDisplayName class="font-weight-bold" :parent="row.item"></UserDisplayName>
+                <PostMeta data-cy="post-view-meta" :post="row.item"></PostMeta>
+              </div>
+            </div>
+            <Content class="mt-2" :parent="row.item"> </Content>
+            <FileList class="mt-2" :post="row.item"></FileList>
+          </b-card>
+        </template>
       </b-table>
       <div v-if="this.forum.posts.length" class="d-flex mt-3 justify-content-center w-100">
         <div class="overflow-auto">
@@ -109,8 +116,14 @@
   </section>
 </template>
 
+<style scoped>
+.trash-icon {
+  width: 1em;
+}
+</style>
+
 <script lang="ts">
-import { ForumInterface } from "@/x-vue/interfaces/forum.interface";
+import { ForumInterface, PostModel } from "@/x-vue/interfaces/forum.interface";
 import { ApiService } from "@/x-vue/services/api.service";
 import ComponentService from "@/x-vue/services/component.service";
 import Vue from "vue";
@@ -124,7 +137,14 @@ import Content from "@/x-vue/components/forum/Content.vue";
 import PostMeta from "@/x-vue/components/forum/post/PostMeta.vue";
 import { Err } from "@/x-vue/services/defines";
 
+import UserAvatarWithInfo from "@/x-vue/widgets/common/UserAvatarWithInfo.vue";
+
+import BoxArrowUpRightSvg from "@/x-vue/svg/BoxArrowUpRightSvg.vue";
+import BoxArrowInUpSvg from "@/x-vue/svg/BoxArrowInUpSvg.vue";
+import BoxArrowInDownSvg from "@/x-vue/svg/BoxArrowInDownSvg.vue";
 import Loading from "@/x-vue/widgets/common/Loading.vue";
+
+import TrashSvg from "@/x-vue/svg/TrashSvg.vue";
 @Component({
   components: {
     UserDisplayName,
@@ -133,6 +153,11 @@ import Loading from "@/x-vue/widgets/common/Loading.vue";
     Content,
     PostMeta,
     Loading,
+    UserAvatarWithInfo,
+    BoxArrowInUpSvg,
+    BoxArrowInDownSvg,
+    BoxArrowUpRightSvg,
+    TrashSvg,
   },
 })
 export default class AdminPostList extends Vue {
@@ -240,6 +265,17 @@ export default class AdminPostList extends Vue {
       ComponentService.instance.error(error);
     }
     this.forum.endLoad();
+  }
+
+  async onClickDelete(post: PostModel): Promise<void> {
+    const re = await ComponentService.instance.confirm("Delete Post", "Do you want to delete the post?");
+    if (!re) return;
+    try {
+      const cat = await ApiService.instance.postDelete(post.idx);
+      this.loadPosts();
+    } catch (e) {
+      ComponentService.instance.error(e);
+    }
   }
 }
 </script>

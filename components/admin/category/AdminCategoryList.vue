@@ -11,6 +11,7 @@
 
     <section class="overflow-auto mb-3">
       <b-table
+        table-class="text-center"
         small
         striped
         hover
@@ -26,26 +27,26 @@
         </template>
 
         <template #cell(idx)="row">
-          <router-link :to="'/forum/' + row.item.idx">
+          <router-link class="d-block" :to="'/forum/' + row.item.idx">
             {{ row.item.idx }} <BoxArrowUpRightSvg></BoxArrowUpRightSvg>
           </router-link>
         </template>
 
         <template #cell(id)="row">
-          <router-link :to="'/admin/category/edit/' + row.item.idx">
-            {{ row.item.id }} <BoxArrowUpRightSvg></BoxArrowUpRightSvg>
+          <router-link class="d-block" :to="'/admin/category/edit/' + row.item.idx">
+            {{ row.item.id }} <PencilSvg></PencilSvg>
           </router-link>
         </template>
 
         <template #cell(action)="row">
-          <div class="d-flex justify-content-around">
+          <!-- <div class="d-flex justify-content-around">
             <router-link :to="'/admin/category/edit/' + row.item.idx">
-              <PencilSvg class="trash-icon pointer"></PencilSvg>
-            </router-link>
-            <div @click="onClickDelete(row.item)">
-              <TrashSvg class="trash-icon pointer"></TrashSvg>
-            </div>
+              <PencilSvg></PencilSvg>
+            </router-link> -->
+          <div @click="onClickDelete(row.item)">
+            <TrashSvg class="trash-icon pointer"></TrashSvg>
           </div>
+          <!-- </div> -->
         </template>
 
         <template #table-busy>
@@ -106,7 +107,7 @@ export default class AdminCategoryList extends Vue {
 
   fields: Array<{ [index: string]: unknown }> = [
     { key: "idx", visible: true },
-    { key: "id", visible: true },
+    { key: "id", visible: true, tdClass: "text-left" },
     { key: "title", visible: true },
     { key: "description", visible: true },
     { key: "action", visible: true, class: "text-center" },

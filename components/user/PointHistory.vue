@@ -141,6 +141,9 @@ export default class PointHistory extends Vue {
 
   getAction(h: PointHistoryModel): string {
     if (h.action == "dislike" && h.fromUserIdx == this.$app.user.idx) return "dislike_deduction";
+
+    if (h.action == "like" && h.fromUserIdx == this.$app.user.idx) return "like_deduction";
+
     return h.action;
   }
 }

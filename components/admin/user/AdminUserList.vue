@@ -39,6 +39,7 @@
       </div>
       <section class="overflow-auto mb-3">
         <b-table
+          table-class="text-center"
           small
           striped
           hover
@@ -47,18 +48,13 @@
           :busy="loading"
           :bordered="true"
           responsive="true"
+          head-variant="dark"
         >
           <template #head()="scope">
             <div class="text-nowrap">{{ scope.label | t }}</div>
           </template>
           <template #cell(user)="row">
-            <div class="d-flex align-items-center">
-              <b-avatar class="mr-1" :src="row.item.photoUrl"></b-avatar>
-              <router-link :to="'/admin/user/edit/' + row.item.idx">
-                <div>({{ row.item.idx }}) {{ row.item.name }}</div>
-                <div>{{ row.item.email }}</div>
-              </router-link>
-            </div>
+            <UserAvatarWithInfo class="text-left" :user="row.item"></UserAvatarWithInfo>
           </template>
 
           <template #cell(block)="row">
@@ -66,12 +62,13 @@
           </template>
 
           <template #cell(action)="row">
-            <div class="d-flex justify-content-around text-nowrap">
-              <button class="btn btn-sm btn-outline-info mr-1" @click="row.toggleDetails">
-                {{ row.detailsShowing ? "&#11161;" : "&#11163;" }}
-              </button>
-              <router-link class="btn btn-sm btn-outline-primary" :to="editLink(row.item)">&#9999;</router-link>
+            <!-- <div class="d-flex justify-content-around text-nowrap"> -->
+            <div class="pointer px-1" @click="row.toggleDetails">
+              <BoxArrowInUpSvg v-if="row.detailsShowing"></BoxArrowInUpSvg>
+              <BoxArrowInDownSvg v-else></BoxArrowInDownSvg>
             </div>
+            <!-- <router-link class="px-1" :to="editLink(row.item)"><PencilSvg></PencilSvg></router-link>
+            </div> -->
           </template>
 
           <template #row-details="row">
@@ -124,10 +121,19 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import Service from "../../../services/component.service";
 
+import PencilSvg from "@/x-vue/svg/PencilSvg.vue";
+import BoxArrowInUpSvg from "@/x-vue/svg/BoxArrowInUpSvg.vue";
+import BoxArrowInDownSvg from "@/x-vue/svg/BoxArrowInDownSvg.vue";
+
+import UserAvatarWithInfo from "@/x-vue/widgets/common/UserAvatarWithInfo.vue";
 import Loading from "@/x-vue/widgets/common/Loading.vue";
 @Component({
   components: {
     Loading,
+    UserAvatarWithInfo,
+    PencilSvg,
+    BoxArrowInUpSvg,
+    BoxArrowInDownSvg,
   },
 })
 export default class AdminUserList extends Vue {
