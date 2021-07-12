@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex align-items-center text-nowrap">
     <b-avatar class="mr-1" :src="user.photoUrl"></b-avatar>
-    <router-link :to="'/admin/user/edit/' + user.idx">
+    <router-link :to="'/user/' + user.idx">
       <div>({{ user.idx }}) {{ user.nicknameOrName }} <PencilSvg v-if="editIcon"></PencilSvg></div>
       <div>{{ user.email }}</div>
     </router-link>

@@ -243,7 +243,7 @@ export default class AdminFileList extends Vue {
   total = 0;
   noOfPages = 0;
 
-  viewMode: "table" | "gallery" = "table";
+  viewMode: "table" | "gallery" = "gallery";
 
   fields: Array<{ [index: string]: unknown }> = [
     { key: "file", visible: true },
