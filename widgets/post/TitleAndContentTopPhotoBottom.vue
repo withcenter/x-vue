@@ -1,7 +1,7 @@
 <template>
   <router-link class="title-and-content-top-photo-bottom text-center" :to="story.relativeUrl">
-    <h3 class="title overflow-hidden">{{ story.title }}</h3>
-    <h5 class="content text-truncate">{{ story.content }}</h5>
+    <h3 class="title overflow-hidden mt-2">{{ story.title }}</h3>
+    <h5 class="content text-truncate m-0">{{ story.content }}</h5>
     <b-img fluid-grow class="primary mt-2" :src="src"></b-img>
   </router-link>
 </template>

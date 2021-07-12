@@ -4,7 +4,6 @@
       :categoryId="firstCategoryId"
       :limit="topListLimit"
       :isMultiLine="true"
-      :isTextCentered="false"
     ></ThumbnailWithTextAtRightList>
     <div class="mt-2 border-top border-bottom p-2 text-truncate text-centered">
       <b><PostTitle :categoryId="secondCategoryId"></PostTitle></b>
@@ -53,6 +52,6 @@ export default class ThumbnailTextListTopTextMiddleTextsBottom extends Vue {
   @Prop() secondCategoryId!: string;
   @Prop() thirdCategoryId!: string;
   @Prop({ default: 3 }) topListLimit!: number;
-  @Prop({ default: 3 }) bottomListLimit!: number;
+  @Prop({ default: 5 }) bottomListLimit!: number;
 }
 </script>

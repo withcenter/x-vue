@@ -4,7 +4,6 @@
       :isMultiLine="true"
       :categoryId="firstCategoryId"
       :limit="firstLimit"
-      :isTextCentered="false"
     ></ThumbnailWithTextAtRightList>
     <PostsTitleList class="mt-2" :categoryId="secondCategoryId" :limit="secondLimit" :bulleted="true"></PostsTitleList>
   </div>
@@ -28,6 +27,6 @@ export default class ThumbnailWithTextListTopTextsBottom extends Vue {
   @Prop({ default: 3 }) firstLimit!: number;
 
   @Prop() secondCategoryId!: string;
-  @Prop({ default: 8 }) secondLimit!: number;
+  @Prop({ default: 7 }) secondLimit!: number;
 }
 </script>
