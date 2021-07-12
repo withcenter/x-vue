@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="thumbnail-with-text">
     <router-link class="d-flex" :to="post.relativeUrl || '#'">
       <b-img
         class="primary mr-2"
