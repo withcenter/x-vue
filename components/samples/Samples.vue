@@ -44,6 +44,9 @@
       <LeftArrowSvg></LeftArrowSvg>
       <RightArrowSvg></RightArrowSvg>
       <DownArrowSvg></DownArrowSvg>
+
+      <ManSvg></ManSvg>
+      <WomanSvg></WomanSvg>
     </div>
 
     <hr />
@@ -619,6 +622,8 @@ import UpArrowSvg from "@/x-vue/svg/UpArrowSvg.vue";
 import LeftArrowSvg from "@/x-vue/svg/LeftArrowSvg.vue";
 import RightArrowSvg from "@/x-vue/svg/RightArrowSvg.vue";
 import DownArrowSvg from "@/x-vue/svg/DownArrowSvg.vue";
+import ManSvg from "@/x-vue/svg/ManSvg.vue";
+import WomanSvg from "@/x-vue/svg/WomanSvg.vue";
 
 @Component({
   components: {
@@ -636,6 +641,8 @@ import DownArrowSvg from "@/x-vue/svg/DownArrowSvg.vue";
     LeftArrowSvg,
     RightArrowSvg,
     DownArrowSvg,
+    ManSvg,
+    WomanSvg,
     UploadButton,
     FileUploadButton,
     PostTitle,
