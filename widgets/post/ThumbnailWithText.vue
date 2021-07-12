@@ -1,19 +1,15 @@
 <template>
   <section>
-    <router-link class="d-flex justify-content-start" :to="post.relativeUrl || '#'">
-      <div v-if="post.files.length">
-        <div class="mr-3" :style="'height:' + thumbnailHeight + 'px;width:' + thumbnailWidth + 'px'">
-          <b-img
-            :width="thumbnailWidth"
-            :style="'height:' + thumbnailHeight + 'px;'"
-            :thumbnail="thumbnail"
-            fluid
-            rounded="0"
-            :src="post.files[0].url"
-          ></b-img>
-        </div>
-      </div>
-      <div class="flex-grow-1 overflow-hidden">
+    <router-link class="d-flex" :to="post.relativeUrl || '#'">
+      <b-img
+        class="primary mr-2"
+        :thumbnail="thumbnail"
+        fluid
+        rounded="0"
+        :src="post.files[0].url"
+        v-if="post.files.length"
+      ></b-img>
+      <div class="overflow-hidden">
         <div class="font-weight-bold text-truncate">{{ post.title }}</div>
         <div class="text-truncate-2line">{{ post.content }}</div>
       </div>
@@ -42,12 +38,6 @@ export default class ThumbnailWithText extends Vue {
     default: () => ComponentService.instance.temporaryPost(),
   })
   post!: PostModel;
-
-  @Prop({ default: 70 })
-  thumbnailWidth!: number;
-
-  @Prop({ default: 70 })
-  thumbnailHeight!: number;
 
   @Prop({ default: false }) thumbnail!: boolean;
 
