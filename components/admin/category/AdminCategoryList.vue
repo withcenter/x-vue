@@ -2,7 +2,7 @@
   <section>
     <div class="d-flex justify-content-between mb-2">
       <h4>{{ "category_list" | t }}</h4>
-      <div class="btn btn-sm btn-info" @click="checkDefaultCategory">Check Default Category</div>
+      <!-- <div class="btn btn-sm btn-info" @click="checkDefaultCategory">Check Default Category</div> -->
     </div>
 
     <section class="w-100">
@@ -11,7 +11,7 @@
 
     <section class="overflow-auto mb-3">
       <b-table
-        table-class="text-center"
+        table-class="text-center text-nowrap"
         small
         striped
         hover
@@ -168,20 +168,20 @@ export default class AdminCategoryList extends Vue {
     }
   }
 
-  async checkDefaultCategory(): Promise<void> {
-    try {
-      const menus = await ApiService.instance.cafeInitDefautMenu();
-      let ok = 0;
-      let error = 0;
-      for (const menu in menus) {
-        if (menu) ok++;
-        else error++;
-      }
-      this.s.alert("Default Menus: ", `${ok} Okay Menus. ${error} Error Menus`);
-      this.onSubmitSearch();
-    } catch (e) {
-      this.s.error(e);
-    }
-  }
+  // async checkDefaultCategory(): Promise<void> {
+  //   try {
+  //     const menus = await ApiService.instance.cafeInitDefautMenu();
+  //     let ok = 0;
+  //     let error = 0;
+  //     for (const menu in menus) {
+  //       if (menu) ok++;
+  //       else error++;
+  //     }
+  //     this.s.alert("Default Menus: ", `${ok} Okay Menus. ${error} Error Menus`);
+  //     this.onSubmitSearch();
+  //   } catch (e) {
+  //     this.s.error(e);
+  //   }
+  // }
 }
 </script>

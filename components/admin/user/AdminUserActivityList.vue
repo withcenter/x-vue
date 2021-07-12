@@ -41,6 +41,7 @@
 
     <section class="overflow-auto mb-3">
       <b-table
+        table-class="text-center text-nowrap"
         small
         striped
         hover
@@ -55,19 +56,21 @@
         </template>
 
         <template #cell(taxonomy)="row">
-          <router-link :to="'/' + row.item.entity">{{ row.item.taxonomy }}</router-link>
+          <router-link :to="'/' + row.item.entity"
+            >{{ row.item.taxonomy }} <BoxArrowUpRightSvg></BoxArrowUpRightSvg
+          ></router-link>
         </template>
 
         <template #cell(fromUser)="row">
-          <router-link v-if="row.item.fromUserIdx" :to="'/admin/user/edit/' + row.item.fromUserIdx">
-            ({{ row.item.fromUserIdx }}) {{ row.item.fromUser.nickname }}
-          </router-link>
+          <UserAvatarWithInfo
+            v-if="row.item.fromUserIdx"
+            class="text-left"
+            :user="row.item.fromUser"
+          ></UserAvatarWithInfo>
         </template>
 
         <template #cell(toUser)="row">
-          <router-link :to="'/admin/user/edit/' + row.item.toUserIdx">
-            ({{ row.item.toUserIdx }}) {{ row.item.toUser.nickname }}
-          </router-link>
+          <UserAvatarWithInfo v-if="row.item.toUserIdx" class="text-left" :user="row.item.toUser"></UserAvatarWithInfo>
         </template>
 
         <template #cell(createdAt)="row">
@@ -90,11 +93,15 @@ import { ApiService } from "@/x-vue/services/api.service";
 import { yymmddhma } from "@/x-vue/services/functions";
 import dayjs from "dayjs";
 import { Component, Vue } from "vue-property-decorator";
-
+import UserAvatarWithInfo from "@/x-vue/widgets/common/UserAvatarWithInfo.vue";
 import Loading from "@/x-vue/widgets/common/Loading.vue";
+
+import BoxArrowUpRightSvg from "@/x-vue/svg/BoxArrowUpRightSvg.vue";
 @Component({
   components: {
+    UserAvatarWithInfo,
     Loading,
+    BoxArrowUpRightSvg,
   },
 })
 export default class AdminUserActivityList extends Vue {
