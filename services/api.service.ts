@@ -510,7 +510,15 @@ export class ApiService {
    */
   isMine(obj: PostModel): boolean {
     if (this.notLoggedIn) return false;
+
     return obj.userIdx === this.user?.idx;
+  }
+
+  /**
+   * Return true if the logged in user is admin.
+   */
+  get admin(): boolean {
+    return this.user.admin;
   }
 
   /**

@@ -1,5 +1,5 @@
 <template>
-  <div class="mine-buttons" v-if="api.isMine(parent)">
+  <div class="mine-buttons" v-if="api.isMine(parent) || api.admin">
     <button data-cy="mine-button" :id="'mine-button-popover-' + parent.idx" class="btn btn-sm">
       <!-- <img class="icon-v grey" src="@/assets/svg/ellipsis-v.svg" /> -->
       <EllipsisVSvg class="icon-v grey"></EllipsisVSvg>
