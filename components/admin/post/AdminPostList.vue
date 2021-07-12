@@ -145,7 +145,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 
 import UserDisplayName from "@/x-vue/components/forum/UserDisplayName.vue";
-import UserAvatar from "@/x-vue/components/forum/UserAvatar.vue";
+import UserAvatar from "@/x-vue/components/forum/ForumUserAvatar.vue";
 import FileList from "@/x-vue/components/file/FileList.vue";
 import Content from "@/x-vue/components/forum/Content.vue";
 

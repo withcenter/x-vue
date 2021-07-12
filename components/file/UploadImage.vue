@@ -13,7 +13,7 @@
     </section>
     <section class="upload-image-circle" v-if="ui == 'circle'">
       <div class="base">
-        <b-avatar :src="file.url" size="8rem"></b-avatar>
+        <b-avatar :src="file.url" size="8rem" v-if="loading == false"></b-avatar>
         <CameraSvg class="camera"></CameraSvg>
         <input type="file" @change="onFileChangeImage($event, 'banner')" />
       </div>
@@ -66,6 +66,9 @@ export default class UploadImage extends Vue {
   file: FileModel = new FileModel();
   confirmDelete = translate("do_you_want_to_delete");
   api: ApiService = ApiService.instance;
+
+  // To hide the blinking. To prevent to show the default avatar icon from <b-avatar>.
+  loading = true;
   async mounted(): Promise<void> {
     console.log("defaultImageUrl;", this.defaultImageUrl);
     try {
@@ -93,6 +96,7 @@ export default class UploadImage extends Vue {
         console.log("e; ", e);
       }
     }
+    this.loading = false;
   }
 
   // Delete previously uploaded image
@@ -138,10 +142,12 @@ export default class UploadImage extends Vue {
         },
         (p: number) => {
           this.percent = p;
+          this.$emit("progress", p);
         }
       );
 
       this.$emit("uploaded", this.file);
+      this.$emit("progress", 0);
     } catch (e) {
       this.$emit("error", e);
     }
