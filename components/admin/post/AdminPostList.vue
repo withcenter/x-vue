@@ -177,6 +177,7 @@ export default class AdminPostList extends Vue {
     },
     {
       key: "idx",
+      label: "post idx",
       visible: true,
     },
     {
