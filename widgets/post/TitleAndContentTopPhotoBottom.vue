@@ -2,7 +2,7 @@
   <router-link class="title-and-content-top-photo-bottom text-center" :to="story.relativeUrl">
     <h3 class="title overflow-hidden">{{ story.title }}</h3>
     <h5 class="content text-truncate">{{ story.content }}</h5>
-    <b-img class="w-100 mt-2" :src="src" :style="{ height: imageHeight + 'px' }"></b-img>
+    <b-img fluid-grow class="primary mt-2" :src="src"></b-img>
   </router-link>
 </template>
 
@@ -23,8 +23,6 @@ import ComponentService from "@/x-vue/services/component.service";
 export default class TitleAndContentTopPhotoBottom extends Vue {
   @Prop() categoryId!: string;
   @Prop() post!: PostModel;
-
-  @Prop({ default: 209 }) imageHeight!: string;
 
   story: PostModel = new PostModel();
 

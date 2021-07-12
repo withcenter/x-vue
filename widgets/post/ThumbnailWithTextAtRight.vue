@@ -5,7 +5,7 @@
     :class="isCenterAligned ? 'align-items-center' : ''"
   >
     <b-img class="primary" :src="post.files[0].url"></b-img>
-    <div class="ml-2 title overflow-hidden" :class="isMultiLine ? '' : 'text-truncate'">
+    <div class="px-2 title overflow-hidden" :class="isMultiLine ? '' : 'text-truncate'">
       {{ post.title }}
     </div>
   </router-link>
@@ -13,7 +13,7 @@
 
 <style lang="scss" scoped>
 .title {
-  max-height: 3em;
+  max-height: 4.5em;
 }
 </style>
 

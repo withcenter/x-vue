@@ -1,15 +1,15 @@
 <template>
-  <div class="two-column-story-group-b d-flex">
+  <div class="two-column-story-group-b row">
     <TitleContentPhotoTopAndTextListBottom
       :firstCategoryId="leftCategories[0]"
       :secondCategoryId="leftCategories[1]"
-      class="left mr-2"
+      class="left col-12 col-lg-6 pr-lg-1"
     ></TitleContentPhotoTopAndTextListBottom>
     <ThumbnailTextListTopTextMiddleTextsBottom
       :firstCategoryId="rightCategories[0]"
       :secondCategoryId="rightCategories[1]"
       :thirdCategoryId="rightCategories[2]"
-      class="right"
+      class="right col-12 col-lg-6 pl-lg-1 mt-lg-0 mt-2"
     ></ThumbnailTextListTopTextMiddleTextsBottom>
   </div>
 </template>

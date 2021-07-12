@@ -1,9 +1,6 @@
 <template>
   <div class="title-content-photo-top-and-text-list-bottom">
-    <TitleAndContentTopPhotoBottom
-      :categoryId="firstCategoryId"
-      :imageHeight="imageHeight"
-    ></TitleAndContentTopPhotoBottom>
+    <TitleAndContentTopPhotoBottom :categoryId="firstCategoryId"></TitleAndContentTopPhotoBottom>
     <PostsTitleList class="mt-2" :categoryId="secondCategoryId" :limit="bottomListLimit"></PostsTitleList>
   </div>
 </template>
@@ -22,6 +19,5 @@ export default class TitleContentPhotoTopAndTextListBottom extends Vue {
   @Prop() firstCategoryId!: string;
   @Prop() secondCategoryId!: string;
   @Prop({ default: 3 }) bottomListLimit!: number;
-  @Prop({ default: 210 }) imageHeight!: number;
 }
 </script>

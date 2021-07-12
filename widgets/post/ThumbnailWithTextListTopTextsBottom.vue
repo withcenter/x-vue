@@ -25,11 +25,9 @@ import PostsTitleList from "./PostsTitleList.vue";
 })
 export default class ThumbnailWithTextListTopTextsBottom extends Vue {
   @Prop() firstCategoryId!: string;
-  @Prop({ default: 3 })
-  firstLimit!: number;
+  @Prop({ default: 3 }) firstLimit!: number;
 
   @Prop() secondCategoryId!: string;
-  @Prop({ default: 8 })
-  secondLimit!: number;
+  @Prop({ default: 8 }) secondLimit!: number;
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="thumbnail-with-text-and-meta-at-bottom">
     <router-link :to="story.relativeUrl">
-      <b-img fluid-grow :src="src"></b-img>
+      <b-img fluid-grow class="primary" :src="src"></b-img>
       <div class="text-meta mt-2">
         <div class="category">{{ story.categoryId }}</div>
         <div class="title text-truncate">{{ story.title }}</div>

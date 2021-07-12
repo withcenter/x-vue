@@ -27,7 +27,6 @@ import { PostModel } from "@/x-vue/interfaces/forum.interface";
 })
 export default class TwoByTwoPhotoTextBottom extends Vue {
   @Prop() categoryId!: string;
-  @Prop({ default: 200 }) imageHeight!: number;
   @Prop({ default: true }) isMultilineText!: boolean;
 
   posts: PostModel[] = [];

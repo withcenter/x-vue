@@ -6,7 +6,6 @@
       :key="post.idx"
       :post="post"
       :isMultiLine="isMultiLine"
-      :height="itemHeight"
       :isCenterAligned="isTextCentered"
     ></ThumbnailWithTextAtRight>
   </div>
@@ -26,7 +25,6 @@ import ThumbnailWithTextAtRight from "./ThumbnailWithTextAtRight.vue";
 export default class ThumbnailWithTextAtRightList extends Vue {
   @Prop({}) categoryId!: string;
   @Prop({ default: 2 }) limit!: number;
-  @Prop({ default: 70 }) itemHeight!: number;
   @Prop({ default: true }) isMultiLine!: boolean;
   @Prop({ default: true }) isTextCentered!: boolean;
 

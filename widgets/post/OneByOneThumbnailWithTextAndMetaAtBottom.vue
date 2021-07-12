@@ -3,13 +3,8 @@
     <ThumbnailWithTextAndMetaAtBottom
       class="mr-2 w-50"
       :categoryId="firstCategoryId"
-      :imageHeight="imageHeight"
     ></ThumbnailWithTextAndMetaAtBottom>
-    <ThumbnailWithTextAndMetaAtBottom
-      class="w-50"
-      :categoryId="firstCategoryId"
-      :imageHeight="imageHeight"
-    ></ThumbnailWithTextAndMetaAtBottom>
+    <ThumbnailWithTextAndMetaAtBottom class="w-50" :categoryId="firstCategoryId"></ThumbnailWithTextAndMetaAtBottom>
   </div>
 </template>
 
@@ -23,14 +18,9 @@ import ThumbnailWithTextAndMetaAtBottom from "./ThumbnailWithTextAndMetaAtBottom
   components: { ThumbnailWithTextAndMetaAtBottom },
 })
 export default class OneByOneThumbnailWithTextAndMetaAtBottom extends Vue {
-  @Prop()
-  firstCategoryId!: string;
-  @Prop()
-  secondCategoryId!: string;
+  @Prop() firstCategoryId!: string;
+  @Prop() secondCategoryId!: string;
 
-  @Prop({ default: 5 })
-  limit!: string;
-  @Prop({ default: 200 })
-  imageHeight!: string;
+  @Prop({ default: 5 }) limit!: string;
 }
 </script>

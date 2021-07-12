@@ -36,7 +36,6 @@ import PhotoInlineTextBottom from "./PhotoInlineTextBottom.vue";
   },
 })
 export default class TwoPhotoTopThumbnailsWithTextAndPhotoBottom extends Vue {
-  @Prop({ default: 255 }) topImageHeight!: number;
   @Prop({ default: 2 }) textListLimit!: number;
   @Prop() firstCategoryId!: string;
   @Prop() secondCategoryId!: string;

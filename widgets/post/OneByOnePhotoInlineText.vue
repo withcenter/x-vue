@@ -18,12 +18,8 @@ import PhotoInlineTextBottom from "./PhotoInlineTextBottom.vue";
   components: { PhotoInlineTextBottom },
 })
 export default class OneByOnePhotoInlineText extends Vue {
-  @Prop()
-  categoryId!: string;
-  @Prop({ default: 200 })
-  imageHeight!: string;
-  @Prop({ default: false })
-  isMultilineText!: boolean;
+  @Prop() categoryId!: string;
+  @Prop({ default: false }) isMultilineText!: boolean;
 
   @Prop({
     default: () => {

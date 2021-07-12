@@ -5,7 +5,7 @@
     </router-link>
     <div class="d-flex">
       <router-link :to="story.relativeUrl">
-        <b-img :src="src"> </b-img>
+        <b-img class="primary" :src="src"> </b-img>
       </router-link>
       <LatestPostsText class="ml-2 text-truncate" :categoryId="categoryId" :limit="limit"></LatestPostsText>
     </div>

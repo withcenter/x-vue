@@ -16,10 +16,7 @@ import FourPhotosWithTextBottom from "./FourPhotosWithTextBottom.vue";
   components: { PhotoWithTextsAtRight, FourPhotosWithTextBottom },
 })
 export default class PhotoTextsTopPhotosBottom extends Vue {
-  @Prop({})
-  categoryIdTop!: string;
-
-  @Prop({})
-  categoryIdBottom!: string;
+  @Prop({}) categoryIdTop!: string;
+  @Prop({}) categoryIdBottom!: string;
 }
 </script>

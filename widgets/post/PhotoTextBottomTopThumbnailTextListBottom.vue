@@ -1,6 +1,6 @@
 <template>
   <div class="photo-text-bottom-top-thumbnail-text-list-bottom">
-    <PhotoTextBottom :imageHeight="imageHeight" :categoryId="firstCategoryId"></PhotoTextBottom>
+    <PhotoTextBottom :categoryId="firstCategoryId"></PhotoTextBottom>
     <ThumbnailWithTextAtRightList
       class="mt-3"
       :isMultiLine="true"
@@ -25,7 +25,6 @@ export default class PhotoTextBottomTopThumbnailTextListBottom extends Vue {
   @Prop() firstCategoryId!: string;
 
   @Prop() secondCategoryId!: string;
-  @Prop({ default: 150 }) imageHeight!: number;
   @Prop({ default: 7 }) listLimit!: number;
 }
 </script>

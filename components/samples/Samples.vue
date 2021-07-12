@@ -173,7 +173,7 @@
           <br />
         </p>
         <hr />
-        <PhotoTextBottom></PhotoTextBottom>
+        <PhotoTextBottom class="child-image-height-md child-image-height-lg child-image-height-xl"></PhotoTextBottom>
       </div>
     </div>
 
@@ -212,8 +212,6 @@
           Displays 4 post thumbnail with inline texts.
           <br />
           categoryId string
-          <br />
-          itemHeight number (200px default)
         </p>
         <hr />
         <TwoByTwoPhotoInlineTextBottom></TwoByTwoPhotoInlineTextBottom>
@@ -242,8 +240,6 @@
           Displays 4 Photo on with text at bottom.
           <br />
           categoryId string
-          <br />
-          itemHeight number (150px default)
         </p>
         <hr />
         <FourPhotosWithTextBottom></FourPhotosWithTextBottom>
@@ -318,7 +314,6 @@
           firstCategoryId string
           <br />
           secondCategoryId string
-          <br />
         </p>
         <hr />
         <OneByOneThumbnailWithTextAndMetaAtBottom
@@ -335,8 +330,6 @@
           <br />
           categoryId string
           <br />
-
-          <br />
           isMultilineText boolean (false default)
         </p>
         <hr />
@@ -351,8 +344,6 @@
           Display 2 Photo with text at bottom
           <br />
           categoryId string
-          <br />
-
           <br />
           isMultilineText boolean (false default)
         </p>
@@ -493,8 +484,6 @@
       <div class="card-body">
         <h5 class="card-title">ThreeColumnStoryGroupA</h5>
         <p class="card-text">
-          leftCategories string[] - 2 categories <br />
-          leftPhotoheight number (150 default)<br />
           secondCategories string[] - 2 categories <br />
           thirdCategories string[] - 4 categories <br />
         </p>
