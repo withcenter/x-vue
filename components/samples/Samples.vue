@@ -87,11 +87,11 @@
         <li>thumbnailHeight: number</li>
       </ul>
       <b-card>
-        <thumbnail-with-text :thumbnailHeight="75" :thumbnailWidth="75"></thumbnail-with-text>
+        <thumbnail-with-text class="child-image-size-xl"></thumbnail-with-text>
       </b-card>
       <b-card class="mt-1">
-        <b-card-title>With thumbnail</b-card-title>
-        <thumbnail-with-text :thumbnail="true" :thumbnailHeight="50" :thumbnailWidth="50"></thumbnail-with-text>
+        <b-card-title>With thumbnail and .child-image-size-xl.child-image-size-lg-md</b-card-title>
+        <thumbnail-with-text class="child-image-size-xl child-image-size-lg-md" :thumbnail="true"></thumbnail-with-text>
       </b-card>
     </div>
 
