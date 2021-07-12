@@ -1,12 +1,11 @@
 <template>
-  <div>
+  <div class="thumbnail-with-text-at-right-list">
     <ThumbnailWithTextAtRight
       :class="index > 0 ? 'mt-2' : ''"
       v-for="(post, index) of posts"
       :key="post.idx"
       :post="post"
       :isMultiLine="isMultiLine"
-      :height="itemHeight"
       :isCenterAligned="isTextCentered"
     ></ThumbnailWithTextAtRight>
   </div>
@@ -26,8 +25,7 @@ import ThumbnailWithTextAtRight from "./ThumbnailWithTextAtRight.vue";
 export default class ThumbnailWithTextAtRightList extends Vue {
   @Prop({}) categoryId!: string;
   @Prop({ default: 2 }) limit!: number;
-  @Prop({ default: 70 }) itemHeight!: number;
-  @Prop({ default: false }) isMultiLine!: boolean;
+  @Prop({ default: true }) isMultiLine!: boolean;
   @Prop({ default: true }) isTextCentered!: boolean;
 
   posts: PostModel[] = [];

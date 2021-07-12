@@ -1,37 +1,18 @@
 <template>
   <div class="posts-title-list">
-    <ul class="p-0 m-0" v-if="bulleted">
-      <li
-        class="post-text text-truncate"
-        v-for="(post, index) of postsList"
-        :key="post.idx"
-        :class="index > 0 ? 'mt-1' : ''"
-      >
-        <router-link :to="post.relativeUrl">
-          {{ post.title }}
-        </router-link>
-      </li>
-    </ul>
-    <div v-if="!bulleted">
-      <div
-        class="post-text text-truncate"
-        v-for="(post, index) of postsList"
-        :key="post.idx"
-        :class="index > 0 ? 'mt-1' : ''"
-      >
-        <router-link :to="post.relativeUrl">
-          {{ post.title }}
-        </router-link>
-      </div>
+    <div
+      class="post-text text-truncate"
+      v-for="(post, index) of postsList"
+      :key="post.idx"
+      :class="index > 0 ? 'mt-2' : ''"
+    >
+      <router-link :to="post.relativeUrl">
+        <span class="mr-2" v-if="bulleted"> &#9679; </span>
+        {{ post.title }}
+      </router-link>
     </div>
   </div>
 </template>
-
-<style lang="scss" scoped>
-li {
-  list-style-position: inside;
-}
-</style>
 
 <script lang="ts">
 import Vue from "vue";
@@ -45,10 +26,8 @@ export default class PostsTitleList extends Vue {
   @Prop() categoryId!: string;
   @Prop() posts!: PostModel[];
 
-  @Prop({ default: 5 })
-  limit!: number;
-  @Prop({ default: false })
-  bulleted!: boolean;
+  @Prop({ default: 5 }) limit!: number;
+  @Prop({ default: false }) bulleted!: boolean;
 
   postsList: PostModel[] = [];
 

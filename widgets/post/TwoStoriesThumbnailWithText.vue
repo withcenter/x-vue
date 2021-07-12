@@ -1,14 +1,12 @@
 <template>
-  <section>
-    <thumbnail-with-text
+  <section class="two-stories-thumbnail-with-text">
+    <ThumbnailWithText
       class="mb-3"
       v-for="(post, index) of posts.slice(0, limit)"
       :key="index"
       :post="post"
-      :thumbnailWidth="thumbnailWidth"
-      :thumbnailHeight="thumbnailHeight"
       :thumbnail="thumbnail"
-    ></thumbnail-with-text>
+    ></ThumbnailWithText>
   </section>
 </template>
 
@@ -36,15 +34,7 @@ export default class TwoStoriesThumbnailWithText extends Vue {
   })
   posts!: PostModel[];
 
-  @Prop({ default: 70 })
-  thumbnailWidth!: number;
-
-  @Prop({ default: 70 })
-  thumbnailHeight!: number;
-
-  @Prop({ default: 2 })
-  limit!: number;
-
+  @Prop({ default: 2 }) limit!: number;
   @Prop({ default: false }) thumbnail!: boolean;
 
   mounted(): void {
