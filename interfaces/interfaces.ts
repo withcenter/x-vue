@@ -128,6 +128,7 @@ export class UserModel {
   phoneNo = "";
   gender = "";
   birthdate = 0;
+  age = 0;
   countryCode = "";
   province = "";
   city = "";
@@ -172,6 +173,7 @@ export class UserModel {
     this.phoneNo = map.phoneNo;
     this.gender = map.gender;
     this.birthdate = map.birthdate;
+    this.age = map.age ?? 0;
     this.countryCode = map.countryCode;
     this.province = map.province;
     this.city = map.city;

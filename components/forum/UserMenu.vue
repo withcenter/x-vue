@@ -1,18 +1,14 @@
 <template>
   <div class="user-menu">
-    <!-- <a type="button" class="btn w-100" @click="$emit('menuClick', 'profile')">
-      {{ "see_profile" | t }}
-    </a>
-    <a type="button" class="btn w-100" @click="$emit('menuClick', 'posts')">
-      {{ "see_posts" | t }}
-    </a>
-    <a type="button" class="btn w-100" @click="$emit('menuClick', 'comments')">
-      {{ "see_comments" | t }}
-    </a>
-    <a type="button" class="btn w-100" @click="$emit('menuClick', 'message')">
-      {{ "send_message" | t }}
-    </a> -->
+    <div v-if="user.verified == false">본인 미 인증</div>
 
+    <router-link class="btn d-block text-left" :to="`/profile/${user.idx}`" v-if="user.verified">{{
+      user.name
+    }}</router-link>
+    <router-link class="btn d-block text-left" :to="`/profile/${user.idx}`" v-if="user.verified"
+      >{{ user.age }}세 / {{ user.gender | t }}</router-link
+    >
+    <hr />
     <router-link class="btn d-block text-left" :to="`/profile/${user.idx}`">{{ "see_profile" | t }}</router-link>
     <router-link class="btn d-block text-left" :to="`/user/posts/${user.idx}`">{{ "see_posts" | t }}</router-link>
     <router-link class="btn d-block text-left" :to="`/user/comments/${user.idx}`">{{ "see_comments" | t }}</router-link>
