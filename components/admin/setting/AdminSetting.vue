@@ -7,7 +7,7 @@
       README.md of `matrix`.
     </div>
 
-    <div class="mt-2 alert alert-info">
+    <div class="mt-2 alert alert-info" v-if="loading == false">
       <h4>Pre-defined codes</h4>
       <pre-defined
         code="admins"
@@ -228,10 +228,11 @@ export default class AdminSettings extends Vue {
     data: "",
   };
   settings: { [index: string]: string | number } = {};
+  loading = true;
   async mounted(): Promise<void> {
     try {
       this.settings = await this.api.settings();
-      this.settings = Object.assign({}, this.settings);
+      this.loading = false;
     } catch (e) {
       this.cs.error(e);
     }
