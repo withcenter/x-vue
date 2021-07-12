@@ -41,27 +41,39 @@
         responsive="true"
         head-variant="dark"
       >
+        <template #head()="scope">
+          <div class="text-nowrap">{{ scope.label | t }}</div>
+        </template>
+
         <template #cell(user)="row">
           <UserAvatarWithInfo class="text-left" :user="row.item.user"></UserAvatarWithInfo>
         </template>
 
         <template #cell(idx)="row">
-          <router-link :to="row.item.relativeUrl"
+          <router-link :to="'/' + row.item.idx"
             >{{ row.item.idx }} <BoxArrowUpRightSvg></BoxArrowUpRightSvg
           ></router-link>
         </template>
 
         <template #cell(title)="row">
-          {{ row.item.title.substring(0, 32) }}
-          <span class="align-middle">{{ row.item.fileIdxes ? "(&#128247;)" : "" }}</span>
+          <div v-if="row.item.deletedAt">{{ "deleted" | t }}</div>
+          <div v-else>
+            {{ row.item.title.substring(0, 32) }}
+            <span v-if="row.item.fileIdxes">(<CameraSvg class="action-icon"></CameraSvg>)</span>
+          </div>
         </template>
 
         <template #cell(content)="row">
-          {{ row.item.content.substring(0, 64) }}
+          <div v-if="row.item.deletedAt">{{ "deleted" | t }}</div>
+          <div v-else>
+            {{ row.item.content.substring(0, 64) }}
+          </div>
         </template>
 
         <template #cell(categoryId)="row">
-          <router-link :to="'/forum/' + row.item.categoryId">{{ row.item.categoryId }}</router-link>
+          <router-link :to="'/forum/' + row.item.categoryId"
+            >{{ row.item.categoryId }} <BoxArrowUpRightSvg></BoxArrowUpRightSvg
+          ></router-link>
         </template>
 
         <template #cell(shortDate)="row">
@@ -74,12 +86,15 @@
 
         <template #cell(action)="row">
           <div class="d-flex justify-content-around">
-            <div class="pointer px-1" @click="row.toggleDetails">
-              <BoxArrowInUpSvg class="trash-icon" v-if="row.detailsShowing"></BoxArrowInUpSvg>
+            <div class="pointer px-2" @click="row.toggleDetails">
+              <BoxArrowInUpSvg class="action-icon" v-if="row.detailsShowing"></BoxArrowInUpSvg>
               <BoxArrowInDownSvg v-else></BoxArrowInDownSvg>
             </div>
-            <div @click="onClickDelete(row.item)">
-              <TrashSvg class="trash-icon pointer"></TrashSvg>
+            <router-link class="px-2" :to="'/forum/edit/' + row.item.idx"
+              ><PencilSvg class="action-icon"></PencilSvg
+            ></router-link>
+            <div class="px-2" @click="onClickDelete(row.item)">
+              <TrashSvg class="action-icon pointer"></TrashSvg>
             </div>
           </div>
         </template>
@@ -117,7 +132,7 @@
 </template>
 
 <style scoped>
-.trash-icon {
+.action-icon {
   width: 1em;
 }
 </style>
@@ -144,6 +159,9 @@ import BoxArrowInUpSvg from "@/x-vue/svg/BoxArrowInUpSvg.vue";
 import BoxArrowInDownSvg from "@/x-vue/svg/BoxArrowInDownSvg.vue";
 import Loading from "@/x-vue/widgets/common/Loading.vue";
 
+import PencilSvg from "@/x-vue/svg/PencilSvg.vue";
+
+import CameraSvg from "@/x-vue/svg/CameraSvg.vue";
 import TrashSvg from "@/x-vue/svg/TrashSvg.vue";
 @Component({
   components: {
@@ -158,6 +176,8 @@ import TrashSvg from "@/x-vue/svg/TrashSvg.vue";
     BoxArrowInDownSvg,
     BoxArrowUpRightSvg,
     TrashSvg,
+    PencilSvg,
+    CameraSvg,
   },
 })
 export default class AdminPostList extends Vue {
@@ -183,10 +203,14 @@ export default class AdminPostList extends Vue {
     {
       key: "title",
       visible: true,
+
+      tdClass: "text-left",
     },
     {
       key: "content",
       visible: true,
+
+      tdClass: "text-left",
     },
     {
       key: "categoryId",

@@ -65,27 +65,41 @@
           >
             <b-card-text>
               <div @click.stop="">
-                <router-link :to="'/admin/user/edit/' + file.user.idx" class="d-flex align-items-center">
-                  <b-avatar class="mr-1" :src="file.user.photoUrl"></b-avatar>
-                  <div>
-                    <div>({{ file.user.idx }}) {{ file.user.nicknameOrName }}</div>
-                  </div>
-                </router-link>
+                <UserAvatarWithInfo class="text-left" :user="file.user"></UserAvatarWithInfo>
               </div>
               <div><b>idx:</b> {{ file.idx }}</div>
-              <div v-if="file.taxonomy"><b>taxonomy:</b> {{ file.taxonomy }}</div>
-              <div v-if="file.code"><b>code:</b> {{ file.code }}</div>
+              <div @click.stop="">
+                <div class="d-flex justify-content-start" v-if="file.taxonomy == 'posts'">
+                  <b>{{ "posts" | t }}</b>
+                  <span class="flex-grow-1"></span>
+                  <router-link class="px-2" :to="'/' + file.post.idx">
+                    <BoxArrowUpRightSvg class="action-icon"></BoxArrowUpRightSvg>
+                  </router-link>
+                  <router-link class="px-2" :to="'/forum/edit/' + file.post.idx"
+                    ><PencilSvg class="action-icon"></PencilSvg
+                  ></router-link>
+                  <div class="px-2" @click="onClickDelete(file.post)">
+                    <TrashSvg class="action-icon pointer"></TrashSvg>
+                  </div>
+                </div>
+                <div v-else-if="file.taxonomy == 'users' || file.code == 'photoUrl'">
+                  <b>{{ "users" | t }}</b> <template v-if="file.code">({{ file.code }})</template>
+                  <router-link class="px-2" :to="'/admin/user/edit/' + file.user.idx"
+                    ><PencilSvg class="action-icon"></PencilSvg
+                  ></router-link>
+                </div>
+              </div>
               <div v-if="file.taxonomy == 'posts'">
                 <div>{{ file.post.title }}</div>
                 <div>{{ file.post.content }}</div>
               </div>
+
+              <div></div>
             </b-card-text>
             <div class="position-absolute right top">
               <b-button variant="light" size="sm" @click.stop="fileDelete(file)" pill>
                 <TrashSvg style="width: 22px" class="trash-icon"></TrashSvg>
-                <!-- &#128465; -->
               </b-button>
-              <!-- <b-button variant="light" size="sm" @click.stop="" pill>&#128193;</b-button> -->
             </div>
           </b-card>
         </b-col>
@@ -109,6 +123,7 @@
       </div>
       <section class="overflow-auto mb-3">
         <b-table
+          table-class="text-center text-nowrap"
           small
           striped
           hover
@@ -119,11 +134,15 @@
           responsive="true"
         >
           <template #head()="scope">
-            <div class="text-nowrap">{{ scope.label | t }}</div>
+            <div>{{ scope.label | t }}</div>
           </template>
 
           <template #cell(file)="row">
-            <div @click="$bvModal.show('file-modal-' + row.item.idx)" class="mr-3" :style="'height:50px;width:50px'">
+            <div
+              @click="$bvModal.show('file-modal-' + row.item.idx)"
+              class="mr-3 pointer"
+              :style="'height:50px;width:50px'"
+            >
               <b-img width="50" style="height: 50px" thumbnail fluid rounded="0" :src="row.item.thumbnailUrl"></b-img>
             </div>
 
@@ -136,18 +155,31 @@
             </b-modal>
           </template>
 
-          <template #cell(userIdx)="row">
-            <div class="d-flex align-items-center">
-              <b-avatar class="mr-1" :src="row.item.user.photoUrl"></b-avatar>
-              <router-link :to="'/admin/user/edit/' + row.item.user.idx">
-                <div>({{ row.item.user.idx }}) {{ row.item.user.name }}</div>
+          <template #cell(taxonomy)="row">
+            <div class="d-flex">
+              <div v-if="row.item.taxonomy == 'posts'">{{ "posts" | t }}</div>
+              <div v-if="row.item.taxonomy == 'users' || row.item.code == 'photoUrl'">{{ "users" | t }}</div>
+              <router-link class="px-2" :to="'/' + row.item.post.idx">
+                <BoxArrowUpRightSvg class="action-icon"></BoxArrowUpRightSvg>
               </router-link>
+              <router-link class="px-2" :to="'/forum/edit/' + row.item.post.idx"
+                ><PencilSvg class="action-icon"></PencilSvg
+              ></router-link>
+              <div class="px-2" @click="onClickDelete(row.item.post)">
+                <TrashSvg class="action-icon pointer"></TrashSvg>
+              </div>
             </div>
           </template>
 
+          <template #cell(userIdx)="row">
+            <UserAvatarWithInfo class="text-left" :user="row.item.user"></UserAvatarWithInfo>
+          </template>
+
           <template #cell(action)="row">
-            <div class="d-flex align-item-center text-nowrap">
-              <button class="btn btn-sm btn-outline-primary" @click="fileDelete(row.item)">&#128465;</button>
+            <div class="d-flex align-item-center">
+              <button class="btn" @click="fileDelete(row.item)">
+                <TrashSvg class="action-icon"></TrashSvg>
+              </button>
             </div>
           </template>
 
@@ -170,6 +202,12 @@
   </section>
 </template>
 
+<style scoped>
+.action-icon {
+  width: 1em;
+}
+</style>
+
 <script lang="ts">
 import { FileModel, RequestData } from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
@@ -178,10 +216,20 @@ import Vue from "vue";
 import Component from "vue-class-component";
 
 import TrashSvg from "@/x-vue/svg/TrashSvg.vue";
+import PencilSvg from "@/x-vue/svg/PencilSvg.vue";
+import BoxArrowUpRightSvg from "@/x-vue/svg/BoxArrowUpRightSvg.vue";
 
+import UserAvatarWithInfo from "@/x-vue/widgets/common/UserAvatarWithInfo.vue";
 import Loading from "@/x-vue/widgets/common/Loading.vue";
+import { PostModel } from "@/x-vue/interfaces/forum.interface";
 @Component({
-  components: { TrashSvg, Loading },
+  components: {
+    TrashSvg,
+    Loading,
+    PencilSvg,
+    UserAvatarWithInfo,
+    BoxArrowUpRightSvg,
+  },
 })
 export default class AdminFileList extends Vue {
   files: Array<FileModel> = [];
@@ -195,11 +243,11 @@ export default class AdminFileList extends Vue {
   total = 0;
   noOfPages = 0;
 
-  viewMode: "table" | "gallery" = "gallery";
+  viewMode: "table" | "gallery" = "table";
 
   fields: Array<{ [index: string]: unknown }> = [
     { key: "file", visible: true },
-    { key: "idx", visible: true, sortable: true },
+    { key: "idx", label: "File idx", visible: true, sortable: true },
     { key: "taxonomy", visible: true },
     { key: "entity", visible: true, sortable: true },
     { key: "userIdx", label: "User", visible: true, sortable: true },
@@ -283,6 +331,17 @@ export default class AdminFileList extends Vue {
       centered: true,
       size: "lg",
     });
+  }
+
+  async onClickDelete(post: PostModel): Promise<void> {
+    const re = await ComponentService.instance.confirm("Delete Post", "Do you want to delete the post?");
+    if (!re) return;
+    try {
+      const cat = await ApiService.instance.postDelete(post.idx);
+      this.loadFiles();
+    } catch (e) {
+      ComponentService.instance.error(e);
+    }
   }
 }
 </script>

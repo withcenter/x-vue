@@ -11,7 +11,7 @@
 
     <section class="overflow-auto mb-3">
       <b-table
-        table-class="text-center"
+        table-class="text-center text-nowrap"
         small
         striped
         hover
