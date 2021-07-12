@@ -23,7 +23,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import UserAvatar from "@/x-vue/components/forum/UserAvatar.vue";
+import UserAvatar from "@/x-vue/components/forum/ForumUserAvatar.vue";
 import UserDisplayName from "@/x-vue/components/forum/UserDisplayName.vue";
 import FileList from "@/x-vue/components/file/FileList.vue";
 

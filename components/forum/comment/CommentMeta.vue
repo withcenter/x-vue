@@ -18,7 +18,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { CommentModel } from "@/x-vue/interfaces/forum.interface";
 import UserDisplayName from "../UserDisplayName.vue";
-import UserAvatar from "../UserAvatar.vue";
+import UserAvatar from "@/x-vue/components/forum/ForumUserAvatar.vue";
 
 @Component({
   props: ["comment"],
