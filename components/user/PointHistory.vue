@@ -116,6 +116,7 @@ export default class PointHistory extends Vue {
   }
 
   mounted(): void {
+    console.log("PointHistory::");
     this.search();
   }
 
@@ -152,7 +153,7 @@ export default class PointHistory extends Vue {
         }
       }
 
-      // console.log(this.pointHistories);
+      console.log(this.pointHistories);
     } catch (e) {
       this.$emit("error", e);
     }

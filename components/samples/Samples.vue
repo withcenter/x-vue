@@ -55,6 +55,7 @@
       <CloseSvg></CloseSvg>
       <PencilSquareSvg></PencilSquareSvg>
       <PencilSvg></PencilSvg>
+      <ArrowLeftRightSvg></ArrowLeftRightSvg>
     </div>
 
     <hr />
@@ -641,6 +642,8 @@ import CloseSvg from "@/x-vue/svg/CloseSvg.vue";
 import PencilSquareSvg from "@/x-vue/svg/PencilSquareSvg.vue";
 import PencilSvg from "@/x-vue/svg/PencilSvg.vue";
 
+import ArrowLeftRightSvg from "@/x-vue/svg/ArrowLeftRightSvg.vue";
+
 @Component({
   components: {
     CameraSvg,
@@ -666,6 +669,7 @@ import PencilSvg from "@/x-vue/svg/PencilSvg.vue";
     CloseSvg,
     PencilSquareSvg,
     PencilSvg,
+    ArrowLeftRightSvg,
 
     UploadButton,
     FileUploadButton,
