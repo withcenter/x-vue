@@ -6,7 +6,6 @@
           class="primary"
           :thumbnail="thumbnail"
           rounded="0"
-          block
           :src="post.files[0].url"
           v-if="post.files.length"
         ></b-img>
