@@ -10,8 +10,8 @@
           </router-link>
         </div>
       </div>
-      <div class="mt-3 p-2 text-center" v-if="!posts.length && !loadingPosts">No Advertisements ..</div>
-      <div class="p-3 text-center rounded" v-if="loadingPosts">
+      <div class="mt-3 p-2 text-center" v-if="!posts.length && !loading">No Advertisements ..</div>
+      <div class="p-3 text-center rounded" v-if="loading">
         <b-spinner small class="mx-2" type="grow" variant="info"></b-spinner>
         Loading Advertisements ...
       </div>
@@ -54,7 +54,7 @@ export default class AdvertisementList extends Vue {
   api = ApiService.instance;
   s = ComponentService.instance;
 
-  loadingPosts = false;
+  loading = false;
 
   total = 0;
   limit = 10;
@@ -76,15 +76,17 @@ export default class AdvertisementList extends Vue {
   }
 
   async mounted(): Promise<void> {
+    this.loading = true;
     this.options.limit = this.limit;
     this.options.page = 1;
     this.options.categoryId = "advertisement";
     this.currentPage = this.$route.query.page as string;
-    this.options.userIdx = this.$store.state.user.idx;
+
+    console.log("mounted", this.options);
 
     try {
-      await this.loadPosts();
       this.total = await this.api.postCount(this.options);
+      await this.loadPosts();
       this.noOfPages = Math.ceil(this.total / this.limit);
     } catch (e) {
       Service.instance.error(e);
@@ -92,12 +94,13 @@ export default class AdvertisementList extends Vue {
   }
 
   async loadPosts(): Promise<void> {
-    this.loadingPosts = true;
+    this.loading = true;
+    this.options.userIdx = this.$store.state.user.idx;
     try {
       this.posts = await AdvertisementService.instance.advertisementSearch(this.options);
-      this.loadingPosts = false;
+      this.loading = false;
     } catch (e) {
-      this.loadingPosts = false;
+      this.loading = false;
       Service.instance.error(e);
     }
   }
