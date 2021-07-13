@@ -234,7 +234,7 @@ export default class PointHistory extends Vue {
     if (h.post.idx && h.post.deletedAt) return "";
     if (h.action.includes("advertisement.")) {
       return "/advertisement/edit/" + h.entity;
-    } else if (h.action.includes("Post") || h.action.includes("like")) {
+    } else if (h.action.includes("Post") || h.action.includes("Comment") || h.action.includes("like")) {
       return "/" + h.entity;
     }
     return "";
