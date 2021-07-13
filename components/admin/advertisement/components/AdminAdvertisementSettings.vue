@@ -70,7 +70,7 @@
       <tbody>
         <tr v-for="n in points.length" :key="n">
           <th scope="row">
-            {{ points[n - 1].countryCode ? points[n - 1].countryCode : "Default Setting" }}
+            {{ points[n - 1].countryCode ? points[n - 1].countryCode : "default_setting" | t }}
           </th>
           <td>
             <input class="form-control" type="number" v-model="points[n - 1].top" />
@@ -85,8 +85,8 @@
             <input class="form-control" type="number" v-model="points[n - 1].line" />
           </td>
           <td>
-            <button class="w-100 btn btn-primary" @click="onEdit(points[n - 1])">Update</button>
-            <button class="w-100 btn btn-warning" @click="onDelete(points[n - 1])">Delete</button>
+            <button class="w-100 btn btn-primary btn-sm" @click="onEdit(points[n - 1])">Update</button>
+            <button class="w-100 btn btn-warning btn-sm" @click="onDelete(points[n - 1])">Delete</button>
           </td>
         </tr>
       </tbody>

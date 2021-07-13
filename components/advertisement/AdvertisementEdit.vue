@@ -154,7 +154,7 @@
               {{ "start_advertisement" | t }}
             </button>
             <div class="alert alert-danger mt-2" v-if="isPointInsufficient">
-              <span v-if="isEmptyObj(bannerPoints)">{{ "poiint_setting_not_set" | t }}</span>
+              <span v-if="isEmptyObj(bannerPoints)">{{ "point_setting_not_set" | t }}</span>
               <span v-else>{{ "start_advertisement_warning" | t }}</span>
             </div>
           </div>
