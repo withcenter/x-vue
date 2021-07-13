@@ -3,7 +3,7 @@
     <div class="w-100 position-relative">
       <b-img fluid-grow class="primary" :src="src"> </b-img>
       <div class="title position-absolute w-100 p-2 text-white" :class="isMultiLine ? '' : 'text-truncate'">
-        <b>{{ story.title }}</b>
+        {{ story.title }}
       </div>
     </div>
   </router-link>
@@ -11,12 +11,11 @@
 
 <style lang="scss" scoped>
 .photo-inline-text-bottom {
-  overflow: hidden;
-
   .title {
     background-color: rgba(1, 1, 1, 0.3) !important;
     max-height: 3.6em;
     bottom: 0;
+    overflow: hidden;
   }
 }
 </style>
