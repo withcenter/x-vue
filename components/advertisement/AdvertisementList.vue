@@ -82,8 +82,6 @@ export default class AdvertisementList extends Vue {
     this.options.categoryId = "advertisement";
     this.currentPage = this.$route.query.page as string;
 
-    console.log("mounted", this.options);
-
     try {
       this.total = await this.api.postCount(this.options);
       await this.loadPosts();
