@@ -87,6 +87,12 @@
       </b-card>
     </div>
 
+    <div class="my-3">
+      <h2>PhotoTitleContent</h2>
+      <p>Displays thumbanil photo, title, and content</p>
+      <PhotoTitleContent class="mt-2"></PhotoTitleContent>
+    </div>
+
     <div class="alert alert-info">
       <h2>ThumbnailWithText</h2>
       Display thumbnail and title and content from a post. It uses bootstrap vue 'b-img'. So, you can customize the
@@ -122,10 +128,6 @@
         <two-stories-thumbnail-with-text :thumbnail="true"></two-stories-thumbnail-with-text>
       </b-card>
     </div>
-
-    <p>..</p>
-    <p>..</p>
-    <p>..</p>
 
     <div class="card mb-2">
       <div class="card-body">
@@ -644,6 +646,8 @@ import PencilSvg from "@/x-vue/svg/PencilSvg.vue";
 
 import ArrowLeftRightSvg from "@/x-vue/svg/ArrowLeftRightSvg.vue";
 
+import PhotoTitleContent from "@/x-vue/widgets/post/PhotoTitleContent.vue";
+
 @Component({
   components: {
     CameraSvg,
@@ -705,6 +709,7 @@ import ArrowLeftRightSvg from "@/x-vue/svg/ArrowLeftRightSvg.vue";
     ThumbnailTextListTopTextMiddleTextsBottom,
     TitleContentPhotoTopAndTextListBottom,
     TwoColumnStoryGroupB,
+    PhotoTitleContent,
   },
 })
 export default class Samples extends Vue {
