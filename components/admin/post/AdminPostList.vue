@@ -296,7 +296,7 @@ export default class AdminPostList extends Vue {
     const re = await ComponentService.instance.confirm("Delete Post", "Do you want to delete the post?");
     if (!re) return;
     try {
-      const cat = await ApiService.instance.postDelete(post.idx);
+      await ApiService.instance.postDelete(post.idx);
       this.loadPosts();
     } catch (e) {
       ComponentService.instance.error(e);
