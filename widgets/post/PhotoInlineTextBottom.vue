@@ -1,8 +1,8 @@
 <template>
-  <router-link :to="story.relativeUrl" v-if="story && story.idx">
-    <div class="thumbnail-with-inline-text w-100 position-relative h-100">
-      <b-img class="image w-100" :src="src" :style="{ height: imageHeight + 'px' }"> </b-img>
-      <div class="title position-absolute w-100" :class="isMultiLine ? '' : 'text-truncate'">
+  <router-link class="photo-inline-text-bottom overflow-hidden" :to="story.relativeUrl" v-if="story && story.idx">
+    <div class="w-100 position-relative">
+      <b-img fluid-grow class="primary" :src="src"> </b-img>
+      <div class="title position-absolute w-100 p-2 text-white" :class="isMultiLine ? '' : 'text-truncate'">
         <b>{{ story.title }}</b>
       </div>
     </div>
@@ -10,14 +10,12 @@
 </template>
 
 <style lang="scss" scoped>
-.thumbnail-with-inline-text {
+.photo-inline-text-bottom {
   overflow: hidden;
 
   .title {
     background-color: rgba(1, 1, 1, 0.3) !important;
-    max-height: 3.7em;
-    padding: 0.5em;
-    color: white;
+    max-height: 3.6em;
     bottom: 0;
   }
 }
@@ -33,10 +31,9 @@ import { Component, Prop } from "vue-property-decorator";
 
 @Component({})
 export default class PhotoInlineTextBottom extends Vue {
-  @Prop() categoryId!: string;
-  @Prop({ default: 200 }) imageHeight!: number;
-  @Prop({ default: true }) isMultiLine!: boolean;
   @Prop() post!: PostModel;
+  @Prop() categoryId!: string;
+  @Prop({ default: true }) isMultiLine!: boolean;
 
   story: PostModel = new PostModel();
 

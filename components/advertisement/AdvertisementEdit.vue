@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!app.isEmptyObject(settings)">
+  <div v-if="!isEmptyObj(settings)">
     <login-first class="mt-2"></login-first>
 
     <div v-if="api._user.loggedIn">
@@ -154,7 +154,8 @@
               {{ "start_advertisement" | t }}
             </button>
             <div class="alert alert-danger mt-2" v-if="isPointInsufficient">
-              {{ "start_advertisement_warning" | t }}
+              <span v-if="isEmptyObj(bannerPoints)">{{ "poiint_setting_not_set" | t }}</span>
+              <span v-else>{{ "start_advertisement_warning" | t }}</span>
             </div>
           </div>
           <hr />
@@ -275,7 +276,7 @@
               <span v-if="banner.countryCode"> {{ banner.countryCode }} - {{ countries[banner.countryCode] }} </span>
               <span v-if="!banner.countryCode">{{ "default" | t }}</span>
             </p>
-            <table class="w-100 mt-2 table table-striped">
+            <table class="w-100 mt-2 table table-striped" v-if="!isEmptyObj(bannerPoints)">
               <thead>
                 <tr class="table-header">
                   <th scope="col">{{ "adv_banner_type" | t }}</th>
@@ -341,24 +342,25 @@
 
 <script lang="ts">
 import Vue from "vue";
-import Component from "vue-class-component";
+import { Component, Prop } from "vue-property-decorator";
 import { AdvertisementSettings, FileModel, ResponseData } from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
-import { addByComma, daysBetween } from "@/x-vue/services/functions";
+import { addByComma, daysBetween, isEmptyObject } from "@/x-vue/services/functions";
 import UploadImage from "@/x-vue/components/file/UploadImage.vue";
 import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
 import dayjs from "dayjs";
 import Service from "@/x-vue/services/component.service";
 import { AdvertisementModel } from "@/x-vue/interfaces/advertisement.interface";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
-import { AppService } from "@/service/app.service";
 import BannerType from "@/x-vue/components/advertisement/AdvertisementEditBannerType.vue";
+import ComponentService from "@/x-vue/services/component.service";
 
 @Component({
   components: { UploadImage, LoginFirst, BannerType },
 })
 export default class Advertisement extends Vue {
-  app = AppService.instance;
+  @Prop({ default: "default" }) countryCode!: string;
+
   api = ApiService.instance;
   s = Service.instance;
   isMounted = false;
@@ -374,13 +376,11 @@ export default class Advertisement extends Vue {
   loading = true;
 
   countries: ResponseData = {};
-  bannerPoints!: ResponseData;
+  bannerPoints: ResponseData = {};
   settings: AdvertisementSettings = {} as AdvertisementSettings;
 
   async mounted(): Promise<void> {
-    this.countries = await this.api.countryAll();
-    this.bannerPoints = await this.app.advertisementCountryBannerPoints();
-    this.settings = await AdvertisementService.instance.advertisementSettings();
+    this.loadPointsAndSettings();
 
     const idx = parseInt(this.$route.params.idx);
     if (idx) {
@@ -393,6 +393,25 @@ export default class Advertisement extends Vue {
 
     this.beginAtMin = this.today;
     this.isMounted = true;
+  }
+
+  async loadPointsAndSettings(): Promise<void> {
+    try {
+      this.countries = await this.api.countryAll();
+      const _settings = await AdvertisementService.instance.advertisementSettings();
+
+      this.settings = _settings;
+      this.bannerPoints = _settings.point[this.countryCode] ?? {};
+      console.log("settings", _settings);
+      console.log("bannerPoints", this.bannerPoints);
+    } catch (e) {
+      ComponentService.instance.error(e);
+    }
+  }
+
+  // eslint-disable-next-line
+  isEmptyObj(obj: any): boolean {
+    return isEmptyObject(obj);
   }
 
   get today(): string {
@@ -462,6 +481,7 @@ export default class Advertisement extends Vue {
    * Will return true if:
    *  - No logged in user.
    *  - Current user has 0 point.
+   *  - No banner point settings is set.
    *  - User point is smaller than required point to create advertisement.
    *
    * @returns boolean
@@ -469,6 +489,7 @@ export default class Advertisement extends Vue {
   get isPointInsufficient(): boolean {
     if (!this.api._user) return true;
     if (this.api._user.point == 0) return true;
+    if (this.isEmptyObj(this.bannerPoints)) return true;
     return this.api._user.point < this.priceInPoint;
   }
 
@@ -572,10 +593,11 @@ export default class Advertisement extends Vue {
    */
   async onAdvertisementStart(): Promise<void> {
     try {
-      this.banner.countryCode = this.app.countryCode;
+      this.banner.countryCode = this.countryCode;
       const res = await AdvertisementService.instance.advertisementStart(this.banner.toJson);
       this.banner = res;
-      this.app.refreshProfile();
+      // this.app.refreshProfile();
+      this.$emit("start");
     } catch (e) {
       this.s.error(e);
     }
@@ -586,7 +608,8 @@ export default class Advertisement extends Vue {
     if (!conf) return;
     try {
       this.banner = await AdvertisementService.instance.advertisementStop(this.banner.idx);
-      this.app.refreshProfile();
+      // this.app.refreshProfile();
+      this.$emit("stop");
     } catch (e) {
       this.s.error(e);
     }

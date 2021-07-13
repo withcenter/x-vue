@@ -21,14 +21,9 @@ import PostsTitleList from "./PostsTitleList.vue";
   components: { PostsTitleList },
 })
 export default class LatestPostsText extends Vue {
-  @Prop({})
-  title!: string;
-  @Prop({})
-  categoryId!: string;
-  @Prop({
-    default: 10,
-  })
-  limit!: number;
+  @Prop({}) title!: string;
+  @Prop({}) categoryId!: string;
+  @Prop({ default: 10 }) limit!: number;
 
   posts: PostModel[] = [];
 

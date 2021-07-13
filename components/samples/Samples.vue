@@ -174,10 +174,9 @@
           <br />
           post PostModel
           <br />
-          imageHeight number (200 default)
         </p>
         <hr />
-        <PhotoTextBottom></PhotoTextBottom>
+        <PhotoTextBottom class="child-image-height-md child-image-height-lg child-image-height-xl"></PhotoTextBottom>
       </div>
     </div>
 
@@ -189,7 +188,6 @@
           <br />
           categoryId string
           <br />
-          imageHeight number (200 default)
         </p>
         <hr />
         <TwoByTwoPhotoTextBottom></TwoByTwoPhotoTextBottom>
@@ -204,7 +202,6 @@
           <br />
           post PostModel
           <br />
-          imageHeight number (200 default)
         </p>
         <hr />
         <PhotoInlineTextBottom></PhotoInlineTextBottom>
@@ -218,8 +215,6 @@
           Displays 4 post thumbnail with inline texts.
           <br />
           categoryId string
-          <br />
-          itemHeight number (200px default)
         </p>
         <hr />
         <TwoByTwoPhotoInlineTextBottom></TwoByTwoPhotoInlineTextBottom>
@@ -233,8 +228,6 @@
           Displays 1 Photo on left and several post as text on right.
           <br />
           categoryId string
-          <br />
-          imageHeight number (215 default)
           <br />
           limit number (7 default)
         </p>
@@ -250,8 +243,6 @@
           Displays 4 Photo on with text at bottom.
           <br />
           categoryId string
-          <br />
-          itemHeight number (150px default)
         </p>
         <hr />
         <FourPhotosWithTextBottom></FourPhotosWithTextBottom>
@@ -311,7 +302,6 @@
           <br />
           post PostModel
           <br />
-          imageHeight number (200 default)
         </p>
         <hr />
         <ThumbnailWithTextAndMetaAtBottom></ThumbnailWithTextAndMetaAtBottom>
@@ -327,11 +317,11 @@
           firstCategoryId string
           <br />
           secondCategoryId string
-          <br />
-          imageHeight number (200 default)
         </p>
         <hr />
-        <OneByOneThumbnailWithTextAndMetaAtBottom></OneByOneThumbnailWithTextAndMetaAtBottom>
+        <OneByOneThumbnailWithTextAndMetaAtBottom
+          class="child-img-height-100"
+        ></OneByOneThumbnailWithTextAndMetaAtBottom>
       </div>
     </div>
 
@@ -342,8 +332,6 @@
           Display 2 Photo with inline text
           <br />
           categoryId string
-          <br />
-          imageHeight number (200 default)
           <br />
           isMultilineText boolean (false default)
         </p>
@@ -359,8 +347,6 @@
           Display 2 Photo with text at bottom
           <br />
           categoryId string
-          <br />
-          imageHeight number (200 default)
           <br />
           isMultilineText boolean (false default)
         </p>
@@ -392,14 +378,14 @@
           Displays thumbnail on left and text (title) on right.
           <br />
           post PostModel <br />
-          isTwoLine boolean (false default) - if true, 2 lines of text will be shown if it can't fit in one line.
+          isTwoLine boolean (true default) - if true, 2 lines of text will be shown if it can't fit in one line.
         </p>
         <hr />
         Single line
-        <ThumbnailWithTextAtRight></ThumbnailWithTextAtRight>
+        <ThumbnailWithTextAtRight :isMultiLine="false" :isCenterAligned="false"></ThumbnailWithTextAtRight>
         <hr />
-        Multi line
-        <ThumbnailWithTextAtRight :isMultiLine="true"></ThumbnailWithTextAtRight>
+        Multi line and vertically aligned center text.
+        <ThumbnailWithTextAtRight></ThumbnailWithTextAtRight>
       </div>
     </div>
 
@@ -440,7 +426,6 @@
         <p class="card-text">
           Displays a combination of Photo with inline text and Thumbnail with text
           <br />
-          topImageHeight number (255 default) <br />
           textListLimit number (8 default) - limit for the post text list panel. <br />
           firstCategory string <br />
           secondCategory string <br />
@@ -502,8 +487,6 @@
       <div class="card-body">
         <h5 class="card-title">ThreeColumnStoryGroupA</h5>
         <p class="card-text">
-          leftCategories string[] - 2 categories <br />
-          leftPhotoheight number (150 default)<br />
           secondCategories string[] - 2 categories <br />
           thirdCategories string[] - 4 categories <br />
         </p>
@@ -518,7 +501,6 @@
         <p class="card-text">
           categoryId string <br />
           post Postmodel <br />
-          imageHeight number<br />
           -<br />
           @note: If `categoryId` is provided, it will fetch a post, if `post` is provided it will use the post. <br />
           if `categoryId` and `post` is both provided, it will prioritize to use the `post` instead of fetching. <br />
@@ -550,7 +532,6 @@
         <p class="card-text">
           firstCategoryId string <br />
           secondCategoryId string <br />
-          bottomListLimit number (3 default); imageHeight number (210 default)
         </p>
         <hr />
         <TitleContentPhotoTopAndTextListBottom></TitleContentPhotoTopAndTextListBottom>

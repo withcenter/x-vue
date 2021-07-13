@@ -1,14 +1,15 @@
 <template>
   <section class="thumbnail-with-text">
     <router-link class="d-flex" :to="post.relativeUrl || '#'">
-      <b-img
-        class="primary mr-2"
-        :thumbnail="thumbnail"
-        fluid
-        rounded="0"
-        :src="post.files[0].url"
-        v-if="post.files.length"
-      ></b-img>
+      <div class="image-holder mr-2">
+        <b-img
+          class="primary"
+          :thumbnail="thumbnail"
+          rounded="0"
+          :src="post.files[0].url"
+          v-if="post.files.length"
+        ></b-img>
+      </div>
       <div class="overflow-hidden">
         <div class="font-weight-bold text-truncate">{{ post.title }}</div>
         <div class="text-truncate-2line">{{ post.content }}</div>

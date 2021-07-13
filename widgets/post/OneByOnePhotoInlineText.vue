@@ -1,17 +1,7 @@
 <template>
-  <div class="d-flex">
-    <PhotoInlineTextBottom
-      class="mr-1 w-50"
-      :post="postList[0]"
-      :imageHeight="imageHeight"
-      :isMultiLine="isMultilineText"
-    ></PhotoInlineTextBottom>
-    <PhotoInlineTextBottom
-      class="w-50"
-      :post="postList[1]"
-      :imageHeight="imageHeight"
-      :isMultiLine="isMultilineText"
-    ></PhotoInlineTextBottom>
+  <div class="one-by-one-photo-inline-text d-flex">
+    <PhotoInlineTextBottom class="mr-2 w-50" :post="postList[0]" :isMultiLine="isMultilineText"></PhotoInlineTextBottom>
+    <PhotoInlineTextBottom class="w-50" :post="postList[1]" :isMultiLine="isMultilineText"></PhotoInlineTextBottom>
   </div>
 </template>
 
@@ -28,12 +18,8 @@ import PhotoInlineTextBottom from "./PhotoInlineTextBottom.vue";
   components: { PhotoInlineTextBottom },
 })
 export default class OneByOnePhotoInlineText extends Vue {
-  @Prop()
-  categoryId!: string;
-  @Prop({ default: 200 })
-  imageHeight!: string;
-  @Prop({ default: false })
-  isMultilineText!: boolean;
+  @Prop() categoryId!: string;
+  @Prop({ default: false }) isMultilineText!: boolean;
 
   @Prop({
     default: () => {

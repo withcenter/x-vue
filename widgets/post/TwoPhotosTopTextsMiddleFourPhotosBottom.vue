@@ -1,12 +1,8 @@
 <template>
-  <div>
-    <OneByOnePhotoInlineText :imageHeight="topImageHeight"></OneByOnePhotoInlineText>
+  <div class="two-photos-top-texts-midle-four-photos-bottom">
+    <OneByOnePhotoInlineText></OneByOnePhotoInlineText>
     <PostsTitleList class="mt-2" :limit="listLimit"></PostsTitleList>
-    <TwoByTwoPhotoTextBottom
-      class="mt-2"
-      :imageHeight="bottomImageHeight"
-      :isMultilineText="false"
-    ></TwoByTwoPhotoTextBottom>
+    <TwoByTwoPhotoTextBottom class="mt-2" :isMultilineText="false"></TwoByTwoPhotoTextBottom>
   </div>
 </template>
 
@@ -29,9 +25,6 @@ export default class TwoPhotosTopTextsMiddleFourPhotosBottom extends Vue {
   @Prop() firstCategory!: string;
   @Prop() secondCategory!: string;
   @Prop() thirdCategory!: string;
-
-  @Prop({ default: 200 }) topImageHeight!: number;
-  @Prop({ default: 200 }) bottomImageHeight!: number;
   @Prop({ default: 3 }) listLimit!: number;
 }
 </script>

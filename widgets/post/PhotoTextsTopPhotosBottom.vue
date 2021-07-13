@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="photo-texts-top-photos-bottom">
     <PhotoWithTextsAtRight :categoryId="categoryIdTop"></PhotoWithTextsAtRight>
     <FourPhotosWithTextBottom class="mt-2" :categoryId="categoryIdBottom"></FourPhotosWithTextBottom>
   </div>
@@ -16,10 +16,7 @@ import FourPhotosWithTextBottom from "./FourPhotosWithTextBottom.vue";
   components: { PhotoWithTextsAtRight, FourPhotosWithTextBottom },
 })
 export default class PhotoTextsTopPhotosBottom extends Vue {
-  @Prop({})
-  categoryIdTop!: string;
-
-  @Prop({})
-  categoryIdBottom!: string;
+  @Prop({}) categoryIdTop!: string;
+  @Prop({}) categoryIdBottom!: string;
 }
 </script>

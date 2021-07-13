@@ -1,16 +1,16 @@
 <template>
   <div class="four-photos-with-text-bottom m-0 d-flex" v-if="posts">
-    <div class="w-25 mr-1">
-      <PhotoTextBottom :imageHeight="imageHeight" :post="posts[0]"></PhotoTextBottom>
+    <div class="w-25 mr-2">
+      <PhotoTextBottom :post="posts[0]"></PhotoTextBottom>
     </div>
-    <div class="w-25 mr-1">
-      <PhotoTextBottom :imageHeight="imageHeight" :post="posts[1]"></PhotoTextBottom>
+    <div class="w-25 mr-2">
+      <PhotoTextBottom :post="posts[1]"></PhotoTextBottom>
     </div>
-    <div class="w-25 mr-1">
-      <PhotoTextBottom :imageHeight="imageHeight" :post="posts[2]"></PhotoTextBottom>
+    <div class="w-25 mr-2">
+      <PhotoTextBottom :post="posts[2]"></PhotoTextBottom>
     </div>
     <div class="w-25">
-      <PhotoTextBottom :imageHeight="imageHeight" :post="posts[3]"></PhotoTextBottom>
+      <PhotoTextBottom :post="posts[3]"></PhotoTextBottom>
     </div>
   </div>
 </template>
@@ -35,13 +35,7 @@ import PhotoTextBottom from "./PhotoTextBottom.vue";
   components: { PhotoTextBottom },
 })
 export default class FourPhotosWithTextBottom extends Vue {
-  @Prop({})
-  categoryId!: string;
-  @Prop({
-    default: 150,
-  })
-  imageHeight!: number;
-
+  @Prop({}) categoryId!: string;
   posts: PostModel[] = [];
 
   mounted(): void {
