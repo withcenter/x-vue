@@ -1,18 +1,16 @@
 import firebase from "firebase/app";
 import "firebase/messaging";
-import "firebase/auth";
 import { ApiService } from "./api.service";
 
-export class FirebaseService {
-  private static _instance: FirebaseService;
-  public auth!: firebase.auth.Auth;
+export class MessagingService {
+  private static _instance: MessagingService;
   private onMessage?: (payload: Record<string, Record<string, unknown>>) => void;
 
-  public static get instance(): FirebaseService {
-    if (!FirebaseService._instance) {
-      FirebaseService._instance = new FirebaseService();
+  public static get instance(): MessagingService {
+    if (!MessagingService._instance) {
+      MessagingService._instance = new MessagingService();
     }
-    return FirebaseService._instance;
+    return MessagingService._instance;
   }
 
   // private constructor() {
@@ -21,14 +19,7 @@ export class FirebaseService {
 
   public token = "";
 
-  init(
-    firebaseConfig: Record<string, unknown>,
-    options: {
-      onMessage: (payload: Record<string, Record<string, unknown>>) => void;
-    }
-  ): void {
-    firebase.initializeApp(firebaseConfig);
-    this.auth = firebase.auth();
+  init(options: { onMessage: (payload: Record<string, Record<string, unknown>>) => void }): void {
     this.pushMessageInit();
     this.onMessage = options.onMessage;
   }
@@ -50,7 +41,7 @@ export class FirebaseService {
             .then(async (token) => {
               // console.log("Token", token);
               /** SAVE TOKEN::From here you need to store the TOKEN by AJAX request to your server */
-              FirebaseService.instance.token = token;
+              MessagingService.instance.token = token;
               await ApiService.instance.saveToken(token, location.hostname);
               // store.commit("onFirebaseMessageTokenSave");
             })
