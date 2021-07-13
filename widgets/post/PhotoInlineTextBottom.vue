@@ -14,7 +14,7 @@
   .title {
     overflow: hidden;
     background-color: rgba(1, 1, 1, 0.6) !important;
-    max-height: 3.6em;
+    height: 3.8em;
     bottom: 0;
   }
 }

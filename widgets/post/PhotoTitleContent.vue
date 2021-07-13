@@ -51,7 +51,8 @@ export default class extends Vue {
   async loadPost(): Promise<void> {
     try {
       const res = await ApiService.instance.postSearch({ categoryId: this.categoryId, limit: 1, files: "Y" });
-      this.story = res[0];
+      if (res.length) this.story = res[0];
+      else this.story = ComponentService.instance.temporaryPost();
     } catch (e) {
       ComponentService.instance.error(e);
     }
