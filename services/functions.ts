@@ -120,6 +120,10 @@ export function translate(code: string): string {
   return texts[code][ApiService.instance.userLanguage];
 }
 
+export function t(code: string): string {
+  return translate(code);
+}
+
 // eslint-disable-next-line
 export function isEmptyObject(obj: any): boolean {
   return Object.keys(obj).length === 0 && obj.constructor === Object;
