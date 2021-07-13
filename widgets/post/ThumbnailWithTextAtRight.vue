@@ -4,7 +4,9 @@
     :to="post.relativeUrl"
     :class="isCenterAligned ? 'align-items-center' : ''"
   >
-    <b-img class="primary" :src="post.files[0].url"></b-img>
+    <div class="image-holder">
+      <b-img class="primary" :src="post.files[0].url"></b-img>
+    </div>
     <div class="px-2 title overflow-hidden" :class="isMultiLine ? '' : 'text-truncate'">
       {{ post.title }}
     </div>

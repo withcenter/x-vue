@@ -1,6 +1,6 @@
 <template>
   <div class="title-content-photo-top-and-text-list-bottom">
-    <TitleAndContentTopPhotoBottom class="mt-2" :categoryId="firstCategoryId"></TitleAndContentTopPhotoBottom>
+    <TitleAndContentTopPhotoBottom :categoryId="firstCategoryId"></TitleAndContentTopPhotoBottom>
     <PostsTitleList class="mt-2" :categoryId="secondCategoryId" :limit="bottomListLimit"></PostsTitleList>
   </div>
 </template>

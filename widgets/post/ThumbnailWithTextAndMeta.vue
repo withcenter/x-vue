@@ -1,6 +1,8 @@
 <template>
   <router-link class="thumbnail-with-text-and-meta d-flex" :to="story.relativeUrl">
-    <b-img class="primary" :src="src"></b-img>
+    <div class="image-holder">
+      <b-img class="primary" :src="src"></b-img>
+    </div>
     <div class="text-meta ml-2 flex-grow-1 overflow-hidden">
       <div class="category">{{ story.categoryId }}</div>
       <div class="title text-truncate">{{ story.title }}</div>
