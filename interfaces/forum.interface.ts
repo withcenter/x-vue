@@ -16,6 +16,7 @@ export interface PostSearchRequest {
   page?: number;
   limit?: number;
   comments?: number;
+  minimize?: boolean;
 }
 
 /**

@@ -42,7 +42,11 @@ export default class ThumbnailWithTextAtRightList extends Vue {
 
   async loadPosts(): Promise<void> {
     try {
-      this.posts = await ApiService.instance.postSearch({ categoryId: this.categoryId, files: "Y", limit: this.limit });
+      this.posts = await ApiService.instance.latestPosts({
+        categoryId: this.categoryId,
+        files: "Y",
+        limit: this.limit,
+      });
     } catch (e) {
       ComponentService.instance.error(e);
     }

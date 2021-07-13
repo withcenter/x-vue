@@ -39,7 +39,7 @@ export default class LatestPostsText extends Vue {
 
   async loadPosts(): Promise<void> {
     try {
-      const res = await ApiService.instance.postSearch({
+      const res = await ApiService.instance.latestPosts({
         categoryId: this.categoryId,
         limit: this.limit,
       });

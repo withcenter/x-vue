@@ -46,7 +46,7 @@ export default class PhotoTextBottom extends Vue {
 
   async loadPost(): Promise<void> {
     try {
-      const res = await ApiService.instance.postSearch({ categoryId: this.categoryId, limit: 1, files: "Y" });
+      const res = await ApiService.instance.latestPosts({ categoryId: this.categoryId, limit: 1, files: "Y" });
       this.story = res[0];
     } catch (e) {
       ComponentService.instance.error(e);

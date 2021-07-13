@@ -42,7 +42,7 @@ export default class PostsTitleList extends Vue {
 
   async loadPosts(): Promise<void> {
     try {
-      this.postsList = await ApiService.instance.postSearch({ categoryId: this.categoryId, limit: this.limit });
+      this.postsList = await ApiService.instance.latestPosts({ categoryId: this.categoryId, limit: this.limit });
     } catch (e) {
       ComponentService.instance.error(e);
     }

@@ -43,7 +43,7 @@ export default class OneByOnePhotoTextBottom extends Vue {
 
   async loadPosts(): Promise<void> {
     try {
-      this.postList = await ApiService.instance.postSearch({ categoryId: this.categoryId, files: "Y", limit: 2 });
+      this.postList = await ApiService.instance.latestPosts({ categoryId: this.categoryId, files: "Y", limit: 2 });
     } catch (e) {
       ComponentService.instance.error(e);
     }

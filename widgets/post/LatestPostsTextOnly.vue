@@ -46,7 +46,7 @@ export default class extends Vue {
 
   async loadPosts(): Promise<void> {
     try {
-      this.posts = await ApiService.instance.postSearch({
+      this.posts = await ApiService.instance.latestPosts({
         categoryId: this.categoryId,
         limit: this.limit,
       });
