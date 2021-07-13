@@ -179,6 +179,21 @@
 
     <div class="card mb-2">
       <div class="card-body">
+        <h5 class="card-title">PhotoText</h5>
+        <p class="card-text">
+          Displays thumbnail with text at bottom of image.<br />
+          This is more convinient to customize the design since it has no hard coded css style by not using b-img.
+          <br />
+          post PostModel
+          <br />
+        </p>
+        <hr />
+        <PhotoText class=""></PhotoText>
+      </div>
+    </div>
+
+    <div class="card mb-2">
+      <div class="card-body">
         <h5 class="card-title">PhotoTextBottom</h5>
         <p class="card-text">
           Displays thumbnail with text at bottom of image.
@@ -647,6 +662,7 @@ import PencilSvg from "@/x-vue/svg/PencilSvg.vue";
 import ArrowLeftRightSvg from "@/x-vue/svg/ArrowLeftRightSvg.vue";
 
 import PhotoTitleContent from "@/x-vue/widgets/post/PhotoTitleContent.vue";
+import PhotoText from "@/x-vue/widgets/post/PhotoText.vue";
 
 @Component({
   components: {
@@ -710,6 +726,7 @@ import PhotoTitleContent from "@/x-vue/widgets/post/PhotoTitleContent.vue";
     TitleContentPhotoTopAndTextListBottom,
     TwoColumnStoryGroupB,
     PhotoTitleContent,
+    PhotoText,
   },
 })
 export default class Samples extends Vue {
