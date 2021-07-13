@@ -99,16 +99,16 @@
         <li>thumbnailHeight: number</li>
       </ul>
       <b-card>
-        <thumbnail-with-text class="child-image-size-xl"></thumbnail-with-text>
+        <ThumbnailWithText class="child-image-size-xl"></ThumbnailWithText>
       </b-card>
       <b-card class="mt-1">
         <b-card-title>With thumbnail and .child-image-size-xl.child-image-size-lg-md</b-card-title>
-        <thumbnail-with-text class="child-image-size-xl child-image-size-lg-md" :thumbnail="true"></thumbnail-with-text>
+        <ThumbnailWithText class="child-image-size-xl child-image-size-lg-md" :thumbnail="true"></ThumbnailWithText>
       </b-card>
     </div>
 
     <div class="alert alert-info">
-      <h4>TwoStories Thumbnail With Title And Content</h4>
+      <h4>TwoStoriesThumbnailWithText</h4>
       Display two ThumbnailWithText from posts
 
       <div>Props</div>
@@ -119,7 +119,7 @@
         <li>thumbnailHeight: number</li>
       </ul>
       <b-card>
-        <two-stories-thumbnail-with-text :thumbnail="true"></two-stories-thumbnail-with-text>
+        <TwoStoriesThumbnailWithText :thumbnail="true"></TwoStoriesThumbnailWithText>
       </b-card>
     </div>
 

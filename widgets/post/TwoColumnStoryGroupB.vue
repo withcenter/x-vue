@@ -1,5 +1,5 @@
 <template>
-  <div class="two-column-story-group-b row">
+  <div class="row">
     <TitleContentPhotoTopAndTextListBottom
       :firstCategoryId="leftCategories[0]"
       :secondCategoryId="leftCategories[1]"

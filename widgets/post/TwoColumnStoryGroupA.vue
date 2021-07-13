@@ -1,15 +1,15 @@
 <template>
-  <div class="two-column-story-group-a row">
-    <div class="col-lg-8 col-12 pr-lg-0">
+  <div class="two-column-story-group-a container">
+    <div class="row">
       <TwoPhotoTopThumbnailsWithTextAndPhotoBottom
+        class="col-lg-8 col-12"
         :firstCategoryId="firstCategories[0]"
         :secondCategoryId="firstCategories[1]"
         :thirdCategoryId="firstCategories[2]"
         :fourthCategoryId="firstCategories[3]"
       ></TwoPhotoTopThumbnailsWithTextAndPhotoBottom>
-    </div>
-    <div class="col-lg-4 col-12 mt-lg-0 mt-2">
       <TextsTopThumbnailTextListBottom
+        class="col-lg-4 col-12 pl-lg-2 p-0 mt-lg-0 mt-2"
         :firstCategoryId="secondCategories[0]"
         :secondCategoryId="secondCategories[1]"
         :firstLimit="textListLimit"

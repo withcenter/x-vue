@@ -1,12 +1,12 @@
 <template>
   <div class="two-by-two-thumbnail-with-text-bottom w-100">
-    <div class="top d-flex">
-      <PhotoTextBottom class="w-50 mr-2" :post="posts[0]" :isMultiLine="isMultilineText"></PhotoTextBottom>
-      <PhotoTextBottom class="w-50" :post="posts[1]" :isMultiLine="isMultilineText"></PhotoTextBottom>
+    <div class="top row">
+      <PhotoTextBottom class="col-6 pr-1" :post="posts[0]" :isMultiLine="isMultilineText"></PhotoTextBottom>
+      <PhotoTextBottom class="col-6 pl-1" :post="posts[1]" :isMultiLine="isMultilineText"></PhotoTextBottom>
     </div>
-    <div class="mt-2 bottom d-flex">
-      <PhotoTextBottom class="w-50 mr-2" :post="posts[2]" :isMultiLine="isMultilineText"></PhotoTextBottom>
-      <PhotoTextBottom class="w-50" :post="posts[3]" :isMultiLine="isMultilineText"></PhotoTextBottom>
+    <div class="mt-2 bottom row">
+      <PhotoTextBottom class="col-6 pr-1" :post="posts[2]" :isMultiLine="isMultilineText"></PhotoTextBottom>
+      <PhotoTextBottom class="col-6 pl-1" :post="posts[3]" :isMultiLine="isMultilineText"></PhotoTextBottom>
     </div>
   </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <router-link class="photo-inline-text-bottom" :to="story.relativeUrl" v-if="story && story.idx">
     <div class="w-100 position-relative">
-      <b-img fluid-grow class="primary" :src="src"> </b-img>
+      <b-img fluid-grow block class="primary" :src="src"> </b-img>
       <div class="title position-absolute w-100 p-2 text-white" :class="isMultiLine ? '' : 'text-truncate'">
         {{ story.title }}
       </div>
@@ -16,7 +16,6 @@
     background-color: rgba(1, 1, 1, 0.3) !important;
     max-height: 3.6em;
     bottom: 0;
-    overflow: hidden;
   }
 }
 </style>

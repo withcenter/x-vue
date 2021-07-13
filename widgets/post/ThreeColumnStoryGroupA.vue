@@ -1,30 +1,30 @@
 <template>
-  <div class="three-column-story-group-a row">
-    <div class="col-lg-4 p-0 col-12 pr-lg-1">
+  <div class="container">
+    <div class="row">
       <PhotoTextBottomTopThumbnailTextListBottom
+        class="col-lg-4 p-0 col-12 pr-lg-1"
         :firstCategoryId="leftCategories[0]"
         :secondCategoryId="leftCategories[1]"
         :listLimit="3"
       >
       </PhotoTextBottomTopThumbnailTextListBottom>
-    </div>
-    <div class="col-lg-4 p-0 col-12 px-lg-1 mt-2 mt-lg-0">
       <ThumbnailWithTextListTopTextsBottom
+        class="col-lg-4 p-0 col-12 px-lg-1 mt-2 mt-lg-0"
         :firstCategoryId="centerCategories[0]"
         :secondCategoryId="centerCategories[1]"
       ></ThumbnailWithTextListTopTextsBottom>
-    </div>
-    <div class="col-lg-4 p-0 col-12 pl-lg-1 mt-2 mt-lg-0">
-      <OneByOnePhotoTextBottom :categoryId="rightCategories[0]"></OneByOnePhotoTextBottom>
-      <div class="border-top border-bottom py-2">
-        <PostsTitleList :categoryId="rightCategories[1]" :bulleted="true" :limit="2"></PostsTitleList>
-        <ThumbnailWithTextAtRight :categoryId="rightCategories[2]" class="mt-2"></ThumbnailWithTextAtRight>
+      <div class="col-lg-4 p-0 col-12 pl-lg-1 mt-2 mt-lg-0">
+        <OneByOnePhotoTextBottom :categoryId="rightCategories[0]"></OneByOnePhotoTextBottom>
+        <div class="border-top border-bottom py-2">
+          <PostsTitleList :categoryId="rightCategories[1]" :bulleted="true" :limit="2"></PostsTitleList>
+          <ThumbnailWithTextAtRight :categoryId="rightCategories[2]" class="mt-2"></ThumbnailWithTextAtRight>
+        </div>
+        <OneByOnePhotoTextBottom
+          class="d-flex p-0 mt-2"
+          :categoryId="rightCategories[3]"
+          :isMultilineText="true"
+        ></OneByOnePhotoTextBottom>
       </div>
-      <OneByOnePhotoTextBottom
-        class="d-flex p-0 mt-2"
-        :categoryId="rightCategories[3]"
-        :isMultilineText="true"
-      ></OneByOnePhotoTextBottom>
     </div>
   </div>
 </template>

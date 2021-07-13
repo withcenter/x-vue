@@ -1,6 +1,6 @@
 <template>
   <router-link class="photo-text-bottom overflow-hidden" v-if="story && story.idx" :to="post.relativeUrl">
-    <b-img fluid-grow class="primary" :src="src"> </b-img>
+    <b-img fluid-grow block class="primary" :src="src"> </b-img>
     <div class="p-2 title" :class="isMultiLine ? 'overflow-hidden' : 'text-truncate'">
       {{ story.title }}
     </div>

@@ -1,12 +1,12 @@
 <template>
   <div class="two-by-two-thumbnail-with-text-bottom">
-    <div class="top d-flex">
-      <PhotoInlineTextBottom class="w-50" :post="posts[0]"></PhotoInlineTextBottom>
-      <PhotoInlineTextBottom class="ml-2 w-50" :post="posts[1]"></PhotoInlineTextBottom>
+    <div class="top row">
+      <PhotoInlineTextBottom class="col-6 pr-1" :post="posts[0]"></PhotoInlineTextBottom>
+      <PhotoInlineTextBottom class="col-6 pl-1" :post="posts[1]"></PhotoInlineTextBottom>
     </div>
-    <div class="mt-2 bottom d-flex">
-      <PhotoInlineTextBottom class="w-50" :post="posts[2]"></PhotoInlineTextBottom>
-      <PhotoInlineTextBottom class="ml-2 w-50" :post="posts[3]"></PhotoInlineTextBottom>
+    <div class="mt-2 bottom row">
+      <PhotoInlineTextBottom class="col-6 pr-1" :post="posts[2]"></PhotoInlineTextBottom>
+      <PhotoInlineTextBottom class="col-6 pl-1" :post="posts[3]"></PhotoInlineTextBottom>
     </div>
   </div>
 </template>

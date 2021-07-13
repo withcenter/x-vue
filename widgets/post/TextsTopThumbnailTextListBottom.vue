@@ -1,17 +1,12 @@
 <template>
   <div class="texts-top-thumbnail-text-list-bottom">
     <PostsTitleList
-      class="border py-1 px-2"
+      class="border p-2"
       :categoryId="firstCategoryId"
       :limit="firstLimit"
       :bulleted="true"
     ></PostsTitleList>
 
-    <!-- <ThumbnailWithTextAtRightList
-      class="mt-2"
-      :categoryId="secondCategoryId"
-      :limit="secondLimit"
-    ></ThumbnailWithTextAtRightList> -->
     <ThumbnailWithTextAndMetaList
       class="mt-2"
       :categoryId="secondCategoryId"

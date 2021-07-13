@@ -1,7 +1,7 @@
 <template>
   <section class="two-stories-thumbnail-with-text">
     <ThumbnailWithText
-      class="mb-3"
+      class="mb-2"
       v-for="(post, index) of posts.slice(0, limit)"
       :key="index"
       :post="post"

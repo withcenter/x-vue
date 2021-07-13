@@ -12,19 +12,22 @@
       </div>
       <div class="overflow-hidden">
         <div class="font-weight-bold text-truncate">{{ post.title }}</div>
-        <div class="text-truncate-2line">{{ post.content }}</div>
+        <div class="content overflow-hidden">{{ post.content }}</div>
       </div>
     </router-link>
   </section>
 </template>
 
 <style lang="scss" scoped>
-.text-truncate-2line {
-  -webkit-line-clamp: 2;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.content {
+  max-height: 3em;
 }
+// .text-truncate-2line {
+//   -webkit-line-clamp: 2;
+//   display: -webkit-box;
+//   -webkit-box-orient: vertical;
+//   overflow: hidden;
+// }
 </style>
 
 <script lang="ts">
