@@ -28,6 +28,7 @@
       <!-- <input v-model="add.countryCode" placeholder="2 letter country code" /> -->
       <div class="d-flex w-100">
         <div class="col-3 pl-0 pr-1">
+          {{ "country" | t }}
           <select class="form-control" v-model="add.countryCode">
             <option value="" selected>{{ "default" | t }}</option>
             <option v-for="(value, name) in countries" :key="name" :value="name">
@@ -36,19 +37,25 @@
           </select>
         </div>
         <div class="col-2 px-1">
+          {{ "top" | t }}
           <input type="number" class="form-control" v-model="add.top" />
         </div>
         <div class="col-2 px-1">
+          {{ "sidebar" | t }}
           <input type="number" class="form-control" v-model="add.sidebar" />
         </div>
         <div class="col-2 px-1">
+          {{ "square" | t }}
           <input type="number" class="form-control" v-model="add.square" />
         </div>
         <div class="col-2 px-1">
+          {{ "line" | t }}
           <input type="number" class="form-control" v-model="add.line" />
         </div>
         <div class="col-1 pl-1 pr-0">
-          <button class="btn btn-primary">ADD</button>
+          <button class="btn btn-primary mt-4">
+            {{ "add" | t }}
+          </button>
         </div>
       </div>
       <div class="mt-2 alert alert-info">
@@ -126,11 +133,11 @@ export default class AdminAdvertisement extends Vue {
       // re = await this.api.getConfig("advertisementCategories");
       this.advertisementCategories = settings.categoryArray.join(",");
 
-      // this.points = await AdvertisementService.instance.advertisementGetBannerPoints();
-      this.points = Object.keys(settings.point).map((k) => {
-        settings.point[k].countryCode = k;
-        return settings.point[k];
-      });
+      this.points = await AdvertisementService.instance.advertisementGetBannerPoints();
+      // this.points = Object.keys(settings.point).map((k) => {
+      //   settings.point[k].countryCode = k;
+      //   return settings.point[k];
+      // });
 
       this.countries = await this.api.countryAll();
     } catch (e) {
@@ -151,7 +158,7 @@ export default class AdminAdvertisement extends Vue {
   }
 
   async onDelete(data: RequestData): Promise<void> {
-    // console.log("onDelete::data", data);
+    console.log("onDelete::data", data);
 
     const conf = await this.s.confirm("Confirm", `Delete point settings for ${data.countryCode}?`);
     if (!conf) return;
