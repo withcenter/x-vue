@@ -1,6 +1,6 @@
 <template>
   <div class="two-column-story-group-a row">
-    <div class="col-lg-8 col-12 p-0 pr-lg-2">
+    <div class="col-lg-8 col-12 pr-lg-2">
       <TwoPhotoTopThumbnailsWithTextAndPhotoBottom
         :firstCategoryId="firstCategories[0]"
         :secondCategoryId="firstCategories[1]"
@@ -8,7 +8,7 @@
         :fourthCategoryId="firstCategories[3]"
       ></TwoPhotoTopThumbnailsWithTextAndPhotoBottom>
     </div>
-    <div class="col-lg-4 col-12 p-0 mt-lg-0 mt-2">
+    <div class="col-lg-4 col-12 mt-lg-0 mt-2">
       <TextsTopThumbnailTextListBottom
         :firstCategoryId="secondCategories[0]"
         :secondCategoryId="secondCategories[1]"

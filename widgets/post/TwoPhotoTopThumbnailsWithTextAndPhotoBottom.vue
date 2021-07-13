@@ -9,13 +9,13 @@
       </div>
     </div>
     <div class="mt-2 d-flex">
-      <div class="col-8 p-0 pr-2">
+      <div class="col-9 p-0 pr-2">
         <ThumbnailWithTextAtRightList
           :categoryId="thirdCategoryId"
           :limit="textListLimit"
         ></ThumbnailWithTextAtRightList>
       </div>
-      <div class="col-4 p-0">
+      <div class="col-3 p-0">
         <PhotoInlineTextBottom :categoryId="fourthCategoryId"></PhotoInlineTextBottom>
       </div>
     </div>
