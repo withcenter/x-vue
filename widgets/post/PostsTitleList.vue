@@ -6,10 +6,7 @@
       :key="post.idx"
       :class="index > 0 ? 'mt-2' : ''"
     >
-      <router-link :to="post.relativeUrl">
-        <span class="mr-2" v-if="bulleted"> &#9679; </span>
-        {{ post.title }}
-      </router-link>
+      <router-link :to="post.relativeUrl"> <span class="mr-2" v-if="bulleted">•</span>{{ post.title }} </router-link>
     </div>
   </div>
 </template>

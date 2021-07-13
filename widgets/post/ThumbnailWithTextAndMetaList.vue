@@ -1,8 +1,11 @@
 <template>
   <div class="thumbnail-with-text-and-meta-list">
-    <div :class="index > 0 ? 'mt-2' : ''" v-for="(post, index) of posts" :key="post.idx">
-      <ThumbnailWithTextAndMeta :post="post"></ThumbnailWithTextAndMeta>
-    </div>
+    <ThumbnailWithTextAndMeta
+      :class="index > 0 ? 'mt-2' : ''"
+      v-for="(post, index) of posts"
+      :key="post.idx"
+      :post="post"
+    ></ThumbnailWithTextAndMeta>
   </div>
 </template>
 

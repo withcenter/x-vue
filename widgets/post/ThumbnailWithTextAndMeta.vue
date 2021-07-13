@@ -5,9 +5,9 @@
     </div>
     <div class="text-meta ml-2 flex-grow-1 overflow-hidden">
       <div class="category">{{ story.categoryId }}</div>
-      <div class="title text-truncate">{{ story.title }}</div>
+      <div class="title text-truncate font-weight-bold">{{ story.title }}</div>
       <div class="content">{{ story.content }}</div>
-      <div class="author">
+      <div class="author text-truncate">
         <span>{{ story.user.nicknameOrName }}</span>
         <span class="text-muted"> ∙ {{ story.shortDate }}</span>
       </div>
@@ -17,7 +17,7 @@
 
 <style lang="scss" scoped>
 .content {
-  height: 3em;
+  max-height: 3em;
   overflow: hidden;
 }
 </style>

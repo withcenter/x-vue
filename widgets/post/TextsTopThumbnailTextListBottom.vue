@@ -1,17 +1,22 @@
 <template>
   <div class="texts-top-thumbnail-text-list-bottom">
     <PostsTitleList
-      class="border p-2"
+      class="border py-1 px-2"
       :categoryId="firstCategoryId"
       :limit="firstLimit"
       :bulleted="true"
     ></PostsTitleList>
 
-    <ThumbnailWithTextAtRightList
+    <!-- <ThumbnailWithTextAtRightList
       class="mt-2"
       :categoryId="secondCategoryId"
       :limit="secondLimit"
-    ></ThumbnailWithTextAtRightList>
+    ></ThumbnailWithTextAtRightList> -->
+    <ThumbnailWithTextAndMetaList
+      class="mt-2"
+      :categoryId="secondCategoryId"
+      :limit="secondLimit"
+    ></ThumbnailWithTextAndMetaList>
   </div>
 </template>
 
@@ -20,10 +25,10 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 
 import PostsTitleList from "./PostsTitleList.vue";
-import ThumbnailWithTextAtRightList from "./ThumbnailWithTextAtRightList.vue";
+import ThumbnailWithTextAndMetaList from "./ThumbnailWithTextAndMetaList.vue";
 
 @Component({
-  components: { PostsTitleList, ThumbnailWithTextAtRightList },
+  components: { PostsTitleList, ThumbnailWithTextAndMetaList },
 })
 export default class TextsTopThumbnailTextListBottom extends Vue {
   @Prop() firstCategoryId!: string;

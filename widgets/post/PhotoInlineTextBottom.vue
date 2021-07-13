@@ -1,9 +1,9 @@
 <template>
-  <router-link class="photo-inline-text-bottom overflow-hidden" :to="story.relativeUrl" v-if="story && story.idx">
+  <router-link class="photo-inline-text-bottom" :to="story.relativeUrl" v-if="story && story.idx">
     <div class="w-100 position-relative">
       <b-img fluid-grow class="primary" :src="src"> </b-img>
       <div class="title position-absolute w-100 p-2 text-white" :class="isMultiLine ? '' : 'text-truncate'">
-        <b>{{ story.title }}</b>
+        {{ story.title }}
       </div>
     </div>
   </router-link>
@@ -11,9 +11,8 @@
 
 <style lang="scss" scoped>
 .photo-inline-text-bottom {
-  overflow: hidden;
-
   .title {
+    overflow: hidden;
     background-color: rgba(1, 1, 1, 0.3) !important;
     max-height: 3.6em;
     bottom: 0;

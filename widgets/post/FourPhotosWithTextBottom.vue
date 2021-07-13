@@ -1,16 +1,10 @@
 <template>
-  <div class="four-photos-with-text-bottom m-0 d-flex" v-if="posts">
-    <div class="w-25 mr-2">
-      <PhotoTextBottom :post="posts[0]"></PhotoTextBottom>
-    </div>
-    <div class="w-25 mr-2">
-      <PhotoTextBottom :post="posts[1]"></PhotoTextBottom>
-    </div>
-    <div class="w-25 mr-2">
-      <PhotoTextBottom :post="posts[2]"></PhotoTextBottom>
-    </div>
-    <div class="w-25">
-      <PhotoTextBottom :post="posts[3]"></PhotoTextBottom>
+  <div class="four-photos-with-text-bottom m-0 container" v-if="posts">
+    <div class="row">
+      <PhotoTextBottom class="col-3 p-0 pr-1" :post="posts[0]"></PhotoTextBottom>
+      <PhotoTextBottom class="col-3 p-0 px-1" :post="posts[1]"></PhotoTextBottom>
+      <PhotoTextBottom class="col-3 p-0 px-1" :post="posts[2]"></PhotoTextBottom>
+      <PhotoTextBottom class="col-3 p-0 pl-1" :post="posts[3]"></PhotoTextBottom>
     </div>
   </div>
 </template>

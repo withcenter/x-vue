@@ -1,19 +1,19 @@
 <template>
-  <div class="two-photo-top-thumbnails-with-text-and-photo-bottom">
-    <div class="d-flex">
+  <div class="two-photo-top-thumbnails-with-text-and-photo-bottom container">
+    <div class="row">
       <div class="col-9 p-0 pr-2">
-        <PhotoInlineTextBottom :categoryId="fourthCategoryId"></PhotoInlineTextBottom>
+        <PhotoInlineTextBottom :categoryId="firstCategoryId"></PhotoInlineTextBottom>
       </div>
       <div class="col-3 p-0">
-        <PhotoInlineTextBottom :categoryId="fourthCategoryId"></PhotoInlineTextBottom>
+        <PhotoInlineTextBottom :categoryId="secondCategoryId"></PhotoInlineTextBottom>
       </div>
     </div>
-    <div class="mt-2 d-flex">
+    <div class="mt-2 row">
       <div class="col-9 p-0 pr-2">
-        <ThumbnailWithTextAtRightList
+        <ThumbnailWithTextAndMetaList
           :categoryId="thirdCategoryId"
           :limit="textListLimit"
-        ></ThumbnailWithTextAtRightList>
+        ></ThumbnailWithTextAndMetaList>
       </div>
       <div class="col-3 p-0">
         <PhotoInlineTextBottom :categoryId="fourthCategoryId"></PhotoInlineTextBottom>
@@ -26,12 +26,12 @@
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 
-import ThumbnailWithTextAtRightList from "./ThumbnailWithTextAtRightList.vue";
+import ThumbnailWithTextAndMetaList from "./ThumbnailWithTextAndMetaList.vue";
 import PhotoInlineTextBottom from "./PhotoInlineTextBottom.vue";
 
 @Component({
   components: {
-    ThumbnailWithTextAtRightList,
+    ThumbnailWithTextAndMetaList,
     PhotoInlineTextBottom,
   },
 })

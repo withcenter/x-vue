@@ -1,6 +1,6 @@
 <template>
   <div class="two-column-story-group-a row">
-    <div class="col-lg-8 col-12 pr-lg-2">
+    <div class="col-lg-8 col-12 pr-lg-0">
       <TwoPhotoTopThumbnailsWithTextAndPhotoBottom
         :firstCategoryId="firstCategories[0]"
         :secondCategoryId="firstCategories[1]"
@@ -32,6 +32,6 @@ export default class TwoColumnStoryGroupA extends Vue {
   @Prop({ default: () => [] }) firstCategories!: string[];
   @Prop({ default: () => [] }) secondCategories!: string[];
 
-  @Prop({ default: 5 }) textListLimit!: number;
+  @Prop({ default: 4 }) textListLimit!: number;
 }
 </script>
