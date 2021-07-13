@@ -378,14 +378,14 @@
           Displays thumbnail on left and text (title) on right.
           <br />
           post PostModel <br />
-          isTwoLine boolean (false default) - if true, 2 lines of text will be shown if it can't fit in one line.
+          isTwoLine boolean (true default) - if true, 2 lines of text will be shown if it can't fit in one line.
         </p>
         <hr />
         Single line
-        <ThumbnailWithTextAtRight></ThumbnailWithTextAtRight>
+        <ThumbnailWithTextAtRight :isMultiLine="false" :isCenterAligned="false"></ThumbnailWithTextAtRight>
         <hr />
-        Multi line
-        <ThumbnailWithTextAtRight :isMultiLine="true"></ThumbnailWithTextAtRight>
+        Multi line and vertically aligned center text.
+        <ThumbnailWithTextAtRight></ThumbnailWithTextAtRight>
       </div>
     </div>
 
