@@ -13,7 +13,7 @@
 .photo-inline-text-bottom {
   .title {
     overflow: hidden;
-    background-color: rgba(1, 1, 1, 0.3) !important;
+    background-color: rgba(1, 1, 1, 0.6) !important;
     max-height: 3.6em;
     bottom: 0;
   }
