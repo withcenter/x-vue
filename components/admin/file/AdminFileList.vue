@@ -219,7 +219,7 @@ import TrashSvg from "@/x-vue/svg/TrashSvg.vue";
 import PencilSvg from "@/x-vue/svg/PencilSvg.vue";
 import BoxArrowUpRightSvg from "@/x-vue/svg/BoxArrowUpRightSvg.vue";
 
-import UserAvatarWithInfo from "@/x-vue/widgets/common/UserAvatarWithInfo.vue";
+import UserAvatarWithInfo from "@/x-vue/components/admin/user/AdminUserAvatarWithInfo.vue";
 import Loading from "@/x-vue/widgets/common/Loading.vue";
 import { PostModel } from "@/x-vue/interfaces/forum.interface";
 @Component({

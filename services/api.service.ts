@@ -701,9 +701,9 @@ export class ApiService {
     return new CafeModel().fromJson(res);
   }
 
-  async cafeInitDefautMenu(): Promise<ResponseData> {
-    return await this.request("cafe.initDefaultCafeMenu");
-  }
+  // async cafeInitDefautMenu(): Promise<ResponseData> {
+  //   return await this.request("cafe.initDefaultCafeMenu");
+  // }
 
   // async loadCafe(): Promise<CafeModel> {
   //   const res = await this.request("cafe.get", { domain: this.domain });

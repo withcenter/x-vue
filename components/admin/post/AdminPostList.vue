@@ -2,19 +2,21 @@
   <section>
     <h4>Post list</h4>
     <form @submit.prevent="search" class="mb-2">
-      <div class="d-flex">
-        <b-form-group label-size="sm" label="userIdx" label-for="userIdx" class="mb-0">
-          <b-form-input size="sm" id="userIdx" v-model="forum.userIdx" placeholder="userIdx"></b-form-input>
-        </b-form-group>
-        <b-form-group label-size="sm" label="categoryId" label-for="categoryId" class="mb-0">
-          <b-form-input size="sm" id="categoryId" v-model="forum.categoryId" placeholder="categoryId"></b-form-input>
-        </b-form-group>
-        <b-form-group label-size="sm" label="limit" label-for="limit" class="mb-0">
-          <b-form-input size="sm" id="limit" v-model="forum.limit" placeholder="limit"></b-form-input>
-        </b-form-group>
+      <div class="d-flex flex-wrap flex-md-nowrap">
+        <b-input-group class="pr-2" size="sm" prepend="userIdx">
+          <b-form-input id="userIdx" v-model="forum.userIdx" placeholder="userIdx"></b-form-input>
+        </b-input-group>
+
+        <b-input-group class="pr-2 mt-2 mt-md-0" size="sm" prepend="categoryId">
+          <b-form-input id="categoryId" v-model="forum.categoryId" placeholder="categoryId"></b-form-input>
+        </b-input-group>
+
+        <b-input-group class="pr-2 mt-2 mt-md-0" size="sm" prepend="limit">
+          <b-form-input id="limit" v-model="forum.limit" placeholder="limit"></b-form-input>
+        </b-input-group>
       </div>
 
-      <button class="btn btn-primary mt-2">Search</button>
+      <button class="btn btn-primary mt-2 px-4 btn-sm">Search</button>
     </form>
 
     <div class="mb-2">
@@ -56,17 +58,25 @@
         </template>
 
         <template #cell(title)="row">
-          <div v-if="row.item.deletedAt">{{ "deleted" | t }}</div>
-          <div v-else>
-            {{ row.item.title.substring(0, 32) }}
-            <span v-if="row.item.fileIdxes">(<CameraSvg class="action-icon"></CameraSvg>)</span>
+          <div class="d-flex justify-content-between">
+            <div v-if="row.item.deletedAt">{{ "deleted" | t }}</div>
+            <div v-else>
+              {{ row.item.title.substring(0, 32) }}
+              <span v-if="row.item.fileIdxes">(<CameraSvg class="action-icon"></CameraSvg>)</span>
+            </div>
+
+            <router-link class="px-2" :to="'/' + row.item.idx"><BoxArrowUpRightSvg></BoxArrowUpRightSvg></router-link>
           </div>
         </template>
 
         <template #cell(content)="row">
-          <div v-if="row.item.deletedAt">{{ "deleted" | t }}</div>
-          <div v-else>
-            {{ row.item.content.substring(0, 64) }}
+          <div class="d-flex justify-content-between">
+            <div v-if="row.item.deletedAt">{{ "deleted" | t }}</div>
+            <div v-else>
+              {{ row.item.content.substring(0, 64) }}
+            </div>
+
+            <router-link class="px-2" :to="'/' + row.item.idx"><BoxArrowUpRightSvg></BoxArrowUpRightSvg></router-link>
           </div>
         </template>
 
@@ -152,7 +162,7 @@ import Content from "@/x-vue/components/forum/Content.vue";
 import PostMeta from "@/x-vue/components/forum/post/PostMeta.vue";
 import { Err } from "@/x-vue/services/defines";
 
-import UserAvatarWithInfo from "@/x-vue/widgets/common/UserAvatarWithInfo.vue";
+import UserAvatarWithInfo from "@/x-vue/components/admin/user/AdminUserAvatarWithInfo.vue";
 
 import BoxArrowUpRightSvg from "@/x-vue/svg/BoxArrowUpRightSvg.vue";
 import BoxArrowInUpSvg from "@/x-vue/svg/BoxArrowInUpSvg.vue";

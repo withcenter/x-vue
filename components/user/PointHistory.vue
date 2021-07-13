@@ -1,12 +1,9 @@
 <template>
   <section>
-    <h1>Point History</h1>
-
-    <div>Search</div>
-    <div>Result count: {{ pointHistories.length }}</div>
-    <div>Point Added: {{ summary.total_point_apply_increase }}</div>
-    <div>Point Deducted: {{ summary.total_point_apply_decrease }}</div>
-    <!-- <div>Point Difference: {{ summary.total_point_apply_increase + summary.total_point_apply_decrease }}</div> -->
+    <h1>{{ "point_history" | t }}</h1>
+    <div>{{ "count" | t }}: {{ pointHistories.length }}</div>
+    <div>{{ "point_added" | t }}: {{ summary.total_point_apply_increase }}</div>
+    <div>{{ "point_decrease" | t }}: {{ summary.total_point_apply_decrease }}</div>
 
     <label>{{ "begin_end_date" | t }}</label>
     <div class="d-flex justify-content-between">
@@ -20,38 +17,52 @@
       </label>
     </div>
 
-    <table class="table table-striped mt-2 text-center">
-      <thead class="thead-dark">
-        <tr class="fs-sm">
-          <th scope="col">{{ "action" | t }}</th>
-          <th scope="col">{{ "taxonomy" | t }}</th>
-          <th scope="col">{{ "point_apply" | t }}</th>
-          <th scope="col">{{ "point_after" | t }}</th>
-          <th scope="col">{{ "Date" | t }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="history of pointHistories" :key="history.idx">
-          <td>
-            {{ getAction(history) }}
-          </td>
-          <td>
-            <router-link :to="'/' + history.entity">{{ history.taxonomy }}</router-link>
-          </td>
-          <td>
-            {{ pointApply(history) }}
-          </td>
-          <td>
-            {{ pointAfter(history) }}
-          </td>
-          <td>
-            {{ date(history.createdAt) }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <section class="overflow-auto mb-3">
+      <b-table
+        table-class="text-center text-nowrap"
+        small
+        striped
+        hover
+        :items="pointHistories"
+        :fields="visibleFields"
+        :busy="loading"
+        :bordered="true"
+        responsive="true"
+        head-variant="dark"
+      >
+        <template #head()="scope">
+          <div class="text-nowrap">{{ scope.label | t }}</div>
+        </template>
 
-    <div class="alert alert-info" v-if="!pointHistories.length">No records found.</div>
+        <template #cell(action)="row">
+          {{ getAction(row.item) }}
+        </template>
+
+        <template #cell(taxonomy)="row">
+          <router-link :to="'/' + row.item.entity"
+            >{{ row.item.taxonomy }} <BoxArrowUpRightSvg></BoxArrowUpRightSvg
+          ></router-link>
+        </template>
+
+        <template #cell(fromUserPointApply)="row">
+          {{ pointApply(row.item) }}
+        </template>
+
+        <template #cell(fromUserPointAfter)="row">
+          {{ pointAfter(row.item) }}
+        </template>
+
+        <template #cell(date)="row">
+          {{ date(row.item) }}
+        </template>
+
+        <template #table-busy>
+          <Loading></Loading>
+        </template>
+      </b-table>
+    </section>
+
+    <div class="alert alert-info" v-if="!pointHistories.length">{{ "no_records_found" | t }}</div>
   </section>
 </template>
 
@@ -62,10 +73,19 @@ import ComponentService from "@/x-vue/services/component.service";
 import { yymmddhma } from "@/x-vue/services/functions";
 import dayjs from "dayjs";
 import { Component, Vue } from "vue-property-decorator";
+import Loading from "@/x-vue/widgets/common/Loading.vue";
 
-@Component({})
+import BoxArrowUpRightSvg from "@/x-vue/svg/BoxArrowUpRightSvg.vue";
+@Component({
+  components: {
+    Loading,
+    BoxArrowUpRightSvg,
+  },
+})
 export default class PointHistory extends Vue {
   pointHistories: Array<PointHistoryModel> = [];
+
+  loading = false;
 
   beginAtMin = "";
   beginAtMax = dayjs().format("YYYY-MM-DD");
@@ -83,6 +103,18 @@ export default class PointHistory extends Vue {
     total_point_apply_decrease: 0,
   };
 
+  fields: Array<{ [index: string]: unknown }> = [
+    { key: "action", visible: true },
+    { key: "taxonomy", visible: true },
+    { key: "fromUserPointApply", label: "point_apply", visible: true },
+    { key: "fromUserPointAfter", label: "point_after", visible: true },
+    { key: "createdAt", label: "Date", visible: true },
+  ];
+
+  get visibleFields(): Array<{ [index: string]: unknown }> {
+    return this.fields.filter((field) => field.visible);
+  }
+
   mounted(): void {
     this.search();
   }
@@ -96,6 +128,9 @@ export default class PointHistory extends Vue {
 
     // show error if days difference is morethan 90days
     if (days > 90) ComponentService.instance.alert("date range", "error_more_than_90days_date_difference");
+
+    if (this.loading) return;
+    this.loading = true;
 
     try {
       this.pointHistories = await ApiService.instance.userPointHistory(this.options);
@@ -121,7 +156,7 @@ export default class PointHistory extends Vue {
     } catch (e) {
       this.$emit("error", e);
     }
-    return;
+    this.loading = false;
   }
 
   pointApply(h: PointHistoryModel): number {
@@ -130,6 +165,7 @@ export default class PointHistory extends Vue {
     return 0;
   }
   pointAfter(h: PointHistoryModel): number {
+    console.log(h.toUserIdx, this.$app.user.idx);
     if (h.fromUserIdx == this.$app.user.idx) return h.fromUserPointAfter;
     if (h.toUserIdx == this.$app.user.idx) return h.toUserPointAfter;
     return 0;

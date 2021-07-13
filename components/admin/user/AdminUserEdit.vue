@@ -67,7 +67,7 @@
 
           <div class="form-group col-6">
             <label for="gender">{{ "gender" | t }}</label>
-            <select class="custom-select" id="gender" name="gender">
+            <select class="custom-select" id="gender" name="gender" v-model="user.gender">
               <option value="">{{ "select_gender" | t }}</option>
               <option value="M">{{ "male" | t }}</option>
               <option value="F">{{ "female" | t }}</option>
