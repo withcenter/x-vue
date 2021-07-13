@@ -33,6 +33,7 @@
       <ChatBubbleSvg></ChatBubbleSvg>
       <CoffeeBreakSvg></CoffeeBreakSvg>
       <EllipsisVSvg></EllipsisVSvg>
+      <ExternalLinkSvg></ExternalLinkSvg>
       <FacebookLogoSvg></FacebookLogoSvg>
       <GoogleLogoSvg></GoogleLogoSvg>
       <MenuSvg></MenuSvg>
@@ -47,6 +48,13 @@
 
       <ManSvg></ManSvg>
       <WomanSvg></WomanSvg>
+
+      <BoxArrowInDownSvg></BoxArrowInDownSvg>
+      <BoxArrowInUpSvg></BoxArrowInUpSvg>
+      <BoxArrowUpRightSvg></BoxArrowUpRightSvg>
+      <CloseSvg></CloseSvg>
+      <PencilSquareSvg></PencilSquareSvg>
+      <PencilSvg></PencilSvg>
     </div>
 
     <hr />
@@ -625,12 +633,21 @@ import DownArrowSvg from "@/x-vue/svg/DownArrowSvg.vue";
 import ManSvg from "@/x-vue/svg/ManSvg.vue";
 import WomanSvg from "@/x-vue/svg/WomanSvg.vue";
 
+import ExternalLinkSvg from "@/x-vue/svg/ExternalLinkSvg.vue";
+import BoxArrowInDownSvg from "@/x-vue/svg/BoxArrowInDownSvg.vue";
+import BoxArrowInUpSvg from "@/x-vue/svg/BoxArrowInUpSvg.vue";
+import BoxArrowUpRightSvg from "@/x-vue/svg/BoxArrowUpRightSvg.vue";
+import CloseSvg from "@/x-vue/svg/CloseSvg.vue";
+import PencilSquareSvg from "@/x-vue/svg/PencilSquareSvg.vue";
+import PencilSvg from "@/x-vue/svg/PencilSvg.vue";
+
 @Component({
   components: {
     CameraSvg,
     ChatBubbleSvg,
     CoffeeBreakSvg,
     EllipsisVSvg,
+    ExternalLinkSvg,
     FacebookLogoSvg,
     GoogleLogoSvg,
     MenuSvg,
@@ -643,6 +660,13 @@ import WomanSvg from "@/x-vue/svg/WomanSvg.vue";
     DownArrowSvg,
     ManSvg,
     WomanSvg,
+    BoxArrowInDownSvg,
+    BoxArrowInUpSvg,
+    BoxArrowUpRightSvg,
+    CloseSvg,
+    PencilSquareSvg,
+    PencilSvg,
+
     UploadButton,
     FileUploadButton,
     PostTitle,

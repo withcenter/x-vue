@@ -1,5 +1,5 @@
 <template>
-  <section class="user-avatar pointer" @click="onClick">
+  <section class="user-avatar" @click="onClick" :class="{ pointer: to }">
     <div v-if="user.photoUrl == '' && user.gender">
       <ManSvg class="avatar" v-if="user.gender == 'M'"></ManSvg>
       <WomanSvg class="avatar" v-if="user.gender == 'F'"></WomanSvg>
