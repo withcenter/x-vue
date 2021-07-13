@@ -29,7 +29,7 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 
 @Component({})
-export default class ThumbnailWithTextAndMeta extends Vue {
+export default class extends Vue {
   @Prop() categoryId!: string;
   @Prop() post!: PostModel;
 
