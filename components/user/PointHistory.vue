@@ -52,8 +52,8 @@
           {{ pointAfter(row.item) }}
         </template>
 
-        <template #cell(date)="row">
-          {{ date(row.item) }}
+        <template #cell(createdAt)="row">
+          {{ date(row.item.createdAt) }}
         </template>
 
         <template #table-busy>
@@ -116,6 +116,7 @@ export default class PointHistory extends Vue {
   }
 
   mounted(): void {
+    console.log("PointHistory::");
     this.search();
   }
 
@@ -152,7 +153,7 @@ export default class PointHistory extends Vue {
         }
       }
 
-      // console.log(this.pointHistories);
+      console.log(this.pointHistories);
     } catch (e) {
       this.$emit("error", e);
     }
@@ -165,7 +166,6 @@ export default class PointHistory extends Vue {
     return 0;
   }
   pointAfter(h: PointHistoryModel): number {
-    console.log(h.toUserIdx, this.$app.user.idx);
     if (h.fromUserIdx == this.$app.user.idx) return h.fromUserPointAfter;
     if (h.toUserIdx == this.$app.user.idx) return h.toUserPointAfter;
     return 0;

@@ -16,6 +16,7 @@
     background-color: rgba(1, 1, 1, 0.3) !important;
     max-height: 3.6em;
     bottom: 0;
+    overflow: hidden;
   }
 }
 </style>

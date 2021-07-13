@@ -18,7 +18,9 @@
             ></b-form-input>
           </b-input-group>
         </div>
-        <button class="btn px-1" v-if="miniSwitchButton" @click="onSwitch">&#8644;</button>
+        <button class="btn px-1" v-if="miniSwitchButton" @click="onSwitch">
+          <ArrowLeftRightSvg></ArrowLeftRightSvg>
+        </button>
         <div class="w-100 ml-1">
           <b-form-select
             size="sm"
@@ -56,6 +58,8 @@ import Service from "@/x-vue/services/component.service";
 
 import { Vue, Prop, Component } from "vue-property-decorator";
 
+import ArrowLeftRightSvg from "@/x-vue/svg/ArrowLeftRightSvg.vue";
+
 /**
  * Usage by default the `from` is 'United States' and `to` is 'South Korea'
  * 
@@ -66,7 +70,11 @@ import { Vue, Prop, Component } from "vue-property-decorator";
       @error="app.error($event)"
     ></currency-converter>
  */
-@Component({})
+@Component({
+  components: {
+    ArrowLeftRightSvg,
+  },
+})
 export default class CurrencyConverter extends Vue {
   currencies: CountryCurrenciesModel = new CountryCurrenciesModel();
   @Prop({ default: "미국" }) from!: string;

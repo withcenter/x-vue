@@ -424,6 +424,8 @@ export class PointHistoryModel {
   createdAt = 0;
   updatedAt = 0;
 
+  post = new PostModel();
+
   // createdAtShortDate = "";
   // updatedAtShortDate = "";
   fromJson(map: ResponseData): PointHistoryModel {
@@ -441,6 +443,10 @@ export class PointHistoryModel {
 
     this.createdAt = map.createdAt;
     this.updatedAt = map.updatedAt;
+
+    if (map.post) {
+      this.post = new PostModel().fromJson(map.post);
+    }
 
     // this.createdAtShortDate = map.createdAtShortDate;
     // this.updatedAtShortDate = map.updatedAtShortDate;
