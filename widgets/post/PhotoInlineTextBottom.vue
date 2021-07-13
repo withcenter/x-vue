@@ -3,7 +3,7 @@
     <div class="w-100 position-relative">
       <b-img fluid-grow class="primary" :src="src"> </b-img>
       <div class="title position-absolute w-100 p-2 text-white" :class="isMultiLine ? '' : 'text-truncate'">
-        <b>{{ story.title }}</b>
+        {{ story.title }}
       </div>
     </div>
   </router-link>
