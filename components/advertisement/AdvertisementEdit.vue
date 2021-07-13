@@ -380,6 +380,7 @@ export default class Advertisement extends Vue {
   settings: AdvertisementSettings = {} as AdvertisementSettings;
 
   async mounted(): Promise<void> {
+    console.log("mounted::countryCode", this.countryCode);
     this.loadPointsAndSettings();
 
     const idx = parseInt(this.$route.params.idx);
@@ -401,9 +402,9 @@ export default class Advertisement extends Vue {
       const _settings = await AdvertisementService.instance.advertisementSettings();
 
       this.settings = _settings;
-      this.bannerPoints = _settings.point[this.countryCode] ?? {};
-      console.log("settings", _settings);
-      console.log("bannerPoints", this.bannerPoints);
+      this.bannerPoints = _settings.point[this.countryCode];
+      if (!this.bannerPoints) this.bannerPoints = _settings.point["default"];
+      if (!this.bannerPoints) this.bannerPoints = {};
     } catch (e) {
       ComponentService.instance.error(e);
     }
