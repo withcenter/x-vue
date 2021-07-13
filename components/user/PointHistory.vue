@@ -19,7 +19,7 @@
 
     <section class="overflow-auto mb-3">
       <b-table
-        table-class="text-center text-nowrap"
+        table-class="text-center"
         small
         striped
         hover
@@ -35,12 +35,17 @@
         </template>
 
         <template #cell(action)="row">
-          {{ getAction(row.item) }}
+          {{ getAction(row.item) | t }}
+
+          <router-link v-if="actionTo(row.item)" :to="actionTo(row.item)"
+            ><BoxArrowUpRightSvg></BoxArrowUpRightSvg
+          ></router-link>
         </template>
 
-        <template #cell(taxonomy)="row">
-          <router-link :to="'/' + row.item.entity"
-            >{{ row.item.taxonomy }} <BoxArrowUpRightSvg></BoxArrowUpRightSvg
+        <template #cell(title)="row">
+          {{ title(row.item) }}
+          <router-link v-if="actionTo(row.item)" :to="actionTo(row.item)"
+            ><BoxArrowUpRightSvg></BoxArrowUpRightSvg
           ></router-link>
         </template>
 
@@ -62,7 +67,7 @@
       </b-table>
     </section>
 
-    <div class="alert alert-info" v-if="!pointHistories.length">{{ "no_records_found" | t }}</div>
+    <div class="alert alert-info" v-if="!loading && !pointHistories.length">{{ "no_records_found" | t }}</div>
   </section>
 </template>
 
@@ -70,7 +75,7 @@
 import { PointHistoryModel } from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
 import ComponentService from "@/x-vue/services/component.service";
-import { yymmddhma } from "@/x-vue/services/functions";
+import { t, yymmddhma } from "@/x-vue/services/functions";
 import dayjs from "dayjs";
 import { Component, Vue } from "vue-property-decorator";
 import Loading from "@/x-vue/widgets/common/Loading.vue";
@@ -105,7 +110,7 @@ export default class PointHistory extends Vue {
 
   fields: Array<{ [index: string]: unknown }> = [
     { key: "action", visible: true },
-    { key: "taxonomy", visible: true },
+    { key: "title", visible: true },
     { key: "fromUserPointApply", label: "point_apply", visible: true },
     { key: "fromUserPointAfter", label: "point_after", visible: true },
     { key: "createdAt", label: "Date", visible: true },
@@ -176,11 +181,63 @@ export default class PointHistory extends Vue {
   }
 
   getAction(h: PointHistoryModel): string {
-    if (h.action == "dislike" && h.fromUserIdx == this.$app.user.idx) return "dislike_deduction";
+    // vote like/dislike
+    if (h.action == "dislike" || h.action == "like") {
+      const f = h.post.parentIdx == 0 ? "post" : "comment";
+      if (h.action == "dislike" && h.fromUserIdx == this.$app.user.idx) {
+        return `dislike_deduction_for_disliking_a_${f}`;
+      } else if (h.action == "dislike" && h.toUserIdx == this.$app.user.idx) {
+        return `your_${f}_got_disliked`;
+      } else if (h.action == "like" && h.fromUserIdx == this.$app.user.idx) {
+        return `like_deduction_for_liking_a_${f}`;
+      } else if (h.action == "like" && h.toUserIdx == this.$app.user.idx) {
+        return `your_${f}_got_liked`;
+      }
+    }
 
-    if (h.action == "like" && h.fromUserIdx == this.$app.user.idx) return "like_deduction";
+    // post
+    else if (h.action == "createPost") {
+      return "you_created_a_post";
+    } else if (h.action == "deletePost") {
+      return "you_deleted_a_post";
+    }
+    // comment
+    else if (h.action == "createComment") {
+      return "you_commented_a_post";
+    } else if (h.action == "deleteComment") {
+      return "you_deleted_a_comment";
+    }
+    // advertisement
+    else if (h.action == "advertisement.start") {
+      return "you_started_an_advertisement";
+    } else if (h.action == "advertisement.stop") {
+      return "you_stopped_an_advertisement";
+    } else if (h.action == "advertisement.cancel") {
+      return "you_canceled_an_advertisement";
+    }
 
     return h.action;
+  }
+
+  title(h: PointHistoryModel): string {
+    if (h.post.parentIdx == 0) {
+      if (h.post.deletedAt) return t("post_deleted");
+      if (h.post.title) return h.post.title;
+    } else if (h.post.parentIdx != 0) {
+      if (h.post.deletedAt) return t("comment_deleted");
+      if (h.post.content) return h.post.content;
+    }
+    return t("no_title");
+  }
+
+  actionTo(h: PointHistoryModel): string {
+    if (h.post.idx && h.post.deletedAt) return "";
+    if (h.action.includes("advertisement.")) {
+      return "/advertisement/edit/" + h.entity;
+    } else if (h.action.includes("Post") || h.action.includes("like")) {
+      return "/" + h.entity;
+    }
+    return "";
   }
 }
 </script>
