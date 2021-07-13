@@ -50,6 +50,7 @@
         :busy="loading"
         :bordered="true"
         responsive="true"
+        head-variant="dark"
       >
         <template #head()="scope">
           <div class="text-nowrap">{{ scope.label | t }}</div>
@@ -93,7 +94,7 @@ import { ApiService } from "@/x-vue/services/api.service";
 import { yymmddhma } from "@/x-vue/services/functions";
 import dayjs from "dayjs";
 import { Component, Vue } from "vue-property-decorator";
-import UserAvatarWithInfo from "@/x-vue/widgets/common/UserAvatarWithInfo.vue";
+import UserAvatarWithInfo from "@/x-vue/components/admin/user/AdminUserAvatarWithInfo.vue";
 import Loading from "@/x-vue/widgets/common/Loading.vue";
 
 import BoxArrowUpRightSvg from "@/x-vue/svg/BoxArrowUpRightSvg.vue";

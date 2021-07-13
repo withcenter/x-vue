@@ -108,8 +108,8 @@ export default class AdminCategoryList extends Vue {
   fields: Array<{ [index: string]: unknown }> = [
     { key: "idx", visible: true },
     { key: "id", visible: true, tdClass: "text-left" },
-    { key: "title", visible: true },
-    { key: "description", visible: true },
+    { key: "title", visible: true, tdClass: "text-left" },
+    { key: "description", visible: true, tdClass: "text-left" },
     { key: "action", visible: true, class: "text-center" },
   ];
 
@@ -167,21 +167,5 @@ export default class AdminCategoryList extends Vue {
       this.s.error(e);
     }
   }
-
-  // async checkDefaultCategory(): Promise<void> {
-  //   try {
-  //     const menus = await ApiService.instance.cafeInitDefautMenu();
-  //     let ok = 0;
-  //     let error = 0;
-  //     for (const menu in menus) {
-  //       if (menu) ok++;
-  //       else error++;
-  //     }
-  //     this.s.alert("Default Menus: ", `${ok} Okay Menus. ${error} Error Menus`);
-  //     this.onSubmitSearch();
-  //   } catch (e) {
-  //     this.s.error(e);
-  //   }
-  // }
 }
 </script>

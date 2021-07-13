@@ -71,6 +71,14 @@
             </div> -->
           </template>
 
+          <template #cell(createdAt)="row">
+            {{ yymmddhma(row.item.createdAt) }}
+          </template>
+
+          <template #cell(updatedAt)="row">
+            {{ yymmddhma(row.item.updatedAt) }}
+          </template>
+
           <template #row-details="row">
             <b-card body-class="p-1 text-left">
               <b-row>
@@ -90,8 +98,8 @@
                 <b-col>birthdate: {{ row.item.birthdate }}</b-col>
               </b-row>
               <div>address: {{ row.item.address }}</div>
-              <div>createdAt: {{ row.item.createdAt }}</div>
-              <div>updatedAt: {{ row.item.updatedAt }}</div>
+              <div>createdAt: {{ yymmddhma(row.item.createdAt) }}</div>
+              <div>updatedAt: {{ yymmddhma(row.item.updatedAt) }}</div>
             </b-card>
           </template>
 
@@ -125,8 +133,9 @@ import PencilSvg from "@/x-vue/svg/PencilSvg.vue";
 import BoxArrowInUpSvg from "@/x-vue/svg/BoxArrowInUpSvg.vue";
 import BoxArrowInDownSvg from "@/x-vue/svg/BoxArrowInDownSvg.vue";
 
-import UserAvatarWithInfo from "@/x-vue/widgets/common/UserAvatarWithInfo.vue";
+import UserAvatarWithInfo from "@/x-vue/components/admin/user/AdminUserAvatarWithInfo.vue";
 import Loading from "@/x-vue/widgets/common/Loading.vue";
+import { yymmddhma } from "@/x-vue/services/functions";
 @Component({
   components: {
     Loading,
@@ -209,6 +218,10 @@ export default class AdminUserList extends Vue {
       this.s.error(e);
     }
     this.loading = false;
+  }
+
+  yymmddhma(stamp: number): string {
+    return yymmddhma(stamp);
   }
 }
 </script>
