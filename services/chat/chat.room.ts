@@ -1,9 +1,10 @@
 import { ChatBase } from "./chat.base";
 import { BOTH_OF_ID_AND_USERS_HAVE_VALUE, EMPTY_ID_AND_USERS, LOGIN_FIRST } from "./chat.defines";
 
-import { ChatGlobalRoomModel } from "./chat.interface";
+import { ChatGlobalRoomModel, ChatMessageModel } from "./chat.interface";
 
 import md5 from "crypto-js/md5";
+import { BehaviorSubject, Subject, Subscription } from "rxjs";
 
 /// You may rewrite your own helper class.
 export class ChatRoomService extends ChatBase {
@@ -15,48 +16,55 @@ export class ChatRoomService extends ChatBase {
     return ChatRoomService._instance;
   }
 
-  //   int _limit = 30;
+  _limit = 30;
 
-  //   /// upload progress
-  //   double progress = 0;
+  /// upload progress
+  progress = 0;
 
-  //   /// When user scrolls to top to view previous messages, the app fires the scroll event
-  //   /// too much, so it fetches too many batches(pages) at one time.
-  //   /// [_throttle] reduces the scroll event to relax the fetch racing.
-  //   /// [_throttle] is working together with [_throttling]
-  //   /// 1500ms is recommended.
-  //   int _throttle = 1500;
-  //   bool _throttling = false;
+  /// When user scrolls to top to view previous messages, the app fires the scroll event
+  /// too much, so it fetches too many batches(pages) at one time.
+  /// [_throttle] reduces the scroll event to relax the fetch racing.
+  /// [_throttle] is working together with [_throttling]
+  /// 1500ms is recommended.
+  _throttle = 1500;
+  _throttling = false;
 
-  //   /// When the room information changes or there is new message, then [changes] will be posted.
-  //   ///
-  //   /// This event will be posted when
-  //   /// - init with `null`
-  //   /// - fetching messages(created, modified, updated), with the last chat message.
-  //   ///   When there are messages from Firestore, there might be many message in one fetch, that's why it returns only last message.
-  //   /// - sending a message, with the chat message to be sent.
-  //   /// - cancelling for sending a message. `null` will be passed.
-  //   BehaviorSubject<ChatMessage> changes = BehaviorSubject.seeded(null);
+  /// When the room information changes or there is new message, then [changes] will be posted.
+  ///
+  /// This event will be posted when
+  /// - init with `null`
+  /// - fetching messages(created, modified, updated), with the last chat message.
+  ///   When there are messages from Firestore, there might be many message in one fetch, that's why it returns only last message.
+  /// - sending a message, with the chat message to be sent.
+  /// - cancelling for sending a message. `null` will be passed.
+  changes: BehaviorSubject<ChatMessageModel> = BehaviorSubject.create(null);
+  //  changes: Subject<ChatMessageModel> = new Subject();
 
-  //   /// When user scrolls, this event is posted.
-  //   /// If it is scroll up, true will be passed over the parameter.s
-  //   PublishSubject<bool> scrollChanges = PublishSubject();
+  /// When user scrolls, this event is posted.
+  /// If it is scroll up, true will be passed over the parameter.s
+  //  scrollChanges: PublishSubject<boolan> = PublishSubject();
 
-  //   /// Whenever global room information chagnes, [globalRoomChanges] will be posted with
-  //   /// the global room document
-  //   ///
-  //   BehaviorSubject<ChatGlobalRoom> globalRoomChanges = BehaviorSubject.seeded(null);
+  scrollChanges: Subject<boolean> = new Subject();
 
-  //   StreamSubscription _chatRoomSubscription;
-  //   StreamSubscription _currentRoomSubscription;
-  //   StreamSubscription _globalRoomSubscription;
+  /// Whenever global room information chagnes, [globalRoomChanges] will be posted with
+  /// the global room document
+  ///
+  globalRoomChanges: BehaviorSubject<ChatGlobalRoomModel> = BehaviorSubject.create(null);
+
+  // StreamSubscription _chatRoomSubscription;
+  // StreamSubscription _currentRoomSubscription;
+  // StreamSubscription _globalRoomSubscription;
+
+  _chatRoomSubscription: Subscription = new Subscription();
+  _currentRoomSubscription: Subscription = new Subscription();
+  _globalRoomSubscription: Subscription = new Subscription();
 
   //   /// Loaded the chat messages of current chat room.
-  //   List<ChatMessage> messages = [];
+  messages: ChatMessageModel[] = [];
 
   //   /// [loading] becomes true while the app is fetching more messages.
   //   /// The app should display loader while it is fetching.
-  //   bool loading = false;
+  loading = false;
 
   /// Current room's global room document.
   ///
@@ -64,20 +72,34 @@ export class ChatRoomService extends ChatBase {
   /// When `/chat/global-rooms/list/{roomId}` changes, it will be updated and calls render handler.
   global: ChatGlobalRoomModel = {} as ChatGlobalRoomModel;
 
-  //   /// Chat room properties
-  //   String get id => global?.roomId ?? '';
-  //   String get title => global?.title;
+  /// Chat room properties
+  get id(): string {
+    return this.global?.roomId ?? "";
+  }
+  get title(): string {
+    return this.global?.title;
+  }
 
-  //   /// The [users] holds the firebase uid(s) of the global.users which will be loaded
-  //   /// when user enters chat room and the global room information has fetched.
-  //   /// The [users] will be available immediately after chat room entering.
-  //   List<String> get users => global?.users;
-  //   List<String> get moderators => global?.moderators;
-  //   List<String> get blockedUsers => global?.blockedUsers;
-  //   Timestamp get createdAt => global.createdAt;
+  /// The [users] holds the firebase uid(s) of the global.users which will be loaded
+  /// when user enters chat room and the global room information has fetched.
+  /// The [users] will be available immediately after chat room entering.
+  get users(): string[] {
+    return this.global?.users;
+  }
+  get moderators(): string[] {
+    return this.global?.moderators;
+  }
+  get blockedUsers(): string[] {
+    return this.global?.blockedUsers;
+  }
+  get createdAt(): string {
+    return this.global?.createdAt;
+  }
 
-  //   /// push notification topic name
-  //   String get topic => 'notifyChat-${this.id}';
+  /// push notification topic name
+  get topic(): string {
+    return `notifyChat-${this.id}`;
+  }
 
   //   final textController = TextEditingController();
   //   final scrollController = ScrollController();
@@ -100,8 +122,10 @@ export class ChatRoomService extends ChatBase {
   //     });
   //   }
 
-  //   ChatMessage isMessageEdit;
-  //   bool get isCreate => isMessageEdit == null;
+  isMessageEdit: ChatMessageModel | null = null;
+  get isCreate(): boolean {
+    return this.isMessageEdit == null;
+  }
 
   _displayName = "";
 
@@ -120,18 +144,18 @@ export class ChatRoomService extends ChatBase {
   ///
   /// Whenever global room information changes, it is updated on [global].
   async enter({
-    id = "",
+    id = null,
     users = [],
     hatch = true,
     displayName = "",
   }: {
-    id?: string;
+    id?: string | null;
     users?: string[];
     hatch?: boolean;
     displayName?: string;
   }): Promise<void> {
     /// confusing with [this.id], so, it goes as `_id`.
-    let _id: string = id;
+    let _id: string | null = id;
     this._displayName = displayName;
 
     if (this.loginUserUid == null) {
@@ -148,7 +172,7 @@ export class ChatRoomService extends ChatBase {
     if (_id == null && users.length == 0) {
       throw EMPTY_ID_AND_USERS;
     }
-
+    console.log(users);
     // Note that, if `id` is set, `users` is ignored. And if both exists, it throws an error.
     if (_id != null) {
       // Enter existing room
@@ -164,9 +188,11 @@ export class ChatRoomService extends ChatBase {
       // Avoid duplicated users.
       users = Array.from(new Set(users));
       if (hatch) {
+        console.log("Hatch:: true:: Create New Room::");
         // Always create new room
         await this.___create({ users: users });
       } else {
+        console.log("Hatch:: false:: Open Previous New Room::");
         // Create room named based on the user
         // Users array can contain no user or only one user, or even many users.
         // User id must be sorted to generate same room id with same user.
@@ -198,61 +224,65 @@ export class ChatRoomService extends ChatBase {
         }
       }
     }
+
+    // fetch latest messages
+    this.fetchMessages();
+
+    // Listening current global room for changes and update.
+    if (this._globalRoomSubscription != null) this._globalRoomSubscription.unsubscribe();
+
+    this._globalRoomSubscription.add(
+      this.globalRoomDoc(this.global.roomId).onSnapshot({
+        next: (snapshot) => {
+          this.global = new ChatGlobalRoomModel().fromSnapshot(snapshot);
+          // print(' ------------> global updated; ');
+          // print(global);
+          this.globalRoomChanges.next(this.global);
+          this;
+        },
+      })
+    );
+
+    //     // Listening current room document change event (in my room list).
+    //     //
+    //     // This will be notify the listener when chat room title changes, or new users enter, etc.
+    //     if (_currentRoomSubscription != null) _currentRoomSubscription.cancel();
+    //     _currentRoomSubscription = currentRoom.snapshots().listen((DocumentSnapshot doc) {
+    //       if (doc.exists == false) {
+    //         // User left the room. So the room does not exists.
+    //         return;
+    //       }
+
+    //       // If the user got a message from a chat room where the user is currently in,
+    //       // then, set `newMessages` to 0.
+    //       final data = ChatUserRoom.fromSnapshot(doc);
+    //       if (int.parse(data.newMessages) > 0 && data.createdAt != null) {
+    //         currentRoom.update({'newMessages': 0});
+    //       }
+    //     });
+
+    //     // fetch previous chat when user scrolls up
+    //     scrollController.addListener(() {
+    //       // mark if scrolled up
+    //       if (scrollUp) {
+    //         scrolledUp = true;
+    //       }
+    //       // fetch previous messages
+    //       if (scrollUp && atTop) {
+    //         fetchMessages();
+    //       }
+    //       scrollChanges.add(scrollUp);
+    //     });
+
+    //     // Listen to keyboard
+    //     //
+    //     // When keyboard opens, scroll to bottom only if needed when user open/hide keyboard.
+    //     keyboardSubscription = keyboardVisibilityController.onChange.listen((bool visible) {
+    //       if (visible && atBottom) {
+    //         scrollToBottom(ms: 10);
+    //       }
+    //     });
   }
-
-  //     // fetch latest messages
-  //     fetchMessages();
-
-  //     // Listening current global room for changes and update.
-  //     if (_globalRoomSubscription != null) _globalRoomSubscription.cancel();
-
-  //     _globalRoomSubscription = globalRoomDoc(global.roomId).snapshots().listen((event) {
-  //       global = ChatGlobalRoom.fromSnapshot(event);
-  //       // print(' ------------> global updated; ');
-  //       // print(global);
-  //       globalRoomChanges.add(global);
-  //     });
-
-  //     // Listening current room document change event (in my room list).
-  //     //
-  //     // This will be notify the listener when chat room title changes, or new users enter, etc.
-  //     if (_currentRoomSubscription != null) _currentRoomSubscription.cancel();
-  //     _currentRoomSubscription = currentRoom.snapshots().listen((DocumentSnapshot doc) {
-  //       if (doc.exists == false) {
-  //         // User left the room. So the room does not exists.
-  //         return;
-  //       }
-
-  //       // If the user got a message from a chat room where the user is currently in,
-  //       // then, set `newMessages` to 0.
-  //       final data = ChatUserRoom.fromSnapshot(doc);
-  //       if (int.parse(data.newMessages) > 0 && data.createdAt != null) {
-  //         currentRoom.update({'newMessages': 0});
-  //       }
-  //     });
-
-  //     // fetch previous chat when user scrolls up
-  //     scrollController.addListener(() {
-  //       // mark if scrolled up
-  //       if (scrollUp) {
-  //         scrolledUp = true;
-  //       }
-  //       // fetch previous messages
-  //       if (scrollUp && atTop) {
-  //         fetchMessages();
-  //       }
-  //       scrollChanges.add(scrollUp);
-  //     });
-
-  //     // Listen to keyboard
-  //     //
-  //     // When keyboard opens, scroll to bottom only if needed when user open/hide keyboard.
-  //     keyboardSubscription = keyboardVisibilityController.onChange.listen((bool visible) {
-  //       if (visible && atBottom) {
-  //         scrollToBottom(ms: 10);
-  //       }
-  //     });
-  //   }
 
   //   /// Returns the current room in my room list.
   //   DocumentReference get currentRoom => myRoom(id);
@@ -282,99 +312,86 @@ export class ChatRoomService extends ChatBase {
     //   );
   }
 
-  //   /// Fetch previous messages
-  //   fetchMessages() async {
-  //     if (_throttling || noMoreMessage) return;
-  //     loading = true;
-  //     _throttling = true;
-
-  //     page++;
-  //     if (page == 1) {
-  //       final ref = myRoom(global.roomId);
-  //       // print('ref: ${ref.path}');
-  //       await ref.set({'newMessages': 0}, SetOptions(merge: true));
-  //     }
-
-  //     /// Get messages for the chat room
-  //     Query q = messagesCol(global.roomId)
-  //         .orderBy('createdAt', descending: true)
-
-  //         /// todo make it optional from firestore settings.
-  //         .limit(_limit); // 몇 개만 가져온다.
-
-  //     if (messages.isNotEmpty) {
-  //       q = q.startAfter([messages.first.createdAt]);
-  //     }
-
-  //     // Listens all the message for update/delete.
-  //     //
-  //     // Note that, when a user chats, [changes] event will be posted twice. one for
-  //     // create(for offline support), the other for modified(real data from firestore).
-  //     // And this may cause the app to render twice and scroll to bottom twice. You may
-  //     // do `debounce` to fix this one.
-  //     _chatRoomSubscription = q.snapshots().listen((snapshot) {
-  //       // print('fetchMessage() -> done: _page: $_page');
-  //       // Block loading previous messages for some time.
-
-  //       loading = false;
-  //       Timer(Duration(milliseconds: _throttle), () => _throttling = false);
-
-  //       snapshot.docChanges.forEach((DocumentChange documentChange) {
-  //         final message = ChatMessage.fromData(documentChange.doc.data(), id: documentChange.doc.id);
-
-  //         // message.id = documentChange.doc.id;
-
-  //         // print('type: ${documentChange.type}. ${message['text']}');
-
-  //         /// 새로 채팅을 하거나, 이전 글을 가져 올 때, 새 채팅(생성)뿐만 아니라, 이전 채팅 글을 가져올 때에도 added 이벤트 발생.
-  //         if (documentChange.type == DocumentChangeType.added) {
-  //           // Two events will be fired on the sender's device.
-  //           // First event has null of FieldValue.serverTimestamp()
-  //           // Only one event will be fired on other user's devices.
-  //           if (message.createdAt == null) {
-  //             messages.add(message);
-  //           }
-
-  //           /// if it's new message, add at bottom.
-  //           else if (messages.length > 0 &&
-  //               messages[0].createdAt != null &&
-  //               message.createdAt.microsecondsSinceEpoch >
-  //                   messages[0].createdAt.microsecondsSinceEpoch) {
-  //             messages.add(message);
-  //           } else {
-  //             // if it's old message, add on top.
-  //             messages.insert(0, message);
-  //           }
-
-  //           // if it is loading old messages
-  //           // and if it has less messages than the limit
-  //           // check if it is the very first message.
-  //           if (message.createdAt != null) {
-  //             if (snapshot.docs.length < _limit) {
-  //               if (message.text == ChatProtocol.roomCreated) {
-  //                 noMoreMessage = true;
-  //                 // print('-----> noMoreMessage: $noMoreMessage');
-  //               }
-  //             }
-  //           }
-  //         } else if (documentChange.type == DocumentChangeType.modified) {
-  //           final int i = messages.indexWhere((r) => r.id == message.id);
-  //           if (i > -1) {
-  //             messages[i] = message;
-  //           }
-  //         } else if (documentChange.type == DocumentChangeType.removed) {
-  //           final int i = messages.indexWhere((r) => r.id == message.id);
-  //           if (i > -1) {
-  //             messages.removeAt(i);
-  //           }
-  //         } else {
-  //           assert(false, 'This is error');
-  //         }
-  //       });
-
-  //       changes.add(messages.last);
-  //     });
-  //   }
+  /// Fetch previous messages
+  async fetchMessages(): Promise<void> {
+    //   if (_throttling || noMoreMessage) return;
+    //   loading = true;
+    //   _throttling = true;
+    //   page++;
+    //   if (page == 1) {
+    //     final ref = myRoom(global.roomId);
+    //     // print('ref: ${ref.path}');
+    //     await ref.set({'newMessages': 0}, SetOptions(merge: true));
+    //   }
+    //   /// Get messages for the chat room
+    //   Query q = messagesCol(global.roomId)
+    //       .orderBy('createdAt', descending: true)
+    //       /// todo make it optional from firestore settings.
+    //       .limit(_limit); // 몇 개만 가져온다.
+    //   if (messages.isNotEmpty) {
+    //     q = q.startAfter([messages.first.createdAt]);
+    //   }
+    //   // Listens all the message for update/delete.
+    //   //
+    //   // Note that, when a user chats, [changes] event will be posted twice. one for
+    //   // create(for offline support), the other for modified(real data from firestore).
+    //   // And this may cause the app to render twice and scroll to bottom twice. You may
+    //   // do `debounce` to fix this one.
+    //   _chatRoomSubscription = q.snapshots().listen((snapshot) {
+    //     // print('fetchMessage() -> done: _page: $_page');
+    //     // Block loading previous messages for some time.
+    //     loading = false;
+    //     Timer(Duration(milliseconds: _throttle), () => _throttling = false);
+    //     snapshot.docChanges.forEach((DocumentChange documentChange) {
+    //       final message = ChatMessage.fromData(documentChange.doc.data(), id: documentChange.doc.id);
+    //       // message.id = documentChange.doc.id;
+    //       // print('type: ${documentChange.type}. ${message['text']}');
+    //       /// 새로 채팅을 하거나, 이전 글을 가져 올 때, 새 채팅(생성)뿐만 아니라, 이전 채팅 글을 가져올 때에도 added 이벤트 발생.
+    //       if (documentChange.type == DocumentChangeType.added) {
+    //         // Two events will be fired on the sender's device.
+    //         // First event has null of FieldValue.serverTimestamp()
+    //         // Only one event will be fired on other user's devices.
+    //         if (message.createdAt == null) {
+    //           messages.add(message);
+    //         }
+    //         /// if it's new message, add at bottom.
+    //         else if (messages.length > 0 &&
+    //             messages[0].createdAt != null &&
+    //             message.createdAt.microsecondsSinceEpoch >
+    //                 messages[0].createdAt.microsecondsSinceEpoch) {
+    //           messages.add(message);
+    //         } else {
+    //           // if it's old message, add on top.
+    //           messages.insert(0, message);
+    //         }
+    //         // if it is loading old messages
+    //         // and if it has less messages than the limit
+    //         // check if it is the very first message.
+    //         if (message.createdAt != null) {
+    //           if (snapshot.docs.length < _limit) {
+    //             if (message.text == ChatProtocol.roomCreated) {
+    //               noMoreMessage = true;
+    //               // print('-----> noMoreMessage: $noMoreMessage');
+    //             }
+    //           }
+    //         }
+    //       } else if (documentChange.type == DocumentChangeType.modified) {
+    //         final int i = messages.indexWhere((r) => r.id == message.id);
+    //         if (i > -1) {
+    //           messages[i] = message;
+    //         }
+    //       } else if (documentChange.type == DocumentChangeType.removed) {
+    //         final int i = messages.indexWhere((r) => r.id == message.id);
+    //         if (i > -1) {
+    //           messages.removeAt(i);
+    //         }
+    //       } else {
+    //         assert(false, 'This is error');
+    //       }
+    //     });
+    //     changes.add(messages.last);
+    //   });
+  }
 
   //   /// Unsubscribe room event listeners
   //   ///

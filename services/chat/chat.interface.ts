@@ -121,7 +121,7 @@ export class ChatGlobalRoomModel {
   }
 
   fromJson(map: firebase.firestore.DocumentData): ChatGlobalRoomModel {
-    // if (map == null) return new ChatGlobalRoomModel();
+    if (map == null) return new ChatGlobalRoomModel();
     this.roomId = map.id;
     this.title = map.title;
     this.users = map.users;
@@ -132,8 +132,8 @@ export class ChatGlobalRoomModel {
     return this;
   }
 
-  fromSnapshot(snapshot: firebase.firestore.DocumentSnapshot): ChatGlobalRoomModel | null {
-    if (snapshot.exists == false) return null;
+  fromSnapshot(snapshot: firebase.firestore.DocumentSnapshot): ChatGlobalRoomModel {
+    if (snapshot.exists == false) return new ChatGlobalRoomModel();
     const info: firebase.firestore.DocumentData = snapshot.data() as firebase.firestore.DocumentData;
     info["id"] = snapshot.id;
     return this.fromJson(info);
