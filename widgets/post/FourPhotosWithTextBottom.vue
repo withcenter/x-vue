@@ -44,7 +44,7 @@ export default class FourPhotosWithTextBottom extends Vue {
 
   async loadPosts(): Promise<void> {
     try {
-      this.posts = await ApiService.instance.postSearch({ categoryId: this.categoryId, files: "Y", limit: 4 });
+      this.posts = await ApiService.instance.latestPosts({ categoryId: this.categoryId, files: "Y", limit: 4 });
     } catch (e) {
       ComponentService.instance.error(e);
     }

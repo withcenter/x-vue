@@ -386,14 +386,34 @@ export class ApiService {
   }
 
   /**
-   * Returns the posts.
+   * Returns the posts based on the search request
    * @param data request data
    * @returns posts
    */
-  async postSearch(data: PostSearchRequest): Promise<Array<PostModel>> {
+  async postSearch(req: PostSearchRequest): Promise<Array<PostModel>> {
+    // console.log("postSearch::req", req);
+    const res = await this.request("post.search", req);
+    console.log("postSearch::res", res);
+    return res.map((post: JSON) => new PostModel().fromJson(post));
+  }
+
+  /**
+   * Returns the posts minimal properties based on the search request.
+   *
+   * Note, the difference from `postSearch` is that, it only returns the minimal properties
+   *    like title, 255 letters of content, user, and those that are needed to display posts
+   *    in widgets.
+   *    This may not include like 'updatedAt', 'phoneNo', 'provice', and those that are not
+   *    need to display in widgets.
+   *
+   * @param data request data
+   * @returns posts
+   */
+  async latestPosts(data: PostSearchRequest): Promise<Array<PostModel>> {
     // console.log("postSearch::data", data);
+    data.minimize = true;
     const res = await this.request("post.search", data);
-    // console.log("postSearch::res", res);
+    console.log("latestPosts::res", res);
     return res.map((post: JSON) => new PostModel().fromJson(post));
   }
 

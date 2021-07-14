@@ -1,22 +1,21 @@
 <template>
-  <router-link class="photo-title-content d-flex" :to="story.relativeUrl">
-    <div class=""><b-img class="primary" :src="src"></b-img></div>
-    <div class="text-meta pl-2 overflow-hidden">
-      <div class="title text-truncate">{{ story.title }}</div>
-      <div class="content">{{ story.content }}</div>
+  <router-link class="photo-text" v-if="story && story.idx" :to="post.relativeUrl">
+    <img class="primary" :src="src" />
+    <div class="p-1 title">
+      {{ story.title }}
     </div>
   </router-link>
 </template>
-
 <style lang="scss" scoped>
-.primary {
-  width: 72px;
-  height: 72px;
-}
-.content {
-  line-height: 1.3em;
-  height: 2.6em;
+.photo-text {
+  display: block;
+  width: 100px;
+  height: 120px;
   overflow: hidden;
+  font-size: 0.85em;
+  img {
+    width: 100%;
+  }
 }
 </style>
 <script lang="ts">
@@ -29,7 +28,9 @@ import { Component, Prop } from "vue-property-decorator";
 @Component({})
 export default class extends Vue {
   @Prop() categoryId!: string;
-  @Prop() post!: PostModel;
+  @Prop({ default: true }) isMultiLine!: boolean;
+  @Prop({ default: () => ComponentService.instance.temporaryPost() })
+  post!: PostModel;
 
   story: PostModel = new PostModel();
 

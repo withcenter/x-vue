@@ -294,7 +294,7 @@ export default class AdminPostList extends Vue {
 
     console.log(this.forum.searchOptions);
     try {
-      this.forum.posts = await ApiService.instance.postSearch(this.forum.searchOptions);
+      this.forum.posts = await ApiService.instance.latestPosts(this.forum.searchOptions);
       console.log(this.forum.posts);
     } catch (error) {
       ComponentService.instance.error(error);

@@ -40,7 +40,11 @@ export default class ThumbnailWithTextAndMetaList extends Vue {
 
   async loadPosts(): Promise<void> {
     try {
-      this.posts = await ApiService.instance.postSearch({ categoryId: this.categoryId, limit: this.limit, files: "Y" });
+      this.posts = await ApiService.instance.latestPosts({
+        categoryId: this.categoryId,
+        limit: this.limit,
+        files: "Y",
+      });
     } catch (e) {
       ComponentService.instance.error(e);
     }

@@ -2,7 +2,7 @@
   <router-link class="photo-inline-text-bottom" :to="story.relativeUrl" v-if="story && story.idx">
     <div class="w-100 position-relative">
       <b-img fluid-grow block class="primary" :src="src"> </b-img>
-      <div class="title position-absolute w-100 p-2 text-white" :class="isMultiLine ? '' : 'text-truncate'">
+      <div class="title position-absolute w-100 p-1 text-white" :class="isMultiLine ? '' : 'text-truncate'">
         {{ story.title }}
       </div>
     </div>
@@ -14,7 +14,7 @@
   .title {
     overflow: hidden;
     background-color: rgba(1, 1, 1, 0.6) !important;
-    height: 3.8em;
+    max-height: 2em;
     bottom: 0;
   }
 }
@@ -53,7 +53,7 @@ export default class PhotoInlineTextBottom extends Vue {
 
   async loadPost(): Promise<void> {
     try {
-      const res = await ApiService.instance.postSearch({ categoryId: this.categoryId, limit: 1, files: "Y" });
+      const res = await ApiService.instance.latestPosts({ categoryId: this.categoryId, limit: 1, files: "Y" });
       this.story = res[0];
     } catch (e) {
       ComponentService.instance.error(e);
