@@ -1,5 +1,5 @@
 <template>
-  <div class="posts-title-list">
+  <div class="posts-title-list" v-if="postsList.length">
     <div
       class="post-text text-truncate"
       v-for="(post, index) of postsList"
