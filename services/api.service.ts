@@ -240,10 +240,11 @@ export class ApiService {
    * @param sessionId string
    */
   setUserSessionId(res: ResponseData): UserModel {
-    // console.log(res);
     this.user = new UserModel().fromJson(res);
     this.setCookie(Keys.sessionId, this.user.sessionId);
     this.sessionId = this.user.sessionId;
+
+    // console.log('user; ', this.user);
 
     if (this.userChanges != null) this.userChanges(this.user);
 
@@ -346,6 +347,7 @@ export class ApiService {
    */
   async firebaseLogin(data: RequestData): Promise<UserModel> {
     const res = await this.request("user.firebaseLogin", data);
+    console.log("firebaseLogin; res;", res);
     return this.setUserSessionId(res);
   }
 
@@ -393,7 +395,7 @@ export class ApiService {
   async postSearch(req: PostSearchRequest): Promise<Array<PostModel>> {
     // console.log("postSearch::req", req);
     const res = await this.request("post.search", req);
-    console.log("postSearch::res", res);
+    // console.log("postSearch::res", res);
     return res.map((post: JSON) => new PostModel().fromJson(post));
   }
 
@@ -413,7 +415,7 @@ export class ApiService {
     // console.log("postSearch::data", data);
     data.minimize = true;
     const res = await this.request("post.search", data);
-    console.log("latestPosts::res", res);
+    // console.log("latestPosts::res", res);
     return res.map((post: JSON) => new PostModel().fromJson(post));
   }
 
