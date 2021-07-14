@@ -93,6 +93,7 @@ export interface AdvertisementSettings {
   };
   categoryArray: string[];
   maximumAdvertisementDays: number;
+  globalBannerMultiplying: number;
 }
 
 export interface KakaoUserMe {

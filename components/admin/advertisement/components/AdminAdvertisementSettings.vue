@@ -15,9 +15,18 @@
         <label for="advertisementCategories">Categories</label>
         <input type="text" class="form-control" id="advertisementCategories" v-model="advertisementCategories" />
         <small class="form-text text-muted">
-          Only these categories can display banners. These will appear on banner edit form. It can have many categories
-          separating by comma(,). For instance, "qna,discussion,job"
+          Categories to display banners on. These categories will appear on banner edit form. You can input many
+          categories separating by comma(,). For instance, "qna,discussion,job"
         </small>
+      </div>
+      <div class="form-group">
+        <label for="globalBannerMultiplying">Global banner price by multiplying</label>
+        <input type="number" class="form-control" id="globalBannerMultiplying" v-model="globalBannerMultiplying" />
+        <small class="form-text text-muted">
+          Global banner has more change to be displayed on many subcategories. So, it should be expansive than
+          categories banners. Input how many times to multiply on each banner price. @see README.md for details.
+        </small>
+        <small class="form-text text-muted">Recommend value for global banner multiplying is: <b>4</b></small>
       </div>
 
       <button type="submit" class="btn btn-primary">Submit</button>
@@ -117,6 +126,7 @@ export default class AdminAdvertisement extends Vue {
   s = Service.instance;
   maximumAdvertisementDays = 0;
   advertisementCategories = "";
+  globalBannerMultiplying = 0;
   points = [] as AdvertisementPointSetting[];
 
   add = {};
@@ -132,6 +142,7 @@ export default class AdminAdvertisement extends Vue {
       this.maximumAdvertisementDays = settings.maximumAdvertisementDays;
       // re = await this.api.getConfig("advertisementCategories");
       this.advertisementCategories = settings.categoryArray.join(",");
+      this.globalBannerMultiplying = settings.globalBannerMultiplying;
 
       this.points = await AdvertisementService.instance.advertisementGetBannerPoints();
       // this.points = Object.keys(settings.point).map((k) => {
@@ -174,6 +185,7 @@ export default class AdminAdvertisement extends Vue {
     try {
       await this.api.setConfig("maximumAdvertisementDays", this.maximumAdvertisementDays);
       await this.api.setConfig("advertisementCategories", this.advertisementCategories);
+      await this.api.setConfig("globalBannerMultiplying", this.globalBannerMultiplying);
 
       this.s.alert("Settings", "Saved!");
     } catch (e) {
