@@ -880,4 +880,8 @@ export class ApiService {
     this._settings = (await this.request("app.settings")) as Settings;
     return this._settings;
   }
+
+  thumbnailUrl(idx: number, width: number, height: number, quality = 95): string {
+    return this.serverUrl.replace("index.php", "") + `etc/thumbnail.php?idx=${idx}&w=${width}&h=${height}&q=${quality}`;
+  }
 }
