@@ -16,6 +16,7 @@ export class ChatBase {
     return this.firestore;
   }
 
+  // Returns firebase uid.
   get loginUserUid(): string {
     return this.auth.currentUser == null ? "" : this.auth.currentUser?.uid;
   }

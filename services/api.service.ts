@@ -351,8 +351,8 @@ export class ApiService {
     return this.setUserSessionId(res);
   }
 
-  async otherUserProfile(idx: string): Promise<UserModel> {
-    const res = await this.request("user.get", { idx });
+  async otherUserProfile(idxOrEmail: number | string): Promise<UserModel> {
+    const res = await this.request("user.get", { idxOrEmail: idxOrEmail });
     return new UserModel().fromJson(res);
   }
 
