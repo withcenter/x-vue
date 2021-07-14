@@ -4,6 +4,7 @@ import { ResponseData } from "../../interfaces/interfaces";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { ChatBase } from "./chat.base";
+import { ChatService } from "./chat.service";
 /// [ChatMessageModel] presents the chat message under
 /// `/chat/messages/{roomId}/{messageId}` collection.
 ///
@@ -105,7 +106,7 @@ export class ChatUserRoomModel {
 
 /// [ChatGloalRoom] is a model (extending [ChatBase]) that represents the chat room under `/chat-global` collection.
 /// All the chat room resides under this collection.
-export class ChatGlobalRoomModel extends ChatBase {
+export class ChatGlobalRoomModel {
   roomId = "";
   title = "";
   users: string[] = [];
@@ -116,7 +117,7 @@ export class ChatGlobalRoomModel extends ChatBase {
 
   get otherUserId(): string | undefined {
     // If there is no other user.
-    return this.users.find((el: string) => el != this.loginUserUid);
+    return this.users.find((el: string) => el != ChatService.instance.auth.currentUser?.uid);
   }
 
   fromJson(map: firebase.firestore.DocumentData): ChatGlobalRoomModel {

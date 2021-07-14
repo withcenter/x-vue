@@ -5,14 +5,16 @@
 import { ChatBase } from "./chat.base";
 import { ChatUserRoomModel } from "./chat.interface";
 
+import { BehaviorSubject } from "rxjs";
+
 /// You may rewrite your own helper class.
-export class ChatUserRoomList extends ChatBase {
-  private static _instance: ChatUserRoomList;
-  public static get instance(): ChatUserRoomList {
-    if (!ChatUserRoomList._instance) {
-      ChatUserRoomList._instance = new ChatUserRoomList();
+export class ChatUserRoomListService extends ChatBase {
+  private static _instance: ChatUserRoomListService;
+  public static get instance(): ChatUserRoomListService {
+    if (!ChatUserRoomListService._instance) {
+      ChatUserRoomListService._instance = new ChatUserRoomListService();
     }
-    return ChatUserRoomList._instance;
+    return ChatUserRoomListService._instance;
   }
 
   private constructor() {
@@ -39,7 +41,7 @@ export class ChatUserRoomList extends ChatBase {
   //   /// - When global room information changes. it will pass the user room of the global room.
   //   ///
   //   /// To get the whole list of room info, use [rooms].
-  //   BehaviorSubject<ChatUserRoom> changes = BehaviorSubject.seeded(null);
+  // changes: BehaviorSubject<ChatUserRoomModel> = BehaviorSubject.seeded(null);
 
   //   StreamSubscription _myRoomListSubscription;
   //   Map<String, StreamSubscription> _roomSubscriptions = {};

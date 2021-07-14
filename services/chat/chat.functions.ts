@@ -1,15 +1,15 @@
-import { ChatRoom } from "./chat.room";
+import { ChatRoomService } from "./chat.room";
 
 export function otherUserUid(users: string[]): string | undefined {
   if (users == null) return "";
   return users.find((uid) => {
-    uid != ChatRoom.instance.loginUserUid;
+    uid != ChatRoomService.instance.loginUserUid;
   });
 }
 
 export function otherUsersUid(users: string[]): string[] {
   if (users == null) return [];
-  return users.filter((uid) => uid != ChatRoom.instance.loginUserUid); //.toList();
+  return users.filter((uid) => uid != ChatRoomService.instance.loginUserUid); //.toList();
 }
 
 export function isImageUrl(t: string): boolean {
