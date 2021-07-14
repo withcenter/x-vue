@@ -1,6 +1,6 @@
 <template>
   <div class="two-photo-top-thumbnails-with-text-and-photo-bottom container">
-    <div class="row">
+    <div class="top row">
       <div class="col-9 p-0 pr-2">
         <PhotoInlineTextBottom :categoryId="firstCategoryId"></PhotoInlineTextBottom>
       </div>
@@ -8,7 +8,7 @@
         <PhotoInlineTextBottom :categoryId="secondCategoryId"></PhotoInlineTextBottom>
       </div>
     </div>
-    <div class="mt-2 row">
+    <div class="bottom mt-2 row">
       <div class="col-9 p-0 pr-2">
         <ThumbnailWithTextAndMetaList
           :categoryId="thirdCategoryId"
@@ -16,7 +16,7 @@
         ></ThumbnailWithTextAndMetaList>
       </div>
       <div class="col-3 p-0">
-        <PhotoInlineTextBottom :categoryId="fourthCategoryId"></PhotoInlineTextBottom>
+        <PhotoInlineTextBottomList :categoryId="fourthCategoryId"></PhotoInlineTextBottomList>
       </div>
     </div>
   </div>
@@ -28,11 +28,13 @@ import { Component, Prop } from "vue-property-decorator";
 
 import ThumbnailWithTextAndMetaList from "./ThumbnailWithTextAndMetaList.vue";
 import PhotoInlineTextBottom from "./PhotoInlineTextBottom.vue";
+import PhotoInlineTextBottomList from "./PhotoInlineTextBottomList.vue";
 
 @Component({
   components: {
     ThumbnailWithTextAndMetaList,
     PhotoInlineTextBottom,
+    PhotoInlineTextBottomList,
   },
 })
 export default class TwoPhotoTopThumbnailsWithTextAndPhotoBottom extends Vue {

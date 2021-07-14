@@ -1,5 +1,5 @@
 <template>
-  <router-link class="thumbnail-with-text-at-right d-flex" :to="post.relativeUrl">
+  <router-link class="thumbnail-with-text-at-right d-flex" :to="post.relativeUrl" v-if="story && story.idx">
     <!-- For IE11, we need a wrapper -->
     <div class="image-holder">
       <b-img class="primary" :src="post.files[0].url"></b-img>

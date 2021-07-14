@@ -1,17 +1,13 @@
 <template>
   <div class="texts-top-thumbnail-text-list-bottom">
     <PostsTitleList
-      class="top border p-2"
+      class="border p-2"
       :categoryId="firstCategoryId"
       :limit="firstLimit"
       :bulleted="true"
     ></PostsTitleList>
 
-    <ThumbnailWithTextAndMetaList
-      class="bottom mt-2"
-      :categoryId="secondCategoryId"
-      :limit="secondLimit"
-    ></ThumbnailWithTextAndMetaList>
+    <ThumbnailWithTextAndMetaAtBottom class="mt-2" :categoryId="secondCategoryId"></ThumbnailWithTextAndMetaAtBottom>
   </div>
 </template>
 
@@ -20,15 +16,14 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 
 import PostsTitleList from "./PostsTitleList.vue";
-import ThumbnailWithTextAndMetaList from "./ThumbnailWithTextAndMetaList.vue";
+import ThumbnailWithTextAndMetaAtBottom from "./ThumbnailWithTextAndMetaAtBottom.vue";
 
 @Component({
-  components: { PostsTitleList, ThumbnailWithTextAndMetaList },
+  components: { PostsTitleList, ThumbnailWithTextAndMetaAtBottom },
 })
-export default class TextsTopThumbnailTextListBottom extends Vue {
+export default class TextsTopThumbnailTextBottom extends Vue {
   @Prop() firstCategoryId!: string;
   @Prop() secondCategoryId!: string;
   @Prop({ default: 8 }) firstLimit!: number;
-  @Prop({ default: 2 }) secondLimit!: number;
 }
 </script>

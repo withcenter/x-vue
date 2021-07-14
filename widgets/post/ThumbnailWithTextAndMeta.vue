@@ -1,9 +1,9 @@
 <template>
-  <router-link class="thumbnail-with-text-and-meta d-flex" :to="story.relativeUrl">
-    <div class="image-holder">
-      <b-img class="primary" :src="src"></b-img>
-    </div>
-    <div class="text-meta ml-2 flex-grow-1 overflow-hidden">
+  <router-link class="thumbnail-with-text-and-meta row no-gutters" :to="story.relativeUrl" v-if="story && story.idx">
+    <!-- <div class="col-3 image-holder"> -->
+    <b-img class="col-4 p-0 primary" :src="src"></b-img>
+    <!-- </div> -->
+    <div class="col-8 text-meta pl-2 overflow-hidden">
       <div class="category">{{ story.categoryId }}</div>
       <div class="title text-truncate font-weight-bold">{{ story.title }}</div>
       <div class="content">{{ story.content }}</div>

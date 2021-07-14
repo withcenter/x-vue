@@ -228,6 +228,7 @@
           <br />
           post PostModel
           <br />
+          categoryId string
         </p>
         <hr />
         <PhotoInlineTextBottom></PhotoInlineTextBottom>
@@ -254,6 +255,8 @@
           Displays 1 Photo on left and several post as text on right.
           <br />
           categoryId string
+          <br />
+          photo PostModel
           <br />
           limit number (7 default)
         </p>
@@ -295,6 +298,8 @@
         <h5 class="card-title">ThumbnailWithTextAndMeta</h5>
         <p class="card-text">
           Displays 1 photo with text and meta information.
+          <br />
+          categoryId string
           <br />
           post PostModel
         </p>
@@ -403,6 +408,7 @@
         <p class="card-text">
           Displays thumbnail on left and text (title) on right.
           <br />
+          categoryId string <br />
           post PostModel <br />
           isTwoLine boolean (true default) - if true, 2 lines of text will be shown if it can't fit in one line.
         </p>
