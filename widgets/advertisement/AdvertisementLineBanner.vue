@@ -1,6 +1,8 @@
 <template>
   <div class="mb-2 banner line d-flex pointer border-bottom" @click="onClick" v-if="currentBanner.bannerUrl">
-    <img :src="currentBanner.bannerUrl" />
+    <div class="image-holder">
+      <img :src="currentBanner.bannerUrl" />
+    </div>
     <div class="title">
       {{ currentBanner.title }}
     </div>
