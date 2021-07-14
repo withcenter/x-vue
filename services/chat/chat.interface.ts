@@ -3,7 +3,7 @@ import { ResponseData } from "../../interfaces/interfaces";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
-import { ChatBase } from "./chat.base";
+// import { ChatBase } from "./chat.base";
 import { ChatService } from "./chat.service";
 /// [ChatMessageModel] presents the chat message under
 /// `/chat/messages/{roomId}/{messageId}` collection.
