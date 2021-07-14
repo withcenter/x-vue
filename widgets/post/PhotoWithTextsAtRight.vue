@@ -1,5 +1,5 @@
 <template>
-  <div class="photo-with-text-right" v-if="story">
+  <div class="photo-with-text-right" v-if="story && story.idx">
     <router-link :to="story.relativeUrl">
       <h3 class="text-truncate">{{ story.title }}</h3>
     </router-link>
@@ -39,8 +39,9 @@ export default class PhotoWithTextsAtRight extends Vue {
   mounted(): void {
     if (this.post) {
       this.story = this.post;
+      this.loadPost(this.story.categoryId);
     } else if (this.categoryId) {
-      this.loadPost();
+      this.loadPost(this.categoryId);
     } else {
       this.story = ComponentService.instance.temporaryPost();
     }
@@ -51,9 +52,9 @@ export default class PhotoWithTextsAtRight extends Vue {
     return this.story.files[0].thumbnailUrl ? this.story.files[0].thumbnailUrl : this.story.files[0].url;
   }
 
-  async loadPost(): Promise<void> {
+  async loadPost(categoryId: string): Promise<void> {
     try {
-      const res = await ApiService.instance.latestPosts({ categoryId: this.categoryId, limit: 1, files: "Y" });
+      const res = await ApiService.instance.latestPosts({ categoryId: categoryId, limit: 1, files: "Y" });
       this.story = res[0];
     } catch (e) {
       ComponentService.instance.error(e);

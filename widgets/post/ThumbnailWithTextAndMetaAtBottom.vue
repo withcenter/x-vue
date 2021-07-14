@@ -1,5 +1,5 @@
 <template>
-  <div class="thumbnail-with-text-and-meta-at-bottom">
+  <div class="thumbnail-with-text-and-meta-at-bottom" v-if="story && story.idx">
     <router-link :to="story.relativeUrl">
       <b-img fluid-grow class="primary" :src="src"></b-img>
       <div class="text-meta mt-2">
