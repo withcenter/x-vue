@@ -155,8 +155,8 @@ export class ChatRoomService extends ChatBase {
       // If permission-denied error happens here,
       // 1. Probably the room does not exists.
       // 2. Or, the login user is not a user of the room.
-      // print(f.user.uid);
-      // print(_id);
+      //   console.log(this.auth.currentUser.uid);
+      console.log(_id);
       this.global = await this.getGlobalRoom(_id);
     } else {
       // Add login user(uid) into room users.
