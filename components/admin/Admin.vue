@@ -24,6 +24,9 @@
       <router-link class="btn btn-link" to="/admin/advertisement">
         {{ "advertisement" | t }}
       </router-link>
+      <router-link class="btn btn-link" to="/admin/utility">
+        {{ "utility" | t }}
+      </router-link>
       <router-link class="btn btn-link" to="/admin/samples">
         {{ "samples" | t }}
       </router-link>

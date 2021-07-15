@@ -120,6 +120,8 @@ new Vue({
 }).$mount("#app");
 ```
 
+
+
 ## t, translation filter
 
 - The filter `t` for translation is registered by the initialization of `ApiService`.
@@ -175,6 +177,13 @@ export default class Login extends Vue {
 </script>
 ```
 
+# 관리자 페이지
+
+- `x-vue` 컴포넌트에서 제공하는 관리자 페이지는 범용적으로 많이 쓰이는 것만 제공한다.
+- 예를 들어, 소너브 카페에서 기본 게시판을 생성하는 것은 소너브에 한정된 기능이기 때문에, `x-vue` 에 넣으면 안된다.
+  - 따라서, 소너브 카페에 한정된 기능은 별도의 메뉴(페이지)를 만들고, 그 곳에 관리자 기능을 따로 만들어야 한다.
+
+- 기본 샘플(예제)글/코멘트를 만드는 것은 `x-vue` 에서 제공 가능하다.
 
 # Components and Widgets
 
