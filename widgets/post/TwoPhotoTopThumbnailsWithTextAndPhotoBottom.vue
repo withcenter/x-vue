@@ -15,9 +15,7 @@
           :limit="textListLimit"
         ></ThumbnailWithTextAndMetaList>
       </div>
-      <div class="col-3 p-0">
-        <PhotoInlineTextBottomList :categoryId="fourthCategoryId"></PhotoInlineTextBottomList>
-      </div>
+      <PhotoInlineTextBottomList class="col-3 p-0" :categoryId="fourthCategoryId"></PhotoInlineTextBottomList>
     </div>
   </div>
 </template>

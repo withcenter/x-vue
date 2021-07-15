@@ -120,6 +120,8 @@ new Vue({
 }).$mount("#app");
 ```
 
+
+
 ## t, translation filter
 
 - The filter `t` for translation is registered by the initialization of `ApiService`.
@@ -175,6 +177,13 @@ export default class Login extends Vue {
 </script>
 ```
 
+# 관리자 페이지
+
+- `x-vue` 컴포넌트에서 제공하는 관리자 페이지는 범용적으로 많이 쓰이는 것만 제공한다.
+- 예를 들어, 소너브 카페에서 기본 게시판을 생성하는 것은 소너브에 한정된 기능이기 때문에, `x-vue` 에 넣으면 안된다.
+  - 따라서, 소너브 카페에 한정된 기능은 별도의 메뉴(페이지)를 만들고, 그 곳에 관리자 기능을 따로 만들어야 한다.
+
+- 기본 샘플(예제)글/코멘트를 만드는 것은 `x-vue` 에서 제공 가능하다.
 
 # Components and Widgets
 
@@ -214,7 +223,44 @@ export default class Login extends Vue {
     - Developer can change its design within the single `Forum.vue` component.
 
 
+## 캐시
 
+- `latestPosts()` 함수는 `options.callback` 파라메타에 콜백 함수를 전달 하면,
+  내부적으로 자동 캐시를 해서 보다 빠르게 내용을 화면에 표시 할 수 있다.
+
+- 아래의 코드는 캐시를 하는 예제인데, await 을 하지 않아서, 세 개의 게시판으로 부터 최근글을 빠르게 한번 화면에 표시해 주고, promise 작업이 끝나면, 서버로 부터 가져온 데이터를 localStorage 에 저장하고, 화면에 한번 더 그려준다.
+
+```ts
+  mounted(): void {
+    this.api
+      .latestPosts({ categoryId: "travel", limit: 4 }, { callback: (posts) => (this.travel = posts) })
+      .then((posts) => (this.travel = posts))
+      .catch((e) => this.app.error(e));
+    this.api
+      .latestPosts({ categoryId: "discussion", limit: 5 }, { callback: (posts) => (this.discussion = posts) })
+      .then((posts) => (this.discussion = posts))
+      .catch((e) => this.app.error(e));
+    this.api
+      .latestPosts({ categoryId: "qna", limit: 5 }, { callback: (posts) => (this.qna = posts) })
+      .then((posts) => (this.qna = posts))
+      .catch((e) => this.app.error(e));
+  }
+```
+
+- 아래의 코드는 캐시를 하지 않는 예제인데, 두개를 비교해 보면 속도 차이를 알 수 있다.
+
+```ts
+  async mounted(): Promise<void> {
+    try {
+      this.travel = await this.api.latestPosts({ categoryId: "travel", limit: 4 });
+      this.discussion = await this.api.latestPosts({ categoryId: "discussion", limit: 5 });
+      this.qna = await this.api.latestPosts({ categoryId: "qna", limit: 5 });
+      this.loaded = true;
+    } catch (e) {
+      this.app.error(e);
+    }
+  }
+```
 
 # 디버깅
 

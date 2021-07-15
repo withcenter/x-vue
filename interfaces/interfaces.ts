@@ -145,6 +145,9 @@ export class UserModel {
 
   nicknameOrName = "";
 
+  level = 0;
+  levelPercentage = 0;
+
   get loggedIn(): boolean {
     return !!this.idx;
   }
@@ -185,6 +188,8 @@ export class UserModel {
     this.createdAt = map.createdAt;
     this.updatedAt = map.updatedAt;
     this.verifier = map.verifier;
+    this.level = map.level;
+    this.levelPercentage = map.levelPercentage;
     return this;
   }
 }

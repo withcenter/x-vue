@@ -1,8 +1,12 @@
 <template>
   <div class="photo-inline-text-bottom-list">
-    <div :class="{ 'mt-2': index > 0 }" v-for="(post, index) of postList" :key="post.idx">
-      <PhotoInlineTextBottom :post="post" :isMultiLine="isMultilineText"></PhotoInlineTextBottom>
-    </div>
+    <PhotoInlineTextBottom
+      :class="{ 'mt-2': index > 0 }"
+      v-for="(post, index) of postList"
+      :key="post.idx"
+      :post="post"
+      :isMultiLine="isMultilineText"
+    ></PhotoInlineTextBottom>
   </div>
 </template>
 

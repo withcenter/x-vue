@@ -1,12 +1,13 @@
 <template>
   <div class="posts-title-list" v-if="postsList.length">
-    <div
-      class="post-text text-truncate"
-      v-for="(post, index) of postsList"
-      :key="post.idx"
-      :class="index > 0 ? 'mt-2' : ''"
-    >
-      <router-link :to="post.relativeUrl"> <span class="mr-2" v-if="bulleted">•</span>{{ post.title }} </router-link>
+    <div class="post-text" v-for="(post, index) of postsList" :key="post.idx" :class="index > 0 ? 'mt-2' : ''">
+      <router-link class="d-flex" :to="post.relativeUrl">
+        <span class="mr-2" v-if="bulleted">•</span>
+        <div class="d-block text-truncate">
+          {{ post.title }}
+        </div>
+        <b-badge class="ml-2" variant="light" v-if="post.noOfComments">{{ post.noOfComments }}</b-badge>
+      </router-link>
     </div>
   </div>
 </template>

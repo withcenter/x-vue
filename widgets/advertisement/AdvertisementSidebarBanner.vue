@@ -1,11 +1,6 @@
 <template>
-  <div class="banner line pointer row no-gutters" @click="onClick" v-if="currentBanner.bannerUrl">
-    <div class="col-2 p-0 image-holder">
-      <img :src="currentBanner.bannerUrl" />
-    </div>
-    <div class="col-10 title">
-      {{ currentBanner.title }}
-    </div>
+  <div class="banner square pointer" @click="onClick(banner)" v-if="currentBanner.bannerUrl">
+    <img class="w-100 h-100" :src="banner.bannerUrl" />
   </div>
 </template>
 
@@ -16,7 +11,7 @@ import { Banner, CategoryBanners } from "@/x-vue/interfaces/advertisement.interf
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 
 @Component({})
-export default class AdvertisementLineBanner extends Vue {
+export default class AdvertisementSidebarBanner extends Vue {
   @Prop() banners!: CategoryBanners;
   @Prop() categoryId!: string;
 
@@ -31,10 +26,10 @@ export default class AdvertisementLineBanner extends Vue {
     if (!this.banners) return [];
 
     let _banners = this.banners[this.categoryId];
-    if (!_banners || !_banners["line"]) _banners = this.banners["global"];
-    if (!_banners || !_banners["line"]) return [];
+    if (!_banners || !_banners["sidebar"]) _banners = this.banners["global"];
+    if (!_banners || !_banners["sidebar"]) return [];
 
-    return _banners["line"];
+    return _banners["sidebar"];
   }
 
   get currentBanner(): Banner {
