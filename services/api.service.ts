@@ -411,11 +411,27 @@ export class ApiService {
    * @param data request data
    * @returns posts
    */
-  async latestPosts(data: PostSearchRequest): Promise<Array<PostModel>> {
-    // console.log("postSearch::data", data);
+  async latestPosts(
+    data: PostSearchRequest,
+    options?: { callback: (posts: Array<PostModel>) => void }
+  ): Promise<Array<PostModel>> {
+    const key = `${data.categoryId}-${data.categoryIdx ?? ""}-${data?.subcategory ?? ""}-${data?.files ?? ""}-${
+      data.countryCode ?? ""
+    }-${data.searchKey ?? ""}-${data.userIdx ?? ""}-${data.order ?? ""}-${data.page ?? ""}-${data.limit ?? ""}`;
+    // console.log("postSearch::key", key);
+    if (options?.callback) {
+      const cache = localStorage.getItem(key);
+      if (cache) {
+        // console.log("there is cache; ");
+        options.callback(JSON.parse(cache).map((post: JSON) => new PostModel().fromJson(post)));
+      }
+    }
     data.minimize = true;
     const res = await this.request("post.search", data);
     // console.log("latestPosts::res", res);
+    if (options?.callback) {
+      localStorage.setItem(key, JSON.stringify(res));
+    }
     return res.map((post: JSON) => new PostModel().fromJson(post));
   }
 
