@@ -214,7 +214,44 @@ export default class Login extends Vue {
     - Developer can change its design within the single `Forum.vue` component.
 
 
+## 캐시
 
+- `latestPosts()` 함수는 `options.callback` 파라메타에 콜백 함수를 전달 하면,
+  내부적으로 자동 캐시를 해서 보다 빠르게 내용을 화면에 표시 할 수 있다.
+
+- 아래의 코드는 캐시를 하는 예제인데, await 을 하지 않아서, 세 개의 게시판으로 부터 최근글을 빠르게 한번 화면에 표시해 주고, promise 작업이 끝나면, 서버로 부터 가져온 데이터를 localStorage 에 저장하고, 화면에 한번 더 그려준다.
+
+```ts
+  mounted(): void {
+    this.api
+      .latestPosts({ categoryId: "travel", limit: 4 }, { callback: (posts) => (this.travel = posts) })
+      .then((posts) => (this.travel = posts))
+      .catch((e) => this.app.error(e));
+    this.api
+      .latestPosts({ categoryId: "discussion", limit: 5 }, { callback: (posts) => (this.discussion = posts) })
+      .then((posts) => (this.discussion = posts))
+      .catch((e) => this.app.error(e));
+    this.api
+      .latestPosts({ categoryId: "qna", limit: 5 }, { callback: (posts) => (this.qna = posts) })
+      .then((posts) => (this.qna = posts))
+      .catch((e) => this.app.error(e));
+  }
+```
+
+- 아래의 코드는 캐시를 하지 않는 예제인데, 두개를 비교해 보면 속도 차이를 알 수 있다.
+
+```ts
+  async mounted(): Promise<void> {
+    try {
+      this.travel = await this.api.latestPosts({ categoryId: "travel", limit: 4 });
+      this.discussion = await this.api.latestPosts({ categoryId: "discussion", limit: 5 });
+      this.qna = await this.api.latestPosts({ categoryId: "qna", limit: 5 });
+      this.loaded = true;
+    } catch (e) {
+      this.app.error(e);
+    }
+  }
+```
 
 # 디버깅
 
