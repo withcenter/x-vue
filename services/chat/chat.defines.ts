@@ -24,3 +24,9 @@ export enum ChatProtocol {
   addModerator = "ChatProtocol.addModerator",
   removeModerator = "ChatProtocol.removeModerator",
 }
+
+export enum DocumentChangeType {
+  added = "added",
+  removed = "removed",
+  modified = "modified",
+}

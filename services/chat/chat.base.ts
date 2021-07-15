@@ -8,10 +8,6 @@ export class ChatBase {
   auth = firebase.auth();
   firestore = firebase.firestore();
 
-  // get auth(): firebase.auth.Auth {
-  //     return firebase.auth();
-  // }
-
   get db(): firebase.firestore.Firestore {
     return this.firestore;
   }
@@ -114,6 +110,6 @@ export class ChatBase {
   /// Todo move this method to `ChatRoom`
   async getGlobalRoom(roomId: string): Promise<ChatGlobalRoomModel> {
     const snapshot = await this.globalRoomDoc(roomId).get();
-    return new ChatGlobalRoomModel().fromJson(snapshot);
+    return new ChatGlobalRoomModel().fromSnapshot(snapshot);
   }
 }

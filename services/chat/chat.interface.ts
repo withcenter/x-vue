@@ -1,5 +1,5 @@
 import { isImageUrl } from "./chat.functions";
-import { ResponseData } from "../../interfaces/interfaces";
+import { MapStringAny, ResponseData } from "../../interfaces/interfaces";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
@@ -12,7 +12,7 @@ import { ChatService } from "./chat.service";
 /// [isImage] returns  if the message is image or not = false.
 export class ChatMessageModel {
   id = "";
-  createdAt = ""; //Timestamp
+  createdAt: firebase.firestore.Timestamp = {} as firebase.firestore.Timestamp; //Timestamp
   newUsers: string[] = [];
   senderDisplayName = "";
   senderPhotoURL = "";
@@ -29,10 +29,17 @@ export class ChatMessageModel {
     return false;
   }
 
+  fromSnapshot(snapshot: firebase.firestore.DocumentSnapshot): ChatMessageModel {
+    if (snapshot.exists == false) return new ChatMessageModel();
+    const info: firebase.firestore.DocumentData = snapshot.data() as firebase.firestore.DocumentData;
+    info["id"] = snapshot.id;
+    return this.fromJson(info);
+  }
+
   fromJson(map: ResponseData): ChatMessageModel {
     this.id = map.id;
     this.createdAt = map.createdAt;
-    this.newUsers = map.newUsers;
+    this.newUsers = map.newUsers ?? [];
     this.senderDisplayName = map.senderDisplayName;
     this.senderPhotoURL = map.senderPhotoURL;
     this.senderUid = map.senderUid;
@@ -66,7 +73,7 @@ export class ChatUserRoomModel {
   /// [createAt] is the time that last message was sent by a user.
   /// It will be `FieldValue.serverTimestamp()` when it sends the
   /// message. And it will `Timestamp` when it read the room information.
-  createdAt = ""; //Timestamp
+  createdAt: firebase.firestore.Timestamp = {} as firebase.firestore.Timestamp; //Timestamp
 
   /// [newMessages] has the number of new messages for that room.
   newMessages = "";
@@ -76,8 +83,10 @@ export class ChatUserRoomModel {
 
   isImage = false;
 
-  fromSnapshot(snapshot: firebase.firestore.DocumentSnapshot): ChatUserRoomModel | null {
-    if (snapshot.exists == false) return null;
+  global = {} as ChatGlobalRoomModel;
+
+  fromSnapshot(snapshot: firebase.firestore.DocumentSnapshot): ChatUserRoomModel {
+    if (snapshot.exists == false) return new ChatUserRoomModel();
     const info: firebase.firestore.DocumentData = snapshot.data() as firebase.firestore.DocumentData;
     info["id"] = snapshot.id;
     return this.fromJson(info);
@@ -88,10 +97,10 @@ export class ChatUserRoomModel {
     this.senderUid = map.senderUid;
     this.senderDisplayName = map.senderDisplayName;
     this.senderPhotoURL = map.senderPhotoURL;
-    this.users = map.users;
-    this.moderators = map.moderators;
-    this.blockedUsers = map.blockedUsers;
-    this.newUsers = map.newUsers;
+    this.users = map.users ?? [];
+    this.moderators = map.moderators ?? [];
+    this.blockedUsers = map.blockedUsers ?? [];
+    this.newUsers = map.newUsers ?? [];
     this.text = map.text;
     this.createdAt = map.createdAt;
     this.newMessages = map.newMessages;
@@ -112,8 +121,8 @@ export class ChatGlobalRoomModel {
   users: string[] = [];
   moderators: string[] = [];
   blockedUsers: string[] = [];
-  createdAt = "";
-  updatedAt = "";
+  createdAt: firebase.firestore.Timestamp = {} as firebase.firestore.Timestamp; //Timestamp
+  updatedAt: firebase.firestore.Timestamp = {} as firebase.firestore.Timestamp; //Timestamp
 
   get otherUserId(): string | undefined {
     // If there is no other user.
@@ -121,12 +130,13 @@ export class ChatGlobalRoomModel {
   }
 
   fromJson(map: firebase.firestore.DocumentData): ChatGlobalRoomModel {
+    console.log("ChatGlobalRoomModel", map);
     if (map == null) return new ChatGlobalRoomModel();
-    this.roomId = map.id;
-    this.title = map.title;
-    this.users = map.users;
-    this.moderators = map.moderators;
-    this.blockedUsers = map.blockedUsers;
+    this.roomId = map.roomId;
+    this.title = map.title ?? "";
+    this.users = map.users ?? [];
+    this.moderators = map.moderators ?? [];
+    this.blockedUsers = map.blockedUsers ?? [];
     this.createdAt = map.createdAt;
     this.updatedAt = map.updatedAt;
     return this;
@@ -135,7 +145,17 @@ export class ChatGlobalRoomModel {
   fromSnapshot(snapshot: firebase.firestore.DocumentSnapshot): ChatGlobalRoomModel {
     if (snapshot.exists == false) return new ChatGlobalRoomModel();
     const info: firebase.firestore.DocumentData = snapshot.data() as firebase.firestore.DocumentData;
-    info["id"] = snapshot.id;
+    info["roomId"] = snapshot.id;
     return this.fromJson(info);
+  }
+
+  get data(): MapStringAny {
+    return {
+      title: this.title,
+      users: this.users,
+      moderators: this.moderators,
+      blockedUsers: this.blockedUsers,
+      createdAt: this.createdAt,
+    };
   }
 }

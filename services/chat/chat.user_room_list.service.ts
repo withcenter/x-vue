@@ -3,9 +3,13 @@
 /// This is a completely independent helper class to help to list login user's room list.
 
 import { ChatBase } from "./chat.base";
-import { ChatUserRoomModel } from "./chat.interface";
+import { ChatGlobalRoomModel, ChatUserRoomModel } from "./chat.interface";
 
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Subject, Subscription } from "rxjs";
+
+import firebase from "firebase/app";
+import "firebase/firestore";
+import { DocumentChangeType } from "./chat.defines";
 
 /// You may rewrite your own helper class.
 export class ChatUserRoomListService extends ChatBase {
@@ -19,16 +23,18 @@ export class ChatUserRoomListService extends ChatBase {
 
   private constructor() {
     super();
+    console.log("ChatUserRoomListService");
     this.init();
   }
 
   init() {
     this.auth.onAuthStateChanged((user) => {
+      console.log("onAuthStateChanged::", user);
       if (user == null) {
         this._unsubscribe();
       } else {
-        // _reset();
-        // _listenRoomList();
+        this._reset({});
+        this._listenRoomList();
       }
     });
   }
@@ -41,10 +47,15 @@ export class ChatUserRoomListService extends ChatBase {
   //   /// - When global room information changes. it will pass the user room of the global room.
   //   ///
   //   /// To get the whole list of room info, use [rooms].
-  // changes: BehaviorSubject<ChatUserRoomModel> = BehaviorSubject.seeded(null);
+  changes: BehaviorSubject<ChatUserRoomModel> = BehaviorSubject.create(null);
 
-  //   StreamSubscription _myRoomListSubscription;
-  //   Map<String, StreamSubscription> _roomSubscriptions = {};
+  // changes: Subject<ChatUserRoomModel> = new Subject();
+
+  // _myRoomListSubscription: Subscription | null = new Subscription();
+  _myRoomListSubscription: (() => void) | null = null;
+
+  // _roomSubscriptions: { [index: string]: Subscription } = {} as { [index: string]: Subscription };
+  _roomSubscriptions: { [index: string]: () => void } = {} as { [index: string]: () => void };
 
   /// Login user's whole room list including room id.
   rooms: ChatUserRoomModel[] = [];
@@ -52,90 +63,98 @@ export class ChatUserRoomListService extends ChatBase {
 
   newMessages = 0;
 
-  //   _reset({String order}) {
-  //     if (order != null) {
-  //       _order = order;
-  //     }
-  //     newMessages = 0;
-  //     rooms = [];
-  //     if (_myRoomListSubscription != null) {
-  //       _myRoomListSubscription.cancel();
-  //       _myRoomListSubscription = null;
-  //     }
-  //   }
+  _reset({ order = "" }: { order?: string }) {
+    if (order != "") {
+      this._order = order;
+    }
+    this.newMessages = 0;
+    this.rooms = [];
+    if (this._myRoomListSubscription != null) {
+      this._myRoomListSubscription();
+      this._myRoomListSubscription = null;
+    }
+  }
 
-  //   /// Listen to global room updates.
-  //   ///
-  //   /// Listen for;
-  //   /// - title changes,
-  //   /// - users array changes,
-  //   /// - and other properties change.
-  //   _listenRoomList() {
-  //     _myRoomListSubscription =
-  //         myRoomListCol.orderBy(_order, descending: true).snapshots().listen((snapshot) {
-  //       snapshot.docChanges.forEach((DocumentChange documentChange) {
-  //         final roomInfo = ChatUserRoom.fromSnapshot(documentChange.doc);
+  /// Listen to global room updates.
+  ///
+  /// Listen for;
+  /// - title changes,
+  /// - users array changes,
+  /// - and other properties change.
+  _listenRoomList() {
+    console.log("_listenRoomList::");
+    this._myRoomListSubscription = this.myRoomListCol.orderBy(this._order, "desc").onSnapshot({
+      next: (snapshot) => {
+        console.log("_listenRoomList::snapshot::", snapshot.docs);
+        snapshot.docChanges().forEach((documentChange: firebase.firestore.DocumentChange) => {
+          const roomInfo = new ChatUserRoomModel().fromSnapshot(documentChange.doc);
+          console.log(roomInfo?.newMessages);
 
-  //         // print(roomInfo.newMessages);
-  //         if (documentChange.type == DocumentChangeType.added) {
-  //           rooms.add(roomInfo);
+          // console.log(roomInfo.newMessages);
+          if (documentChange.type == DocumentChangeType.added) {
+            this.rooms.push(roomInfo);
 
-  //           /// When room list is retreived for the first, it will be added to listener.
-  //           /// This is where [changes] event happens many times when the app listens to room list.
-  //           _roomSubscriptions[roomInfo.id] = globalRoomDoc(roomInfo.id).snapshots().listen(
-  //             (DocumentSnapshot snapshot) {
-  //               int found = rooms.indexWhere((r) => r.id == roomInfo.id);
-  //               rooms[found].global = ChatGlobalRoom.fromSnapshot(snapshot);
-  //               // print('global room has changed. ${rooms[found]}');
-  //               changes.add(rooms[found]);
-  //             },
-  //           );
-  //         } else if (documentChange.type == DocumentChangeType.modified) {
-  //           int found = rooms.indexWhere((r) => r.id == roomInfo.id);
-  //           // If global room information exists, copy it to updated object to
-  //           // maintain global room information.
-  //           final global = rooms[found].global;
-  //           rooms[found] = roomInfo;
-  //           rooms[found].global = global;
-  //         } else if (documentChange.type == DocumentChangeType.removed) {
-  //           final int i = rooms.indexWhere((r) => r.id == roomInfo.id);
-  //           if (i > -1) {
-  //             rooms.removeAt(i);
-  //           }
-  //         } else {
-  //           assert(false, 'This is error');
-  //         }
-  //       });
+            /// When room list is retreived for the first, it will be added to listener.
+            /// This is where [changes] event happens many times when the app listens to room list.
+            this._roomSubscriptions[roomInfo.id] = this.globalRoomDoc(roomInfo.id).onSnapshot({
+              next: (snapshot) => {
+                const found: number = this.rooms.findIndex((r) => r.id == roomInfo.id);
+                this.rooms[found].global = new ChatGlobalRoomModel().fromSnapshot(snapshot);
+                // console.log('global room has changed. ${rooms[found]}');
+                this.changes.next(this.rooms[found]);
+              },
+            });
+          } else if (documentChange.type == DocumentChangeType.modified) {
+            const found: number = this.rooms.findIndex((r) => r.id == roomInfo.id);
+            // If global room information exists, copy it to updated object to
+            // maintain global room information.
+            const global: ChatGlobalRoomModel = this.rooms[found].global;
+            this.rooms[found] = roomInfo;
+            this.rooms[found].global = global;
+          } else if (documentChange.type == DocumentChangeType.removed) {
+            const i: number = this.rooms.findIndex((r) => r.id == roomInfo.id);
+            if (i > -1) {
+              this.rooms.splice(i, 1);
+            }
+          } else {
+            console.log("This is error");
+          }
+        });
 
-  //       newMessages = 0;
-  //       rooms.forEach((roomInfo) {
-  //         newMessages += int.parse(roomInfo.newMessages);
-  //       });
+        this.newMessages = 0;
+        this.rooms.forEach((roomInfo) => {
+          this.newMessages += parseInt(roomInfo.newMessages);
+        });
 
-  //       /// post event with last room
+        /// post event with last room
+        const re =
+          snapshot.docChanges.length > 0
+            ? new ChatUserRoomModel().fromSnapshot(
+                snapshot.docChanges()[snapshot.docChanges().length - 1].doc as firebase.firestore.DocumentSnapshot
+              )
+            : new ChatUserRoomModel();
 
-  //       changes.add(snapshot.docChanges.length > 0
-  //           ? ChatUserRoom.fromSnapshot(snapshot.docChanges.last.doc)
-  //           : null);
-  //     });
-  //   }
+        console.log("ROOMS::: ", this.rooms);
+        this.changes.next(re);
+      },
+    });
+  }
 
   _unsubscribe() {
-    // if (_myRoomListSubscription != null) _myRoomListSubscription.cancel();
-    // if (_roomSubscriptions.isNotEmpty) {
-    //   for (final key in _roomSubscriptions.keys) {
-    //     _roomSubscriptions[key].cancel();
-    //   }
-    //   this._roomSubscriptions = {};
-    // }
+    if (this._myRoomListSubscription != null) this._myRoomListSubscription();
+    if (Object.keys(this._roomSubscriptions).length) {
+      for (const key in this._roomSubscriptions) {
+        this._roomSubscriptions[key]();
+      }
+      this._roomSubscriptions = {};
+    }
     this.newMessages = 0;
   }
 
-  //   unsubscribeUserRoom(ChatGlobalRoom room) {
-  //     if (_roomSubscriptions.isEmpty) return;
-  //     if (_roomSubscriptions[room.roomId] == null) return;
-
-  //     _roomSubscriptions[room.roomId].cancel();
-  //     _roomSubscriptions.removeWhere((String key, dynamic value) => key == room.roomId);
-  //   }
+  unsubscribeUserRoom(room: ChatGlobalRoomModel) {
+    if (this._roomSubscriptions.isEmpty) return;
+    if (this._roomSubscriptions[room.roomId] == null) return;
+    this._roomSubscriptions[room.roomId]();
+    delete this._roomSubscriptions[room.roomId];
+  }
 }

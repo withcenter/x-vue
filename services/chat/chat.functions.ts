@@ -1,4 +1,4 @@
-import { ChatRoomService } from "./chat.room";
+import { ChatRoomService } from "./chat.room.service";
 
 export function otherUserUid(users: string[]): string | undefined {
   if (users == null) return "";
