@@ -35,7 +35,7 @@
     <h3>Add banner points for a country</h3>
     <form @submit.prevent="onEdit(add)">
       <!-- <input v-model="add.countryCode" placeholder="2 letter country code" /> -->
-      <div class="d-flex w-100">
+      <div class="row no-gutters w-100">
         <div class="col-3 pl-0 pr-1">
           {{ "country" | t }}
           <select class="form-control" v-model="add.countryCode">
@@ -85,23 +85,15 @@
       </thead>
       <tbody>
         <tr v-for="n in points.length" :key="n">
-          <th scope="row">
+          <th scope="row" class="p-1">
             {{ points[n - 1].countryCode ? points[n - 1].countryCode : "default_setting" | t }}
           </th>
-          <td>
-            <input class="form-control" type="number" v-model="points[n - 1].top" />
-          </td>
-          <td>
-            <input class="form-control" type="number" v-model="points[n - 1].sidebar" />
-          </td>
-          <td>
-            <input class="form-control" type="number" v-model="points[n - 1].square" />
-          </td>
-          <td>
-            <input class="form-control" type="number" v-model="points[n - 1].line" />
-          </td>
-          <td>
-            <button class="w-100 btn btn-primary btn-sm" @click="onEdit(points[n - 1])">Update</button>
+          <td class="p-1"><input class="form-control px-1" type="number" v-model="points[n - 1].top" /></td>
+          <td class="p-1"><input class="form-control px-1" type="number" v-model="points[n - 1].sidebar" /></td>
+          <td class="p-1"><input class="form-control px-1" type="number" v-model="points[n - 1].square" /></td>
+          <td class="p-1"><input class="form-control px-1" type="number" v-model="points[n - 1].line" /></td>
+          <td class="p-1 d-flex">
+            <button class="w-100 btn btn-primary btn-sm mr-1" @click="onEdit(points[n - 1])">Update</button>
             <button class="w-100 btn btn-warning btn-sm" @click="onDelete(points[n - 1])">Delete</button>
           </td>
         </tr>

@@ -68,22 +68,6 @@
         </div>
 
         <div class="mb-2" v-if="banner.isInactive">
-          <!-- <BannerType :settings="settings" :banner="banner"></BannerType> -->
-
-          <!-- Banner country -->
-          <!-- <div class="form-group mt-2" v-if="countries">
-            <label>{{ "adv_cafe_country" | t }}</label>
-            <select value="" class="form-control" v-model="banner.countryCode" :disabled="banner.isActive">
-              <option disabled selected>{{ "select_country" | t }}</option>
-              <option v-for="(value, name) in countries" :key="name" :value="name">
-                {{ value }}
-              </option>
-            </select>
-            <small class="form-text text-muted">
-              {{ "adv_cafe_country_hint" | t }}
-            </small>
-          </div> -->
-
           <div class="box" v-if="banner.code">
             {{ "adv_points_per_day" | t }}: <b>{{ bannerPoints[banner.code] }}</b> <br />
             <small class="text-info">
@@ -157,6 +141,38 @@
               <span v-if="isEmptyObj(bannerPoints)">{{ "point_setting_not_set" | t }}</span>
               <span v-else>{{ "start_advertisement_warning" | t }}</span>
             </div>
+          </div>
+
+          <!-- Banner points country listing table -->
+          <div class="mt-3 box" v-if="!banner.isActive">
+            <p>
+              {{ "adv_point_listing" | t }}:
+              <span v-if="banner.countryCode"> {{ banner.countryCode }} - {{ countries[banner.countryCode] }} </span>
+              <span v-if="!banner.countryCode">{{ "default" | t }}</span>
+            </p>
+            <table class="w-100 mt-2 table table-striped" v-if="!isEmptyObj(bannerPoints)">
+              <thead>
+                <tr class="table-header">
+                  <th scope="col">{{ "adv_banner_type" | t }}</th>
+                  <th scope="col">{{ "adv_points_per_day" | t }}</th>
+                  <th scope="col" v-if="settings.globalBannerMultiplying">
+                    {{ "global_adv_price" | t }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(value, name) in bannerPoints" :key="name">
+                  <td>{{ name }}</td>
+                  <td>{{ value }}</td>
+                  <td v-if="settings.globalBannerMultiplying">
+                    {{ value * settings.globalBannerMultiplying }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <small class="text-info">
+              {{ "adv_point_listing_hint" | t }}
+            </small>
           </div>
           <hr />
         </div>
@@ -267,32 +283,6 @@
               <span v-if="!banner.idx">{{ "save" | t }}</span>
             </button>
             <b-spinner class="m-2" type="grow" variant="success" v-if="isSubmitted"></b-spinner>
-          </div>
-
-          <!-- Banner points country listing table -->
-          <div class="mt-3 box" v-if="!banner.isActive">
-            <p>
-              {{ "adv_point_listing" | t }}:
-              <span v-if="banner.countryCode"> {{ banner.countryCode }} - {{ countries[banner.countryCode] }} </span>
-              <span v-if="!banner.countryCode">{{ "default" | t }}</span>
-            </p>
-            <table class="w-100 mt-2 table table-striped" v-if="!isEmptyObj(bannerPoints)">
-              <thead>
-                <tr class="table-header">
-                  <th scope="col">{{ "adv_banner_type" | t }}</th>
-                  <th scope="col">{{ "adv_points_per_day" | t }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(value, name) in bannerPoints" :key="name">
-                  <td>{{ name }}</td>
-                  <td>{{ value }}</td>
-                </tr>
-              </tbody>
-            </table>
-            <small class="text-info">
-              {{ "adv_point_listing_hint" | t }}
-            </small>
           </div>
         </div>
       </form>
@@ -426,7 +416,12 @@ export default class Advertisement extends Vue {
    */
   get priceInPoint(): number {
     if (!this.noOfDays) return 0;
-    return this.bannerPoints[this.banner.code] * this.noOfDays;
+    let bannerPrice = this.bannerPoints[this.banner.code];
+    if (this.banner.subcategory == "" && this.settings.globalBannerMultiplying) {
+      bannerPrice = bannerPrice * this.settings.globalBannerMultiplying;
+    }
+
+    return bannerPrice * this.noOfDays;
   }
 
   /**
@@ -576,10 +571,6 @@ export default class Advertisement extends Vue {
         this.s.toast({
           title: "Updated",
           message: "Advertisement successfully updated!",
-          // placement: "b-toaster-bottom-right",
-          // variant: "success",
-          // append: true,
-          // hideDelay: 1500,
         });
       }
       this.isSubmitted = false;
@@ -593,6 +584,7 @@ export default class Advertisement extends Vue {
    * Starts the advertisement.
    */
   async onAdvertisementStart(): Promise<void> {
+    console.log("onAdvertisementStart", this.banner.toJson);
     try {
       this.banner.countryCode = this.countryCode;
       const res = await AdvertisementService.instance.advertisementStart(this.banner.toJson);
