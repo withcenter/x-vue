@@ -6,16 +6,15 @@
 
 <script lang="ts">
 import Vue from "vue";
-import Component from "vue-class-component";
-import { Banner, Banners } from "@/x-vue/interfaces/advertisement.interface";
+import { Component, Prop } from "vue-property-decorator";
+import { Banner, CategoryBanners } from "@/x-vue/interfaces/advertisement.interface";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 
-@Component({
-  props: ["position", "banners"],
-})
+@Component({})
 export default class AdvertisementTopBanner extends Vue {
-  position!: string;
-  banners!: Banners;
+  @Prop({ default: "right" }) position!: string;
+  @Prop() banners!: CategoryBanners;
+  @Prop() categoryId!: string;
 
   index = 0;
 
@@ -24,14 +23,22 @@ export default class AdvertisementTopBanner extends Vue {
   }
 
   get _banners(): Banner[] {
+    if (!this.categoryId) return [];
     if (!this.banners) return [];
 
-    if (!this.banners["top"]) return [];
+    let _banners = this.banners[this.categoryId];
+    if (!_banners || !_banners["top"]) _banners = this.banners["global"];
+    if (!_banners || !_banners["top"]) return [];
 
-    const banners = this.banners["top"].filter((v, i) => {
+    const banners = _banners["top"].filter((v, i) => {
       if (this.position == "left") return i % 2 == 0;
       else return i % 2 != 0;
     });
+
+    if (this.categoryId != "global" && !banners.length && this.position == "right") {
+      if (!this.banners["global"]) return [];
+      return this.banners["global"]["top"];
+    }
     return banners;
   }
 
