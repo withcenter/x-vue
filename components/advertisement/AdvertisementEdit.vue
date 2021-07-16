@@ -557,6 +557,7 @@ export default class Advertisement extends Vue {
   }
 
   async onSubmit(): Promise<void> {
+    console.log("onSubmit", this.banner.toJson);
     if (this.isSubmitted) return;
     this.isSubmitted = true;
     let isCreate = true;

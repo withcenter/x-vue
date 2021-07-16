@@ -15,7 +15,7 @@
         <b-spinner small class="mx-2" type="grow" variant="info"></b-spinner>
         Loading Advertisements ...
       </div>
-
+      {{ currentPage }}
       <div class="d-flex mt-3 justify-content-center w-100" v-if="posts.length">
         <div class="overflow-auto">
           <b-pagination-nav
@@ -76,16 +76,21 @@ export default class AdvertisementList extends Vue {
   }
 
   async mounted(): Promise<void> {
+    this.init();
+  }
+
+  async init(): Promise<void> {
     this.loading = true;
     this.options.limit = this.limit;
     this.options.page = 1;
     this.options.categoryId = "advertisement";
+    this.options.userIdx = this.$store.state.user.idx;
     this.currentPage = this.$route.query.page as string;
 
     try {
       this.total = await this.api.postCount(this.options);
-      await this.loadPosts();
       this.noOfPages = Math.ceil(this.total / this.limit);
+      await this.loadPosts();
     } catch (e) {
       Service.instance.error(e);
     }
@@ -93,7 +98,6 @@ export default class AdvertisementList extends Vue {
 
   async loadPosts(): Promise<void> {
     this.loading = true;
-    this.options.userIdx = this.$store.state.user.idx;
     try {
       this.posts = await AdvertisementService.instance.advertisementSearch(this.options);
       this.loading = false;

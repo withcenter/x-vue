@@ -23,7 +23,6 @@ export default class AdvertisementTopBanner extends Vue {
   }
 
   get _banners(): Banner[] {
-    if (!this.categoryId) return [];
     if (!this.banners) return [];
 
     let _banners = this.banners[this.categoryId];

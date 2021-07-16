@@ -1,6 +1,6 @@
 <template>
-  <div class="banner square pointer" @click="onClick(banner)" v-if="currentBanner.bannerUrl">
-    <img class="w-100 h-100" :src="banner.bannerUrl" />
+  <div class="banner square pointer" @click="onClick(currentBanner)" v-if="currentBanner.bannerUrl">
+    <img class="w-100 h-100" :src="currentBanner.bannerUrl" />
   </div>
 </template>
 
@@ -22,7 +22,6 @@ export default class AdvertisementSidebarBanner extends Vue {
   }
 
   get _banners(): Banner[] {
-    if (!this.categoryId) return [];
     if (!this.banners) return [];
 
     let _banners = this.banners[this.categoryId];
