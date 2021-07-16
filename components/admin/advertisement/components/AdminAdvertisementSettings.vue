@@ -86,7 +86,7 @@
       <tbody>
         <tr v-for="n in points.length" :key="n">
           <th scope="row" class="p-1">
-            {{ points[n - 1].countryCode ? points[n - 1].countryCode : "default_setting" | t }}
+            {{ points[n - 1].countryCode ? points[n - 1].countryCode : "default_banner_point_setting" | t }}
           </th>
           <td class="p-1"><input class="form-control px-1" type="number" v-model="points[n - 1].top" /></td>
           <td class="p-1"><input class="form-control px-1" type="number" v-model="points[n - 1].sidebar" /></td>
@@ -99,6 +99,13 @@
         </tr>
       </tbody>
     </table>
+
+    <ul>
+      <li>
+        Default is the default point that will apply all the countries by default unless country are set above. @see
+        readme.
+      </li>
+    </ul>
   </div>
 </template>
 
