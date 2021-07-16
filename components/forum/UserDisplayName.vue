@@ -1,6 +1,6 @@
 <template>
-  <div class="d-flex">
-    <div tabindex="0" :id="id" class="pointer" v-if="id">
+  <div class="user-display-name d-flex">
+    <div tabindex="0" :id="id" class="pointer text-truncate" v-if="id">
       {{ parent.user.displayName }}
     </div>
 
