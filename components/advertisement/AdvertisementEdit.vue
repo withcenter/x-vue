@@ -205,13 +205,13 @@
           <!-- banner -->
           <div class="box mt-4">
             <label>{{ "adv_banner" | t }}</label>
-            <upload-image
+            <UploadImage
               taxonomy="posts"
               :entity="banner.idx"
               code="banner"
               @uploaded="onFileUpload"
               v-if="isMounted"
-            ></upload-image>
+            ></UploadImage>
             <small class="form-text text-muted">
               {{ "adv_banner_description" | t }}
             </small>
@@ -220,13 +220,13 @@
           <!-- content banner -->
           <div class="box mt-2">
             <label>{{ "adv_content_banner" | t }}</label>
-            <upload-image
+            <UploadImage
               taxonomy="posts"
               :entity="banner.idx"
               code="content"
               @uploaded="onFileUpload"
               v-if="isMounted"
-            ></upload-image>
+            ></UploadImage>
             <small class="form-text text-muted">
               {{ "adv_banner_description" | t }}
             </small>
@@ -355,7 +355,7 @@ export default class Advertisement extends Vue {
   s = Service.instance;
   isMounted = false;
 
-  banner = new AdvertisementModel();
+  banner: AdvertisementModel = new AdvertisementModel();
 
   uploadProgress = 0;
 
@@ -370,7 +370,6 @@ export default class Advertisement extends Vue {
   settings: AdvertisementSettings = {} as AdvertisementSettings;
 
   async mounted(): Promise<void> {
-    console.log("mounted::countryCode", this.countryCode);
     this.loadPointsAndSettings();
 
     const idx = parseInt(this.$route.params.idx);
@@ -557,7 +556,7 @@ export default class Advertisement extends Vue {
   }
 
   async onSubmit(): Promise<void> {
-    console.log("onSubmit", this.banner.toJson);
+    // console.log("onSubmit", this.banner.toJson);
     if (this.isSubmitted) return;
     this.isSubmitted = true;
     let isCreate = true;
@@ -585,7 +584,7 @@ export default class Advertisement extends Vue {
    * Starts the advertisement.
    */
   async onAdvertisementStart(): Promise<void> {
-    console.log("onAdvertisementStart", this.banner.toJson);
+    // console.log("onAdvertisementStart", this.banner.toJson);
     try {
       this.banner.countryCode = this.countryCode;
       const res = await AdvertisementService.instance.advertisementStart(this.banner.toJson);

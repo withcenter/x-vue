@@ -73,7 +73,9 @@ export default class UploadImage extends Vue {
     console.log("defaultImageUrl;", this.defaultImageUrl);
     try {
       // 사진을 백엔드에서 가져온다.
-      if (this.entity || this.code || this.userIdx) {
+      // if (this.entity || this.code || this.userIdx) { // original if statement
+      // only load image if either entity and code exist or userIdx and code exists.
+      if ((this.entity && this.code) || (this.userIdx && this.code)) {
         const req = {
           taxonomy: this.taxonomy,
           entity: this.entity,
