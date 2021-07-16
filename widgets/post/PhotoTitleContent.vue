@@ -1,5 +1,5 @@
 <template>
-  <router-link class="photo-title-content d-flex" :to="story.relativeUrl">
+  <router-link class="photo-title-content d-flex" :to="story.relativeUrl" v-if="story && story.idx">
     <div class=""><b-img class="primary" :src="src"></b-img></div>
     <div class="text pl-2 overflow-hidden">
       <div class="title text-truncate">{{ story.title }}</div>
