@@ -54,7 +54,7 @@ export class ChatRoomService extends ChatBase {
   ///   When there are messages from Firestore, there might be many message in one fetch, that's why it returns only last message.
   /// - sending a message, with the chat message to be sent.
   /// - cancelling for sending a message. `null` will be passed.
-  changes: BehaviorSubject<ChatMessageModel> = BehaviorSubject.create(null);
+  changes: BehaviorSubject<ChatMessageModel> = new BehaviorSubject(new ChatMessageModel());
   //  changes: Subject<ChatMessageModel> = new Subject();
 
   /// When user scrolls, this event is posted.
@@ -66,7 +66,7 @@ export class ChatRoomService extends ChatBase {
   /// Whenever global room information chagnes, [globalRoomChanges] will be posted with
   /// the global room document
   ///
-  globalRoomChanges: BehaviorSubject<ChatGlobalRoomModel> = BehaviorSubject.create(null);
+  globalRoomChanges: BehaviorSubject<ChatGlobalRoomModel> = new BehaviorSubject(new ChatGlobalRoomModel());
 
   // _chatRoomSubscription: Subscription = new Subscription();
   // _currentRoomSubscription: Subscription = new Subscription();
@@ -118,8 +118,8 @@ export class ChatRoomService extends ChatBase {
     return `notifyChat-${this.id}`;
   }
 
-  //   final textController = TextEditingController();
-  //   final scrollController = ScrollController();
+  textInput = "";
+  // scrollController = ScrollController();
 
   //   /// When keyboard(keypad) is open, the app needs to adjust the scroll.
   //   final keyboardVisibilityController = KeyboardVisibilityController();
@@ -189,7 +189,7 @@ export class ChatRoomService extends ChatBase {
     if (_id == null && users.length == 0) {
       throw EMPTY_ID_AND_USERS;
     }
-    console.log("enter:users", users);
+
     // Note that, if `id` is set, `users` is ignored. And if both exists, it throws an error.
     if (_id != null) {
       // Enter existing room
@@ -200,6 +200,7 @@ export class ChatRoomService extends ChatBase {
       console.log("enter: _id", _id);
       this.global = await this.getGlobalRoom(_id);
     } else {
+      console.log("enter:users::", users);
       // Add login user(uid) into room users.
       users.push(this.loginUserUid);
       // Avoid duplicated users.
@@ -284,27 +285,27 @@ export class ChatRoomService extends ChatBase {
       },
     });
 
-    //     // fetch previous chat when user scrolls up
-    //     scrollController.addListener(() {
-    //       // mark if scrolled up
-    //       if (scrollUp) {
-    //         scrolledUp = true;
-    //       }
-    //       // fetch previous messages
-    //       if (scrollUp && atTop) {
-    //         fetchMessages();
-    //       }
-    //       scrollChanges.add(scrollUp);
-    //     });
+    // fetch previous chat when user scrolls up
+    // scrollController.addListener(() {
+    //   // mark if scrolled up
+    //   if (scrollUp) {
+    //     scrolledUp = true;
+    //   }
+    //   // fetch previous messages
+    //   if (scrollUp && atTop) {
+    //     fetchMessages();
+    //   }
+    //   scrollChanges.add(scrollUp);
+    // });
 
-    //     // Listen to keyboard
-    //     //
-    //     // When keyboard opens, scroll to bottom only if needed when user open/hide keyboard.
-    //     keyboardSubscription = keyboardVisibilityController.onChange.listen((bool visible) {
-    //       if (visible && atBottom) {
-    //         scrollToBottom(ms: 10);
-    //       }
-    //     });
+    // // Listen to keyboard
+    // //
+    // // When keyboard opens, scroll to bottom only if needed when user open/hide keyboard.
+    // keyboardSubscription = keyboardVisibilityController.onChange.listen((bool visible) {
+    //   if (visible && atBottom) {
+    //     scrollToBottom(ms: 10);
+    //   }
+    // });
   }
 
   /// Returns the current room in my room list.
@@ -370,11 +371,14 @@ export class ChatRoomService extends ChatBase {
     // create(for offline support), the other for modified(real data from firestore).
     // And this may cause the app to render twice and scroll to bottom twice. You may
     // do `debounce` to fix this one.
+
+    console.log("fetchMessages():::before::q");
     this._chatRoomSubscription = q.onSnapshot({
       next: (snapshot) => {
         // console.log('fetchMessage() -> done: _page: $_page');
         // Block loading previous messages for some time.
         this.loading = false;
+        this._throttling = false; // update or remove after working with scroll event
         // Timer(Duration(milliseconds: _throttle), () => _throttling = false);
 
         snapshot.docChanges().forEach((documentChange: firebase.firestore.DocumentChange) => {
@@ -426,6 +430,7 @@ export class ChatRoomService extends ChatBase {
             console.log("This is error");
           }
         });
+        console.log("this.changes.next:::::======", this.messages[this.messages.length - 1]);
         this.changes.next(this.messages[this.messages.length - 1]);
       },
     });
@@ -446,6 +451,7 @@ export class ChatRoomService extends ChatBase {
   /// And right before the user leave the room, it should be unsubscribed.
   unsubscribe(): void {
     if (this._chatRoomSubscription != null) {
+      console.log("unsubscribe()::::_chatRoomSubscription");
       this._chatRoomSubscription();
       this._chatRoomSubscription = null;
     }
@@ -512,7 +518,7 @@ export class ChatRoomService extends ChatBase {
     }
 
     if (this.isCreate) {
-      console.log("create::");
+      console.log("create::sendMessage");
       // Time that this message(or last message) was created.
       message["createdAt"] = firebase.firestore.FieldValue.serverTimestamp();
 
@@ -523,6 +529,7 @@ export class ChatRoomService extends ChatBase {
       const messages: Promise<void>[] = []; // todo
 
       /// Just incase there are duplicated UIDs.
+      console.log("this.global.users::", this.global.users);
       const roomUsers: string[] = Array.from(new Set(this.global.users));
       console.log("roomUsers", roomUsers);
 
@@ -535,7 +542,7 @@ export class ChatRoomService extends ChatBase {
       // console.log('send messages to: ${messages.length}');
       await Promise.all(messages); //Promise.allSettled()
     } else {
-      console.log("update::");
+      console.log("update::sendMessage");
       message["updatedAt"] = firebase.firestore.FieldValue.serverTimestamp();
       await this.messagesCol(this.global.roomId).doc(this.isMessageEdit?.id).update(message);
       this.isMessageEdit = null;

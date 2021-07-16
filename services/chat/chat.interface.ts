@@ -130,7 +130,6 @@ export class ChatGlobalRoomModel {
   }
 
   fromJson(map: firebase.firestore.DocumentData): ChatGlobalRoomModel {
-    console.log("ChatGlobalRoomModel", map);
     if (map == null) return new ChatGlobalRoomModel();
     this.roomId = map.roomId;
     this.title = map.title ?? "";

@@ -1,8 +1,8 @@
 <template>
   <section>
-    <h1>Chat Room list</h1>
-
-    <div v-for="room in chat.userRoomList.rooms" :key="room.id">{{ room.id }}</div>
+    <div v-for="room in chat.userRoomList.rooms" :key="room.id">
+      <router-link :to="{ path: 'chat-message', query: { id: room.id } }">{{ room.id }}</router-link>
+    </div>
   </section>
 </template>
 

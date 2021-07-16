@@ -47,7 +47,7 @@ export class ChatUserRoomListService extends ChatBase {
   //   /// - When global room information changes. it will pass the user room of the global room.
   //   ///
   //   /// To get the whole list of room info, use [rooms].
-  changes: BehaviorSubject<ChatUserRoomModel> = BehaviorSubject.create(null);
+  changes: BehaviorSubject<ChatUserRoomModel> = new BehaviorSubject(new ChatUserRoomModel());
 
   // changes: Subject<ChatUserRoomModel> = new Subject();
 
@@ -82,13 +82,13 @@ export class ChatUserRoomListService extends ChatBase {
   /// - users array changes,
   /// - and other properties change.
   _listenRoomList() {
-    console.log("_listenRoomList::");
+    // console.log("_listenRoomList::");
     this._myRoomListSubscription = this.myRoomListCol.orderBy(this._order, "desc").onSnapshot({
       next: (snapshot) => {
-        console.log("_listenRoomList::snapshot::", snapshot.docs);
+        // console.log("_listenRoomList::snapshot::", snapshot.docs);
         snapshot.docChanges().forEach((documentChange: firebase.firestore.DocumentChange) => {
           const roomInfo = new ChatUserRoomModel().fromSnapshot(documentChange.doc);
-          console.log(roomInfo?.newMessages);
+          // console.log(roomInfo?.newMessages);
 
           // console.log(roomInfo.newMessages);
           if (documentChange.type == DocumentChangeType.added) {
@@ -134,7 +134,7 @@ export class ChatUserRoomListService extends ChatBase {
               )
             : new ChatUserRoomModel();
 
-        console.log("ROOMS::: ", this.rooms);
+        // console.log("ROOMS::: ", this.rooms);
         this.changes.next(re);
       },
     });
