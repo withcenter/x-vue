@@ -70,7 +70,7 @@ export default class UploadImage extends Vue {
   // To hide the blinking. To prevent to show the default avatar icon from <b-avatar>.
   loading = true;
   async mounted(): Promise<void> {
-    console.log("defaultImageUrl;", this.defaultImageUrl);
+    // console.log("defaultImageUrl;", this.defaultImageUrl);
     try {
       // 사진을 백엔드에서 가져온다.
       // if (this.entity || this.code || this.userIdx) { // original if statement
@@ -83,10 +83,10 @@ export default class UploadImage extends Vue {
           userIdx: this.userIdx,
         };
 
-        console.log("req;; ", req);
+        // console.log("req;; ", req);
         this.file = await this.api.fileGet(req);
 
-        console.log("file;", this.file);
+        // console.log("file;", this.file);
       }
     } catch (e) {
       if (e !== "error_entity_not_found") {
@@ -95,7 +95,7 @@ export default class UploadImage extends Vue {
         this.file.url = this.defaultImageUrl;
         // this.$set(this.file, "url", this.defaultImageUrl);
         // console.log("this.file;, ", this.file);
-        console.log("e; ", e);
+        // console.log("e; ", e);
       }
     }
     this.loading = false;

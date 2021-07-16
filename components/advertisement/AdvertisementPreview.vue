@@ -3,7 +3,7 @@
     <div class="d-flex">
       <div class="overflow-hidden mr-2">
         <div>
-          No. {{ advertisement.idx }} ●
+          <span class="mr-2">No. {{ advertisement.idx }}</span> •
           <span class="badge badge-success ml-2" v-if="advertisement.isActive"> Active </span>
           <span class="badge badge-warning ml-2" v-if="advertisement.isInactive"> Inactive </span>
           <span class="badge badge-info ml-2" v-if="advertisement.isWaiting"> Waiting </span>

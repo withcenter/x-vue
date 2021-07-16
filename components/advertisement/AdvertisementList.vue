@@ -90,7 +90,7 @@ export default class AdvertisementList extends Vue {
       this.options.userIdx = si?.split("-")[0];
     }
 
-    console.log(this.options);
+    // console.log(this.options);
 
     try {
       this.total = await this.api.postCount(this.options);
