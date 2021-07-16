@@ -6,7 +6,7 @@
       <div class="mt-3" v-if="posts.length">
         <div class="box p-2 mb-2" v-for="post of posts" :key="post.idx">
           <router-link :to="`/advertisement/edit/${post.idx}`">
-            <advertisement-preview :advertisement="post"></advertisement-preview>
+            <AdvertisementPreview :advertisement="post"></AdvertisementPreview>
           </router-link>
         </div>
       </div>
@@ -15,7 +15,6 @@
         <b-spinner small class="mx-2" type="grow" variant="info"></b-spinner>
         Loading Advertisements ...
       </div>
-
       <div class="d-flex mt-3 justify-content-center w-100" v-if="posts.length">
         <div class="overflow-auto">
           <b-pagination-nav
@@ -44,10 +43,7 @@ import { AdvertisementModel } from "@/x-vue/interfaces/advertisement.interface";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 
 @Component({
-  components: {
-    AdvertisementPreview,
-    LoginFirst,
-  },
+  components: { AdvertisementPreview, LoginFirst },
 })
 export default class AdvertisementList extends Vue {
   posts: Array<AdvertisementModel> = [];
@@ -76,16 +72,29 @@ export default class AdvertisementList extends Vue {
   }
 
   async mounted(): Promise<void> {
+    this.init();
+  }
+
+  async init(): Promise<void> {
     this.loading = true;
     this.options.limit = this.limit;
     this.options.page = 1;
     this.options.categoryId = "advertisement";
+    this.options.userIdx = this.$store.state.user.idx;
     this.currentPage = this.$route.query.page as string;
+
+    // when landing on this page, user info in store may take a while to load.
+    if (!this.options.userIdx) {
+      const si = this.api.getUserSessionId();
+      this.options.userIdx = si?.split("-")[0];
+    }
+
+    // console.log(this.options);
 
     try {
       this.total = await this.api.postCount(this.options);
-      await this.loadPosts();
       this.noOfPages = Math.ceil(this.total / this.limit);
+      await this.loadPosts();
     } catch (e) {
       Service.instance.error(e);
     }
@@ -93,7 +102,6 @@ export default class AdvertisementList extends Vue {
 
   async loadPosts(): Promise<void> {
     this.loading = true;
-    this.options.userIdx = this.$store.state.user.idx;
     try {
       this.posts = await AdvertisementService.instance.advertisementSearch(this.options);
       this.loading = false;

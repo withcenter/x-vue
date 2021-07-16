@@ -205,13 +205,14 @@
           <!-- banner -->
           <div class="box mt-4">
             <label>{{ "adv_banner" | t }}</label>
-            <upload-image
+            <UploadImage
               taxonomy="posts"
               :entity="banner.idx"
               code="banner"
               @uploaded="onFileUpload"
+              @deleted="onFileDelete"
               v-if="isMounted"
-            ></upload-image>
+            ></UploadImage>
             <small class="form-text text-muted">
               {{ "adv_banner_description" | t }}
             </small>
@@ -220,13 +221,14 @@
           <!-- content banner -->
           <div class="box mt-2">
             <label>{{ "adv_content_banner" | t }}</label>
-            <upload-image
+            <UploadImage
               taxonomy="posts"
               :entity="banner.idx"
               code="content"
               @uploaded="onFileUpload"
+              @deleted="onFileDelete"
               v-if="isMounted"
-            ></upload-image>
+            ></UploadImage>
             <small class="form-text text-muted">
               {{ "adv_banner_description" | t }}
             </small>
@@ -335,7 +337,7 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { AdvertisementSettings, FileModel, ResponseData } from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
-import { addByComma, daysBetween, isEmptyObject } from "@/x-vue/services/functions";
+import { addByComma, daysBetween, deleteByComma, isEmptyObject } from "@/x-vue/services/functions";
 import UploadImage from "@/x-vue/components/file/UploadImage.vue";
 import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
 import dayjs from "dayjs";
@@ -355,7 +357,7 @@ export default class Advertisement extends Vue {
   s = Service.instance;
   isMounted = false;
 
-  banner = new AdvertisementModel();
+  banner: AdvertisementModel = new AdvertisementModel();
 
   uploadProgress = 0;
 
@@ -370,7 +372,6 @@ export default class Advertisement extends Vue {
   settings: AdvertisementSettings = {} as AdvertisementSettings;
 
   async mounted(): Promise<void> {
-    console.log("mounted::countryCode", this.countryCode);
     this.loadPointsAndSettings();
 
     const idx = parseInt(this.$route.params.idx);
@@ -557,6 +558,7 @@ export default class Advertisement extends Vue {
   }
 
   async onSubmit(): Promise<void> {
+    // console.log("onSubmit", this.banner.toJson);
     if (this.isSubmitted) return;
     this.isSubmitted = true;
     let isCreate = true;
@@ -584,7 +586,7 @@ export default class Advertisement extends Vue {
    * Starts the advertisement.
    */
   async onAdvertisementStart(): Promise<void> {
-    console.log("onAdvertisementStart", this.banner.toJson);
+    // console.log("onAdvertisementStart", this.banner.toJson);
     try {
       this.banner.countryCode = this.countryCode;
       const res = await AdvertisementService.instance.advertisementStart(this.banner.toJson);
@@ -621,6 +623,12 @@ export default class Advertisement extends Vue {
 
   onFileUpload(file: FileModel): void {
     this.banner.fileIdxes = addByComma(this.banner.fileIdxes, file.idx);
+    console.log("onFileUpload", this.banner.fileIdxes);
+  }
+
+  onFileDelete(idx: string): void {
+    this.banner.fileIdxes = deleteByComma(this.banner.fileIdxes, idx);
+    console.log("onFileDelete", this.banner.fileIdxes);
   }
 }
 </script>
