@@ -1,4 +1,5 @@
 import router from "@/router";
+import store from "@/store";
 import { PostModel } from "../interfaces/forum.interface";
 import { translate } from "./functions";
 export interface ConfirmToast {
@@ -53,6 +54,13 @@ export default class ComponentService {
   }
 
   options: ComponentServiceOptions = {} as ComponentServiceOptions;
+
+  get loggedIn(): boolean {
+    return store.state.user.loggedIn;
+  }
+  get notLoggedIn(): boolean {
+    return !this.loggedIn;
+  }
 
   init(options: ComponentServiceOptions): void {
     this.options = options;

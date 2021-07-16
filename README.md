@@ -16,7 +16,10 @@
 
 # Style Guide
 
-- `x-vue` should be independent as much as possible from parent app. But there are certain properties that `x-vue` can use from the page.
+- `x-vue` should be independent as much as possible from parent app.
+  - But components in `x-vue` can use the following properties from root app.
+    - So, root app must set this before using `x-vue` component.
+      while `x-vue/services` are not using these properties.
 
   - `this.$store.state.user` can be used but must be read only.
   - `this.$store.commit('user', userModel)` to update user model data. To login, logout, refresh.
