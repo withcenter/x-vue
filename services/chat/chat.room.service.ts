@@ -16,7 +16,7 @@ import {
 import { ChatGlobalRoomModel, ChatMessageModel, ChatUserRoomModel } from "./chat.interface";
 
 import md5 from "crypto-js/md5";
-import { BehaviorSubject, concat, Subject, Subscription } from "rxjs";
+import { BehaviorSubject, Subject } from "rxjs";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
@@ -278,7 +278,7 @@ export class ChatRoomService extends ChatBase {
         // If the user got a message from a chat room where the user is currently in,
         // then, set `newMessages` to 0.
         const data = new ChatUserRoomModel().fromSnapshot(snapshot);
-        if (parseInt(data!.newMessages) > 0 && data!.createdAt != null) {
+        if (parseInt(data?.newMessages) > 0 && data?.createdAt != null) {
           this.currentRoom.update({ newMessages: 0 });
         }
       },
@@ -444,7 +444,7 @@ export class ChatRoomService extends ChatBase {
   /// 2. the current room information,
   /// 3. the global room infromation
   /// And right before the user leave the room, it should be unsubscribed.
-  unsubscribe() {
+  unsubscribe(): void {
     if (this._chatRoomSubscription != null) {
       this._chatRoomSubscription();
       this._chatRoomSubscription = null;
@@ -466,7 +466,7 @@ export class ChatRoomService extends ChatBase {
     this.resetRoom();
   }
 
-  resetRoom() {
+  resetRoom(): void {
     this.global = new ChatGlobalRoomModel();
     this.messages = [];
     this.page = 0;
@@ -537,7 +537,7 @@ export class ChatRoomService extends ChatBase {
     } else {
       console.log("update::");
       message["updatedAt"] = firebase.firestore.FieldValue.serverTimestamp();
-      await this.messagesCol(this.global.roomId).doc(this.isMessageEdit!.id).update(message);
+      await this.messagesCol(this.global.roomId).doc(this.isMessageEdit?.id).update(message);
       this.isMessageEdit = null;
     }
 
@@ -764,7 +764,7 @@ export class ChatRoomService extends ChatBase {
     });
   }
 
-  editMessage(message: ChatMessageModel) {
+  editMessage(message: ChatMessageModel): void {
     console.log("editMessage");
     // textController.text = message.text; // todo
     this.isMessageEdit = message;
@@ -777,13 +777,13 @@ export class ChatRoomService extends ChatBase {
     return message.id == this.isMessageEdit?.id;
   }
 
-  cancelEdit() {
+  cancelEdit(): void {
     // textController.text = ''; // todo
     this.isMessageEdit = null;
     this.changes.next(new ChatMessageModel());
   }
 
-  deleteMessage(message: ChatMessageModel) {
+  deleteMessage(message: ChatMessageModel): void {
     this.messagesCol(this.id).doc(message.id).delete();
   }
 
