@@ -1,23 +1,23 @@
 <template>
   <div>
     <div class="d-flex">
-      <div class="overflow-hidden">
-        <div>No. {{ advertisement.idx }}</div>
-        <div class="text-truncate">
-          {{ advertisement.title ? advertisement.title : "No title .." }}
-        </div>
+      <div class="overflow-hidden mr-2">
         <div>
-          <span class="badge badge-success" v-if="advertisement.isActive"> Active </span>
-          <span class="badge badge-warning" v-if="advertisement.isInactive"> Inactive </span>
-          <span class="badge badge-info" v-if="advertisement.isWaiting"> Waiting </span>
+          No. {{ advertisement.idx }} ●
+          <span class="badge badge-success ml-2" v-if="advertisement.isActive"> Active </span>
+          <span class="badge badge-warning ml-2" v-if="advertisement.isInactive"> Inactive </span>
+          <span class="badge badge-info ml-2" v-if="advertisement.isWaiting"> Waiting </span>
           <span class="badge badge-secondary ml-2" v-if="advertisement.code">
             {{ advertisement.code }}
           </span>
-          <span class="badge badge-secondary ml-2">
+          <span class="badge badge-primary ml-2">
             {{ advertisement.subcategory ? advertisement.subcategory : "global" }}
           </span>
         </div>
-        <div class="text-truncate">
+        <div class="title text-truncate font-weight-bold">
+          {{ advertisement.title ? advertisement.title : "No title .." }}
+        </div>
+        <div class="content">
           {{ advertisement.content ? advertisement.content : "No content .." }}
         </div>
       </div>
@@ -32,21 +32,23 @@
   </div>
 </template>
 
+<style lang="scss" scoped>
+.content {
+  overflow: hidden;
+  max-height: 3em;
+}
+</style>
+
 <script lang="ts">
-import { AdvertisementModel } from "@/x-vue/interfaces/advertisement.interface";
 import Vue from "vue";
-import Component from "vue-class-component";
+import { Component, Prop } from "vue-property-decorator";
+import { AdvertisementModel } from "@/x-vue/interfaces/advertisement.interface";
 import BoxArrowUpRightSvg from "@/x-vue/svg/BoxArrowUpRightSvg.vue";
-import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 
 @Component({
-  props: ["advertisement"],
-  components: {
-    BoxArrowUpRightSvg,
-  },
+  components: { BoxArrowUpRightSvg },
 })
 export default class AdvertisementPreview extends Vue {
-  advertisement!: AdvertisementModel;
-  as = AdvertisementService.instance;
+  @Prop() advertisement!: AdvertisementModel;
 }
 </script>

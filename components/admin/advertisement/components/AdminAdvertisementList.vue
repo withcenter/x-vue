@@ -16,10 +16,6 @@
           </div>
         </div>
       </div>
-      <div class="p-3 text-center rounded" v-if="loading">
-        <b-spinner small class="mx-2" type="grow" variant="info"></b-spinner>
-        Loading Advertisements ...
-      </div>
       <div class="d-flex overflow-auto justify-content-center">
         <b-pagination-nav
           :link-gen="linkGen"
@@ -30,7 +26,11 @@
         ></b-pagination-nav>
       </div>
     </div>
-    <div class="box text-center mb-2" v-if="!advertisements.length">
+    <div class="p-3 text-center rounded" v-if="loading">
+      <b-spinner small class="mx-2" type="grow" variant="info"></b-spinner>
+      Loading Advertisements ...
+    </div>
+    <div class="box text-center mb-2" v-if="!advertisements.length && !loading">
       {{ "no_advertisements" | t }}
     </div>
   </div>
@@ -63,6 +63,7 @@ export default class AdminAdvertisementList extends Vue {
   options: RequestData = {};
 
   async mounted(): Promise<void> {
+    this.loading = true;
     this.options.limit = this.limit;
     this.options.categoryId = "advertisement";
     this.options.page = (this.$route.query.page as string) ?? "1";
