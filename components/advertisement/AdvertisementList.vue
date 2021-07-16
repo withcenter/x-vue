@@ -15,7 +15,6 @@
         <b-spinner small class="mx-2" type="grow" variant="info"></b-spinner>
         Loading Advertisements ...
       </div>
-      {{ currentPage }}
       <div class="d-flex mt-3 justify-content-center w-100" v-if="posts.length">
         <div class="overflow-auto">
           <b-pagination-nav
@@ -86,6 +85,14 @@ export default class AdvertisementList extends Vue {
     this.options.categoryId = "advertisement";
     this.options.userIdx = this.$store.state.user.idx;
     this.currentPage = this.$route.query.page as string;
+
+    // when landing on this page, user info in store may take a while to load.
+    if (!this.options.userIdx) {
+      const si = this.api.getUserSessionId();
+      this.options.userIdx = si?.split("-")[0];
+    }
+
+    console.log(this.options);
 
     try {
       this.total = await this.api.postCount(this.options);
