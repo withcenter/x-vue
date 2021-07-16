@@ -6,6 +6,7 @@
     <router-link class="d-block text-left" :to="`/user/${user.idx}`" v-if="user.verified"
       >{{ user.age }}세 / {{ user.gender | t }}</router-link
     >
+    <div class="">Lv. {{ user.level }}</div>
     <hr />
     <router-link class="d-block text-left" :to="`/user/${user.idx}`">{{ "see_profile" | t }}</router-link>
     <router-link class="d-block text-left" :to="`/user/posts/${user.idx}`">{{ "see_posts" | t }}</router-link>
