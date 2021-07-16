@@ -88,8 +88,8 @@ export default class ChatMessageList extends Vue {
     }
   }
 
-  onScroll($event: Event): void {
-    // console.log($event);
-  }
+  // onScroll($event: Event): void {
+  //   // console.log($event);
+  // }
 }
 </script>

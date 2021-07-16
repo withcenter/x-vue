@@ -5,7 +5,7 @@
 import { ChatBase } from "./chat.base";
 import { ChatGlobalRoomModel, ChatUserRoomModel } from "./chat.interface";
 
-import { BehaviorSubject, Subject, Subscription } from "rxjs";
+import { BehaviorSubject } from "rxjs";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
@@ -27,7 +27,7 @@ export class ChatUserRoomListService extends ChatBase {
     this.init();
   }
 
-  init() {
+  init(): void {
     this.auth.onAuthStateChanged((user) => {
       console.log("onAuthStateChanged::", user);
       if (user == null) {
@@ -63,7 +63,7 @@ export class ChatUserRoomListService extends ChatBase {
 
   newMessages = 0;
 
-  _reset({ order = "" }: { order?: string }) {
+  _reset({ order = "" }: { order?: string }): void {
     if (order != "") {
       this._order = order;
     }
@@ -81,7 +81,7 @@ export class ChatUserRoomListService extends ChatBase {
   /// - title changes,
   /// - users array changes,
   /// - and other properties change.
-  _listenRoomList() {
+  _listenRoomList(): void {
     // console.log("_listenRoomList::");
     this._myRoomListSubscription = this.myRoomListCol.orderBy(this._order, "desc").onSnapshot({
       next: (snapshot) => {
@@ -140,7 +140,7 @@ export class ChatUserRoomListService extends ChatBase {
     });
   }
 
-  _unsubscribe() {
+  _unsubscribe(): void {
     if (this._myRoomListSubscription != null) this._myRoomListSubscription();
     if (Object.keys(this._roomSubscriptions).length) {
       for (const key in this._roomSubscriptions) {
@@ -151,7 +151,7 @@ export class ChatUserRoomListService extends ChatBase {
     this.newMessages = 0;
   }
 
-  unsubscribeUserRoom(room: ChatGlobalRoomModel) {
+  unsubscribeUserRoom(room: ChatGlobalRoomModel): void {
     if (this._roomSubscriptions.isEmpty) return;
     if (this._roomSubscriptions[room.roomId] == null) return;
     this._roomSubscriptions[room.roomId]();
