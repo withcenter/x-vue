@@ -210,6 +210,7 @@
               :entity="banner.idx"
               code="banner"
               @uploaded="onFileUpload"
+              @deleted="onFileDelete"
               v-if="isMounted"
             ></UploadImage>
             <small class="form-text text-muted">
@@ -225,6 +226,7 @@
               :entity="banner.idx"
               code="content"
               @uploaded="onFileUpload"
+              @deleted="onFileDelete"
               v-if="isMounted"
             ></UploadImage>
             <small class="form-text text-muted">
@@ -335,7 +337,7 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { AdvertisementSettings, FileModel, ResponseData } from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
-import { addByComma, daysBetween, isEmptyObject } from "@/x-vue/services/functions";
+import { addByComma, daysBetween, deleteByComma, isEmptyObject } from "@/x-vue/services/functions";
 import UploadImage from "@/x-vue/components/file/UploadImage.vue";
 import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
 import dayjs from "dayjs";
@@ -621,6 +623,12 @@ export default class Advertisement extends Vue {
 
   onFileUpload(file: FileModel): void {
     this.banner.fileIdxes = addByComma(this.banner.fileIdxes, file.idx);
+    console.log("onFileUpload", this.banner.fileIdxes);
+  }
+
+  onFileDelete(idx: string): void {
+    this.banner.fileIdxes = deleteByComma(this.banner.fileIdxes, idx);
+    console.log("onFileDelete", this.banner.fileIdxes);
   }
 }
 </script>

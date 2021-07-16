@@ -49,7 +49,6 @@ export default class AdvertisementList extends Vue {
   posts: Array<AdvertisementModel> = [];
   api = ApiService.instance;
   s = ComponentService.instance;
-  as = AdvertisementService.instance;
 
   loading = false;
 

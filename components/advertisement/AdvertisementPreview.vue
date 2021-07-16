@@ -44,11 +44,13 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { AdvertisementModel } from "@/x-vue/interfaces/advertisement.interface";
 import BoxArrowUpRightSvg from "@/x-vue/svg/BoxArrowUpRightSvg.vue";
+import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 
 @Component({
   components: { BoxArrowUpRightSvg },
 })
 export default class AdvertisementPreview extends Vue {
   @Prop() advertisement!: AdvertisementModel;
+  as = AdvertisementService.instance;
 }
 </script>
