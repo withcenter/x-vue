@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex">
+  <div class="d-flex forum-user-avatar">
     <UserAvatar :user="parent.user" :id="id" tabindex="0"></UserAvatar>
     <b-popover
       placement="bottomright"
