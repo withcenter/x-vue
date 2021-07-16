@@ -63,7 +63,7 @@ export class AdvertisementService {
     }
 
     this.categoryBanners = _banners;
-    console.log("loadBanners", this.categoryBanners);
+    // console.log("loadBanners", this.categoryBanners);
     return this.categoryBanners;
   }
 
