@@ -2,6 +2,8 @@
   <div class="user-menu">
     <div class="not-verified" v-if="user.verified == false">미인증 회원</div>
 
+    <div>{{ user.displayName }}</div>
+
     <router-link class="d-block text-left" :to="`/user/${user.idx}`" v-if="user.verified">{{ user.name }}</router-link>
     <router-link class="d-block text-left" :to="`/user/${user.idx}`" v-if="user.verified"
       >{{ user.age }}세 / {{ user.gender | t }}</router-link
