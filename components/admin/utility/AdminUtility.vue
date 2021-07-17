@@ -2,7 +2,8 @@
   <div>
     <h1>Admin Utiltiy</h1>
     <hr />
-    <b-button @click="onCreateSamplePosts">Create Sample Posts, comments</b-button>
+    <b-button @click="onCreateSamplePosts" v-if="progressSamples == false">Create Sample Posts, comments</b-button>
+    <b-spinner v-else></b-spinner>
   </div>
 </template>
 <script lang="ts">
@@ -12,7 +13,9 @@ import Vue from "vue";
 import Component from "vue-class-component";
 @Component({})
 export default class extends Vue {
+  progressSamples = false;
   async onCreateSamplePosts(): Promise<void> {
+    this.progressSamples = true;
     try {
       const res = await ApiService.instance.request("utility.createSamplePosts");
       console.log("res; ", res);
@@ -21,6 +24,7 @@ export default class extends Vue {
       console.error(e);
       ComponentService.instance.error(e);
     }
+    this.progressSamples = false;
   }
 }
 </script>

@@ -1,5 +1,11 @@
 <template>
-  <div class="pb-5">
+  <section class="pb-5">
+    <div class="alert alert-danger">
+      To see proper design samples, you must create sample posts by pressing the "<b>create sample posts</b>" button in
+      utility page.
+      <hr />
+      By defaut, it gets posts from qna. And widgets can use the posts if it needs.
+    </div>
     <h1>CSS Samples</h1>
     <div class="p-3 bg-white">
       <div>
@@ -582,7 +588,24 @@
       </div>
     </div>
     <!--  -->
-  </div>
+
+    <hr />
+    Below is the "BigPhoto" and "TextThumbnail" widget.
+    <div class="row mt-2">
+      <div class="col-6"><BigPhoto categoryId="reminder"></BigPhoto></div>
+      <div class="col-6"><TextThumbnail categoryId="qna"></TextThumbnail></div>
+    </div>
+
+    <hr />
+    Below is the "TwoPhotosLatestTexts" which is depending on "BigPhoto"
+    <TwoPhotosLatestTexts class="mt-2" leftCategoryId="buyandsell" rightCategoryId="qna"></TwoPhotosLatestTexts>
+
+    <hr />
+    Below is the "PhotoTextUser" widget.
+    <div v-if="posts.length">
+      <PhotoTextUser :post="posts[0]"></PhotoTextUser>
+    </div>
+  </section>
 </template>
 <style lang="scss">
 .size-sm {
@@ -670,6 +693,15 @@ import ArrowLeftRightSvg from "@/x-vue/svg/ArrowLeftRightSvg.vue";
 import PhotoTitleContent from "@/x-vue/widgets/post/PhotoTitleContent.vue";
 import PhotoText from "@/x-vue/widgets/post/PhotoText.vue";
 
+import BigPhoto from "@/x-vue/widgets/post/BigPhoto.vue";
+import TextThumbnail from "@/x-vue/widgets/post/TextThumbnail.vue";
+
+import TwoPhotosLatestTexts from "@/x-vue/widgets/post/TwoPhotosLatestTexts.vue";
+import { PostModel } from "@/x-vue/interfaces/forum.interface";
+import { ApiService } from "@/x-vue/services/api.service";
+
+import PhotoTextUser from "@/x-vue/widgets/post/PhotoTextUser.vue";
+
 @Component({
   components: {
     CameraSvg,
@@ -733,10 +765,23 @@ import PhotoText from "@/x-vue/widgets/post/PhotoText.vue";
     TwoColumnStoryGroupB,
     PhotoTitleContent,
     PhotoText,
+    BigPhoto,
+    TextThumbnail,
+    TwoPhotosLatestTexts,
+    PhotoTextUser,
   },
 })
 export default class Samples extends Vue {
   cs = ComponentService.instance;
+
+  posts: PostModel[] = [];
+  async mounted(): Promise<void> {
+    try {
+      this.posts = await ApiService.instance.latestPosts({ categoryId: "qna", files: "Y" });
+    } catch (e) {
+      this.cs.error(e);
+    }
+  }
 
   onUploaded(file: FileModel): void {
     alert("uploaded: " + file.url);

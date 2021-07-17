@@ -17,6 +17,7 @@ import {
   UserActivityModel,
   Settings,
   PassloginResponse,
+  CategoryGetsResponse,
 } from "../interfaces/interfaces";
 
 import Cookies from "js-cookie";
@@ -81,6 +82,10 @@ export class ApiService {
   // 관리자 전체 설정
   // 앱이 실행 될 때마다 다운로드를 해야 한다.
   private _settings?: Settings;
+
+  // 카페 전체 설정
+  // 한번만 카페 전체 설정을 가져오고, 그 다음 부터는 메모리에 캐시를 한다.
+  private _cafeSettings?: CafeSettings;
 
   public texts: MapStringAny = {};
 
@@ -688,6 +693,18 @@ export class ApiService {
     const category = await this.request("category.get", data);
     return new CategoryModel().fromJson(category);
   }
+  async categoryGets(ids: string): Promise<CategoryGetsResponse> {
+    const res = await this.request("category.gets", { ids: ids });
+    const rets = {} as CategoryGetsResponse;
+    for (const id of Object.keys(res)) {
+      if (typeof res[id] === "string") {
+        rets[id] = res[id];
+      } else {
+        rets[id] = new CategoryModel().fromJson(res[id]);
+      }
+    }
+    return rets;
+  }
 
   async categoryUpdate(data: RequestData): Promise<CategoryModel> {
     const category = await this.request("category.update", data);
@@ -703,11 +720,18 @@ export class ApiService {
   /// cafe
   ///
 
-  // Get cafe global settings
+  /**
+   * Get cafe global settings
+   * @returns CafeSettings
+   *
+   * ! It does memory cache
+   */
   async loadCafeSettings(): Promise<CafeSettings> {
-    return (await this.request("cafe.settings", {
+    if (this._cafeSettings) return this._cafeSettings;
+    this._cafeSettings = (await this.request("cafe.settings", {
       domain: this.domain,
     })) as CafeSettings;
+    return this._cafeSettings;
   }
 
   /**

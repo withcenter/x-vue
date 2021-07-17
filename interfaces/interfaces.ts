@@ -46,6 +46,7 @@ export interface MainCafeSettings {
   name: string;
   countryCode: string;
   logo: string;
+  searchBoxPlaceHolder: string;
 }
 
 /**
@@ -327,6 +328,7 @@ export class CafeModel extends CategoryModel {
   subcategoriesArray: string[] = [];
   titleImageUrl = "";
   countryCode = "";
+  searchBoxPlaceHolder = "";
 
   fromJson(map: ResponseData): CafeModel {
     this.app_name = map.app_name;
@@ -335,6 +337,7 @@ export class CafeModel extends CategoryModel {
     this.subcategoriesArray = map.subcategoriesArray;
     this.titleImageUrl = map.titleImageUrl;
     this.countryCode = map.countryCode;
+    this.searchBoxPlaceHolder = map.searchBoxPlaceHolder;
     super.fromJson(map);
     return this;
   }
@@ -483,4 +486,8 @@ export interface PassloginResponse {
   phoneNo: string;
   plid: string;
   telcoCd: string;
+}
+
+export interface CategoryGetsResponse {
+  [key: string]: CategoryModel;
 }

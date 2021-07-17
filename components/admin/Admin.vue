@@ -27,6 +27,9 @@
       <router-link class="btn btn-link" to="/admin/utility">
         {{ "utility" | t }}
       </router-link>
+      <router-link class="btn btn-link" to="/admin/cafe">
+        {{ "cafe_admin" | t }}
+      </router-link>
       <router-link class="btn btn-link" to="/admin/samples">
         {{ "samples" | t }}
       </router-link>

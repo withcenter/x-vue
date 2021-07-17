@@ -1,9 +1,17 @@
 import { ApiService } from "../services/api.service";
 import { FileModel, MapStringAny, ResponseData, UserModel } from "./interfaces";
 
+/**
+ *
+ * 예제) 정렬 조건을 보다 복잡하게 하기
+ *      아래와 같이 by 에 빈 값을 입력하고, order 에 원하는 여러개의 정렬 조건 항목을 입력 할 수 있다.
+ *      order: "noOfComments DESC, createdAt DESC",
+ *      by: "",
+ */
 export interface PostSearchRequest {
   categoryIdx?: number;
   categoryId?: string;
+  ids?: string;
   subcategory?: string;
   code?: string;
   files?: "Y" | "";
@@ -17,6 +25,9 @@ export interface PostSearchRequest {
   limit?: number;
   comments?: number;
   minimize?: boolean;
+  within?: number;
+  betweenFrom?: number;
+  betweenTo?: number;
 }
 
 /**

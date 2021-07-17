@@ -29,6 +29,8 @@ import { Component, Prop } from "vue-property-decorator";
 export default class extends Vue {
   @Prop() categoryId!: string;
   @Prop({ default: true }) isMultiLine!: boolean;
+  @Prop({ default: 184 }) w!: number;
+  @Prop({ default: 100 }) h!: number;
   @Prop({ default: () => ComponentService.instance.temporaryPost() })
   post!: PostModel;
 
@@ -46,7 +48,8 @@ export default class extends Vue {
 
   get src(): string {
     if (!this.story.files.length) return "";
-    return this.story.files[0].thumbnailUrl ? this.story.files[0].thumbnailUrl : this.story.files[0].url;
+    return ApiService.instance.thumbnailUrl(this.story.files[0].idx, this.w, this.h);
+    // return this.story.files[0].thumbnailUrl ? this.story.files[0].thumbnailUrl : this.story.files[0].url;
   }
 
   async loadPost(): Promise<void> {
