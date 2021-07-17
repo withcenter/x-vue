@@ -605,6 +605,9 @@
     <div v-if="posts.length">
       <PhotoTextUser :post="posts[0]"></PhotoTextUser>
     </div>
+    <hr />
+    Below is the "NewsLeftBigPhotoRightSmallPhotosAndTexts" widget.
+    <NewsLeftBigPhotoRightSmallPhotosAndTexts categoryid="news"></NewsLeftBigPhotoRightSmallPhotosAndTexts>
   </section>
 </template>
 <style lang="scss">
@@ -701,6 +704,7 @@ import { PostModel } from "@/x-vue/interfaces/forum.interface";
 import { ApiService } from "@/x-vue/services/api.service";
 
 import PhotoTextUser from "@/x-vue/widgets/post/PhotoTextUser.vue";
+import NewsLeftBigPhotoRightSmallPhotosAndTexts from "@/x-vue/widgets/post/NewsLeftBigPhotoRightSmallPhotosAndTexts.vue";
 
 @Component({
   components: {
@@ -769,6 +773,7 @@ import PhotoTextUser from "@/x-vue/widgets/post/PhotoTextUser.vue";
     TextThumbnail,
     TwoPhotosLatestTexts,
     PhotoTextUser,
+    NewsLeftBigPhotoRightSmallPhotosAndTexts,
   },
 })
 export default class Samples extends Vue {

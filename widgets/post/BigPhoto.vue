@@ -54,6 +54,7 @@ export default class ThumbnailWithTextAndMetaAtBottom extends Vue {
   @Prop() categoryId!: string;
   @Prop() subcategory!: string;
   @Prop({ default: "카테고리 + 서브카테고리" }) title!: string;
+  @Prop({ default: 1 }) page!: number;
 
   story: PostModel = new PostModel();
 
@@ -66,6 +67,7 @@ export default class ThumbnailWithTextAndMetaAtBottom extends Vue {
           categoryId: this.categoryId,
           subcategory: this.subcategory,
           limit: 1,
+          page: this.page,
           files: "Y",
         },
         { callback: (posts) => (this.story = posts[0]) }
