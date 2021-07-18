@@ -2,7 +2,7 @@
   <div class="pb-3">
     <h1>{{ "admin_dashboard" | t }}</h1>
     <div>
-      <router-link class="btn btn-link" to="/admin/user">User</router-link>
+      <router-link class="btn btn-link" to="/admin/user">{{ "user" | t }}</router-link>
       <router-link class="btn btn-link" to="/admin/category">
         {{ "category" | t }}
       </router-link>
@@ -19,7 +19,7 @@
         {{ "messaging" | t }}
       </router-link>
       <router-link class="btn btn-link" to="/admin/setting">
-        {{ "settings" | t }}
+        {{ "setting" | t }}
       </router-link>
       <router-link class="btn btn-link" to="/admin/advertisement">
         {{ "advertisement" | t }}

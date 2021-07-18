@@ -2,7 +2,7 @@
   <router-link class="photo-inline-text-bottom d-block" :to="story.relativeUrl" v-if="story && story.idx">
     <div class="w-100 position-relative">
       <b-img fluid-grow block class="primary" :src="src"> </b-img>
-      <div class="title position-absolute w-100 p-1 text-white" :class="isMultiLine ? '' : 'text-truncate'">
+      <div class="title position-absolute w-100 text-white" :class="isMultiLine ? '' : 'text-truncate'">
         {{ story.title }}
       </div>
     </div>
@@ -13,9 +13,11 @@
 .photo-inline-text-bottom {
   .title {
     overflow: hidden;
+    padding: 0.25em 1em;
     background-color: rgba(1, 1, 1, 0.6) !important;
     max-height: 2em;
     bottom: 0;
+    font-size: 0.9em;
   }
 }
 </style>
@@ -32,7 +34,9 @@ import { Component, Prop } from "vue-property-decorator";
 export default class PhotoInlineTextBottom extends Vue {
   @Prop() post!: PostModel;
   @Prop() categoryId!: string;
-  @Prop({ default: true }) isMultiLine!: boolean;
+  @Prop({ default: false }) isMultiLine!: boolean;
+  @Prop({ default: 100 }) w!: number;
+  @Prop({ default: 100 }) h!: number;
 
   story: PostModel = new PostModel();
 
@@ -48,7 +52,7 @@ export default class PhotoInlineTextBottom extends Vue {
 
   get src(): string {
     if (!this.story.files.length) return "";
-    return this.story.files[0].thumbnailUrl ? this.story.files[0].thumbnailUrl : this.story.files[0].url;
+    return ApiService.instance.thumbnailUrl(this.story.files[0].idx, this.w, this.h, 100);
   }
 
   async loadPost(): Promise<void> {

@@ -110,17 +110,36 @@ export function yymmddhma(s: number): string {
   return dayjs(s * 1000).format("YY-MM-DD h:ma");
 }
 
-export function translate(code: string): string {
+/**
+ * 언어 변환
+ *
+ * 만약, 해당 code 또는 언어에 대한 값이 없다면, 영어 텍스트가 있으면 영어 텍스트를 리턴한다.
+ * 영어 텍스트도 없으면, code 를 그대로 리턴한다.
+ *
+ * @param code 언어 변환 할 code 또는 {en: '...', ko: '...' } 형태의 객체
+ * @returns 변환된 문자열
+ */
+export function translate(code: string | { [key: string]: string }): string {
   if (!code) return "";
+  const ln = ApiService.instance.userLanguage;
+  if (typeof code === "string") {
+    const texts = ApiService.instance.texts;
+    if (!ApiService.instance.texts) return code;
+    if (!texts[code]) return code;
 
-  const texts = ApiService.instance.texts;
-  if (!ApiService.instance.texts) return code;
-  if (!texts[code]) return code;
-  if (!texts[code][ApiService.instance.userLanguage]) return code;
-  return texts[code][ApiService.instance.userLanguage];
+    if (texts[code][ln]) return texts[code][ln];
+    else if (texts[code]["en"]) return texts[code]["en"];
+    else return code;
+  } else {
+    if (code[ln]) return code[ln];
+    else if (code["en"]) return code["en"];
+    else return "Wrong code object";
+  }
 }
-
-export function t(code: string): string {
+/**
+ * Alias of translate
+ */
+export function t(code: string | { [key: string]: string }): string {
   return translate(code);
 }
 

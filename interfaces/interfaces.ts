@@ -58,6 +58,15 @@ export interface Settings {
   privacyPolicy: string;
   searchCategories: string;
   termsAndConditions: string;
+  dislike: number;
+  like: number;
+  dislikeDeduction: number;
+  likeDeduction: number;
+  login: number;
+  register: number;
+  voteDailyLimitCount: number;
+  voteHourlyLimit: number;
+  voteHourlyLimitCount: number;
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   [index: string]: any;
 }
@@ -253,6 +262,7 @@ export class CategoryModel {
   title = "";
   description = "";
   subcategories = "";
+  subcategoriesArray: string[] = [];
   createPost = "";
   deletePost = "";
   createComment = "";
@@ -290,6 +300,7 @@ export class CategoryModel {
     this.title = map.title;
     this.description = map.description;
     this.subcategories = map.subcategories;
+    this.subcategoriesArray = map.subcategoriesArray;
     this.createPost = map.createPost;
     this.deletePost = map.deletePost;
     this.createComment = map.createComment;

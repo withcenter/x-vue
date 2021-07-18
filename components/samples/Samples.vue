@@ -591,14 +591,14 @@
 
     <hr />
     Below is the "BigPhoto" and "TextThumbnail" widget.
-    <div class="row mt-2">
+    <div class="row mt-5">
       <div class="col-6"><BigPhoto categoryId="reminder"></BigPhoto></div>
       <div class="col-6"><TextThumbnail categoryId="qna"></TextThumbnail></div>
     </div>
 
     <hr />
     Below is the "TwoPhotosLatestTexts" which is depending on "BigPhoto"
-    <TwoPhotosLatestTexts class="mt-2" leftCategoryId="buyandsell" rightCategoryId="qna"></TwoPhotosLatestTexts>
+    <TwoPhotosLatestTexts class="mt-5" leftCategoryId="travel" rightCategoryId="qna"></TwoPhotosLatestTexts>
 
     <hr />
     Below is the "PhotoTextUser" widget.
@@ -606,8 +606,10 @@
       <PhotoTextUser :post="posts[0]"></PhotoTextUser>
     </div>
     <hr />
-    Below is the "NewsLeftBigPhotoRightSmallPhotosAndTexts" widget.
-    <NewsLeftBigPhotoRightSmallPhotosAndTexts categoryid="news"></NewsLeftBigPhotoRightSmallPhotosAndTexts>
+    Below is the "LeftBigPhotoRightSmallPhotosAndTexts" widget.<br />
+    This widget is a news style, so it does not have author information.
+
+    <NewsLeftBigPhotoRightSmallPhotosAndTexts class="mt-5" categoryId="news"></NewsLeftBigPhotoRightSmallPhotosAndTexts>
   </section>
 </template>
 <style lang="scss">
@@ -704,7 +706,7 @@ import { PostModel } from "@/x-vue/interfaces/forum.interface";
 import { ApiService } from "@/x-vue/services/api.service";
 
 import PhotoTextUser from "@/x-vue/widgets/post/PhotoTextUser.vue";
-import NewsLeftBigPhotoRightSmallPhotosAndTexts from "@/x-vue/widgets/post/NewsLeftBigPhotoRightSmallPhotosAndTexts.vue";
+import NewsLeftBigPhotoRightSmallPhotosAndTexts from "@/x-vue/widgets/post/LeftBigPhotoRightSmallPhotosAndTexts.vue";
 
 @Component({
   components: {

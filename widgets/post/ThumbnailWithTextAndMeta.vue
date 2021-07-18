@@ -4,10 +4,10 @@
     <b-img class="col-4 p-0 primary" :src="src"></b-img>
     <!-- </div> -->
     <div class="col-8 text-meta pl-2 overflow-hidden">
-      <div class="category">{{ story.categoryId }}</div>
+      <div class="category">{{ story.categoryId | t }}</div>
       <div class="title text-truncate font-weight-bold">{{ story.title }}</div>
-      <div class="content">{{ story.content }}</div>
-      <div class="author text-truncate">
+      <div class="content mt-2 two-line-truncate">{{ story.content }}</div>
+      <div class="author mt-2 text-truncate">
         <span>{{ story.user.nicknameOrName }}</span>
         <span class="text-muted"> ∙ {{ story.shortDate }}</span>
       </div>
@@ -16,9 +16,22 @@
 </template>
 
 <style lang="scss" scoped>
+.two-line-truncate {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.category {
+  font-size: 0.85em;
+}
 .content {
+  font-size: 0.85em;
   max-height: 3em;
   overflow: hidden;
+}
+.author {
+  font-size: 0.85em;
 }
 </style>
 <script lang="ts">
@@ -32,6 +45,9 @@ import { Component, Prop } from "vue-property-decorator";
 export default class extends Vue {
   @Prop() categoryId!: string;
   @Prop() post!: PostModel;
+
+  @Prop({ default: 100 }) w!: number;
+  @Prop({ default: 100 }) h!: number;
 
   story: PostModel = new PostModel();
 
@@ -47,7 +63,7 @@ export default class extends Vue {
 
   get src(): string {
     if (!this.story.files.length) return "";
-    return this.story.files[0].thumbnailUrl ? this.story.files[0].thumbnailUrl : this.story.files[0].url;
+    return ApiService.instance.thumbnailUrl(this.story.files[0].idx, this.w, this.h, 100);
   }
 
   async loadPost(): Promise<void> {

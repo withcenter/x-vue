@@ -360,9 +360,7 @@ export default class AdminCategoryEdit extends Vue {
 
   async mounted(): Promise<void> {
     try {
-      this.category = await ApiService.instance.categoryGet({
-        id: this.$route.params.categoryId ?? 0,
-      });
+      this.category = await ApiService.instance.categoryGet(this.$route.params.categoryId ?? 0);
     } catch (e) {
       this.s.error(e);
     }

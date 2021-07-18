@@ -420,10 +420,12 @@ export class ApiService {
     data: PostSearchRequest,
     options?: { callback: (posts: Array<PostModel>) => void }
   ): Promise<Array<PostModel>> {
+    // 캐시 코드
     const key = `${data.categoryId}-${data.categoryIdx ?? ""}-${data?.subcategory ?? ""}-${data?.files ?? ""}-${
       data.countryCode ?? ""
     }-${data.searchKey ?? ""}-${data.userIdx ?? ""}-${data.order ?? ""}-${data.page ?? ""}-${data.limit ?? ""}`;
-    // console.log("postSearch::key", key);
+
+    // 캐시 콜백 함수가 있으면, 캐시 적용
     if (options?.callback) {
       const cache = localStorage.getItem(key);
       if (cache) {
@@ -431,9 +433,11 @@ export class ApiService {
         options.callback(JSON.parse(cache).map((post: JSON) => new PostModel().fromJson(post)));
       }
     }
+    // 목록을 최소한의 데이터만 가져온다. 이 옵션 하나가 postSearch() 와 다른 것이다.
     data.minimize = true;
     const res = await this.request("post.search", data);
-    // console.log("latestPosts::res", res);
+
+    // 캐시 콜백 함수가 있으면, 캐시
     if (options?.callback) {
       localStorage.setItem(key, JSON.stringify(res));
     }
@@ -614,6 +618,9 @@ export class ApiService {
       path: "/",
     });
   }
+  getCookie(k: string): string | undefined {
+    return Cookies.get(k);
+  }
   removeCookie(k: string): void {
     Cookies.remove(k, {
       expires: 365,
@@ -689,8 +696,14 @@ export class ApiService {
     return new CategoryModel().fromJson(category);
   }
 
-  async categoryGet(data: RequestData): Promise<CategoryModel> {
-    const category = await this.request("category.get", data);
+  /**
+   * 카테고리를 가져온다.
+   *
+   * @param idxOrId 카테고리 idx 또는 id. 문자열, 숫자 상관없다.
+   * @returns 카테고리
+   */
+  async categoryGet(idxOrId: number | string): Promise<CategoryModel> {
+    const category = await this.request("category.get", { idx: idxOrId });
     return new CategoryModel().fromJson(category);
   }
   async categoryGets(ids: string): Promise<CategoryGetsResponse> {

@@ -293,7 +293,7 @@ export class PostRootModel {
       idx: this.idx,
       choice: choice,
     });
-    console.log("res; ", res);
+    // console.log("res; ", res);
     this.updateVoteCount(res);
   }
   async dislike(): Promise<void> {

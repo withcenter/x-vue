@@ -138,6 +138,15 @@ new Vue({
 export default class UploadImage extends Vue {
   confirmDelete = translate("do_you_want_to_delete");
 ```
+
+- You can deliver text object for translation.
+
+```html
+{{ { en: "Create Sample Posts, comments", ko: "샘플 글/코멘트/사진 생성" } | t }}
+```
+
+
+
 ## User login and logout
 
 - 사용자 register, login, logout, and profile update 등을 하면,
@@ -286,6 +295,28 @@ console.log(await app.__vue__.api.version());
 ```
 
 
+# 최근 글 가져오기
+
+- `latestPosts()` 함수는 내부적으로 캐시를 한다. 페이지별 게시판 글 목록이나, 최근 글 보여줄 때 사용하면 된다.
+  - 단, 내용의 일부, 첫 코멘트, 첫 사진 등 전체를 다 가져오지 않으므로, 글 목록에서 내용을 바로 보여줄 때에는 적절하지 않다.
+  - 검색 조건은 `postSearch()`와 동일 하다. 내부적으로 `postSearch()` 를 사용한다.
+
+```ts
+ApiService.instance
+  .latestPosts(
+    {
+      ids: this.ids,
+      subcategory: this.subcategory,
+      limit: 4,
+      files: "Y",
+      within: 60 * 60 * 24 * 7, // 최근 7일 (1주) 동안의 최신 글에서 코멘트 많은 순으로 출력.
+      order: "noOfComments DESC, createdAt DESC",
+      by: "",
+    },
+    { callback: (posts) => (this.posts1 = posts) }
+  )
+  .then((posts) => (this.posts1 = posts));
+```
 
 
 
