@@ -163,6 +163,8 @@
           </small>
         </div>
 
+        <!-- Country code (only visible if cafe has no country code) -->
+
         <!-- Banner points country listing table -->
         <div class="mt-3 box" v-if="togglePointTable">
           <div class="d-flex justify-content-between">

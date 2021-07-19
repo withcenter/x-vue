@@ -5,7 +5,7 @@
         <div class="box d-flex p-2 mb-2" v-for="advertisement of advertisements" :key="advertisement.idx">
           <div class="col-10 p-0">
             <router-link :to="`/advertisement/view/${advertisement.idx}`">
-              <advertisement-preview :advertisement="advertisement"></advertisement-preview>
+              <AdvertisementPreview :advertisement="advertisement"></AdvertisementPreview>
             </router-link>
           </div>
           <div class="ml-1 px-2 py-0 text-center border-left col-2">
@@ -38,20 +38,21 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import Service from "@/x-vue/services/component.service";
+
 import { ApiService } from "@/x-vue/services/api.service";
 import { RequestData } from "@/x-vue/interfaces/interfaces";
-import AdvertisementPreview from "@/x-vue/components/advertisement/AdvertisementPreview.vue";
 import { AdvertisementModel } from "@/x-vue/interfaces/advertisement.interface";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 
+import ComponentService from "@/x-vue/services/component.service";
+import AdvertisementPreview from "@/x-vue/components/advertisement/AdvertisementPreview.vue";
+
 @Component({
-  components: {
-    AdvertisementPreview,
-  },
+  components: { AdvertisementPreview },
 })
 export default class AdminAdvertisementList extends Vue {
   api = ApiService.instance;
+  as = AdvertisementService.instance;
 
   loading = false;
   advertisements: AdvertisementModel[] = [];
@@ -73,7 +74,7 @@ export default class AdminAdvertisementList extends Vue {
       this.total = await this.api.postCount(this.options);
       this.noOfPages = Math.ceil(this.total / this.limit);
     } catch (e) {
-      Service.instance.error(e);
+      ComponentService.instance.error(e);
     }
   }
 
@@ -94,7 +95,7 @@ export default class AdminAdvertisementList extends Vue {
       this.loading = false;
     } catch (e) {
       this.loading = false;
-      Service.instance.error(e);
+      ComponentService.instance.error(e);
     }
   }
 }
