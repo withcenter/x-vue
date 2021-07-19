@@ -14,7 +14,7 @@
     <b-spinner v-else></b-spinner>
 
     <b-button class="ml-2" @click="onCreateSamplePosts" v-if="progressSamples == false">
-      {{ { en: "Create Sample Posts, comments", ko: "샘플 글/코멘트/사진 생성" } | t }}
+      {{ { en: "Create Sample Posts, comments, banners", ko: "샘플 광고, 글/코멘트/사진 생성" } | t }}
     </b-button>
     <b-spinner v-else></b-spinner>
   </div>
@@ -31,8 +31,8 @@ export default class extends Vue {
     this.progressSamples = true;
     try {
       await ApiService.instance.request("utility.createSamplePosts");
+      ComponentService.instance.alert("Sample posts created", "Sample banners, posts, comments are created.");
       // console.log("res; ", res);
-      ComponentService.instance.alert("Database clear", "Database had been cleared.");
     } catch (e) {
       console.error(e);
       ComponentService.instance.error(e);
@@ -42,7 +42,7 @@ export default class extends Vue {
   async onDeleteAllPosts(): Promise<void> {
     try {
       await ApiService.instance.request("admin.truncateDb");
-      ComponentService.instance.alert("All posts deleted", "All posts had been deleted.");
+      ComponentService.instance.alert("Database clear", "Database had been cleared.");
     } catch (e) {
       ComponentService.instance.error(e);
     }

@@ -140,7 +140,29 @@
       </div>
 
       <div class="box mt-3 p-3">
-        You are posting banner on <b>{{ countryName }}</b>
+        <h2 v-if="banner.idx == 0">Creating banner</h2>
+        <h2 v-else>Updating banner</h2>
+
+        <section class="" v-if="cafeCountryCode">
+          You are posting banner on <b>{{ countryName }}</b>
+        </section>
+        <section class="" v-else>
+          Choose country
+          <!-- Banner country -->
+          <div class="form-group mt-2" v-if="countries">
+            <label>{{ "adv_cafe_country" | t }}</label>
+            <select value="" class="form-control" v-model="banner.countryCode" :disabled="banner.isActive">
+              <option disabled selected>{{ "select_country" | t }}</option>
+              <option v-for="(value, name) in countries" :key="name" :value="name">
+                {{ value }}
+              </option>
+            </select>
+            <small class="form-text text-muted">
+              {{ "adv_cafe_country_hint" | t }}
+            </small>
+          </div>
+        </section>
+
         <!-- title -->
         <div class="form-group">
           <label>{{ "title" | t }}</label>
@@ -172,8 +194,8 @@
             <div class="btn btn-link btn-sm" @click="togglePointTable = !togglePointTable">Hide</div>
           </div>
           <div>
-            You are posting advertisement under {{ countryCode }} - {{ countryName }}, and the table below is the points
-            of banner type.
+            You are posting advertisement under {{ cafeCountryCode }} - {{ countryName }}, and the table below is the
+            points of banner type.
           </div>
           <table class="w-100 mt-2 table table-striped" v-if="!isEmptyObj(bannerPoints)">
             <thead>
@@ -305,7 +327,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import { AdvertisementSettings, CafeModel, FileModel, ResponseData } from "@/x-vue/interfaces/interfaces";
+import { AdvertisementSettings, FileModel, ResponseData } from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
 import { addByComma, daysBetween, deleteByComma, isEmptyObject } from "@/x-vue/services/functions";
 import UploadImage from "@/x-vue/components/file/UploadImage.vue";
@@ -320,7 +342,7 @@ import ComponentService from "@/x-vue/services/component.service";
   components: { UploadImage, LoginFirst, BannerType },
 })
 export default class extends Vue {
-  @Prop() countryCode!: string;
+  @Prop() cafeCountryCode!: string;
 
   api = ApiService.instance;
   s = ComponentService.instance;
@@ -349,10 +371,14 @@ export default class extends Vue {
   // Returns country name based on banner's country code or current cafe's country code.
   get countryName(): string {
     if (this.banner.countryCode) return this.countries[this.banner.countryCode];
-    else return this.countries[this.countryCode];
+    else return this.countries[this.cafeCountryCode];
   }
 
   async mounted(): Promise<void> {
+    // set cafeCountryCode to banner country code.
+    // If cafeCountryCode is undefined, then, user can choose one.
+    this.banner.countryCode = this.cafeCountryCode;
+
     this.loadCountries();
     this.loadGlobalSettings();
 
@@ -382,7 +408,7 @@ export default class extends Vue {
       const _globalSettings = await AdvertisementService.instance.advertisementSettings();
 
       this.settings = _globalSettings;
-      this.bannerPoints = _globalSettings.point[this.countryCode];
+      this.bannerPoints = _globalSettings.point[this.cafeCountryCode];
       if (!this.bannerPoints) this.bannerPoints = _globalSettings.point["default"];
       if (!this.bannerPoints) this.bannerPoints = {};
     } catch (e) {
@@ -550,7 +576,6 @@ export default class extends Vue {
     let isCreate = true;
     if (this.banner.idx) isCreate = false;
     try {
-      this.banner.countryCode = this.countryCode;
       const res = await AdvertisementService.instance.advertisementEdit(this.banner.toJson);
       // console.log(`${isCreate ? "Create" : "Update"} =>`, res);
       Object.assign(this.banner, res);

@@ -55,7 +55,11 @@ export default class extends Vue {
   @Prop() post!: PostModel;
 
   get src(): string {
-    return ApiService.instance.thumbnailUrl(this.post.files[0].idx, 180, 120, 100);
+    if (this.post.files.length) {
+      return ApiService.instance.thumbnailUrl(this.post.files[0].idx, 180, 120, 100);
+    } else {
+      return "";
+    }
   }
 }
 </script>
