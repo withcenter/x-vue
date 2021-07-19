@@ -2,7 +2,12 @@
   <section>
     <h1>{{ "cafe_management" | t }}</h1>
     <div class="alert alert-warning">
-      이 메뉴는 <b>소너브(카페)</b> 전용 메뉴로 다른 프로젝트를 할 때에는 이 메뉴를 빼면 된다.
+      {{
+        {
+          en: "This menu is only for sonub.com. Remove this menu on other projects.",
+          ko: "이 메뉴는 소너브(카페) 전용 메뉴로 다른 프로젝트를 할 때에는 이 메뉴를 빼면 된다.",
+        } | t
+      }}
     </div>
 
     <div class="alert alert-danger" v-if="categoryError">
@@ -11,10 +16,14 @@
       <b-btn @click="createCategories">{{ "do_you_want_to_create" | t }}</b-btn>
     </div>
 
-    <div v-if="terms">회원 가입 약관이 있습니다.</div>
-    <div class="text-danger" v-else>회원 가입 약관이 입력되지 않았습니다.</div>
-    <div v-if="terms">회원 정보 보호 정책이 있습니다.</div>
-    <div class="text-danger" v-else>회원 정보 보호 정책이 입력되지 않았습니다.</div>
+    <div v-if="terms">{{ { en: "There is user agreement", ko: "회원 가입 약관이 있습니다." } | t }}</div>
+    <div class="text-danger" v-else>
+      {{ { en: "There is no user agreement", ko: "회원 가입 약관이 없습니다." } | t }}
+    </div>
+    <div v-if="terms">{{ { en: "There is provacy policy.", ko: "회원 정보 보호 정책이 있습니다." } | t }}</div>
+    <div class="text-danger" v-else>
+      {{ { en: "There is no provacy policy.", ko: "회원 정보 보호 정책이 없습니다." } | t }}
+    </div>
 
     <div class="alert alert-secondary">
       <h5>{{ "cafe_category_list" | t }}</h5>

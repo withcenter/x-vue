@@ -35,7 +35,7 @@ export default class AdvertisementTopBanner extends Vue {
     });
 
     if (this.categoryId != "global" && !banners.length && this.position == "right") {
-      if (!this.banners["global"]) return [];
+      if (!this.banners["global"] || this.banners["global"]["top"].length < 2) return [];
       return this.banners["global"]["top"];
     }
     return banners;

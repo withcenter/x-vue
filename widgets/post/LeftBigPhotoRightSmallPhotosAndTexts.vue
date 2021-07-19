@@ -3,13 +3,13 @@
     <div class="row round" v-if="posts.length">
       <div class="col-6">
         <!-- 왼쪽 큰 사진 -->
-        <div class="left-top">
+        <div class="left-top" v-if="posts[0]">
           <h1 class="title two-line-truncate">{{ posts[0].title }}</h1>
           <div class="content text-truncate">{{ posts[0].content }}</div>
           <img class="mt-1 w-100" :src="api.thumbnailUrl(posts[0].files[0].idx, 400, 300)" />
         </div>
         <!-- 왼쪽 글 5 개 -->
-        <div class="bottom-latest mt-3">
+        <div class="bottom-latest mt-3" v-if="leftStories.length">
           <router-link
             class="line d-flex align-items-center"
             :to="post.relativeUrl"
@@ -26,7 +26,7 @@
       </div>
       <div class="col-6">
         <!-- 오른쪽 썸네일 텍스트 -->
-        <div class="stories">
+        <div class="stories" v-if="stories.length">
           <router-link class="d-flex align-items-center" :to="post.relativeUrl" v-for="post of stories" :key="post.idx">
             <img :src="post.files[0].thumbnailUrl" />
             <div>
@@ -38,13 +38,13 @@
           </router-link>
         </div>
         <!-- 오른쪽 한 줄 -->
-        <div class="mt-3">
+        <div class="mt-3" v-if="posts[4]">
           <router-link class="line-news d-block text-truncate border-top border-bottom" :to="posts[4].relativeUrl">
             {{ posts[4].title }}
           </router-link>
         </div>
         <!-- 오른쪽 글 5 개 -->
-        <div class="bottom-latest mt-3">
+        <div class="bottom-latest mt-3" v-if="rightStories.length">
           <router-link
             class="line d-flex align-items-center"
             :to="post.relativeUrl"

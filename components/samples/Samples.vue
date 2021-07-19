@@ -610,6 +610,17 @@
     This widget is a news style, so it does not have author information.
 
     <NewsLeftBigPhotoRightSmallPhotosAndTexts class="mt-5" categoryId="news"></NewsLeftBigPhotoRightSmallPhotosAndTexts>
+
+    <hr />
+    <b>LatestPostsBy</b> with many customization options.<br />
+    &lt;LatestPostsBy<br />
+    <b>ids</b>="qna,discussino,reminder,job"<br />
+    <b>subcategory</b>="column"<br />
+    <b>limit</b>="10"<br />
+    <b>within</b>="60000"<br />
+    <b>order</b>="noOfComments" &gt;&lt;/LatestPostsBy&gt;
+
+    <LatestPostsBy></LatestPostsBy>
   </section>
 </template>
 <style lang="scss">
@@ -707,6 +718,7 @@ import { ApiService } from "@/x-vue/services/api.service";
 
 import PhotoTextUser from "@/x-vue/widgets/post/PhotoTextUser.vue";
 import NewsLeftBigPhotoRightSmallPhotosAndTexts from "@/x-vue/widgets/post/LeftBigPhotoRightSmallPhotosAndTexts.vue";
+import LatestPostsBy from "@/x-vue/widgets/post/LatestPostsBy.vue";
 
 @Component({
   components: {
@@ -776,6 +788,7 @@ import NewsLeftBigPhotoRightSmallPhotosAndTexts from "@/x-vue/widgets/post/LeftB
     TwoPhotosLatestTexts,
     PhotoTextUser,
     NewsLeftBigPhotoRightSmallPhotosAndTexts,
+    LatestPostsBy,
   },
 })
 export default class Samples extends Vue {
