@@ -317,9 +317,6 @@ import ComponentService from "@/x-vue/services/component.service";
   components: { UploadImage, LoginFirst, BannerType },
 })
 export default class extends Vue {
-  @Prop({ default: false }) isRootCafe!: boolean;
-  @Prop() currentCafe!: CafeModel;
-  @Prop() rootDomain!: string;
   @Prop() countryCode!: string;
 
   api = ApiService.instance;
