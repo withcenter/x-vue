@@ -202,6 +202,7 @@
         </div>
         <hr />
         <BannerType :settings="settings" :banner="banner"></BannerType>
+
         <div>@TODO Display how much is it per day per month(30 days)</div>
 
         @TODO display banner size tip to user based on banner type.
@@ -263,7 +264,7 @@
           </small>
         </div>
 
-        <div class="form-group mt-2" v-if="banner.idx">
+        <div class="form-group mt-2">
           <label>{{ "click_url" | t }}</label>
           <input class="form-control" :placeholder="'click_url' | t" type="text" v-model="banner.clickUrl" />
           <small class="form-text text-muted">

@@ -6,8 +6,8 @@
     <b-button class="ml-2" variant="danger" @click="onDeleteAllPosts" v-if="progressSamples == false">
       {{
         {
-          en: "Delete all posts table record.",
-          ko: "posts table(글/코멘트 테이블), files table(모든 사진, 사용자 프로필 사진 포함) 레코드 모두 삭제",
+          en: "Delete all data",
+          ko: "DB 초기화. 카테고리, 글/코멘트, 사진 삭제.",
         } | t
       }}
     </b-button>
@@ -32,7 +32,7 @@ export default class extends Vue {
     try {
       await ApiService.instance.request("utility.createSamplePosts");
       // console.log("res; ", res);
-      ComponentService.instance.alert("Sample posts", "Sample posts had been created.");
+      ComponentService.instance.alert("Database clear", "Database had been cleared.");
     } catch (e) {
       console.error(e);
       ComponentService.instance.error(e);
@@ -41,7 +41,7 @@ export default class extends Vue {
   }
   async onDeleteAllPosts(): Promise<void> {
     try {
-      await ApiService.instance.request("admin.truncatePostsTable");
+      await ApiService.instance.request("admin.truncateDb");
       ComponentService.instance.alert("All posts deleted", "All posts had been deleted.");
     } catch (e) {
       ComponentService.instance.error(e);
