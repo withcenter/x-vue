@@ -49,12 +49,8 @@ export class ChatUserRoomListService extends ChatBase {
   //   /// To get the whole list of room info, use [rooms].
   changes: BehaviorSubject<ChatUserRoomModel> = new BehaviorSubject(new ChatUserRoomModel());
 
-  // changes: Subject<ChatUserRoomModel> = new Subject();
-
-  // _myRoomListSubscription: Subscription | null = new Subscription();
   _myRoomListSubscription: (() => void) | null = null;
 
-  // _roomSubscriptions: { [index: string]: Subscription } = {} as { [index: string]: Subscription };
   _roomSubscriptions: { [index: string]: () => void } = {} as { [index: string]: () => void };
 
   /// Login user's whole room list including room id.
@@ -83,16 +79,15 @@ export class ChatUserRoomListService extends ChatBase {
   /// - and other properties change.
   _listenRoomList(): void {
     // console.log("_listenRoomList::");
-    this._myRoomListSubscription = this.myRoomListCol.orderBy(this._order, "desc").onSnapshot({
+    this._myRoomListSubscription = this.myRoomListCol.orderBy(this._order, "asc").onSnapshot({
       next: (snapshot) => {
         // console.log("_listenRoomList::snapshot::", snapshot.docs);
         snapshot.docChanges().forEach((documentChange: firebase.firestore.DocumentChange) => {
           const roomInfo = new ChatUserRoomModel().fromSnapshot(documentChange.doc);
           // console.log(roomInfo?.newMessages);
 
-          // console.log(roomInfo.newMessages);
           if (documentChange.type == DocumentChangeType.added) {
-            this.rooms.push(roomInfo);
+            this.rooms.unshift(roomInfo);
 
             /// When room list is retreived for the first, it will be added to listener.
             /// This is where [changes] event happens many times when the app listens to room list.
@@ -114,6 +109,7 @@ export class ChatUserRoomListService extends ChatBase {
           } else if (documentChange.type == DocumentChangeType.removed) {
             const i: number = this.rooms.findIndex((r) => r.id == roomInfo.id);
             if (i > -1) {
+              // remove from rooms list
               this.rooms.splice(i, 1);
             }
           } else {
@@ -134,7 +130,7 @@ export class ChatUserRoomListService extends ChatBase {
               )
             : new ChatUserRoomModel();
 
-        // console.log("ROOMS::: ", this.rooms);
+        console.log("ROOMS::: ", this.rooms);
         this.changes.next(re);
       },
     });
@@ -152,8 +148,10 @@ export class ChatUserRoomListService extends ChatBase {
   }
 
   unsubscribeUserRoom(room: ChatGlobalRoomModel): void {
+    console.log("unsubscribeUserRoom::", room);
     if (this._roomSubscriptions.isEmpty) return;
     if (this._roomSubscriptions[room.roomId] == null) return;
+    console.log(this._roomSubscriptions[room.roomId]);
     this._roomSubscriptions[room.roomId]();
     delete this._roomSubscriptions[room.roomId];
   }

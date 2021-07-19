@@ -1,6 +1,25 @@
 <template>
   <section class="chat-message d-flex flex-column">
-    <div id="chat-message-list" class="d-flex flex-column overflow-auto flex-grow-1" @scroll="onScroll">
+    <div class="d-flex justify-content-between mb-2">
+      <div class="py-2">{{ rooms.global.title || rooms.global.roomId }}</div>
+      <div class="chat-options">
+        <button :id="'chat-options-popover-' + rooms.global.roomId" class="btn btn-sm">
+          <GearFillSvg></GearFillSvg>
+        </button>
+
+        <b-popover
+          placement="bottomleft"
+          ref="popover"
+          :target="'chat-options-popover-' + rooms.global.roomId"
+          triggers="click blur"
+        >
+          <button data-cy="mine-edit-button" class="btn btn-sm btn-success" @click="leaveRoom">
+            {{ "leave" | t }}
+          </button>
+        </b-popover>
+      </div>
+    </div>
+    <div id="chat-message-list" class="d-flex flex-column overflow-auto flex-grow-1" @scroll="rooms.scrollController()">
       <div class="flex-grow-1"></div>
       <div
         :id="m.id"
@@ -22,12 +41,16 @@
 
 <style scoped>
 .chat-message {
-  height: 600px;
+  height: 500px;
 }
 
 .chat-bubble {
   max-width: 80%;
 }
+/* 
+svg {
+  width: 6px;
+} */
 </style>
 
 <script lang="ts">
@@ -36,7 +59,13 @@ import ComponentService from "@/x-vue/services/component.service";
 import { Subscription } from "rxjs";
 import { Vue, Component } from "vue-property-decorator";
 
-@Component({})
+import GearFillSvg from "@/x-vue/svg/GearFillSvg.vue";
+
+@Component({
+  components: {
+    GearFillSvg,
+  },
+})
 export default class ChatMessageList extends Vue {
   rooms = ChatRoomService.instance;
 
@@ -49,10 +78,10 @@ export default class ChatMessageList extends Vue {
       console.log("message:::::", message);
 
       //
-      this.$nextTick(() => {
-        let elmnt = document.getElementById(`${message.id}`);
-        elmnt?.scrollIntoView(false);
-      });
+      // this.$nextTick(() => {
+      //   let elmnt = document.getElementById(`${message.id}`);
+      //   elmnt?.scrollIntoView(false);
+      // });
 
       // let elmnt = document.getElementById(`${message.id}`);
       // elmnt?.scrollIntoView(false);
@@ -88,8 +117,13 @@ export default class ChatMessageList extends Vue {
     }
   }
 
-  // onScroll($event: Event): void {
-  //   // console.log($event);
-  // }
+  onScroll(): void {
+    // console.log($event);
+  }
+
+  async leaveRoom(): Promise<void> {
+    await this.rooms.leave();
+    this.$router.push("/chat");
+  }
 }
 </script>

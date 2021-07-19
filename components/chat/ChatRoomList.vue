@@ -18,14 +18,14 @@ export default class ChatRoomList extends Vue {
 
   chatUserRoomListSubscription: Subscription = new Subscription();
   mounted(): void {
-    console.log("Subscribe ChatRoomList subscription");
+    console.log("Subscribe chatUserRoomListSubscription:: changes");
     this.chatUserRoomListSubscription = ChatUserRoomListService.instance.changes.subscribe((rooms) => {
       console.log("ChatRoomList:: changed", rooms);
     });
   }
 
   destroyed(): void {
-    console.log("Destroy ChatRoomList subscription");
+    console.log("Destroy chatUserRoomListSubscription:: changes");
     this.chatUserRoomListSubscription.unsubscribe();
   }
 }

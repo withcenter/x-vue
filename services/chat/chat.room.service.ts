@@ -33,7 +33,7 @@ export class ChatRoomService extends ChatBase {
     return ChatRoomService._instance;
   }
 
-  _limit = 30;
+  _limit = 20;
 
   /// upload progress
   progress = 0;
@@ -197,10 +197,10 @@ export class ChatRoomService extends ChatBase {
       // 1. Probably the room does not exists.
       // 2. Or, the login user is not a user of the room.
       //   console.log(this.auth.currentUser.uid);
-      console.log("enter: _id", _id);
+      // console.log("enter: _id", _id);
       this.global = await this.getGlobalRoom(_id);
     } else {
-      console.log("enter:users::", users);
+      // console.log("enter:users::", users);
       // Add login user(uid) into room users.
       users.push(this.loginUserUid);
       // Avoid duplicated users.
@@ -256,8 +256,8 @@ export class ChatRoomService extends ChatBase {
     this._globalRoomSubscription = this.globalRoomDoc(this.global.roomId).onSnapshot({
       next: (snapshot) => {
         this.global = new ChatGlobalRoomModel().fromSnapshot(snapshot);
-        console.log(" ------------> global updated; ");
-        console.log(this.global);
+        // console.log(" ------------> global updated; ");
+        // console.log(this.global);
         this.globalRoomChanges.next(this.global);
         this;
       },
@@ -308,6 +308,28 @@ export class ChatRoomService extends ChatBase {
     // });
   }
 
+  oldTop = 0;
+  scrollUpA(top: number): boolean {
+    if (this.oldTop > top) {
+      // console.log("↑");
+      this.oldTop = top;
+      return true;
+    } else {
+      // console.log("↓");
+      this.oldTop = top;
+      return false;
+    }
+  }
+
+  scrollController(): void {
+    const top = document.getElementById("chat-message-list")?.scrollTop || 0;
+    // console.log(this.scrollUpA(top), top < 100, top != 0);
+    if (this.scrollUpA(top) && top < 100 && top != 0) {
+      console.log("this.fetchMessages();");
+      this.fetchMessages();
+    }
+  }
+
   /// Returns the current room in my room list.
   get currentRoom(): firebase.firestore.DocumentReference {
     return this.myRoom(this.id);
@@ -348,10 +370,17 @@ export class ChatRoomService extends ChatBase {
   async fetchMessages(): Promise<void> {
     console.log("fetchMessages()");
     console.log("this.noMoreMessage", this.noMoreMessage);
-    if (this._throttling || this.noMoreMessage) return;
+    // console.log(this.loading, this._throttling, this.noMoreMessage);
+
+    // console.log(this.loading || this._throttling || this.noMoreMessage);
+    if (this.loading || this._throttling || this.noMoreMessage) return;
     this.loading = true;
     this._throttling = true;
+
+    // console.log(this.loading || this._throttling || this.noMoreMessage);
     this.page++;
+
+    // console.log("this.page++;", this.page);
     if (this.page == 1) {
       const ref = this.myRoom(this.global.roomId);
       // console.log('ref: ${ref.path}');
@@ -363,6 +392,7 @@ export class ChatRoomService extends ChatBase {
       /// todo make it optional from firestore settings.
       .limit(this._limit); // 몇 개만 가져온다.
     if (this.messages.length) {
+      console.log("this.messages.length", this.messages.length, this.messages[0]);
       q = q.startAfter([this.messages[0].createdAt]);
     }
     // Listens all the message for update/delete.
@@ -372,13 +402,9 @@ export class ChatRoomService extends ChatBase {
     // And this may cause the app to render twice and scroll to bottom twice. You may
     // do `debounce` to fix this one.
 
-    console.log("fetchMessages():::before::q");
     this._chatRoomSubscription = q.onSnapshot({
       next: (snapshot) => {
         // console.log('fetchMessage() -> done: _page: $_page');
-        // Block loading previous messages for some time.
-        this.loading = false;
-        this._throttling = false; // update or remove after working with scroll event
         // Timer(Duration(milliseconds: _throttle), () => _throttling = false);
 
         snapshot.docChanges().forEach((documentChange: firebase.firestore.DocumentChange) => {
@@ -387,12 +413,13 @@ export class ChatRoomService extends ChatBase {
           // message.id = documentChange.doc.id;
           // console.log('type: ${documentChange.type}. ${message['text']}');
           /// 새로 채팅을 하거나, 이전 글을 가져 올 때, 새 채팅(생성)뿐만 아니라, 이전 채팅 글을 가져올 때에도 added 이벤트 발생.
+          console.log(documentChange.type);
           if (documentChange.type == DocumentChangeType.added) {
             // Two events will be fired on the sender's device.
             // First event has null of FieldValue.serverTimestamp()
             // Only one event will be fired on other user's devices.
             if (message.createdAt == null) {
-              this.messages.push(message);
+              this.messages.unshift(message);
             }
             /// if it's new message, add at bottom.
             else if (
@@ -400,7 +427,7 @@ export class ChatRoomService extends ChatBase {
               this.messages[0].createdAt != null &&
               message.createdAt.seconds > this.messages[0].createdAt.seconds
             ) {
-              this.messages.push(message);
+              this.messages.unshift(message);
             } else {
               // if it's old message, add on top.
               this.messages.splice(0, 0, message);
@@ -430,6 +457,12 @@ export class ChatRoomService extends ChatBase {
             console.log("This is error");
           }
         });
+
+        setTimeout(() => {
+          // Block loading previous messages for some time.
+          this.loading = false;
+          this._throttling = false; // update or remove after working with scroll event
+        }, 3000);
         console.log("this.changes.next:::::======", this.messages[this.messages.length - 1]);
         this.changes.next(this.messages[this.messages.length - 1]);
       },
@@ -449,9 +482,8 @@ export class ChatRoomService extends ChatBase {
   /// 2. the current room information,
   /// 3. the global room infromation
   /// And right before the user leave the room, it should be unsubscribed.
-  unsubscribe(): void {
+  unsubscribe(reset = true): void {
     if (this._chatRoomSubscription != null) {
-      console.log("unsubscribe()::::_chatRoomSubscription");
       this._chatRoomSubscription();
       this._chatRoomSubscription = null;
     }
@@ -469,7 +501,7 @@ export class ChatRoomService extends ChatBase {
     //   this.keyboardSubscription = null;
     // }
 
-    this.resetRoom();
+    if (reset) this.resetRoom();
   }
 
   resetRoom(): void {
@@ -529,14 +561,14 @@ export class ChatRoomService extends ChatBase {
       const messages: Promise<void>[] = []; // todo
 
       /// Just incase there are duplicated UIDs.
-      console.log("this.global.users::", this.global.users);
+      // console.log("this.global.users::", this.global.users);
       const roomUsers: string[] = Array.from(new Set(this.global.users));
-      console.log("roomUsers", roomUsers);
+      // console.log("roomUsers", roomUsers);
 
       /// Send a message to all users in the room.
       for (const uid in roomUsers) {
         // console.log(chatUserRoomDoc(uid, info['id']).path);
-        console.log("roomUsers[uid]", roomUsers[uid]);
+        // console.log("roomUsers[uid]", roomUsers[uid]);
         messages.push(this.userRoomDoc(roomUsers[uid], this.global.roomId).set(message, { merge: true }));
       }
       // console.log('send messages to: ${messages.length}');
@@ -656,7 +688,7 @@ export class ChatRoomService extends ChatBase {
 
     await this.globalRoomDoc(this.id).update({ moderators: moderators });
     await this.sendMessage({
-      text: ChatProtocol.addModerator,
+      text: ChatProtocol.removeModerator,
       displayName: this.displayName,
       extra: { userName: userName || uid },
     });
@@ -684,11 +716,6 @@ export class ChatRoomService extends ChatBase {
 
     // If there is only one user left (which is himself), then he can leave without setting other user to admin.
 
-    // if the last moderator tries to leave, ask the moderator to add another user to moderator.
-    // if (_globalRoom.moderators.contains(loginUserUid) && _globalRoom.moderators.length == 1) {
-    //   throw ADD_NEW_MODERATOR_BEFORE_YOU_LEAVE;
-    // }
-
     // Update last message of room users that the user is leaving.
     await this.sendMessage({
       text: ChatProtocol.leave,
@@ -711,15 +738,18 @@ export class ChatRoomService extends ChatBase {
       await this.removeModerator(this.loginUserUid);
     }
 
-    // Update users after removing himself.
+    // Update users after removing loginUserUid himself.
     await this.globalRoomDoc(_globalRoom.roomId).update({ users: _globalRoom.users });
 
-    // Delete the room that the user is leaving from. (Not the global room.)
-    await this.myRoom(this.id).delete();
-
+    // unsubscribe first on room for both message and room list to avoid [Error in snapshot listener]
     // This will cause `null` for room existence check on currentRoom.snapshot().listener(...);
     this.unsubscribe();
+
+    // unsubscribe to room list before deleting the room to avoid  [Error in snapshot listener]
     ChatUserRoomListService.instance.unsubscribeUserRoom(_globalRoom);
+
+    // Delete the room that the user is leaving from. (Not the global room.)
+    await this.myRoom(_globalRoom.roomId).delete();
   }
 
   /// Kicks a user out of the room.
@@ -793,9 +823,6 @@ export class ChatRoomService extends ChatBase {
   deleteMessage(message: ChatMessageModel): void {
     this.messagesCol(this.id).doc(message.id).delete();
   }
-
-  //   @Deprecated('Use [userRoom]')
-  //   Future<ChatUserRoom> get lastMessage => getMyRoomInfo(loginUserUid, id);
 
   /// Get the document of user's current chat room which has the last message.
   ///

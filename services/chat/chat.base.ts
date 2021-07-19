@@ -8,6 +8,10 @@ export class ChatBase {
   auth = firebase.auth();
   firestore = firebase.firestore();
 
+  public constructor() {
+    console.log("ChatBase");
+  }
+
   get db(): firebase.firestore.Firestore {
     return this.firestore;
   }
