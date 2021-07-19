@@ -28,7 +28,7 @@
     </div>
 
     <!-- More: Memo, Begin and End date, points -->
-    <div class="alert alert-info p-2 mr-1 my-2" v-if="openMore">
+    <div class="alert alert-info p-2 mr-1 my-2">
       <div class="memo">
         {{ "memo" | t }} : {{ advertisement.privateContent ? advertisement.privateContent : "no_memo" | t }}
       </div>
@@ -48,15 +48,11 @@
         </span>
       </div>
     </div>
-    <div class="d-flex">
-      <div class="mr-4" @click.stop.prevent="as.openAdvertisement({ idx: advertisement.idx })">
-        {{ "view" | t }} <BoxArrowUpRightSvg></BoxArrowUpRightSvg>
-      </div>
-      <div v-if="advertisement.clickUrl" @click.stop.prevent="as.openAdvertisement(advertisement)">
-        {{ "click_url" | t }} : {{ advertisement.clickUrl }} <BoxArrowUpRightSvg></BoxArrowUpRightSvg>
-      </div>
-      <span class="flex-grow-1"></span>
-      <div class="py-0 btn btn-link" @click.stop.prevent="openMore = !openMore">{{ "more" | t }}</div>
+    <div class="mr-4" @click.stop.prevent="as.openAdvertisement({ idx: advertisement.idx })">
+      {{ "view" | t }} <BoxArrowUpRightSvg></BoxArrowUpRightSvg>
+    </div>
+    <div v-if="advertisement.clickUrl" @click.stop.prevent="as.openAdvertisement(advertisement)">
+      {{ "click_url" | t }} : {{ advertisement.clickUrl }} <BoxArrowUpRightSvg></BoxArrowUpRightSvg>
     </div>
   </div>
 </template>
@@ -87,7 +83,5 @@ import BoxArrowUpRightSvg from "@/x-vue/svg/BoxArrowUpRightSvg.vue";
 export default class AdvertisementPreview extends Vue {
   @Prop() advertisement!: AdvertisementModel;
   as = AdvertisementService.instance;
-
-  openMore = false;
 }
 </script>

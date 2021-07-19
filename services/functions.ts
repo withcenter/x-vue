@@ -147,3 +147,7 @@ export function t(code: string | { [key: string]: string }): string {
 export function isEmptyObject(obj: any): boolean {
   return Object.keys(obj).length === 0 && obj.constructor === Object;
 }
+
+export function numberWithCommas(x: number): string {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}

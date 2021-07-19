@@ -379,6 +379,8 @@ export default class extends Vue {
     // If cafeCountryCode is undefined, then, user can choose one.
     this.banner.countryCode = this.cafeCountryCode;
 
+    // console.log("mounted::banner", this.banner);
+
     this.loadCountries();
     this.loadGlobalSettings();
 
@@ -408,7 +410,7 @@ export default class extends Vue {
       const _globalSettings = await AdvertisementService.instance.advertisementSettings();
 
       this.settings = _globalSettings;
-      this.bannerPoints = _globalSettings.point[this.cafeCountryCode];
+      this.bannerPoints = _globalSettings.point[this.banner.countryCode];
       if (!this.bannerPoints) this.bannerPoints = _globalSettings.point["default"];
       if (!this.bannerPoints) this.bannerPoints = {};
     } catch (e) {
