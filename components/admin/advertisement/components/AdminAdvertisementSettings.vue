@@ -40,7 +40,8 @@
           {{ "country" | t }}
           <select class="form-control" v-model="add.countryCode">
             <option value="" selected>{{ "default" | t }}</option>
-            <option v-for="(value, name) in countries" :key="name" :value="name">
+            <option value="AC" selected>{{ "all_country" | t }}</option>
+            <option v-for="(value, _countryCode) in countries" :key="_countryCode" :value="_countryCode">
               {{ value }}
             </option>
           </select>
@@ -86,7 +87,7 @@
       <tbody>
         <tr v-for="n in points.length" :key="n">
           <th scope="row" class="p-1">
-            {{ points[n - 1].countryCode ? points[n - 1].countryCode : "default_banner_point_setting" | t }}
+            {{ countryName(points[n - 1].countryCode) }}
           </th>
           <td class="p-1"><input class="form-control px-1" type="number" v-model="points[n - 1].top" /></td>
           <td class="p-1"><input class="form-control px-1" type="number" v-model="points[n - 1].sidebar" /></td>
@@ -105,6 +106,19 @@
         Default is the default point that will apply all the countries by default unless country are set above. @see
         readme.
       </li>
+      <li>
+        All countries is for displaying a banner on all countries. The point must be expansive since the banner is
+        displayed on all country.<br />
+        전체 국가는 배너가 모든 국가에 다 나오므로, 비용이 비싸야 한다.
+      </li>
+      <li>
+        All countries banner must apply global multiplying also.
+        <br />
+        전체 국가에 배너를 등록 할 때, global multiplying 이 적용된다. 이 뜻은, top banner 의 포인트를 입력 할 때,
+        기본적으로 하나의 카테고리에 대한 금액이다. 만약, global banner 로 등록하면, 전체 국가의 포인트에서 global
+        multiplying 한 금액이 적용되어야 한다. 예를 들면, 전체 국가 top banner 가 1만 포인트이고, global multiplying 이
+        4 라면, 전체 국가의 global top banner 는 4만 포인트가 된다.
+      </li>
     </ul>
   </div>
 </template>
@@ -116,6 +130,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import Service from "@/x-vue/services/component.service";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
+import { translate } from "@/x-vue/services/functions";
 
 @Component({
   components: {},
@@ -130,7 +145,13 @@ export default class AdminAdvertisement extends Vue {
 
   add = {};
 
-  countries?: ResponseData = {};
+  countries: ResponseData = {};
+
+  countryName(code: string): string {
+    if (code == "") return translate("default_banner_point_setting");
+    else if (code == "AC") return translate("all_country");
+    return this.countries[code];
+  }
 
   async mounted(): Promise<void> {
     try {

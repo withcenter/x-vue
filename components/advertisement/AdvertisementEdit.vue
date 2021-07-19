@@ -147,12 +147,13 @@
           You are posting banner on <b>{{ countryName }}</b>
         </section>
         <section class="" v-else>
-          Choose country
           <!-- Banner country -->
           <div class="form-group mt-2" v-if="countries">
             <label>{{ "adv_cafe_country" | t }}</label>
+
             <select value="" class="form-control" v-model="banner.countryCode" :disabled="banner.isActive">
               <option disabled selected>{{ "select_country" | t }}</option>
+              <option value="AC">{{ "all_country" | t }}</option>
               <option v-for="(value, name) in countries" :key="name" :value="name">
                 {{ value }}
               </option>
@@ -329,7 +330,7 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { AdvertisementSettings, FileModel, ResponseData } from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
-import { addByComma, daysBetween, deleteByComma, isEmptyObject } from "@/x-vue/services/functions";
+import { addByComma, daysBetween, deleteByComma, isEmptyObject, translate } from "@/x-vue/services/functions";
 import UploadImage from "@/x-vue/components/file/UploadImage.vue";
 import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
 import dayjs from "dayjs";
@@ -370,8 +371,10 @@ export default class extends Vue {
 
   // Returns country name based on banner's country code or current cafe's country code.
   get countryName(): string {
-    if (this.banner.countryCode) return this.countries[this.banner.countryCode];
-    else return this.countries[this.cafeCountryCode];
+    if (this.banner.countryCode) {
+      if (this.banner.countryCode === "AC") return translate("all_country");
+      return this.countries[this.banner.countryCode];
+    } else return this.countries[this.cafeCountryCode];
   }
 
   async mounted(): Promise<void> {
