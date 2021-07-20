@@ -130,7 +130,7 @@ export class ChatUserRoomListService extends ChatBase {
               )
             : new ChatUserRoomModel();
 
-        console.log("ROOMS::: ", this.rooms);
+        // console.log("ROOMS::: ", this.rooms);
         this.changes.next(re);
       },
     });

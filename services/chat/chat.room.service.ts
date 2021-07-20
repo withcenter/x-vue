@@ -463,7 +463,7 @@ export class ChatRoomService extends ChatBase {
           this.loading = false;
           this._throttling = false; // update or remove after working with scroll event
         }, 3000);
-        console.log("this.changes.next:::::======", this.messages[this.messages.length - 1]);
+        // console.log("this.changes.next:::::======", this.messages[this.messages.length - 1]);
         this.changes.next(this.messages[this.messages.length - 1]);
       },
     });

@@ -34,7 +34,7 @@
 
     <div class="d-flex">
       <input class="w-100" ref="testInput" type="text" v-model="rooms.textInput" />
-      <button class="btn btn-sm btn-primary ml-2 px-5" @click="sendMessage">Send</button>
+      <button class="btn btn-sm btn-primary ml-2 px-5" @click="sendMessage">{{ "Send" | t }}</button>
     </div>
   </section>
 </template>
@@ -47,10 +47,6 @@
 .chat-bubble {
   max-width: 80%;
 }
-/* 
-svg {
-  width: 6px;
-} */
 </style>
 
 <script lang="ts">
@@ -75,9 +71,8 @@ export default class ChatMessageList extends Vue {
 
   mounted(): void {
     this.chatRoomSubscription = ChatRoomService.instance.changes.subscribe((message) => {
-      console.log("message:::::", message);
+      console.log("message::changes::", message);
 
-      //
       // this.$nextTick(() => {
       //   let elmnt = document.getElementById(`${message.id}`);
       //   elmnt?.scrollIntoView(false);
