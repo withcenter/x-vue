@@ -247,9 +247,6 @@ export default class extends Vue {
       await this.loadAdvertisement();
     } else {
       this.banner.categoryId = "advertisement";
-      // set cafeCountryCode to banner country code.
-      // If cafeCountryCode is undefined, then, user can choose one.
-      this.banner.countryCode = this.cafeCountryCode;
     }
 
     this.loading = false;
@@ -269,7 +266,7 @@ export default class extends Vue {
       const _globalSettings = await AdvertisementService.instance.advertisementSettings();
 
       this.settings = _globalSettings;
-      this.bannerPoints = _globalSettings.point[this.banner.countryCode];
+      this.bannerPoints = _globalSettings.point[this.cafeCountryCode];
       if (!this.bannerPoints) this.bannerPoints = _globalSettings.point["default"];
       if (!this.bannerPoints) this.bannerPoints = {};
     } catch (e) {
@@ -337,6 +334,11 @@ export default class extends Vue {
   }
 
   async onSubmit(): Promise<void> {
+    // set cafeCountryCode to banner country code.
+    // If cafeCountryCode is undefined, then, user can choose one.
+    if (this.cafeCountryCode) this.banner.countryCode = this.cafeCountryCode;
+    // console.log("onSubmit", this.banner.toJson);
+
     if (this.isSubmitted) return;
     this.isSubmitted = true;
     let isCreate = true;
