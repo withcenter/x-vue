@@ -925,9 +925,11 @@ export class ChatRoomService extends ChatBase {
     return height > scrollHeight;
   }
 
-  //   bool get atTop {
-  //     return scrollController.position.pixels < 200;
-  //   }
+  get atTop(): boolean {
+    const el = document.getElementById("chat-message-list");
+    const height = el?.scrollTop || 0;
+    return height < 200;
+  }
 
   //   /// The [scrolledUp] becomes true once the user scrolls up the chat room screen.
   //   /// Use this to determine if the user has scrolled up the screen.
