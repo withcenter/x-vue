@@ -502,3 +502,9 @@ export interface PassloginResponse {
 export interface CategoryGetsResponse {
   [key: string]: CategoryModel;
 }
+
+export interface UserStats {
+  total: number;
+  M: number;
+  F: number;
+}
