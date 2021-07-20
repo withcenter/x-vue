@@ -20,8 +20,11 @@
         <div class="title text-truncate font-weight-bold">
           {{ advertisement.title ? advertisement.title : "no_title" | t }}
         </div>
-        <div class="content">
+        <div class="content text-truncate">
           {{ advertisement.content ? advertisement.content : "no_content" | t }}
+        </div>
+        <div class="memo text-truncate">
+          {{ "memo" | t }} : {{ advertisement.privateContent ? advertisement.privateContent : "no_memo" | t }}
         </div>
       </div>
       <span class="flex-grow-1"></span>
@@ -30,11 +33,8 @@
       </div>
     </div>
 
-    <!-- More: Memo, Begin and End date, points -->
-    <div class="alert alert-info p-2 mr-1 my-2">
-      <div class="memo">
-        {{ "memo" | t }} : {{ advertisement.privateContent ? advertisement.privateContent : "no_memo" | t }}
-      </div>
+    <!-- Begin and End date, points -->
+    <div class="fs-sm alert alert-info p-2 mr-1 my-2">
       <div class="dates mt-2">
         <span class="mr-2">{{ "created_at" | t }}: {{ advertisement.shortDate }}</span>
         <span>{{ "advertisement_dates" | t }} :</span>
@@ -60,19 +60,6 @@
     </span>
   </div>
 </template>
-
-<style lang="scss" scoped>
-.content {
-  overflow: hidden;
-  max-height: 3em;
-}
-
-.memo,
-.dates,
-.points {
-  font-size: 0.85em;
-}
-</style>
 
 <script lang="ts">
 import Vue from "vue";

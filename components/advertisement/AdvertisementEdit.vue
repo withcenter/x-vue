@@ -236,10 +236,6 @@ export default class extends Vue {
   }
 
   async mounted(): Promise<void> {
-    // set cafeCountryCode to banner country code.
-    // If cafeCountryCode is undefined, then, user can choose one.
-    this.banner.countryCode = this.cafeCountryCode;
-
     // console.log("mounted::banner", this.banner);
 
     this.loadCountries();
@@ -251,6 +247,9 @@ export default class extends Vue {
       await this.loadAdvertisement();
     } else {
       this.banner.categoryId = "advertisement";
+      // set cafeCountryCode to banner country code.
+      // If cafeCountryCode is undefined, then, user can choose one.
+      this.banner.countryCode = this.cafeCountryCode;
     }
 
     this.loading = false;

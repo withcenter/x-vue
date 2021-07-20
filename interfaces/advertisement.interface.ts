@@ -68,3 +68,7 @@ export interface Banners {
 export interface CategoryBanners {
   [category: string]: Banners;
 }
+
+export interface CountryBanners {
+  [countryCode: string]: CategoryBanners;
+}

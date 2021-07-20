@@ -1,4 +1,4 @@
-import { AdvertisementModel, Banner, CategoryBanners } from "../interfaces/advertisement.interface";
+import { AdvertisementModel, Banner, CountryBanners } from "../interfaces/advertisement.interface";
 import { AdvertisementPointSetting, AdvertisementSettings, RequestData, ResponseData } from "../interfaces/interfaces";
 import { ApiService } from "./api.service";
 
@@ -23,7 +23,8 @@ export class AdvertisementService {
 
   private _advertisementSettings?: AdvertisementSettings;
   //
-  private categoryBanners: CategoryBanners = {};
+  // private categoryBanners: CategoryBanners = {};
+  private countryBanners: CountryBanners = {};
 
   init(options: AdvertisementServiceOptions): void {
     this.options = options;
@@ -36,35 +37,49 @@ export class AdvertisementService {
    * @param cafeDomain cafe domain to get the banners of
    * @returns banner data
    */
-  async loadBanners(cafeDomain: string): Promise<CategoryBanners> {
+  async loadBanners(cafeDomain: string): Promise<CountryBanners> {
     // console.log("loadBanners");
-    if (this.categoryBanners.keys?.length) return this.categoryBanners;
+    if (this.countryBanners.keys?.length) return this.countryBanners;
 
     const res = await this.api.request("advertisement.loadBanners", {
       cafeDomain: cafeDomain,
     });
     const banners: AdvertisementModel[] = res.map((post: JSON) => new AdvertisementModel().fromJson(post));
 
-    const _banners: CategoryBanners = {};
+    // const _banners: CategoryBanners = {};
+    const _banners: CountryBanners = {};
     if (banners && banners.length) {
       for (const banner of banners) {
-        if (!_banners[banner.subcategory]) _banners[banner.subcategory] = {};
-        if (!_banners[banner.subcategory][banner.code]) {
-          _banners[banner.subcategory][banner.code] = [];
+        if (!_banners[banner.countryCode]) _banners[banner.countryCode] = {};
+        if (!_banners[banner.countryCode][banner.subcategory]) _banners[banner.countryCode][banner.subcategory] = {};
+        if (!_banners[banner.countryCode][banner.subcategory][banner.code]) {
+          _banners[banner.countryCode][banner.subcategory][banner.code] = [];
         }
 
-        _banners[banner.subcategory][banner.code].push({
+        _banners[banner.countryCode][banner.subcategory][banner.code].push({
           bannerUrl: banner.bannerUrl,
           clickUrl: banner.clickUrl,
           idx: banner.idx,
           title: banner.title ?? "",
         });
+
+        // if (!_banners[banner.subcategory]) _banners[banner.subcategory] = {};
+        // if (!_banners[banner.subcategory][banner.code]) {
+        //   _banners[banner.subcategory][banner.code] = [];
+        // }
+
+        // _banners[banner.subcategory][banner.code].push({
+        //   bannerUrl: banner.bannerUrl,
+        //   clickUrl: banner.clickUrl,
+        //   idx: banner.idx,
+        //   title: banner.title ?? "",
+        // });
       }
     }
 
-    this.categoryBanners = _banners;
-    console.log("loadBanners", this.categoryBanners);
-    return this.categoryBanners;
+    this.countryBanners = _banners;
+    console.log("loadBanners", this.countryBanners);
+    return this.countryBanners;
   }
 
   async advertisementSearch(options: RequestData): Promise<Array<AdvertisementModel>> {

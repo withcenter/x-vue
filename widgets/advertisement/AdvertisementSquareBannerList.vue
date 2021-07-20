@@ -12,7 +12,7 @@
 <script lang="ts">
 import { Component, Prop } from "vue-property-decorator";
 import Vue from "vue";
-import { Banner, CategoryBanners } from "@/x-vue/interfaces/advertisement.interface";
+import { Banner, CountryBanners } from "@/x-vue/interfaces/advertisement.interface";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 import AdvertisementSquareBanner from "@/x-vue/widgets/advertisement/AdvertisementSquareBanner.vue";
 
@@ -20,18 +20,37 @@ import AdvertisementSquareBanner from "@/x-vue/widgets/advertisement/Advertiseme
   components: { AdvertisementSquareBanner },
 })
 export default class AdvertisementSquareBannerList extends Vue {
-  @Prop() banners!: CategoryBanners;
+  @Prop() banners!: CountryBanners;
+  @Prop() countryCode!: string;
   @Prop() categoryId!: string;
 
   get bannerList(): Banner[] {
     if (!this.categoryId) return [];
     if (!this.banners) return [];
 
-    let _banners = this.banners[this.categoryId];
-    if (!_banners || !_banners["square"]) _banners = this.banners["global"];
-    if (!_banners || !_banners["square"]) return [];
+    const type = "square";
+    let _countryBanners = this.banners[this.countryCode];
 
-    return _banners["square"];
+    // *  - Look for category banners with the same country code.
+    if (_countryBanners && _countryBanners[this.categoryId] && _countryBanners[this.categoryId][type]) {
+      return _countryBanners[this.categoryId][type];
+    }
+    // *  - Look for global banners with the same country code.
+    if (_countryBanners && _countryBanners["global"] && _countryBanners["global"][type]) {
+      return _countryBanners["global"][type];
+    }
+
+    _countryBanners = this.banners["AC"];
+    // *  - Look for category banners with "all country" code.
+    if (_countryBanners && _countryBanners[this.categoryId] && _countryBanners[this.categoryId][type]) {
+      return _countryBanners[this.categoryId][type];
+    }
+    // *  - Finally, display default banner, if any is provided.
+    if (_countryBanners && _countryBanners["global"] && _countryBanners["global"][type]) {
+      return _countryBanners["global"][type];
+    }
+
+    return [];
   }
 
   onClick(banner: Banner): void {

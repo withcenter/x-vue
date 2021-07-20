@@ -7,12 +7,13 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import { Banner, CategoryBanners } from "@/x-vue/interfaces/advertisement.interface";
+import { Banner, CountryBanners } from "@/x-vue/interfaces/advertisement.interface";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 
 @Component({})
 export default class AdvertisementSidebarBanner extends Vue {
-  @Prop() banners!: CategoryBanners;
+  @Prop() banners!: CountryBanners;
+  @Prop() countryCode!: string;
   @Prop() categoryId!: string;
 
   index = 0;
@@ -21,14 +22,40 @@ export default class AdvertisementSidebarBanner extends Vue {
     this.rotate();
   }
 
+  /**
+   * Banner displaying rules
+   *  - Look for category banners with the same country code.
+   *  - Look for global banners with the same country code.
+   *  - Look for category banners with "all country" code.
+   *  - Look for global banners with "all country" code.
+   *  - Finally, display default banner, if any is provided.
+   */
   get _banners(): Banner[] {
     if (!this.banners) return [];
 
-    let _banners = this.banners[this.categoryId];
-    if (!_banners || !_banners["sidebar"]) _banners = this.banners["global"];
-    if (!_banners || !_banners["sidebar"]) return [];
+    const type = "sidebar";
+    let _countryBanners = this.banners[this.countryCode];
 
-    return _banners["sidebar"];
+    // *  - Look for category banners with the same country code.
+    if (_countryBanners && _countryBanners[this.categoryId] && _countryBanners[this.categoryId][type]) {
+      return _countryBanners[this.categoryId][type];
+    }
+    // *  - Look for global banners with the same country code.
+    if (_countryBanners && _countryBanners["global"] && _countryBanners["global"][type]) {
+      return _countryBanners["global"][type];
+    }
+
+    _countryBanners = this.banners["AC"];
+    // *  - Look for category banners with "all country" code.
+    if (_countryBanners && _countryBanners[this.categoryId] && _countryBanners[this.categoryId][type]) {
+      return _countryBanners[this.categoryId][type];
+    }
+    // *  - Finally, display default banner, if any is provided.
+    if (_countryBanners && _countryBanners["global"] && _countryBanners["global"][type]) {
+      return _countryBanners["global"][type];
+    }
+
+    return [];
   }
 
   get currentBanner(): Banner {
