@@ -29,28 +29,7 @@ export default class AdvertisementSquareBannerList extends Vue {
     if (!this.banners) return [];
 
     const type = "square";
-    let _countryBanners = this.banners[this.countryCode];
-
-    // *  - Look for category banners with the same country code.
-    if (_countryBanners && _countryBanners[this.categoryId] && _countryBanners[this.categoryId][type]) {
-      return _countryBanners[this.categoryId][type];
-    }
-    // *  - Look for global banners with the same country code.
-    if (_countryBanners && _countryBanners["global"] && _countryBanners["global"][type]) {
-      return _countryBanners["global"][type];
-    }
-
-    _countryBanners = this.banners["AC"];
-    // *  - Look for category banners with "all country" code.
-    if (_countryBanners && _countryBanners[this.categoryId] && _countryBanners[this.categoryId][type]) {
-      return _countryBanners[this.categoryId][type];
-    }
-    // *  - Finally, display default banner, if any is provided.
-    if (_countryBanners && _countryBanners["global"] && _countryBanners["global"][type]) {
-      return _countryBanners["global"][type];
-    }
-
-    return [];
+    return AdvertisementService.instance.getBanners(this.banners, this.countryCode, this.categoryId, type);
   }
 
   onClick(banner: Banner): void {

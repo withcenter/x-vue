@@ -158,4 +158,36 @@ export class AdvertisementService {
       console.log("No open option set for Advertisement service.");
     }
   }
+
+  /**
+   * Banner displaying rules
+   *  - Look for category banners with the same country code.
+   *  - Look for global banners with the same country code.
+   *  - Look for category banners with "all country" code.
+   *  - Look for global banners with "all country" code.
+   *  - Finally, display default banner, if any is provided.
+   */
+  getBanners(allBanners: CountryBanners, countryCode: string, categoryId: string, type: string): Banner[] {
+    let _countryBanners = allBanners[countryCode];
+
+    // *  - Look for category banners with the same country code.
+    if (_countryBanners && _countryBanners[categoryId] && _countryBanners[categoryId][type]) {
+      return _countryBanners[categoryId][type];
+    }
+    // *  - Look for global banners with the same country code.
+    if (_countryBanners && _countryBanners["global"] && _countryBanners["global"][type]) {
+      return _countryBanners["global"][type];
+    }
+
+    _countryBanners = allBanners["AC"];
+    // *  - Look for category banners with "all country" code.
+    if (_countryBanners && _countryBanners[categoryId] && _countryBanners[categoryId][type]) {
+      return _countryBanners[categoryId][type];
+    }
+    // *  - Look for global banners with "all country" code.
+    if (_countryBanners && _countryBanners["global"] && _countryBanners["global"][type]) {
+      return _countryBanners["global"][type];
+    }
+    return [];
+  }
 }

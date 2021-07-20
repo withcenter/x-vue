@@ -23,49 +23,31 @@ export default class AdvertisementTopBanner extends Vue {
     this.rotate();
   }
 
-  /**
-   * Banner displaying rules
-   *  - Look for category banners with the same country code.
-   *  - Look for global banners with the same country code.
-   *  - Look for category banners with "all country" code.
-   *  - Look for global banners with "all country" code.
-   *  - Finally, display default banner, if any is provided.
-   */
   get _banners(): Banner[] {
     if (!this.banners) return [];
 
     const type = "top";
-    let _countryBanners = this.banners[this.countryCode];
-    let _banners: Banner[] = [];
-
-    // *  - Look for category banners with the same country code.
-    if (_countryBanners && _countryBanners[this.categoryId] && _countryBanners[this.categoryId][type]) {
-      _banners = _countryBanners[this.categoryId][type];
-    }
-    // *  - Look for global banners with the same country code.
-    else if (_countryBanners && _countryBanners["global"] && _countryBanners["global"][type]) {
-      _banners = _countryBanners["global"][type];
-    }
-
-    // *  - Look for category banners with "all country" code.
-    else if (this.banners["AC"] && this.banners["AC"] && this.banners["AC"][type]) {
-      _banners = _countryBanners[this.categoryId][type];
-    }
-    // *  - Finally, display default banner, if any is provided.
-    else if (this.banners["AC"] && this.banners["AC"]["global"] && this.banners["AC"]["global"][type]) {
-      _banners = this.banners["AC"]["global"][type];
-    } else {
-      return [];
-    }
+    let _banners = AdvertisementService.instance.getBanners(this.banners, this.countryCode, this.categoryId, type);
 
     const banners = _banners.filter((v, i) => {
       if (this.position == "left") return i % 2 == 0;
       else return i % 2 != 0;
     });
 
+    // TODO:
+    //   If the category have only 1 banner, only top left banner will have category banner displayed.
+    //   and all global banners will be displayed on right.
     if (this.categoryId != "global" && !banners.length && this.position == "right") {
-      if (!_countryBanners["global"] || _countryBanners["global"]["top"].length < 2) return [];
-      return _countryBanners["global"]["top"];
+      if (
+        this.banners[this.categoryId] &&
+        this.banners[this.categoryId]["global"] &&
+        this.banners[this.categoryId]["global"]["top"] &&
+        this.banners[this.categoryId]["global"]["top"].length
+      ) {
+        return this.banners[this.categoryId]["global"]["top"];
+      } else {
+        return [];
+      }
     }
     return banners;
   }

@@ -22,40 +22,10 @@ export default class AdvertisementSidebarBanner extends Vue {
     this.rotate();
   }
 
-  /**
-   * Banner displaying rules
-   *  - Look for category banners with the same country code.
-   *  - Look for global banners with the same country code.
-   *  - Look for category banners with "all country" code.
-   *  - Look for global banners with "all country" code.
-   *  - Finally, display default banner, if any is provided.
-   */
   get _banners(): Banner[] {
     if (!this.banners) return [];
-
     const type = "sidebar";
-    let _countryBanners = this.banners[this.countryCode];
-
-    // *  - Look for category banners with the same country code.
-    if (_countryBanners && _countryBanners[this.categoryId] && _countryBanners[this.categoryId][type]) {
-      return _countryBanners[this.categoryId][type];
-    }
-    // *  - Look for global banners with the same country code.
-    if (_countryBanners && _countryBanners["global"] && _countryBanners["global"][type]) {
-      return _countryBanners["global"][type];
-    }
-
-    _countryBanners = this.banners["AC"];
-    // *  - Look for category banners with "all country" code.
-    if (_countryBanners && _countryBanners[this.categoryId] && _countryBanners[this.categoryId][type]) {
-      return _countryBanners[this.categoryId][type];
-    }
-    // *  - Finally, display default banner, if any is provided.
-    if (_countryBanners && _countryBanners["global"] && _countryBanners["global"][type]) {
-      return _countryBanners["global"][type];
-    }
-
-    return [];
+    return AdvertisementService.instance.getBanners(this.banners, this.countryCode, this.categoryId, type);
   }
 
   get currentBanner(): Banner {
