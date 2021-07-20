@@ -34,6 +34,9 @@ export class ChatRoomService extends ChatBase {
     return ChatRoomService._instance;
   }
 
+  /// This hold the message list(container) HTML element id.
+  /// This is needed for listening scroll events.
+  messageListId = "chat-room-message-list";
   _limit = 20;
 
   /// upload progress
@@ -144,7 +147,7 @@ export class ChatRoomService extends ChatBase {
     Vue.nextTick(() => {
       if (!this.messages.length) return;
 
-      const el = document.getElementById("chat-message-list");
+      const el = document.getElementById(this.messageListId);
       el!.scrollTop = el?.scrollHeight || 0;
 
       // console.log("scroll to bottom", this.messages[this.messages.length - 1].id);
@@ -336,12 +339,11 @@ export class ChatRoomService extends ChatBase {
   }
 
   scrollController(event: Event): void {
-    console.log(event.target);
-    console.log(event.target?.id);
+    const el = document.getElementById(this.messageListId);
 
-    const top = document.getElementById("chat-message-list")?.scrollTop || 0;
+    const top = el?.scrollTop || 0;
     if (this.scrollUpA(top) && top < 200) {
-      this.fetchMessages();
+      this.fetchMessages(); // wait for scrool stop
     }
   }
 
@@ -481,6 +483,7 @@ export class ChatRoomService extends ChatBase {
     //   this.changes.next(this.messages[this.messages.length - 1]);
     // });
 
+    /// Listen NOT for the newly created or coming from DB, but for listening updates and deletes.
     this._chatRoomSubscription = q.onSnapshot({
       next: (snapshot) => {
         // console.log('fetchMessage() -> done: _page: $_page');
@@ -510,9 +513,9 @@ export class ChatRoomService extends ChatBase {
               this.messages.push(message);
             } else {
               // if it's old message, add on top.
-              // this.messages.splice(0, 0, message);
+              this.messages.splice(0, 0, message);
               // console.log("oldMessage");
-              this.messages.unshift(message);
+              // this.messages.unshift(message);
             }
             // if it is loading old messages
             // and if it has less messages than the limit
@@ -521,6 +524,7 @@ export class ChatRoomService extends ChatBase {
               if (snapshot.docs.length < this._limit) {
                 if (message.text == ChatProtocol.roomCreated) {
                   this.noMoreMessage = true;
+
                   // console.log('-----> noMoreMessage: $noMoreMessage');
                 }
               }
@@ -917,7 +921,7 @@ export class ChatRoomService extends ChatBase {
   }
 
   get atBottom(): boolean {
-    const el = document.getElementById("chat-message-list");
+    const el = document.getElementById(this.messageListId);
     const height = el?.scrollTop || 0;
     const scrollHeight = (el?.scrollHeight || 0) - 540;
 

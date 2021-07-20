@@ -4,19 +4,19 @@
       <div class="admin-user-avatar d-flex align-items-center text-nowrap">
         <UserAvatar class="mr-2" :user="otherUser"></UserAvatar>
         <div>
-          <div v-if="rooms.global.title">{{ rooms.global.title }}</div>
+          <div v-if="room.global.title">{{ room.global.title }}</div>
           <div v-else-if="otherUser.idx">({{ otherUser.idx }}) {{ otherUser.nicknameOrName }}</div>
         </div>
       </div>
       <div class="chat-options d-flex align-items-center">
-        <button :id="'chat-options-popover-' + rooms.global.roomId" class="btn btn-sm py-2">
+        <button :id="'chat-options-popover-' + room.global.roomId" class="btn btn-sm py-2">
           <font-awesome-icon :icon="['fas', 'cog']" size="lg" />
         </button>
 
         <b-popover
           placement="bottomleft"
           ref="popover"
-          :target="'chat-options-popover-' + rooms.global.roomId"
+          :target="'chat-options-popover-' + room.global.roomId"
           triggers="click blur"
         >
           <button data-cy="mine-edit-button" class="btn btn-sm btn-success" @click="leaveRoom">
@@ -26,17 +26,19 @@
       </div>
     </div>
     <div
-      id="chat-message-list"
+      :id="room.messageListId"
       class="d-flex flex-column overflow-auto flex-grow-1 mb-2"
-      @scroll="rooms.scrollController($event)"
+      @scroll="room.scrollController($event)"
     >
       <div class="flex-grow-1"></div>
+
+      <b-spinner v-if="room.loading"></b-spinner>
       <div
         :id="m.id"
         class="chat-bubble mb-1 rounded-lg my-1 px-2 text-break"
-        v-for="m in rooms.messages"
+        v-for="m in room.messages"
         :key="m.id"
-        :class="m.senderUid == rooms.loginUserUid ? 'text-right bg-primary ml-auto' : 'text-left bg-info mr-auto'"
+        :class="m.senderUid == room.loginUserUid ? 'text-right bg-primary ml-auto' : 'text-left bg-info mr-auto'"
       >
         {{ m.text }}
       </div>
@@ -46,7 +48,7 @@
       <div class="py-1 px-2 pointer">
         <font-awesome-icon :icon="['fas', 'camera']" size="lg" />
       </div>
-      <input class="w-100" ref="testInput" type="text" v-model="rooms.textInput" />
+      <input class="w-100" ref="testInput" type="text" v-model="room.textInput" />
       <button class="btn btn-sm btn-primary ml-2 px-5" @click="sendMessage">{{ "Send" | t }}</button>
     </div>
   </section>
@@ -78,7 +80,7 @@ import UserAvatar from "@/x-vue/components/user/UserAvatar.vue";
   },
 })
 export default class ChatMessageList extends Vue {
-  rooms = ChatRoomService.instance;
+  room = ChatRoomService.instance;
 
   sending = false;
 
@@ -127,14 +129,14 @@ export default class ChatMessageList extends Vue {
   }
 
   async sendMessage(): Promise<void> {
-    if (this.rooms.textInput.trim().length == 0 || this.sending) return;
+    if (this.room.textInput.trim().length == 0 || this.sending) return;
     this.sending = true;
-    const tempText: string = this.rooms.textInput;
-    this.rooms.textInput = "";
+    const tempText: string = this.room.textInput;
+    this.room.textInput = "";
     try {
-      await this.rooms.sendMessage({
+      await this.room.sendMessage({
         text: tempText,
-        displayName: this.rooms.displayName,
+        displayName: this.room.displayName,
       });
       this.sending = false;
 
@@ -147,7 +149,7 @@ export default class ChatMessageList extends Vue {
   }
 
   async leaveRoom(): Promise<void> {
-    await this.rooms.leave();
+    await this.room.leave();
     this.$router.push("/chat");
   }
 }

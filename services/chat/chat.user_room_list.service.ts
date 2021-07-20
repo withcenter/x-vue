@@ -124,7 +124,7 @@ export class ChatUserRoomListService extends ChatBase {
 
         /// post event with last room
         const re =
-          snapshot.docChanges.length > 0
+          snapshot.docChanges().length > 0
             ? new ChatUserRoomModel().fromSnapshot(
                 snapshot.docChanges()[snapshot.docChanges().length - 1].doc as firebase.firestore.DocumentSnapshot
               )
