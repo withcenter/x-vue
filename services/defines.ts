@@ -9,6 +9,7 @@ export enum Err {
   user_not_found_by_that_session_id = "error_user_not_found_by_that_session_id",
   cannot_connect_to_server = "cannot_connect_to_server",
   category_not_exists = "error_category_not_exists",
+  user_has_no_firebase_uid = "error_user_has_no_firebase_uid",
 }
 
 export const DEFAULT_TOPIC = "defaultTopic";
