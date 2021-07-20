@@ -1,5 +1,5 @@
 <template>
-  <div class="banner square pointer" @click="onClick(currentBanner)" v-if="currentBanner.bannerUrl">
+  <div class="mt-2 banner square pointer" @click="onClick(currentBanner)" v-if="currentBanner.bannerUrl">
     <img class="w-100 h-100" :src="currentBanner.bannerUrl" />
   </div>
 </template>

@@ -14,8 +14,10 @@
               {{ advertisement.user.displayName }}
             </div>
             <div>{{ "point" | t }}: {{ numberWithCommas(advertisement.user.point) }}</div>
-            <router-link class="d-block" :to="`/chat-message`">{{ "message" | t }}</router-link>
-            <router-link class="d-block" :to="`/user/${advertisement.user.idx}`">{{ "profile" | t }}</router-link>
+            <router-link class="btn btn-link d-block" :to="`/chat-message`">{{ "message" | t }}</router-link>
+            <router-link class="btn btn-link d-block" :to="`/user/${advertisement.user.idx}`">{{
+              "profile" | t
+            }}</router-link>
           </div>
         </div>
       </div>

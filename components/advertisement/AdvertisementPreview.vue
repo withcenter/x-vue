@@ -4,6 +4,9 @@
       <div class="overflow-hidden mr-2">
         <div>
           <span class="mr-2">No. {{ advertisement.idx }}</span> •
+          <span class="badge badge-success ml-2">
+            {{ advertisement.countryCode }}
+          </span>
           <span class="badge badge-success ml-2" v-if="advertisement.isActive"> {{ "active" | t }} </span>
           <span class="badge badge-warning ml-2" v-if="advertisement.isInactive"> {{ "inactive" | t }} </span>
           <span class="badge badge-info ml-2" v-if="advertisement.isWaiting"> {{ "waiting" | t }} </span>
@@ -33,7 +36,8 @@
         {{ "memo" | t }} : {{ advertisement.privateContent ? advertisement.privateContent : "no_memo" | t }}
       </div>
       <div class="dates mt-2">
-        {{ "advertisement_dates" | t }} :
+        <span class="mr-2">{{ "created_at" | t }}: {{ advertisement.shortDate }}</span>
+        <span>{{ "advertisement_dates" | t }} :</span>
         <span v-if="advertisement.beginDate && advertisement.endDate">
           {{ advertisement.beginDate }} ~ {{ advertisement.endDate }}
         </span>
@@ -48,12 +52,12 @@
         </span>
       </div>
     </div>
-    <div class="mr-4" @click.stop.prevent="as.openAdvertisement({ idx: advertisement.idx })">
-      {{ "view" | t }} <BoxArrowUpRightSvg></BoxArrowUpRightSvg>
-    </div>
-    <div v-if="advertisement.clickUrl" @click.stop.prevent="as.openAdvertisement(advertisement)">
+    <span class="mr-4" @click.stop.prevent="as.openAdvertisement({ idx: advertisement.idx })">
+      {{ "view_advertisement" | t }} <BoxArrowUpRightSvg></BoxArrowUpRightSvg>
+    </span>
+    <span v-if="advertisement.clickUrl" @click.stop.prevent="as.openAdvertisement(advertisement)">
       {{ "click_url" | t }} : {{ advertisement.clickUrl }} <BoxArrowUpRightSvg></BoxArrowUpRightSvg>
-    </div>
+    </span>
   </div>
 </template>
 

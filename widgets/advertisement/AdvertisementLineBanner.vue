@@ -26,6 +26,14 @@ export default class AdvertisementLineBanner extends Vue {
     this.rotate();
   }
 
+  /**
+   * Banner displaying rules
+   *  - Look for category banners with the same country code.
+   *  - Look for global banners with the same country code.
+   *  - Look for category banners with "all country" code.
+   *  - Look for global banners with "all country" code.
+   *  - Finally, display default banner, if any is provided.
+   */
   get _banners(): Banner[] {
     if (!this.categoryId) return [];
     if (!this.banners) return [];

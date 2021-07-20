@@ -1,152 +1,37 @@
 <template>
   <section>
     <form class="p-2" @submit.prevent="onSubmit" v-if="!loading">
-      <div v-if="banner.idx">
+      <div class="mb-2" v-if="banner.idx">
         You are posting banner on <b>{{ countryName }}</b>
       </div>
 
-      <div class="box mb-2" v-if="banner.isActive || banner.isWaiting">
-        {{ banner.pointPerDay }}
-        <div class="d-flex">
-          <span>
-            {{ "adv_banner_type" | t }}
-            <h2>{{ banner.code }}</h2>
-          </span>
-          <span class="ml-4">
-            {{ "country" | t }}
-            <h2>{{ countryName }}</h2>
-          </span>
-          <span class="ml-4">
-            {{ "status" | t }}
-            <h2>{{ banner.status }}</h2>
-          </span>
-        </div>
-        <div class="mt-3">
-          {{ "adv_banner_dates" | t }}
-          <h2>{{ banner.beginDate }} ~ {{ banner.endDate }}</h2>
-        </div>
+      <AdvertisementActivePanel
+        :advertisement="banner"
+        :noOfDays="noOfDays"
+        :refundablePoints="refundablePoints"
+        :servingDaysLeft="servingDaysLeft"
+        :isRefundable="isRefundable"
+        :countryName="countryName"
+        @onClickStop="onAdvertisementStop"
+      ></AdvertisementActivePanel>
 
-        <div class="mt-3">
-          <div class="alert alert-info">
-            <div class="d-flex">
-              <span class="mr-3">
-                {{ "adv_no_of_days" | t }}: <b>{{ noOfDays }}</b>
-              </span>
-              <span class="mr-3">
-                {{ "advertisement_serving_days" | t }}:
-                <b>{{ servingDaysLeft }}</b>
-              </span>
-            </div>
-            <div class="d-flex mt-2">
-              <span class="mr-3">
-                {{ "adv_points_per_day" | t }}:
-                <b>{{ banner.pointPerDay }}</b>
-              </span>
-              <span>
-                {{ "adv_refundable_points" | t }}:
-                <b>{{ refundablePoints }}</b>
-              </span>
-            </div>
-            <small class="text-info">
-              {{ "adv_refundable_points_hint" | t }}
-            </small>
-          </div>
-          <button
-            class="w-100 btn btn-outline-danger"
-            type="button"
-            v-if="isCancellable || isRefundable"
-            @click="onAdvertisementStop"
-          >
-            {{ (isCancellable ? "cancel_advertisement" : "stop_advertisement") | t }}
-          </button>
-          <small class="text-info" v-if="isDue">
-            This advertisement is already expired, you can stop it if you want to reset the dates and to start it again.
-            <br />
-            Stopping this advertisement will not cost anything, you will not also get a refund since it is already
-            expired.
-          </small>
-        </div>
-      </div>
-
-      <div class="mb-2" v-if="banner.isInactive">
-        <div class="box" v-if="banner.code">
-          {{ "adv_points_per_day" | t }}: <b>{{ bannerPoints[banner.code] }}</b> <br />
-          <small class="text-info">
-            {{ "adv_points_per_day_hint" | t }}
-          </small>
-        </div>
-
-        <!-- banner start and end date -->
-        <div class="form-group bg-light p-3 mt-3">
-          <label>{{ "advertisement_begin_end_date" | t }}</label>
-          <div class="d-flex justify-content-between">
-            <label>
-              {{ "adv_begin_date" | t }}
-              <input
-                v-model="banner.beginDate"
-                type="date"
-                :min="beginAtMin"
-                :max="beginAtMax"
-                :disabled="banner.isActive"
-              />
-            </label>
-            <label>
-              {{ "adv_end_date" | t }}
-              <input v-model="banner.endDate" type="date" :min="endAtMin" :max="endAtMax" :disabled="banner.isActive" />
-            </label>
-          </div>
-
-          <small class="form-text text-muted mb-2">
-            {{ "advertisement_serving_days" | t }}:
-            <b>{{ servingDaysLeft }}</b>
-            {{ "days" | t }}
-          </small>
-          <small class="form-text text-muted mb-2"> {{ "adv_no_of_days" | t }}: {{ noOfDays }} </small>
-          <small class="form-text text-muted">
-            {{ "adv_no_of_days_hint_a" | t }}
-          </small>
-          <small class="form-text text-muted">
-            {{ "adv_no_of_days_hint_b" | t }}
-          </small>
-          <small class="form-text text-muted">
-            {{ "adv_no_of_days_hint_c" | t }}
-          </small>
-        </div>
-
-        <!-- Total Advertisement price in points -->
-        <div class="alert alert-info" v-if="priceInPoint">
-          {{ "adv_total_points_required" | t }}: <b>{{ priceInPoint }}</b
-          ><br />
-          <small class="text-info">
-            {{ "adv_total_points_required_hint" | t }}
-          </small>
-        </div>
-
-        <!-- Start Advertisement -->
-        <div class="mt-2">
-          <button
-            class="w-100 btn btn-outline-success"
-            type="button"
-            :disabled="!canStart"
-            @click="onAdvertisementStart"
-          >
-            {{ "start_advertisement" | t }}
-          </button>
-          <div class="alert alert-danger mt-2" v-if="isPointInsufficient">
-            <span v-if="isEmptyObj(bannerPoints)">{{ "point_setting_not_set" | t }}</span>
-            <span v-else>{{ "start_advertisement_warning" | t }}</span>
-          </div>
-        </div>
-      </div>
+      <AdvertisementInactivePanel
+        :advertisement="banner"
+        :settings="settings"
+        :bannerPoints="bannerPoints"
+        :servingDaysLeft="servingDaysLeft"
+        :noOfDays="noOfDays"
+        @onClickStart="onAdvertisementStart"
+      ></AdvertisementInactivePanel>
 
       <div class="box mt-3 p-3">
         <h2 v-if="banner.idx == 0">Creating banner</h2>
         <h2 v-else>Updating banner</h2>
 
-        <section class="" v-if="cafeCountryCode">
+        <section class="mb-2" v-if="cafeCountryCode">
           You are posting banner on <b>{{ countryName }}</b>
         </section>
-        <section class="" v-else>
+        <section class="mt-3" v-else>
           <!-- Banner country -->
           <div class="form-group mt-2" v-if="countries">
             <label>{{ "adv_cafe_country" | t }}</label>
@@ -186,51 +71,17 @@
           </small>
         </div>
 
-        <!-- Country code (only visible if cafe has no country code) -->
-
         <!-- Banner points country listing table -->
-        <div class="mt-3 box" v-if="togglePointTable">
-          <div class="d-flex justify-content-between">
-            <div>{{ "adv_point_listing" | t }}</div>
-            <div class="btn btn-link btn-sm" @click="togglePointTable = !togglePointTable">Hide</div>
-          </div>
-          <div>
-            You are posting advertisement under {{ cafeCountryCode }} - {{ countryName }}, and the table below is the
-            points of banner type.
-          </div>
-          <table class="w-100 mt-2 table table-striped" v-if="!isEmptyObj(bannerPoints)">
-            <thead>
-              <tr class="table-header">
-                <th scope="col">{{ "adv_banner_type" | t }}</th>
-                <th scope="col">{{ "adv_points_per_day" | t }}</th>
-                <th scope="col" v-if="settings.globalBannerMultiplying">
-                  {{ "global_adv_price" | t }}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(value, name) in bannerPoints" :key="name">
-                <td>{{ name }}</td>
-                <td>{{ value }}</td>
-                <td v-if="settings.globalBannerMultiplying">
-                  {{ value * settings.globalBannerMultiplying }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <small class="text-info">
-            {{ "adv_point_listing_hint" | t }}
-          </small>
-        </div>
-        <div class="btn btn-link btn-sm" v-else @click="togglePointTable = !togglePointTable">
-          Show advertisement point
-        </div>
+        <BannerPointListingTable
+          :settings="settings"
+          :countryName="countryName"
+          :bannerPoints="bannerPoints"
+          :cafeCountryCode="cafeCountryCode"
+        ></BannerPointListingTable>
         <hr />
+        <!-- Banner type selection -->
         <BannerType :settings="settings" :banner="banner"></BannerType>
 
-        <div>@TODO Display how much is it per day per month(30 days)</div>
-
-        @TODO display banner size tip to user based on banner type.
         <!-- banner -->
         <div class="box mt-4">
           <label>{{ "adv_banner" | t }}</label>
@@ -328,19 +179,30 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import { AdvertisementSettings, FileModel, ResponseData } from "@/x-vue/interfaces/interfaces";
-import { ApiService } from "@/x-vue/services/api.service";
-import { addByComma, daysBetween, deleteByComma, isEmptyObject, translate } from "@/x-vue/services/functions";
-import UploadImage from "@/x-vue/components/file/UploadImage.vue";
-import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
 import dayjs from "dayjs";
+import { ApiService } from "@/x-vue/services/api.service";
+import { AdvertisementSettings, FileModel, ResponseData } from "@/x-vue/interfaces/interfaces";
+import { addByComma, daysBetween, deleteByComma, translate } from "@/x-vue/services/functions";
 import { AdvertisementModel } from "@/x-vue/interfaces/advertisement.interface";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 import BannerType from "@/x-vue/components/advertisement/AdvertisementEditBannerType.vue";
 import ComponentService from "@/x-vue/services/component.service";
 
+import LoginFirst from "@/x-vue/components/user/LoginFirst.vue";
+import UploadImage from "@/x-vue/components/file/UploadImage.vue";
+import AdvertisementActivePanel from "@/x-vue/components/advertisement/AdvertisementActivePanel.vue";
+import AdvertisementInactivePanel from "@/x-vue/components/advertisement/AdvertisementInactivePanel.vue";
+import BannerPointListingTable from "@/x-vue/components/advertisement/BannerPointListingTable.vue";
+
 @Component({
-  components: { UploadImage, LoginFirst, BannerType },
+  components: {
+    UploadImage,
+    LoginFirst,
+    BannerType,
+    AdvertisementActivePanel,
+    AdvertisementInactivePanel,
+    BannerPointListingTable,
+  },
 })
 export default class extends Vue {
   @Prop() cafeCountryCode!: string;
@@ -354,8 +216,6 @@ export default class extends Vue {
 
   uploadProgress = 0;
 
-  beginAtMin = "";
-
   isSubmitted = false;
 
   loading = true;
@@ -366,8 +226,6 @@ export default class extends Vue {
   bannerPoints: ResponseData = {};
   // Global advertisement settings
   settings: AdvertisementSettings = {} as AdvertisementSettings;
-
-  togglePointTable = false;
 
   // Returns country name based on banner's country code or current cafe's country code.
   get countryName(): string {
@@ -396,7 +254,6 @@ export default class extends Vue {
     }
 
     this.loading = false;
-    this.beginAtMin = this.today;
     this.isMounted = true;
   }
 
@@ -421,54 +278,8 @@ export default class extends Vue {
     }
   }
 
-  // eslint-disable-next-line
-  isEmptyObj(obj: any): boolean {
-    return isEmptyObject(obj);
-  }
-
   get today(): string {
     return dayjs().format("YYYY-MM-DD");
-  }
-
-  /**
-   * Total price in point calculation.
-   *
-   * @returns number - returns the total point required to create the advertisement.
-   */
-  get priceInPoint(): number {
-    if (!this.noOfDays) return 0;
-    let bannerPrice = this.bannerPoints[this.banner.code];
-    if (this.banner.subcategory == "" && this.settings.globalBannerMultiplying) {
-      bannerPrice = bannerPrice * this.settings.globalBannerMultiplying;
-    }
-
-    return bannerPrice * this.noOfDays;
-  }
-
-  /**
-   * @returns string - returns the minimum selectable date for the "endAt" input.
-   */
-  get endAtMin(): string {
-    let d = dayjs();
-    if (this.banner.beginDate) d = dayjs(this.banner.beginDate);
-    return d.format("YYYY-MM-DD");
-  }
-
-  get endAtMax(): string {
-    let d = dayjs();
-    if (this.banner.beginDate) d = dayjs(this.banner.beginDate);
-    if (this.settings.maximumAdvertisementDays > 0) {
-      return d.add(this.settings.maximumAdvertisementDays - 1, "d").format("YYYY-MM-DD");
-    }
-    return "";
-  }
-
-  /**
-   * @returns string - returns the maximum selectable date for the "beginAt" input.
-   */
-  get beginAtMax(): string {
-    if (this.banner.endDate) return dayjs(this.banner.endDate).format("YYYY-MM-DD");
-    return "";
   }
 
   /**
@@ -489,25 +300,10 @@ export default class extends Vue {
    * @returns number
    */
   get servingDaysLeft(): number {
-    if (this.isDue) return 0;
     if (!this.isRefundable) return this.noOfDays;
+    // Advertisement is due or expired.
+    if (dayjs().isAfter(this.banner.endDate, "d")) return 0;
     else return daysBetween(this.today, this.banner.endDate);
-  }
-
-  /**
-   * Will return true if:
-   *  - No logged in user.
-   *  - Current user has 0 point.
-   *  - No banner point settings is set.
-   *  - User point is smaller than required point to create advertisement.
-   *
-   * @returns boolean
-   */
-  get isPointInsufficient(): boolean {
-    if (!this.api._user) return true;
-    if (this.api._user.point == 0) return true;
-    if (this.isEmptyObj(this.bannerPoints)) return true;
-    return this.api._user.point < this.priceInPoint;
   }
 
   /**
@@ -523,16 +319,6 @@ export default class extends Vue {
   }
 
   /**
-   * Will return false if:
-   *  - 'beginDate' is equivalent as tomorrow or beyond.
-   *
-   * @returns boolean
-   */
-  get isCancellable(): boolean {
-    return dayjs().isBefore(this.banner.beginDate, "day");
-  }
-
-  /**
    * Will return 0 if:
    *  - servingDaysLeft is smaller than 0 (negative).
    *
@@ -543,46 +329,21 @@ export default class extends Vue {
     return this.servingDaysLeft * this.banner.pointPerDay;
   }
 
-  /**
-   * Will return false if :
-   *  - User have insufficient point.
-   *  - The advertisement date is due.
-   *
-   * @returns boolean
-   */
-  get canStart(): boolean {
-    if (!this.banner.beginDate || !this.banner.endDate) return false;
-    if (this.isPointInsufficient) return false;
-    if (this.isDue) return false;
-    return true;
-  }
-
-  /**
-   * Will return true if:
-   *  -'endDate' is set as yesterday or earlier.
-   */
-  get isDue(): boolean {
-    return dayjs().isAfter(this.banner.endDate, "d");
-  }
-
   async loadAdvertisement(): Promise<void> {
     try {
       this.banner = await AdvertisementService.instance.advertisementGet({ idx: this.banner.idx });
-      // console.log("advertisement: ", this.banner);
     } catch (e) {
       this.s.error(e);
     }
   }
 
   async onSubmit(): Promise<void> {
-    // console.log("onSubmit", this.banner.toJson);
     if (this.isSubmitted) return;
     this.isSubmitted = true;
     let isCreate = true;
     if (this.banner.idx) isCreate = false;
     try {
       const res = await AdvertisementService.instance.advertisementEdit(this.banner.toJson);
-      // console.log(`${isCreate ? "Create" : "Update"} =>`, res);
       Object.assign(this.banner, res);
       if (isCreate) {
         this.s.open(`/advertisement/edit/${this.banner.idx}`);
@@ -603,11 +364,9 @@ export default class extends Vue {
    * Starts the advertisement.
    */
   async onAdvertisementStart(): Promise<void> {
-    // console.log("onAdvertisementStart", this.banner.toJson);
     try {
       const res = await AdvertisementService.instance.advertisementStart(this.banner.toJson);
       this.banner = res;
-      // this.app.refreshProfile();
       this.$emit("start");
     } catch (e) {
       this.s.error(e);
@@ -619,7 +378,6 @@ export default class extends Vue {
     if (!conf) return;
     try {
       this.banner = await AdvertisementService.instance.advertisementStop(this.banner.idx);
-      // this.app.refreshProfile();
       this.$emit("stop");
     } catch (e) {
       this.s.error(e);
