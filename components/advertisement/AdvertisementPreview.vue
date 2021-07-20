@@ -35,7 +35,7 @@
 
     <!-- Begin and End date, points -->
     <div class="fs-sm alert alert-info p-2 mr-1 my-2">
-      <div class="dates mt-2">
+      <div class="dates">
         <span class="mr-2">{{ "created_at" | t }}: {{ advertisement.shortDate }}</span>
         <span>{{ "advertisement_dates" | t }} :</span>
         <span v-if="advertisement.beginDate && advertisement.endDate">
