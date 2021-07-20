@@ -40,7 +40,7 @@ import ThumbnailWithTextAndMeta from "./ThumbnailWithTextAndMeta.vue";
 export default class extends Vue {
   @Prop() categoryId!: string;
   posts: PostModel[] = [];
-  mounted() {
+  mounted(): void {
     ApiService.instance
       .latestPosts(
         {
