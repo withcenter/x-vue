@@ -18,6 +18,7 @@ import {
   Settings,
   PassloginResponse,
   CategoryGetsResponse,
+  UserStats,
 } from "../interfaces/interfaces";
 
 import Cookies from "js-cookie";
@@ -936,5 +937,9 @@ export class ApiService {
 
   thumbnailUrl(idx: number, width: number, height: number, quality = 95): string {
     return this.serverUrl.replace("index.php", "") + `etc/thumbnail.php?idx=${idx}&w=${width}&h=${height}&q=${quality}`;
+  }
+
+  async userStats(): Promise<UserStats> {
+    return (await this.request("user.stats")) as UserStats;
   }
 }

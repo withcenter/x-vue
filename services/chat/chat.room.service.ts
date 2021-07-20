@@ -22,6 +22,7 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import { MapStringAny } from "@/x-vue/interfaces/interfaces";
 import { ChatUserRoomListService } from "./chat.user_room_list.service";
+import Vue from "vue";
 
 /// You may rewrite your own helper class.
 export class ChatRoomService extends ChatBase {
@@ -119,7 +120,6 @@ export class ChatRoomService extends ChatBase {
   }
 
   textInput = "";
-  // scrollController = ScrollController();
 
   //   /// When keyboard(keypad) is open, the app needs to adjust the scroll.
   //   final keyboardVisibilityController = KeyboardVisibilityController();
@@ -138,6 +138,20 @@ export class ChatRoomService extends ChatBase {
   //             duration: Duration(milliseconds: ms), curve: Curves.ease);
   //     });
   //   }
+
+  scrollToBottom(): void {
+    /// This is needed to safely scroll to bottom after chat messages has been added.
+    Vue.nextTick(() => {
+      if (!this.messages.length) return;
+
+      const el = document.getElementById("chat-message-list");
+      el!.scrollTop = el?.scrollHeight || 0;
+
+      // console.log("scroll to bottom", this.messages[this.messages.length - 1].id);
+      // const elmnt = document.getElementById(`${this.messages[this.messages.length - 1].id}`);
+      // elmnt?.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+    });
+  }
 
   isMessageEdit: ChatMessageModel | null = null;
   get isCreate(): boolean {
@@ -206,11 +220,11 @@ export class ChatRoomService extends ChatBase {
       // Avoid duplicated users.
       users = Array.from(new Set(users));
       if (hatch) {
-        console.log("Hatch:: true:: Create New Room::");
+        // console.log("Hatch:: true:: Create New Room::");
         // Always create new room
         await this.___create({ users: users });
       } else {
-        console.log("Hatch:: false:: Open Previous New Room::");
+        // console.log("Hatch:: false:: Open Previous New Room::");
         // Create room named based on the user
         // Users array can contain no user or only one user, or even many users.
         // User id must be sorted to generate same room id with same user.
@@ -218,19 +232,19 @@ export class ChatRoomService extends ChatBase {
         const uids = users.join("");
         _id = md5(unescape(encodeURIComponent(uids))).toString();
 
-        console.log("same room: id", _id);
+        // console.log("same room: id", _id);
         try {
           // Get global room to see if it exists
-          console.log("======================== get room information ======================");
+          // console.log("======================== get room information ======================");
           this.global = await this.getGlobalRoom(_id);
 
-          console.log("this.global", this.global);
+          // console.log("this.global", this.global);
 
           // Base on the security rule the code below will not called even the room doesnt exist
           // because it will throw an error of permission-denied if global-rooms/list/room_id doesnt exist
           // if not exists, create.
           if (this.global == null) {
-            console.log("==================== global is null =========================");
+            // console.log("==================== global is null =========================");
             await this.___create({ id: _id, users: users });
           }
         } catch (e) {
@@ -238,7 +252,7 @@ export class ChatRoomService extends ChatBase {
           // getGlobalRoom(id) will throw error if room doesnt exist yet, and it will fall down to `permission-denied`.
           if (e.code == "permission-denied") {
             // continue to create room
-            console.log("============== permission-denied ========================");
+            // console.log("============== permission-denied ========================");
             await this.___create({ id: _id, users: users });
           } else {
             throw e;
@@ -321,11 +335,12 @@ export class ChatRoomService extends ChatBase {
     }
   }
 
-  scrollController(): void {
+  scrollController(event: Event): void {
+    console.log(event.target);
+    console.log(event.target?.id);
+
     const top = document.getElementById("chat-message-list")?.scrollTop || 0;
-    // console.log(this.scrollUpA(top), top < 100, top != 0);
-    if (this.scrollUpA(top) && top < 100 && top != 0) {
-      console.log("this.fetchMessages();");
+    if (this.scrollUpA(top) && top < 200) {
       this.fetchMessages();
     }
   }
@@ -336,8 +351,8 @@ export class ChatRoomService extends ChatBase {
   }
 
   async ___create({ users = [], id = null }: { users?: string[]; id?: string | null }): Promise<void> {
-    console.log("Create Room", "users ====>", users, "id ====>", id);
-    console.log("my firebaseUid:: ", this.loginUserUid);
+    // console.log("Create Room", "users ====>", users, "id ====>", id);
+    // console.log("my firebaseUid:: ", this.loginUserUid);
 
     const info = new ChatGlobalRoomModel().fromJson({
       users: users,
@@ -346,13 +361,13 @@ export class ChatRoomService extends ChatBase {
     });
 
     let doc: firebase.firestore.DocumentReference;
-    console.log("info.data:: ", info.data);
-    console.log("ID:: ", id);
+    // console.log("info.data:: ", info.data);
+    // console.log("ID:: ", id);
     if (id == null) {
-      console.log("ID:: is null");
+      // console.log("ID:: is null");
       doc = await this.globalRoomListCol.add(info.data);
     } else {
-      console.log("ID:: ", id);
+      // console.log("ID:: ", id);
       doc = this.globalRoomListCol.doc(id);
       // Cannot create if the document is already exists.
       // Cannot update if the user is not one of the room user.
@@ -368,16 +383,15 @@ export class ChatRoomService extends ChatBase {
 
   /// Fetch previous messages
   async fetchMessages(): Promise<void> {
-    console.log("fetchMessages()");
-    console.log("this.noMoreMessage", this.noMoreMessage);
+    // console.log("fetchMessages()");
+    // console.log("this.noMoreMessage", this.noMoreMessage);
     // console.log(this.loading, this._throttling, this.noMoreMessage);
 
-    // console.log(this.loading || this._throttling || this.noMoreMessage);
+    // console.log("fetchMessages()::", !(this.loading || this._throttling || this.noMoreMessage));
     if (this.loading || this._throttling || this.noMoreMessage) return;
     this.loading = true;
     this._throttling = true;
 
-    // console.log(this.loading || this._throttling || this.noMoreMessage);
     this.page++;
 
     // console.log("this.page++;", this.page);
@@ -392,15 +406,80 @@ export class ChatRoomService extends ChatBase {
       /// todo make it optional from firestore settings.
       .limit(this._limit); // 몇 개만 가져온다.
     if (this.messages.length) {
-      console.log("this.messages.length", this.messages.length, this.messages[0]);
-      q = q.startAfter([this.messages[0].createdAt]);
+      // console.log("this.messages.length", this.messages.length, this.messages[0]);
+      q = q.startAfter(this.messages[0].createdAt);
     }
     // Listens all the message for update/delete.
-    //
+
     // Note that, when a user chats, [changes] event will be posted twice. one for
     // create(for offline support), the other for modified(real data from firestore).
     // And this may cause the app to render twice and scroll to bottom twice. You may
     // do `debounce` to fix this one.
+
+    // console.log("next::", q);
+    // q.get().then((snapshot) => {
+    //   snapshot.docChanges().forEach((documentChange: firebase.firestore.DocumentChange) => {
+    //     // const message = new ChatMessageModel().fromData(documentChange.doc.data(), id: documentChange.doc.id);
+    //     const message = new ChatMessageModel().fromSnapshot(documentChange.doc);
+    //     // message.id = documentChange.doc.id;
+    //     // console.log('type: ${documentChange.type}. ${message['text']}');
+    //     /// 새로 채팅을 하거나, 이전 글을 가져 올 때, 새 채팅(생성)뿐만 아니라, 이전 채팅 글을 가져올 때에도 added 이벤트 발생.
+    //     console.log(documentChange.type);
+    //     if (documentChange.type == DocumentChangeType.added) {
+    //       // Two events will be fired on the sender's device.
+    //       // First event has null of FieldValue.serverTimestamp()
+    //       // Only one event will be fired on other user's devices.
+    //       if (message.createdAt == null) {
+    //         console.log("sendMessage");
+    //         this.messages.push(message);
+    //       }
+    //       /// if it's new message, add at bottom.
+    //       else if (
+    //         this.messages.length > 0 &&
+    //         this.messages[0].createdAt != null &&
+    //         message.createdAt.seconds > this.messages[0].createdAt.seconds
+    //       ) {
+    //         this.messages.push(message);
+    //       } else {
+    //         // if it's old message, add on top.
+    //         // this.messages.splice(0, 0, message);
+    //         console.log("oldMessage");
+    //         this.messages.unshift(message);
+    //       }
+    //       // if it is loading old messages
+    //       // and if it has less messages than the limit
+    //       // check if it is the very first message.
+    //       if (message.createdAt != null) {
+    //         if (snapshot.docs.length < this._limit) {
+    //           if (message.text == ChatProtocol.roomCreated) {
+    //             this.noMoreMessage = true;
+    //             // console.log('-----> noMoreMessage: $noMoreMessage');
+    //           }
+    //         }
+    //       }
+    //     } else if (documentChange.type == DocumentChangeType.modified) {
+    //       const i: number = this.messages.findIndex((r) => r.id == message.id);
+    //       if (i > -1) {
+    //         this.messages[i] = message;
+    //       }
+    //     } else if (documentChange.type == DocumentChangeType.removed) {
+    //       const i: number = this.messages.findIndex((r) => r.id == message.id);
+    //       if (i > -1) {
+    //         this.messages.splice(i, 0);
+    //       }
+    //     } else {
+    //       console.log("This is error");
+    //     }
+    //   });
+
+    //   setTimeout(() => {
+    //     // Block loading previous messages for some time.
+    //     this.loading = false;
+    //     this._throttling = false; // update or remove after working with scroll event
+    //   }, 3000);
+    //   // console.log("this.changes.next:::::======", this.messages[this.messages.length - 1]);
+    //   this.changes.next(this.messages[this.messages.length - 1]);
+    // });
 
     this._chatRoomSubscription = q.onSnapshot({
       next: (snapshot) => {
@@ -413,13 +492,14 @@ export class ChatRoomService extends ChatBase {
           // message.id = documentChange.doc.id;
           // console.log('type: ${documentChange.type}. ${message['text']}');
           /// 새로 채팅을 하거나, 이전 글을 가져 올 때, 새 채팅(생성)뿐만 아니라, 이전 채팅 글을 가져올 때에도 added 이벤트 발생.
-          console.log(documentChange.type);
+          // console.log(documentChange.type);
           if (documentChange.type == DocumentChangeType.added) {
             // Two events will be fired on the sender's device.
             // First event has null of FieldValue.serverTimestamp()
             // Only one event will be fired on other user's devices.
             if (message.createdAt == null) {
-              this.messages.unshift(message);
+              // console.log("sendMessage");
+              this.messages.push(message);
             }
             /// if it's new message, add at bottom.
             else if (
@@ -427,10 +507,12 @@ export class ChatRoomService extends ChatBase {
               this.messages[0].createdAt != null &&
               message.createdAt.seconds > this.messages[0].createdAt.seconds
             ) {
-              this.messages.unshift(message);
+              this.messages.push(message);
             } else {
               // if it's old message, add on top.
-              this.messages.splice(0, 0, message);
+              // this.messages.splice(0, 0, message);
+              // console.log("oldMessage");
+              this.messages.unshift(message);
             }
             // if it is loading old messages
             // and if it has less messages than the limit
@@ -462,8 +544,8 @@ export class ChatRoomService extends ChatBase {
           // Block loading previous messages for some time.
           this.loading = false;
           this._throttling = false; // update or remove after working with scroll event
-        }, 3000);
-        console.log("this.changes.next:::::======", this.messages[this.messages.length - 1]);
+        }, 0);
+        // console.log("this.changes.next:::::======", this.messages[this.messages.length - 1]);
         this.changes.next(this.messages[this.messages.length - 1]);
       },
     });
@@ -550,7 +632,7 @@ export class ChatRoomService extends ChatBase {
     }
 
     if (this.isCreate) {
-      console.log("create::sendMessage");
+      // console.log("create::sendMessage");
       // Time that this message(or last message) was created.
       message["createdAt"] = firebase.firestore.FieldValue.serverTimestamp();
 
@@ -574,7 +656,7 @@ export class ChatRoomService extends ChatBase {
       // console.log('send messages to: ${messages.length}');
       await Promise.all(messages); //Promise.allSettled()
     } else {
-      console.log("update::sendMessage");
+      // console.log("update::sendMessage");
       message["updatedAt"] = firebase.firestore.FieldValue.serverTimestamp();
       await this.messagesCol(this.global.roomId).doc(this.isMessageEdit?.id).update(message);
       this.isMessageEdit = null;
@@ -834,13 +916,20 @@ export class ChatRoomService extends ChatBase {
     return this.getMyRoomInfo(this.loginUserUid, this.id);
   }
 
-  //   bool get atBottom {
-  //     return scrollController.offset > (scrollController.position.maxScrollExtent - 640);
-  //   }
+  get atBottom(): boolean {
+    const el = document.getElementById("chat-message-list");
+    const height = el?.scrollTop || 0;
+    const scrollHeight = (el?.scrollHeight || 0) - 540;
 
-  //   bool get atTop {
-  //     return scrollController.position.pixels < 200;
-  //   }
+    // console.log(height, ">", scrollHeight, height - scrollHeight);
+    return height > scrollHeight;
+  }
+
+  get atTop(): boolean {
+    const el = document.getElementById("chat-message-list");
+    const height = el?.scrollTop || 0;
+    return height < 200;
+  }
 
   //   /// The [scrolledUp] becomes true once the user scrolls up the chat room screen.
   //   /// Use this to determine if the user has scrolled up the screen.

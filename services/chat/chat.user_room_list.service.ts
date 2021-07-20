@@ -130,7 +130,7 @@ export class ChatUserRoomListService extends ChatBase {
               )
             : new ChatUserRoomModel();
 
-        console.log("ROOMS::: ", this.rooms);
+        // console.log("ROOMS::: ", this.rooms);
         this.changes.next(re);
       },
     });
@@ -151,7 +151,7 @@ export class ChatUserRoomListService extends ChatBase {
     console.log("unsubscribeUserRoom::", room);
     if (this._roomSubscriptions.isEmpty) return;
     if (this._roomSubscriptions[room.roomId] == null) return;
-    console.log(this._roomSubscriptions[room.roomId]);
+    // console.log(this._roomSubscriptions[room.roomId]);
     this._roomSubscriptions[room.roomId]();
     delete this._roomSubscriptions[room.roomId];
   }

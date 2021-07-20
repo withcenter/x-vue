@@ -3,8 +3,8 @@ import { MapStringAny, ResponseData } from "../../interfaces/interfaces";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
-// import { ChatBase } from "./chat.base";
 import { ChatService } from "./chat.service";
+import { ChatRoomService } from "./chat.room.service";
 /// [ChatMessageModel] presents the chat message under
 /// `/chat/messages/{roomId}/{messageId}` collection.
 ///
@@ -45,7 +45,7 @@ export class ChatMessageModel {
     this.senderUid = map.senderUid;
     this.text = map.text;
 
-    // this.isMine = map.isMine == ChatRoom.instance.loginUserUid; // @todo make this work
+    this.isMine = map.senderUid == ChatRoomService.instance.loginUserUid;
 
     this.isMine = map.isMine;
     this.isImage = map.isImage;
@@ -126,10 +126,11 @@ export class ChatGlobalRoomModel {
 
   get otherUserId(): string | undefined {
     // If there is no other user.
-    return this.users.find((el: string) => el != ChatService.instance.auth.currentUser?.uid);
+    return this.users.find((el: string) => el != ChatRoomService.instance.loginUserUid);
   }
 
   fromJson(map: firebase.firestore.DocumentData): ChatGlobalRoomModel {
+    console.log("ChatGlobalRoomModel::", map);
     if (map == null) return new ChatGlobalRoomModel();
     this.roomId = map.roomId;
     this.title = map.title ?? "";
@@ -138,6 +139,7 @@ export class ChatGlobalRoomModel {
     this.blockedUsers = map.blockedUsers ?? [];
     this.createdAt = map.createdAt;
     this.updatedAt = map.updatedAt;
+    console.log("ChatGlobalRoomModel::users", this.users);
     return this;
   }
 

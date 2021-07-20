@@ -9,7 +9,7 @@ export class ChatBase {
   firestore = firebase.firestore();
 
   public constructor() {
-    console.log("ChatBase");
+    // console.log("ChatBase");
   }
 
   get db(): firebase.firestore.Firestore {
