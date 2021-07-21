@@ -14,10 +14,12 @@ import { Vue, Prop, Component } from "vue-property-decorator";
 @Component({})
 export default class PushNotificationIcon extends Vue {
   @Prop({ default: "defaultTopic" }) topic!: string;
+  @Prop({ default: "" }) rawTopic!: string;
   @Prop({ default: "" }) title!: string;
 
   // 'notifyPost_' is the prefix for post topic subscription
   get postTopic(): string {
+    if (this.rawTopic.length) return this.rawTopic;
     return "notifyPost_" + this.topic;
   }
 

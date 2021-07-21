@@ -3,7 +3,6 @@ import { MapStringAny, ResponseData } from "../../interfaces/interfaces";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
-import { ChatService } from "./chat.service";
 import { ChatRoomService } from "./chat.room.service";
 /// [ChatMessageModel] presents the chat message under
 /// `/chat/messages/{roomId}/{messageId}` collection.
@@ -130,7 +129,7 @@ export class ChatGlobalRoomModel {
   }
 
   fromJson(map: firebase.firestore.DocumentData): ChatGlobalRoomModel {
-    console.log("ChatGlobalRoomModel::", map);
+    // console.log("ChatGlobalRoomModel::", map);
     if (map == null) return new ChatGlobalRoomModel();
     this.roomId = map.roomId;
     this.title = map.title ?? "";
@@ -139,7 +138,7 @@ export class ChatGlobalRoomModel {
     this.blockedUsers = map.blockedUsers ?? [];
     this.createdAt = map.createdAt;
     this.updatedAt = map.updatedAt;
-    console.log("ChatGlobalRoomModel::users", this.users);
+    // console.log("ChatGlobalRoomModel::users", this.users);
     return this;
   }
 

@@ -37,7 +37,7 @@ export class ChatRoomService extends ChatBase {
   /// This hold the message list(container) HTML element id.
   /// This is needed for listening scroll events.
   messageListId = "chat-room-message-list";
-  _limit = 20;
+  _limit = 30;
 
   /// upload progress
   progress = 0;
@@ -46,9 +46,7 @@ export class ChatRoomService extends ChatBase {
   /// too much, so it fetches too many batches(pages) at one time.
   /// [_throttle] reduces the scroll event to relax the fetch racing.
   /// [_throttle] is working together with [_throttling]
-  /// 1500ms is recommended.
-  _throttle = 1500;
-  _throttling = false;
+  throttle = 500;
 
   /// When the room information changes or there is new message, then [changes] will be posted.
   ///
@@ -59,11 +57,9 @@ export class ChatRoomService extends ChatBase {
   /// - sending a message, with the chat message to be sent.
   /// - cancelling for sending a message. `null` will be passed.
   changes: BehaviorSubject<ChatMessageModel> = new BehaviorSubject(new ChatMessageModel());
-  //  changes: Subject<ChatMessageModel> = new Subject();
 
   /// When user scrolls, this event is posted.
-  /// If it is scroll up, true will be passed over the parameter.s
-  //  scrollChanges: PublishSubject<boolan> = PublishSubject();
+  /// If it is scroll up, true will be passed over the parameter.
 
   scrollChanges: Subject<boolean> = new Subject();
 
@@ -71,10 +67,6 @@ export class ChatRoomService extends ChatBase {
   /// the global room document
   ///
   globalRoomChanges: BehaviorSubject<ChatGlobalRoomModel> = new BehaviorSubject(new ChatGlobalRoomModel());
-
-  // _chatRoomSubscription: Subscription = new Subscription();
-  // _currentRoomSubscription: Subscription = new Subscription();
-  // _globalRoomSubscription: Subscription = new Subscription();
 
   _chatRoomSubscription: (() => void) | null = null;
   _currentRoomSubscription: (() => void) | null = null;
@@ -133,26 +125,14 @@ export class ChatRoomService extends ChatBase {
   //   /// * when I chat,
   //   /// * when new chat is coming and the page is scrolled near to bottom. Logically it should not scroll down when the page is scrolled far from the bottom.
   //   /// * when keyboard is open and the page scroll is near to bottom. Locally it should not scroll down when the user is reading message that is far from the bottom.
-  //   scrollToBottom({int ms = 100}) {
-  //     /// This is needed to safely scroll to bottom after chat messages has been added.
-  //     WidgetsBinding.instance.addPostFrameCallback((_) {
-  //       if (scrollController.hasClients)
-  //         scrollController.animateTo(scrollController.position.maxScrollExtent,
-  //             duration: Duration(milliseconds: ms), curve: Curves.ease);
-  //     });
-  //   }
-
   scrollToBottom(): void {
     /// This is needed to safely scroll to bottom after chat messages has been added.
     Vue.nextTick(() => {
       if (!this.messages.length) return;
 
       const el = document.getElementById(this.messageListId);
-      el!.scrollTop = el?.scrollHeight || 0;
-
-      // console.log("scroll to bottom", this.messages[this.messages.length - 1].id);
-      // const elmnt = document.getElementById(`${this.messages[this.messages.length - 1].id}`);
-      // elmnt?.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+      if (!el) return;
+      el.scrollTop = el.scrollHeight;
     });
   }
 
@@ -302,19 +282,6 @@ export class ChatRoomService extends ChatBase {
       },
     });
 
-    // fetch previous chat when user scrolls up
-    // scrollController.addListener(() {
-    //   // mark if scrolled up
-    //   if (scrollUp) {
-    //     scrolledUp = true;
-    //   }
-    //   // fetch previous messages
-    //   if (scrollUp && atTop) {
-    //     fetchMessages();
-    //   }
-    //   scrollChanges.add(scrollUp);
-    // });
-
     // // Listen to keyboard
     // //
     // // When keyboard opens, scroll to bottom only if needed when user open/hide keyboard.
@@ -325,25 +292,30 @@ export class ChatRoomService extends ChatBase {
     // });
   }
 
+  scrollController(): void {
+    if (this.noMoreMessage) return;
+    const el = document.getElementById(this.messageListId);
+    if (!el) return;
+    const top = el.scrollTop;
+    if (this.scrollUp(top) && top < 200) {
+      this.fetchMessages(); // wait for scrool stop
+    }
+  }
+
   oldTop = 0;
-  scrollUpA(top: number): boolean {
+  // isScrollTop = false;
+  scrollUp(top: number): boolean {
+    console.log("scrollUp::", this.oldTop, top);
     if (this.oldTop > top) {
       // console.log("↑");
       this.oldTop = top;
+      // this.isScrollTop = true;
       return true;
     } else {
       // console.log("↓");
       this.oldTop = top;
+      // this.isScrollTop = false;
       return false;
-    }
-  }
-
-  scrollController(event: Event): void {
-    const el = document.getElementById(this.messageListId);
-
-    const top = el?.scrollTop || 0;
-    if (this.scrollUpA(top) && top < 200) {
-      this.fetchMessages(); // wait for scrool stop
     }
   }
 
@@ -385,14 +357,13 @@ export class ChatRoomService extends ChatBase {
 
   /// Fetch previous messages
   async fetchMessages(): Promise<void> {
-    // console.log("fetchMessages()");
+    console.log("fetchMessages()");
     // console.log("this.noMoreMessage", this.noMoreMessage);
-    // console.log(this.loading, this._throttling, this.noMoreMessage);
+    // console.log(this.loading, this.noMoreMessage);
 
-    // console.log("fetchMessages()::", !(this.loading || this._throttling || this.noMoreMessage));
-    if (this.loading || this._throttling || this.noMoreMessage) return;
+    // console.log("fetchMessages()::", !(this.loading  || this.noMoreMessage));
+    if (this.loading || this.noMoreMessage) return;
     this.loading = true;
-    this._throttling = true;
 
     this.page++;
 
@@ -408,7 +379,7 @@ export class ChatRoomService extends ChatBase {
       /// todo make it optional from firestore settings.
       .limit(this._limit); // 몇 개만 가져온다.
     if (this.messages.length) {
-      // console.log("this.messages.length", this.messages.length, this.messages[0]);
+      console.log("this.messages.length", this.messages.length, this.messages[0]);
       q = q.startAfter(this.messages[0].createdAt);
     }
     // Listens all the message for update/delete.
@@ -418,76 +389,10 @@ export class ChatRoomService extends ChatBase {
     // And this may cause the app to render twice and scroll to bottom twice. You may
     // do `debounce` to fix this one.
 
-    // console.log("next::", q);
-    // q.get().then((snapshot) => {
-    //   snapshot.docChanges().forEach((documentChange: firebase.firestore.DocumentChange) => {
-    //     // const message = new ChatMessageModel().fromData(documentChange.doc.data(), id: documentChange.doc.id);
-    //     const message = new ChatMessageModel().fromSnapshot(documentChange.doc);
-    //     // message.id = documentChange.doc.id;
-    //     // console.log('type: ${documentChange.type}. ${message['text']}');
-    //     /// 새로 채팅을 하거나, 이전 글을 가져 올 때, 새 채팅(생성)뿐만 아니라, 이전 채팅 글을 가져올 때에도 added 이벤트 발생.
-    //     console.log(documentChange.type);
-    //     if (documentChange.type == DocumentChangeType.added) {
-    //       // Two events will be fired on the sender's device.
-    //       // First event has null of FieldValue.serverTimestamp()
-    //       // Only one event will be fired on other user's devices.
-    //       if (message.createdAt == null) {
-    //         console.log("sendMessage");
-    //         this.messages.push(message);
-    //       }
-    //       /// if it's new message, add at bottom.
-    //       else if (
-    //         this.messages.length > 0 &&
-    //         this.messages[0].createdAt != null &&
-    //         message.createdAt.seconds > this.messages[0].createdAt.seconds
-    //       ) {
-    //         this.messages.push(message);
-    //       } else {
-    //         // if it's old message, add on top.
-    //         // this.messages.splice(0, 0, message);
-    //         console.log("oldMessage");
-    //         this.messages.unshift(message);
-    //       }
-    //       // if it is loading old messages
-    //       // and if it has less messages than the limit
-    //       // check if it is the very first message.
-    //       if (message.createdAt != null) {
-    //         if (snapshot.docs.length < this._limit) {
-    //           if (message.text == ChatProtocol.roomCreated) {
-    //             this.noMoreMessage = true;
-    //             // console.log('-----> noMoreMessage: $noMoreMessage');
-    //           }
-    //         }
-    //       }
-    //     } else if (documentChange.type == DocumentChangeType.modified) {
-    //       const i: number = this.messages.findIndex((r) => r.id == message.id);
-    //       if (i > -1) {
-    //         this.messages[i] = message;
-    //       }
-    //     } else if (documentChange.type == DocumentChangeType.removed) {
-    //       const i: number = this.messages.findIndex((r) => r.id == message.id);
-    //       if (i > -1) {
-    //         this.messages.splice(i, 0);
-    //       }
-    //     } else {
-    //       console.log("This is error");
-    //     }
-    //   });
-
-    //   setTimeout(() => {
-    //     // Block loading previous messages for some time.
-    //     this.loading = false;
-    //     this._throttling = false; // update or remove after working with scroll event
-    //   }, 3000);
-    //   // console.log("this.changes.next:::::======", this.messages[this.messages.length - 1]);
-    //   this.changes.next(this.messages[this.messages.length - 1]);
-    // });
-
     /// Listen NOT for the newly created or coming from DB, but for listening updates and deletes.
     this._chatRoomSubscription = q.onSnapshot({
       next: (snapshot) => {
         // console.log('fetchMessage() -> done: _page: $_page');
-        // Timer(Duration(milliseconds: _throttle), () => _throttling = false);
 
         snapshot.docChanges().forEach((documentChange: firebase.firestore.DocumentChange) => {
           // const message = new ChatMessageModel().fromData(documentChange.doc.data(), id: documentChange.doc.id);
@@ -547,8 +452,16 @@ export class ChatRoomService extends ChatBase {
         setTimeout(() => {
           // Block loading previous messages for some time.
           this.loading = false;
-          this._throttling = false; // update or remove after working with scroll event
-        }, 0);
+
+          const el = document.getElementById(this.messageListId);
+          if (!el) return;
+          const top = el.scrollTop;
+          if (top == 0 && !this.noMoreMessage) {
+            el?.scrollTo(0, 100);
+            // this.fetchMessages();
+          }
+        }, this.throttle);
+
         // console.log("this.changes.next:::::======", this.messages[this.messages.length - 1]);
         this.changes.next(this.messages[this.messages.length - 1]);
       },
@@ -922,30 +835,18 @@ export class ChatRoomService extends ChatBase {
 
   get atBottom(): boolean {
     const el = document.getElementById(this.messageListId);
-    const height = el?.scrollTop || 0;
-    const scrollHeight = (el?.scrollHeight || 0) - 540;
-
-    // console.log(height, ">", scrollHeight, height - scrollHeight);
-    return height > scrollHeight;
+    if (!el) return false;
+    const height = el.scrollTop;
+    const sh = el.scrollHeight;
+    return sh - height < 540;
   }
 
   get atTop(): boolean {
-    const el = document.getElementById("chat-message-list");
-    const height = el?.scrollTop || 0;
+    const el = document.getElementById(this.messageListId);
+    if (!el) return false;
+    const height = el.scrollTop;
     return height < 200;
   }
-
-  //   /// The [scrolledUp] becomes true once the user scrolls up the chat room screen.
-  //   /// Use this to determine if the user has scrolled up the screen.
-  //   /// This may be used to control the screen to move downward to bottom when there are images on the messages.
-  //   bool scrolledUp = false;
-  //   bool get scrollUp {
-  //     return scrollController.position.userScrollDirection == ScrollDirection.forward;
-  //   }
-
-  //   bool get scrollDown {
-  //     return scrollController.position.userScrollDirection == ScrollDirection.reverse;
-  //   }
 
   //   onImageLoadComplete(ChatMessage message) {
   //     // If the user didn't scroll up the screen (which means, it is really very first time entering the chat room),
