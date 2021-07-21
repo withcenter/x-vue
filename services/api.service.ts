@@ -635,7 +635,7 @@ export class ApiService {
    * @param data search options
    * @returns array of UserModel
    */
-  async userSearch(data: RequestData): Promise<Array<UserModel>> {
+  async userSearch(data: RequestData): Promise<UserModel[]> {
     const res = await this.request("user.search", data);
     return res.map((user: JSON) => new UserModel().fromJson(user));
   }
@@ -941,5 +941,15 @@ export class ApiService {
 
   async userStats(): Promise<UserStats> {
     return (await this.request("user.stats")) as UserStats;
+  }
+
+  /**
+   * Get latest users who has uploaded profile photo.
+   * @param limit number to limit users
+   * @returns array of user model object
+   */
+  async latestUserByProfilePhoto(limit = 5): Promise<UserModel[]> {
+    const res = await this.request("user.latestByProfilePhoto", { limit: limit });
+    return res.map((user: JSON) => new UserModel().fromJson(user));
   }
 }

@@ -133,6 +133,13 @@ export class ChatRoomService extends ChatBase {
       const el = document.getElementById(this.messageListId);
       if (!el) return;
       el.scrollTop = el.scrollHeight;
+
+      // const el: Element = document.getElementById(this.messageListId) as Element;
+      // el.scrollTop = el.scrollHeight || 0;
+
+      // console.log("scroll to bottom", this.messages[this.messages.length - 1].id);
+      // const elmnt = document.getElementById(`${this.messages[this.messages.length - 1].id}`);
+      // elmnt?.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
     });
   }
 
