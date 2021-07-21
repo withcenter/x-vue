@@ -129,7 +129,7 @@ export class ChatGlobalRoomModel {
   }
 
   fromJson(map: firebase.firestore.DocumentData): ChatGlobalRoomModel {
-    console.log("ChatGlobalRoomModel::", map);
+    // console.log("ChatGlobalRoomModel::", map);
     if (map == null) return new ChatGlobalRoomModel();
     this.roomId = map.roomId;
     this.title = map.title ?? "";
@@ -138,7 +138,7 @@ export class ChatGlobalRoomModel {
     this.blockedUsers = map.blockedUsers ?? [];
     this.createdAt = map.createdAt;
     this.updatedAt = map.updatedAt;
-    console.log("ChatGlobalRoomModel::users", this.users);
+    // console.log("ChatGlobalRoomModel::users", this.users);
     return this;
   }
 

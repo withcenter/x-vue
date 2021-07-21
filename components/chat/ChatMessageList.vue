@@ -9,6 +9,7 @@
         </div>
       </div>
       <div class="chat-options d-flex align-items-center">
+        <PushNotificationIcon :rawTopic="room.topic"></PushNotificationIcon>
         <button :id="'chat-options-popover-' + room.global.roomId" class="btn btn-sm py-2">
           <font-awesome-icon :icon="['fas', 'cog']" size="lg" />
         </button>
@@ -28,11 +29,12 @@
     <div
       :id="room.messageListId"
       class="d-flex flex-column overflow-auto flex-grow-1 mb-2"
-      @scroll="room.scrollController($event)"
+      @scroll="room.scrollController()"
     >
       <div class="flex-grow-1"></div>
-
-      <b-spinner v-if="room.loading"></b-spinner>
+      <div class="py-2 mx-auto" v-if="room.loading">
+        <b-spinner></b-spinner>
+      </div>
       <div
         :id="m.id"
         class="chat-bubble mb-1 rounded-lg my-1 px-2 text-break"
@@ -45,8 +47,8 @@
     </div>
 
     <div class="d-flex">
-      <div class="py-1 px-2 pointer">
-        <font-awesome-icon :icon="['fas', 'camera']" size="lg" />
+      <div>
+        <UploadButton @success="onSuccess"></UploadButton>
       </div>
       <input class="w-100" ref="testInput" type="text" v-model="room.textInput" />
       <button class="btn btn-sm btn-primary ml-2 px-5" @click="sendMessage">{{ "Send" | t }}</button>
@@ -65,18 +67,24 @@
 </style>
 
 <script lang="ts">
-import { UserModel } from "@/x-vue/interfaces/interfaces";
+import { FileModel, UserModel } from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
 import { ChatRoomService } from "@/x-vue/services/chat/chat.room.service";
 import ComponentService from "@/x-vue/services/component.service";
 import { Subscription } from "rxjs";
 import { Vue, Component } from "vue-property-decorator";
 
+import UploadButton from "@/x-vue/components/UploadButton.vue";
 import UserAvatar from "@/x-vue/components/user/UserAvatar.vue";
+import { isImageUrl } from "@/x-vue/services/chat/chat.functions";
+
+import PushNotificationIcon from "@/x-vue/components/push-notification/PushNotificationIcon.vue";
 
 @Component({
   components: {
     UserAvatar,
+    UploadButton,
+    PushNotificationIcon,
   },
 })
 export default class ChatMessageList extends Vue {
@@ -94,16 +102,7 @@ export default class ChatMessageList extends Vue {
       if (ChatRoomService.instance.atBottom || ChatRoomService.instance.page == 1) {
         ChatRoomService.instance.scrollToBottom();
       }
-
       console.log("message::changes::", message);
-      // this.$nextTick(() => {
-      //   let elmnt = document.getElementById(`${message.id}`);
-      //   elmnt?.scrollIntoView(false);
-      // });
-      // let elmnt = document.getElementById(`${message.id}`);
-      // elmnt?.scrollIntoView(false);
-      // let elmnt = document.getElementById("chat-message-list");
-      // elmnt?.scrollTo(0, elmnt.scrollHeight);
     });
 
     this.loadOtherUser();
@@ -111,10 +110,10 @@ export default class ChatMessageList extends Vue {
 
   async loadOtherUser(): Promise<void> {
     try {
-      console.log("ChatRoomService.instance.global.otherUserId::", ChatRoomService.instance.global.otherUserId);
-      this.otherUser = await ApiService.instance.userGet({
-        firebaseUid: ChatRoomService.instance.global.otherUserId as string,
-      });
+      // console.log("ChatRoomService.instance.global.otherUserId::", ChatRoomService.instance.global.otherUserId);
+      this.otherUser = await ApiService.instance.otherUserProfile(
+        ChatRoomService.instance.global.otherUserId as string
+      );
 
       console.log("loadOtherUser", this.otherUser);
     } catch (error) {
@@ -123,7 +122,7 @@ export default class ChatMessageList extends Vue {
   }
 
   destroyed(): void {
-    console.log("ChatMessageListScreen::destroyed()");
+    // console.log("ChatMessageListScreen::destroyed()");
     ChatRoomService.instance.unsubscribe();
     this.chatRoomSubscription.unsubscribe();
   }
@@ -136,7 +135,7 @@ export default class ChatMessageList extends Vue {
     try {
       await this.room.sendMessage({
         text: tempText,
-        displayName: this.room.displayName,
+        displayName: ApiService.instance._user.nicknameOrName,
       });
       this.sending = false;
 
@@ -151,6 +150,25 @@ export default class ChatMessageList extends Vue {
   async leaveRoom(): Promise<void> {
     await this.room.leave();
     this.$router.push("/chat");
+  }
+
+  async onSuccess(file: FileModel): Promise<void> {
+    console.log("onSuccess::", file);
+
+    try {
+      await this.room.sendMessage({
+        text: isImageUrl(file.url) ? file.thumbnailUrl : file.url,
+        displayName: ApiService.instance._user.nicknameOrName,
+        extra: { url: file.url },
+      });
+      this.sending = false;
+
+      (this.$refs.testInput as HTMLElement)?.focus();
+    } catch (e) {
+      ComponentService.instance.error(e);
+
+      this.sending = false;
+    }
   }
 }
 </script>
