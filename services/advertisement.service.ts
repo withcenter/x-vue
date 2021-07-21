@@ -40,8 +40,7 @@ export class AdvertisementService {
   async loadBanners(cafeDomain: string): Promise<CountryBanners> {
     // console.log("loadBanners");
     if (this.countryBanners.keys?.length) return this.countryBanners;
-
-    const res = await this.api.request("advertisement.loadBanners", {
+    const res = await this.api.request("advertisement.loadAllBanners", {
       cafeDomain: cafeDomain,
     });
     const banners: AdvertisementModel[] = res.map((post: JSON) => new AdvertisementModel().fromJson(post));
