@@ -45,7 +45,10 @@ export class ChatRoomService extends ChatBase {
   /// When user scrolls to top to view previous messages, the app fires the scroll event
   /// too much, so it fetches too many batches(pages) at one time.
   /// [_throttle] reduces the scroll event to relax the fetch racing.
-  /// [_throttle] is working together with [_throttling]
+  /// Note, that it is expected to have multiple fetches from remote database by one scroll slide,
+  /// For instance, when you slide on `Apple mouse` to scroll up, it looks like the scroll event
+  /// lasts more than a seconds. In this case, after throttle time has passed, there will be another
+  /// fetch.
   throttle = 500;
 
   /// When the room information changes or there is new message, then [changes] will be posted.
@@ -299,13 +302,21 @@ export class ChatRoomService extends ChatBase {
     // });
   }
 
-  scrollController(): void {
+  /**
+   * Message list box scroll even handler.
+   *
+   * When user scroll up the message list box to see previous messages, then this will
+   * handle the loading.
+   *
+   * @returns void
+   */
+  scrollEventHandler(): void {
     if (this.noMoreMessage) return;
     const el = document.getElementById(this.messageListId);
     if (!el) return;
     const top = el.scrollTop;
     if (this.scrollUp(top) && top < 200) {
-      this.fetchMessages(); // wait for scrool stop
+      this.fetchMessages();
     }
   }
 
@@ -373,6 +384,7 @@ export class ChatRoomService extends ChatBase {
     this.loading = true;
 
     this.page++;
+    console.log("------ pageNo;", this.page);
 
     // console.log("this.page++;", this.page);
     if (this.page == 1) {
@@ -410,8 +422,10 @@ export class ChatRoomService extends ChatBase {
           // console.log(documentChange.type);
           if (documentChange.type == DocumentChangeType.added) {
             // Two events will be fired on the sender's device.
-            // First event has null of FieldValue.serverTimestamp()
-            // Only one event will be fired on other user's devices.
+            // First event has null on `createdAt` which should have FieldValue.serverTimestamp().
+            //  - This is because the message cached on locally before saving into the remote database.
+            // Then, there will be another event with the same msssage that has proper value of `createdAt` which comes from the remote database.
+            // Note, Only one event will be fired on other user's devices since there is no cache for the other user.
             if (message.createdAt == null) {
               // console.log("sendMessage");
               this.messages.push(message);
@@ -425,8 +439,8 @@ export class ChatRoomService extends ChatBase {
               this.messages.push(message);
             } else {
               // if it's old message, add on top.
+              console.log("oldMessage arrived. adding on top. pageNo; ", this.page);
               this.messages.splice(0, 0, message);
-              // console.log("oldMessage");
               // this.messages.unshift(message);
             }
             // if it is loading old messages
@@ -457,8 +471,11 @@ export class ChatRoomService extends ChatBase {
         });
 
         setTimeout(() => {
-          // Block loading previous messages for some time.
+          // After `throttle` time has passed, set the `loading` to false. Which means,
+          // it can fetch next batch of message again.
           this.loading = false;
+
+          console.log("------ pageNo;", this.page, " has finished;");
 
           const el = document.getElementById(this.messageListId);
           if (!el) return;
