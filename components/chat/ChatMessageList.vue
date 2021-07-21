@@ -29,7 +29,7 @@
     <div
       :id="room.messageListId"
       class="d-flex flex-column overflow-auto flex-grow-1 mb-2"
-      @scroll="room.scrollController()"
+      @scroll="room.scrollEventHandler()"
     >
       <div class="flex-grow-1"></div>
       <div class="py-2 mx-auto" v-if="room.loading">

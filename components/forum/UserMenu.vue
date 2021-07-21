@@ -13,7 +13,7 @@
     <router-link class="d-block text-left" :to="`/user/${user.idx}`">{{ "see_profile" | t }}</router-link>
     <router-link class="d-block text-left" :to="`/user/posts/${user.idx}`">{{ "see_posts" | t }}</router-link>
     <router-link class="d-block text-left" :to="`/user/comments/${user.idx}`">{{ "see_comments" | t }}</router-link>
-    <router-link class="d-block text-left" :to="`/message/${user.idx}`">{{ "send_message" | t }}</router-link>
+    <router-link class="d-block text-left" :to="`/message/${user.idx}`">{{ "chat" | t }}</router-link>
   </div>
 </template>
 <style lang="scss" scoped>
