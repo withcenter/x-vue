@@ -147,8 +147,8 @@ export class ChatRoomService extends ChatBase {
     Vue.nextTick(() => {
       if (!this.messages.length) return;
 
-      const el = document.getElementById(this.messageListId);
-      el!.scrollTop = el?.scrollHeight || 0;
+      const el: Element = document.getElementById(this.messageListId) as Element;
+      el.scrollTop = el.scrollHeight || 0;
 
       // console.log("scroll to bottom", this.messages[this.messages.length - 1].id);
       // const elmnt = document.getElementById(`${this.messages[this.messages.length - 1].id}`);
@@ -338,7 +338,7 @@ export class ChatRoomService extends ChatBase {
     }
   }
 
-  scrollController(event: Event): void {
+  scrollController(): void {
     const el = document.getElementById(this.messageListId);
 
     const top = el?.scrollTop || 0;
