@@ -14,7 +14,7 @@
               <b-badge class="no-of-comments">{{ post.noOfComments }}</b-badge>
             </div>
           </div>
-          <div class="comment text-truncate">{{ post.comments[0].content | t }}</div>
+          <div class="comment text-truncate" v-if="post.comments.length">{{ post.comments[0].content | t }}</div>
           <div class="category">{{ post.categoryId | t }}</div>
         </div>
       </div>

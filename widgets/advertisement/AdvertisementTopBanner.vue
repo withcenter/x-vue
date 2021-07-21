@@ -37,14 +37,14 @@ export default class AdvertisementTopBanner extends Vue {
     // TODO:
     //   If the category have only 1 banner, only top left banner will have category banner displayed.
     //   and all global banners will be displayed on right.
-    if (this.categoryId != "global" && !banners.length && this.position == "right") {
+    if (this.categoryId && _banners.length < 2 && this.position == "right") {
       if (
-        this.banners[this.categoryId] &&
-        this.banners[this.categoryId]["global"] &&
-        this.banners[this.categoryId]["global"]["top"] &&
-        this.banners[this.categoryId]["global"]["top"].length
+        this.banners[this.countryCode] &&
+        this.banners[this.countryCode]["global"] &&
+        this.banners[this.countryCode]["global"]["top"] &&
+        this.banners[this.countryCode]["global"]["top"].length
       ) {
-        return this.banners[this.categoryId]["global"]["top"];
+        return this.banners[this.countryCode]["global"]["top"];
       } else {
         return [];
       }
