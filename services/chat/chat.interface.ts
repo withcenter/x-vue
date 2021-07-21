@@ -3,7 +3,6 @@ import { MapStringAny, ResponseData } from "../../interfaces/interfaces";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
-import { ChatService } from "./chat.service";
 import { ChatRoomService } from "./chat.room.service";
 /// [ChatMessageModel] presents the chat message under
 /// `/chat/messages/{roomId}/{messageId}` collection.
