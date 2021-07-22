@@ -71,7 +71,9 @@ export class ChatRoomService extends ChatBase {
   ///
   globalRoomChanges: BehaviorSubject<ChatGlobalRoomModel> = new BehaviorSubject(new ChatGlobalRoomModel());
 
-  _chatRoomSubscription: (() => void) | null = null;
+  _chatRoomSubscriptions: Array<(() => void) | null> = [];
+
+  // _chatRoomSubscription: (() => void) | null = null;
   _currentRoomSubscription: (() => void) | null = null;
   _globalRoomSubscription: (() => void) | null = null;
 
@@ -323,7 +325,7 @@ export class ChatRoomService extends ChatBase {
   oldTop = 0;
   // isScrollTop = false;
   scrollUp(top: number): boolean {
-    console.log("scrollUp::", this.oldTop, top);
+    // console.log("scrollUp::", this.oldTop, top);
     if (this.oldTop > top) {
       // console.log("↑");
       this.oldTop = top;
@@ -375,7 +377,7 @@ export class ChatRoomService extends ChatBase {
 
   /// Fetch previous messages
   async fetchMessages(): Promise<void> {
-    console.log("fetchMessages()");
+    // console.log("fetchMessages()");
     // console.log("this.noMoreMessage", this.noMoreMessage);
     // console.log(this.loading, this.noMoreMessage);
 
@@ -384,7 +386,7 @@ export class ChatRoomService extends ChatBase {
     this.loading = true;
 
     this.page++;
-    console.log("------ pageNo;", this.page);
+    // console.log("------ pageNo;", this.page);
 
     // console.log("this.page++;", this.page);
     if (this.page == 1) {
@@ -398,7 +400,7 @@ export class ChatRoomService extends ChatBase {
       /// todo make it optional from firestore settings.
       .limit(this._limit); // 몇 개만 가져온다.
     if (this.messages.length) {
-      console.log("this.messages.length", this.messages.length, this.messages[0]);
+      // console.log("this.messages.length", this.messages.length, this.messages[0]);
       q = q.startAfter(this.messages[0].createdAt);
     }
     // Listens all the message for update/delete.
@@ -409,86 +411,83 @@ export class ChatRoomService extends ChatBase {
     // do `debounce` to fix this one.
 
     /// Listen NOT for the newly created or coming from DB, but for listening updates and deletes.
-    this._chatRoomSubscription = q.onSnapshot({
-      next: (snapshot) => {
-        // console.log('fetchMessage() -> done: _page: $_page');
+    this._chatRoomSubscriptions[this.page] = q.onSnapshot((snapshot) => {
+      // console.log('fetchMessage() -> done: _page: $_page');
 
-        snapshot.docChanges().forEach((documentChange: firebase.firestore.DocumentChange) => {
-          // const message = new ChatMessageModel().fromData(documentChange.doc.data(), id: documentChange.doc.id);
-          const message = new ChatMessageModel().fromSnapshot(documentChange.doc);
-          // message.id = documentChange.doc.id;
-          // console.log('type: ${documentChange.type}. ${message['text']}');
-          /// 새로 채팅을 하거나, 이전 글을 가져 올 때, 새 채팅(생성)뿐만 아니라, 이전 채팅 글을 가져올 때에도 added 이벤트 발생.
-          // console.log(documentChange.type);
-          if (documentChange.type == DocumentChangeType.added) {
-            // Two events will be fired on the sender's device.
-            // First event has null on `createdAt` which should have FieldValue.serverTimestamp().
-            //  - This is because the message cached on locally before saving into the remote database.
-            // Then, there will be another event with the same msssage that has proper value of `createdAt` which comes from the remote database.
-            // Note, Only one event will be fired on other user's devices since there is no cache for the other user.
-            if (message.createdAt == null) {
-              // console.log("sendMessage");
-              this.messages.push(message);
-            }
-            /// if it's new message, add at bottom.
-            else if (
-              this.messages.length > 0 &&
-              this.messages[0].createdAt != null &&
-              message.createdAt.seconds > this.messages[0].createdAt.seconds
-            ) {
-              this.messages.push(message);
-            } else {
-              // if it's old message, add on top.
-              console.log("oldMessage arrived. adding on top. pageNo; ", this.page);
-              this.messages.splice(0, 0, message);
-              // this.messages.unshift(message);
-            }
-            // if it is loading old messages
-            // and if it has less messages than the limit
-            // check if it is the very first message.
-            if (message.createdAt != null) {
-              if (snapshot.docs.length < this._limit) {
-                if (message.text == ChatProtocol.roomCreated) {
-                  this.noMoreMessage = true;
+      snapshot.docChanges().forEach((documentChange: firebase.firestore.DocumentChange) => {
+        // const message = new ChatMessageModel().fromData(documentChange.doc.data(), id: documentChange.doc.id);
+        const message = new ChatMessageModel().fromSnapshot(documentChange.doc);
+        // message.id = documentChange.doc.id;
+        // console.log('type: ${documentChange.type}. ${message['text']}');
+        /// 새로 채팅을 하거나, 이전 글을 가져 올 때, 새 채팅(생성)뿐만 아니라, 이전 채팅 글을 가져올 때에도 added 이벤트 발생.
+        // console.log(documentChange.type);
+        if (documentChange.type == DocumentChangeType.added) {
+          // Two events will be fired on the sender's device.
+          // First event has null on `createdAt` which should have FieldValue.serverTimestamp().
+          //  - This is because the message cached on locally before saving into the remote database.
+          // Then, there will be another event with the same msssage that has proper value of `createdAt` which comes from the remote database.
+          // Note, Only one event will be fired on other user's devices since there is no cache for the other user.
+          if (message.createdAt == null) {
+            // console.log("sendMessage");
+            this.messages.push(message);
+          }
+          /// if it's new message, add at bottom.
+          else if (
+            this.messages.length > 0 &&
+            this.messages[0].createdAt != null &&
+            message.createdAt.seconds > this.messages[0].createdAt.seconds
+          ) {
+            this.messages.push(message);
+          } else {
+            // if it's old message, add on top.
+            // console.log("oldMessage arrived. adding on top. pageNo; ", this.page);
+            this.messages.splice(0, 0, message);
+            // this.messages.unshift(message);
+          }
+          // if it is loading old messages
+          // and if it has less messages than the limit
+          // check if it is the very first message.
+          if (message.createdAt != null) {
+            if (snapshot.docs.length < this._limit) {
+              if (message.text == ChatProtocol.roomCreated) {
+                this.noMoreMessage = true;
 
-                  // console.log('-----> noMoreMessage: $noMoreMessage');
-                }
+                // console.log('-----> noMoreMessage: $noMoreMessage');
               }
             }
-          } else if (documentChange.type == DocumentChangeType.modified) {
-            const i: number = this.messages.findIndex((r) => r.id == message.id);
-            if (i > -1) {
-              this.messages[i] = message;
-            }
-          } else if (documentChange.type == DocumentChangeType.removed) {
-            const i: number = this.messages.findIndex((r) => r.id == message.id);
-            if (i > -1) {
-              this.messages.splice(i, 0);
-            }
-          } else {
-            console.log("This is error");
           }
-        });
-
-        setTimeout(() => {
-          // After `throttle` time has passed, set the `loading` to false. Which means,
-          // it can fetch next batch of message again.
-          this.loading = false;
-
-          console.log("------ pageNo;", this.page, " has finished;");
-
-          const el = document.getElementById(this.messageListId);
-          if (!el) return;
-          const top = el.scrollTop;
-          if (top == 0 && !this.noMoreMessage) {
-            el?.scrollTo(0, 100);
-            // this.fetchMessages();
+        } else if (documentChange.type == DocumentChangeType.modified) {
+          const i: number = this.messages.findIndex((r) => r.id == message.id);
+          if (i > -1) {
+            this.messages[i] = message;
           }
-        }, this.throttle);
+        } else if (documentChange.type == DocumentChangeType.removed) {
+          const i: number = this.messages.findIndex((r) => r.id == message.id);
+          if (i > -1) {
+            this.messages.splice(i, 0);
+          }
+        } else {
+          console.log("This is error");
+        }
+      });
 
-        // console.log("this.changes.next:::::======", this.messages[this.messages.length - 1]);
-        this.changes.next(this.messages[this.messages.length - 1]);
-      },
+      setTimeout(() => {
+        // After `throttle` time has passed, set the `loading` to false. Which means,
+        // it can fetch next batch of message again.
+        this.loading = false;
+
+        // console.log("------ pageNo;", this.page, " has finished;");
+
+        const el = document.getElementById(this.messageListId);
+        if (!el) return;
+        const top = el.scrollTop;
+        if (top == 0 && !this.noMoreMessage) {
+          el.scrollTo(0, 100);
+        }
+      }, this.throttle);
+
+      // console.log("this.changes.next:::::======", this.messages[this.messages.length - 1]);
+      this.changes.next(this.messages[this.messages.length - 1]);
     });
   }
 
@@ -505,10 +504,14 @@ export class ChatRoomService extends ChatBase {
   /// 2. the current room information,
   /// 3. the global room infromation
   /// And right before the user leave the room, it should be unsubscribed.
-  unsubscribe(reset = true): void {
-    if (this._chatRoomSubscription != null) {
-      this._chatRoomSubscription();
-      this._chatRoomSubscription = null;
+  unsubscribe(): void {
+    if (this._chatRoomSubscriptions.length) {
+      this._chatRoomSubscriptions.forEach((chatRoomSubscription, i) => {
+        if (chatRoomSubscription != null) {
+          chatRoomSubscription();
+          this._chatRoomSubscriptions[i] = null;
+        }
+      });
     }
     if (this._currentRoomSubscription != null) {
       this._currentRoomSubscription();
@@ -524,7 +527,7 @@ export class ChatRoomService extends ChatBase {
     //   this.keyboardSubscription = null;
     // }
 
-    if (reset) this.resetRoom();
+    this.resetRoom();
   }
 
   resetRoom(): void {

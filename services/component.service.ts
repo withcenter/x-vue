@@ -13,6 +13,17 @@ export interface ConfirmToast {
   append?: boolean;
 }
 
+export interface PromptToast {
+  title: string;
+  message: string;
+  okCallback: (input: string) => void;
+  cancelCallback: () => void;
+  placement?: string;
+  variant?: string;
+  hideDelay?: number;
+  append?: boolean;
+}
+
 export interface Toast {
   title: string;
   message: string;
@@ -40,6 +51,7 @@ interface ComponentServiceOptions {
   confirmToast?: (options: ConfirmToast) => void;
   toast?: (options: Toast) => void;
   confirm?: (title: string, message: string) => Promise<boolean | null>;
+  promptToast?: (options: PromptToast) => void;
 }
 export default class ComponentService {
   // private constructor() {
@@ -105,6 +117,16 @@ export default class ComponentService {
       const re = await this.confirm(options.title, options.message);
       if (re) options.yesCallback();
       else options.noCallback();
+    }
+  }
+
+  async promptToast(options: PromptToast): Promise<void> {
+    if (this.options.promptToast) {
+      return this.options.promptToast(options);
+    } else {
+      const re = prompt(options.title, options.message);
+      if (re) options.okCallback(re);
+      else options.cancelCallback();
     }
   }
   open(path: string): void {

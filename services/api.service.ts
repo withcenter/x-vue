@@ -840,10 +840,12 @@ export class ApiService {
     return this.request("notification.topicSubscription", data);
   }
 
-  async isSubscribedToTopic(topic: string): Promise<ResponseData> {
-    const res = await this.request("notification.isSubscribedToTopic", {
+  async isSubscribedToTopic(topic: string, subscribedByDefault = false): Promise<ResponseData> {
+    const req: RequestData = {
       topic: topic,
-    });
+      subscribedByDefault: subscribedByDefault,
+    };
+    const res = await this.request("notification.isSubscribedToTopic", req);
     console.log(res);
     return res;
   }

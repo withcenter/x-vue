@@ -9,10 +9,13 @@
         </div>
       </div>
       <div class="chat-options d-flex align-items-center">
-        <PushNotificationIcon :rawTopic="room.topic"></PushNotificationIcon>
+        <PushNotificationIcon :rawTopic="room.topic" :subscribedByDefault="true"></PushNotificationIcon>
         <button :id="'chat-options-popover-' + room.global.roomId" class="btn btn-sm py-2">
           <font-awesome-icon :icon="['fas', 'cog']" size="lg" />
         </button>
+        <router-link :to="'/chat'" class="btn btn-sm py-2 pointer">
+          <font-awesome-icon :icon="['fas', 'times']" size="lg" />
+        </router-link>
 
         <b-popover
           placement="bottomleft"
@@ -20,9 +23,16 @@
           :target="'chat-options-popover-' + room.global.roomId"
           triggers="click blur"
         >
-          <button data-cy="mine-edit-button" class="btn btn-sm btn-success" @click="leaveRoom">
-            {{ "leave" | t }}
-          </button>
+          <div class="p-2 pointer" @click="changeRoomTitle">
+            <font-awesome-icon :icon="['fas', 'edit']" /> {{ "edit_room_title" | t }}
+          </div>
+          <router-link class="p-2 pointer" :to="'/chat'">
+            <font-awesome-icon :icon="['fas', 'list']" /> {{ "goto_room_list" | t }}
+          </router-link>
+          <!-- <hr /> -->
+          <div class="p-2 pointer" @click="leaveRoom">
+            <font-awesome-icon :icon="['fas', 'sign-out-alt']" /> {{ "leave_room" | t }}
+          </div>
         </b-popover>
       </div>
     </div>
@@ -37,7 +47,7 @@
       </div>
       <div
         :id="m.id"
-        class="chat-bubble mb-1 rounded-lg my-1 px-2 text-break"
+        class="chat-bubble mb-1 rounded-lg my-1 p-2 text-break"
         v-for="m in room.messages"
         :key="m.id"
         :class="m.senderUid == room.loginUserUid ? 'text-right bg-primary ml-auto' : 'text-left bg-info mr-auto'"
@@ -50,7 +60,7 @@
       <div>
         <UploadButton @success="onSuccess"></UploadButton>
       </div>
-      <input class="w-100" ref="testInput" type="text" v-model="room.textInput" />
+      <input class="w-100" ref="testInput" type="text" v-model="room.textInput" @keypress.enter="sendMessage" />
       <button class="btn btn-sm btn-primary ml-2 px-5" @click="sendMessage">{{ "Send" | t }}</button>
     </div>
   </section>
@@ -62,7 +72,7 @@
 }
 
 .chat-bubble {
-  max-width: 80%;
+  max-width: 70%;
 }
 </style>
 
@@ -70,7 +80,7 @@
 import { FileModel, UserModel } from "@/x-vue/interfaces/interfaces";
 import { ApiService } from "@/x-vue/services/api.service";
 import { ChatRoomService } from "@/x-vue/services/chat/chat.room.service";
-import ComponentService from "@/x-vue/services/component.service";
+import ComponentService, { PLACEMENT } from "@/x-vue/services/component.service";
 import { Subscription } from "rxjs";
 import { Vue, Component } from "vue-property-decorator";
 
@@ -97,12 +107,12 @@ export default class ChatMessageList extends Vue {
   otherUser: UserModel = new UserModel();
 
   mounted(): void {
-    this.chatRoomSubscription = ChatRoomService.instance.changes.subscribe((message) => {
-      console.log("chatRoomSubscription", ChatRoomService.instance.atBottom, ChatRoomService.instance.page == 1);
+    this.chatRoomSubscription = ChatRoomService.instance.changes.subscribe(() => {
+      // console.log("message::changes::", message);
+      // console.log("chatRoomSubscription", ChatRoomService.instance.atBottom, ChatRoomService.instance.page == 1);
       if (ChatRoomService.instance.atBottom || ChatRoomService.instance.page == 1) {
         ChatRoomService.instance.scrollToBottom();
       }
-      console.log("message::changes::", message);
     });
 
     this.loadOtherUser();
@@ -115,14 +125,14 @@ export default class ChatMessageList extends Vue {
         ChatRoomService.instance.global.otherUserId as string
       );
 
-      console.log("loadOtherUser", this.otherUser);
+      // console.log("loadOtherUser", this.otherUser);
     } catch (error) {
       ComponentService.instance.error(error);
     }
   }
 
   destroyed(): void {
-    // console.log("ChatMessageListScreen::destroyed()");
+    console.log("ChatMessageListScreen::destroyed()");
     ChatRoomService.instance.unsubscribe();
     this.chatRoomSubscription.unsubscribe();
   }
@@ -147,9 +157,33 @@ export default class ChatMessageList extends Vue {
     }
   }
 
+  async changeRoomTitle(): Promise<void> {
+    ComponentService.instance.promptToast({
+      title: "Change Room Title",
+      message: this.room.title || this.room.id,
+      placement: PLACEMENT.TOP_CENTER,
+      okCallback: async (title: string): Promise<void> => {
+        console.log("title", title);
+        try {
+          await this.room.updateTitle(title);
+        } catch (error) {
+          ComponentService.instance.error(error);
+        }
+      },
+      cancelCallback: () => console.log("no"),
+    });
+  }
+
   async leaveRoom(): Promise<void> {
-    await this.room.leave();
-    this.$router.push("/chat");
+    try {
+      const re = await ComponentService.instance.confirm("Chat Room delete", "Do you want to delete this chat room?");
+      if (re === false) return;
+
+      await this.room.leave();
+      this.$router.push("/chat");
+    } catch (e) {
+      ComponentService.instance.error(e);
+    }
   }
 
   async onSuccess(file: FileModel): Promise<void> {

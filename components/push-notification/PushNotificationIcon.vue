@@ -17,6 +17,8 @@ export default class PushNotificationIcon extends Vue {
   @Prop({ default: "" }) rawTopic!: string;
   @Prop({ default: "" }) title!: string;
 
+  @Prop({ default: false }) subscribedByDefault!: boolean;
+
   // 'notifyPost_' is the prefix for post topic subscription
   get postTopic(): string {
     if (this.rawTopic.length) return this.rawTopic;
@@ -29,7 +31,7 @@ export default class PushNotificationIcon extends Vue {
 
   async mounted(): Promise<void> {
     try {
-      const re = await ApiService.instance.isSubscribedToTopic(this.postTopic);
+      const re = await ApiService.instance.isSubscribedToTopic(this.postTopic, this.subscribedByDefault);
       this.data[this.postTopic] = re[this.postTopic] === "Y" ? true : false;
     } catch (e) {
       Service.instance.error(e);

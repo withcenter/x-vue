@@ -1,7 +1,11 @@
 <template>
   <section>
     <div v-for="room in chat.userRoomList.rooms" :key="room.id">
-      <router-link :to="{ path: 'chat-message', query: { id: room.id } }">{{ room.id }}</router-link>
+      <!-- <b-avatar class="avatar" :src="user.photoUrl"></b-avatar> -->
+      <router-link class="fs-lg" :to="{ path: 'chat-message', query: { id: room.id } }">{{
+        room.global.title || room.id
+      }}</router-link>
+      <div>{{ room.senderUid == chat.loginUserUid ? "you" : room.senderDisplayName }}{{ room.text }}</div>
     </div>
   </section>
 </template>
