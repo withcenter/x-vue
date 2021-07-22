@@ -25,8 +25,8 @@ export default class AdvertisementSidebarBanner extends Vue {
   get _banners(): Banner[] {
     if (!this.banners) return [];
     if (!this.banners[this.categoryId]) return [];
-    if (!this.banners[this.categoryId]["sideBar"]) return [];
-    return this.banners[this.categoryId]["sideBar"];
+    if (!this.banners[this.categoryId]["sidebar"]) return [];
+    return this.banners[this.categoryId]["sidebar"];
   }
 
   get currentBanner(): Banner {
