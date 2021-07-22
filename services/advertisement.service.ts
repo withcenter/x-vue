@@ -1,4 +1,4 @@
-import { AdvertisementModel, Banner, CountryBanners } from "../interfaces/advertisement.interface";
+import { AdvertisementModel, Banner } from "../interfaces/advertisement.interface";
 import { AdvertisementPointSetting, AdvertisementSettings, RequestData, ResponseData } from "../interfaces/interfaces";
 import { ApiService } from "./api.service";
 
@@ -22,9 +22,6 @@ export class AdvertisementService {
   options: AdvertisementServiceOptions = {};
 
   private _advertisementSettings?: AdvertisementSettings;
-  //
-  // private categoryBanners: CategoryBanners = {};
-  private countryBanners: CountryBanners = {};
 
   init(options: AdvertisementServiceOptions): void {
     this.options = options;
@@ -34,51 +31,14 @@ export class AdvertisementService {
    * Get banners from backend.
    *
    * @attention it does memory cache.
-   * @param cafeDomain cafe domain to get the banners of
+   * @param options options for fetching banners
    * @returns banner data
    */
-  async loadBanners(cafeDomain: string): Promise<CountryBanners> {
+  async loadBanners(options: { subcategory?: string; cafeDomain: string; code: string }): Promise<Banner[]> {
     // console.log("loadBanners");
-    if (this.countryBanners.keys?.length) return this.countryBanners;
-    const res = await this.api.request("advertisement.loadAllBanners", {
-      cafeDomain: cafeDomain,
-    });
+    const res = await this.api.request("advertisement.loadBanners", options);
     const banners: AdvertisementModel[] = res.map((post: JSON) => new AdvertisementModel().fromJson(post));
-
-    // const _banners: CategoryBanners = {};
-    const _banners: CountryBanners = {};
-    if (banners && banners.length) {
-      for (const banner of banners) {
-        if (!_banners[banner.countryCode]) _banners[banner.countryCode] = {};
-        if (!_banners[banner.countryCode][banner.subcategory]) _banners[banner.countryCode][banner.subcategory] = {};
-        if (!_banners[banner.countryCode][banner.subcategory][banner.code]) {
-          _banners[banner.countryCode][banner.subcategory][banner.code] = [];
-        }
-
-        _banners[banner.countryCode][banner.subcategory][banner.code].push({
-          bannerUrl: banner.bannerUrl,
-          clickUrl: banner.clickUrl,
-          idx: banner.idx,
-          title: banner.title ?? "",
-        });
-
-        // if (!_banners[banner.subcategory]) _banners[banner.subcategory] = {};
-        // if (!_banners[banner.subcategory][banner.code]) {
-        //   _banners[banner.subcategory][banner.code] = [];
-        // }
-
-        // _banners[banner.subcategory][banner.code].push({
-        //   bannerUrl: banner.bannerUrl,
-        //   clickUrl: banner.clickUrl,
-        //   idx: banner.idx,
-        //   title: banner.title ?? "",
-        // });
-      }
-    }
-
-    this.countryBanners = _banners;
-    console.log("loadBanners", this.countryBanners);
-    return this.countryBanners;
+    return banners;
   }
 
   async advertisementSearch(options: RequestData): Promise<Array<AdvertisementModel>> {
@@ -156,37 +116,5 @@ export class AdvertisementService {
     } else {
       console.log("No open option set for Advertisement service.");
     }
-  }
-
-  /**
-   * Banner displaying rules
-   *  - Look for category banners with the same country code.
-   *  - Look for global banners with the same country code.
-   *  - Look for category banners with "all country" code.
-   *  - Look for global banners with "all country" code.
-   *  - Finally, display default banner, if any is provided.
-   */
-  getBanners(allBanners: CountryBanners, countryCode: string, categoryId: string, type: string): Banner[] {
-    let _countryBanners = allBanners[countryCode];
-
-    // *  - Look for category banners with the same country code.
-    if (_countryBanners && _countryBanners[categoryId] && _countryBanners[categoryId][type]) {
-      return _countryBanners[categoryId][type];
-    }
-    // *  - Look for global banners with the same country code.
-    if (_countryBanners && _countryBanners["global"] && _countryBanners["global"][type]) {
-      return _countryBanners["global"][type];
-    }
-
-    _countryBanners = allBanners["AC"];
-    // *  - Look for category banners with "all country" code.
-    if (_countryBanners && _countryBanners[categoryId] && _countryBanners[categoryId][type]) {
-      return _countryBanners[categoryId][type];
-    }
-    // *  - Look for global banners with "all country" code.
-    if (_countryBanners && _countryBanners["global"] && _countryBanners["global"][type]) {
-      return _countryBanners["global"][type];
-    }
-    return [];
   }
 }

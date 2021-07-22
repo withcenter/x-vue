@@ -300,6 +300,8 @@ console.log(await app.__vue__.api.version());
 - `latestPosts()` 함수는 내부적으로 캐시를 한다. 페이지별 게시판 글 목록이나, 최근 글 보여줄 때 사용하면 된다.
   - 단, 내용의 일부, 첫 코멘트, 첫 사진 등 전체를 다 가져오지 않으므로, 글 목록에서 내용을 바로 보여줄 때에는 적절하지 않다.
   - 검색 조건은 `postSearch()`와 동일 하다. 내부적으로 `postSearch()` 를 사용한다.
+  - 아래와 같이 복잡한 쿼리를 할 수 있다.
+    - 특히, `within` 뿐만아니라, `betweenFrom`, `betweenTo` 를 사용 할 수 있으며, 원하는데로 정렬 할 수 있다.
 
 ```ts
 ApiService.instance
@@ -316,6 +318,22 @@ ApiService.instance
     { callback: (posts) => (this.posts1 = posts) }
   )
   .then((posts) => (this.posts1 = posts));
+
+ApiService.instance
+  .latestPosts(
+    {
+      ids: this.ids,
+      subcategory: this.subcategory,
+      limit: 4,
+      files: "Y",
+      betweenFrom: 60 * 60 * 1, // 이 시간 시작 부터,
+      betweenTo: 60 * 60 * 24 * 60, // 이 시간 사이, 최근 두 달 글
+      order: "noOfComments DESC, createdAt DESC",
+      by: "",
+    },
+    { callback: (posts) => (this.posts2 = posts) }
+  )
+  .then((posts) => (this.posts2 = posts));
 ```
 
 

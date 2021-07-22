@@ -414,6 +414,8 @@ export class ApiService {
    *    This may not include like 'updatedAt', 'phoneNo', 'provice', and those that are not
    *    need to display in widgets.
    *
+   * See README.md for details.
+   *
    * @param data request data
    * @returns posts
    */

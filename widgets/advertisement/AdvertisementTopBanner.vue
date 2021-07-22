@@ -7,15 +7,15 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import { Banner, CountryBanners } from "@/x-vue/interfaces/advertisement.interface";
+import { Banner, CategoryBanners } from "@/x-vue/interfaces/advertisement.interface";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 
 @Component({})
 export default class AdvertisementTopBanner extends Vue {
   @Prop({ default: "right" }) position!: string;
-  @Prop() banners!: CountryBanners;
-  @Prop() countryCode!: string;
+  @Prop() banners!: CategoryBanners;
   @Prop() categoryId!: string;
+  @Prop() countryCode!: string;
 
   index = 0;
 
@@ -25,31 +25,13 @@ export default class AdvertisementTopBanner extends Vue {
 
   get _banners(): Banner[] {
     if (!this.banners) return [];
+    if (!this.banners[this.categoryId]) return [];
+    if (!this.banners[this.categoryId]["top"]) return [];
 
-    const type = "top";
-    let _banners = AdvertisementService.instance.getBanners(this.banners, this.countryCode, this.categoryId, type);
-
-    const banners = _banners.filter((v, i) => {
+    return this.banners[this.categoryId]["top"].filter((v, i) => {
       if (this.position == "left") return i % 2 == 0;
       else return i % 2 != 0;
     });
-
-    // TODO:
-    //   If the category have only 1 banner, only top left banner will have category banner displayed.
-    //   and all global banners will be displayed on right.
-    if (this.categoryId && _banners.length < 2 && this.position == "right") {
-      if (
-        this.banners[this.countryCode] &&
-        this.banners[this.countryCode]["global"] &&
-        this.banners[this.countryCode]["global"]["top"] &&
-        this.banners[this.countryCode]["global"]["top"].length
-      ) {
-        return this.banners[this.countryCode]["global"]["top"];
-      } else {
-        return [];
-      }
-    }
-    return banners;
   }
 
   get currentBanner(): Banner {

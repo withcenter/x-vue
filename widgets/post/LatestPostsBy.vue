@@ -2,7 +2,7 @@
   <section class="latest-posts-by">
     <router-link :to="post.relativeUrl" class="d-block mt-2" v-for="post of posts" :key="post.idx">
       <div class="d-flex">
-        <div class="photo">
+        <div class="photo" v-if="post.files.length">
           <img :src="post.files[0].thumbnailUrl" />
         </div>
         <div class="ml-2 overflow-hidden">
