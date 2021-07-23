@@ -11,6 +11,51 @@
           set his advertisement only for 5 days from today.
         </small>
       </div>
+
+      <div class="form-group">
+        <label for="maximum-advertisement-days">Maximum number of banners on each category</label>
+        <table class="table">
+          <thead>
+            <tr>
+              <td>Banner</td>
+              <td>Global</td>
+              <td>Category</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Top banner</th>
+              <td><input type="number" v-model="maxNoOnGlobalTopBanner" /></td>
+              <div>
+                <input type="number" v-model="maxNoOnCategoryTopBanner" />
+              </div>
+            </tr>
+            <tr>
+              <th scope="row">Sidebar banner</th>
+              <td><input type="number" v-model="maxNoOnGlobalSidebarBanner" /></td>
+              <div>
+                <input type="number" v-model="maxNoOnCategorySidebarBanner" />
+              </div>
+            </tr>
+            <tr>
+              <th scope="row">Square banner</th>
+              <td><input type="number" v-model="maxNoOnGlobalSquareBanner" /></td>
+              <div>
+                <input type="number" v-model="maxNoOnCategorySquareBanner" />
+              </div>
+            </tr>
+            <tr>
+              <th scope="row">Line banner</th>
+              <td><input type="number" v-model="maxNoOnGlobalLineBanner" /></td>
+              <div>
+                <input type="number" v-model="maxNoOnCategoryLineBanner" />
+              </div>
+            </tr>
+          </tbody>
+        </table>
+        <small class="form-text text-muted"> @see README.md </small>
+      </div>
+
       <div class="form-group">
         <label for="advertisementCategories">Categories</label>
         <input type="text" class="form-control" id="advertisementCategories" v-model="advertisementCategories" />
@@ -141,6 +186,15 @@ export default class AdminAdvertisement extends Vue {
   maximumAdvertisementDays = 0;
   advertisementCategories = "";
   globalBannerMultiplying = 0;
+  maxNoOnGlobalTopBanner = 0;
+  maxNoOnCategoryTopBanner = 0;
+  maxNoOnGlobalSidebarBanner = 0;
+  maxNoOnCategorySidebarBanner = 0;
+  maxNoOnGlobalSquareBanner = 0;
+  maxNoOnCategorySquareBanner = 0;
+  maxNoOnGlobalLineBanner = 0;
+  maxNoOnCategoryLineBanner = 0;
+
   points = [] as AdvertisementPointSetting[];
 
   add = {};
@@ -156,10 +210,21 @@ export default class AdminAdvertisement extends Vue {
   async mounted(): Promise<void> {
     try {
       const settings = await AdvertisementService.instance.advertisementSettings();
+      console.log(settings);
 
       // let re = await this.api.getConfig("maximumAdvertisementDays");
       // this.maximumAdvertisementDays = re.data ? re.data : 0;
       this.maximumAdvertisementDays = settings.maximumAdvertisementDays;
+
+      this.maxNoOnGlobalTopBanner = settings.maxNoOnGlobalTopBanner;
+      this.maxNoOnCategoryTopBanner = settings.maxNoOnCategoryTopBanner;
+      this.maxNoOnGlobalSidebarBanner = settings.maxNoOnGlobalSidebarBanner;
+      this.maxNoOnCategorySidebarBanner = settings.maxNoOnCategorySidebarBanner;
+      this.maxNoOnGlobalSquareBanner = settings.maxNoOnGlobalSquareBanner;
+      this.maxNoOnCategorySquareBanner = settings.maxNoOnCategorySquareBanner;
+      this.maxNoOnGlobalLineBanner = settings.maxNoOnGlobalLineBanner;
+      this.maxNoOnCategoryLineBanner = settings.maxNoOnCategoryLineBanner;
+
       // re = await this.api.getConfig("advertisementCategories");
       this.advertisementCategories = settings.categoryArray.join(",");
       this.globalBannerMultiplying = settings.globalBannerMultiplying;
@@ -206,6 +271,15 @@ export default class AdminAdvertisement extends Vue {
       await this.api.setConfig("maximumAdvertisementDays", this.maximumAdvertisementDays);
       await this.api.setConfig("advertisementCategories", this.advertisementCategories);
       await this.api.setConfig("globalBannerMultiplying", this.globalBannerMultiplying);
+
+      await this.api.setConfig("maxNoOnGlobalTopBanner", this.maxNoOnGlobalTopBanner);
+      await this.api.setConfig("maxNoOnCategoryTopBanner", this.maxNoOnCategoryTopBanner);
+      await this.api.setConfig("maxNoOnGlobalSidebarBanner", this.maxNoOnGlobalSidebarBanner);
+      await this.api.setConfig("maxNoOnCategorySidebarBanner", this.maxNoOnCategorySidebarBanner);
+      await this.api.setConfig("maxNoOnGlobalSquareBanner", this.maxNoOnGlobalSquareBanner);
+      await this.api.setConfig("maxNoOnCategorySquareBanner", this.maxNoOnCategorySquareBanner);
+      await this.api.setConfig("maxNoOnGlobalLineBanner", this.maxNoOnGlobalLineBanner);
+      await this.api.setConfig("maxNoOnCategoryLineBanner", this.maxNoOnCategoryLineBanner);
 
       this.s.alert("Settings", "Saved!");
     } catch (e) {
