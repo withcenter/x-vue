@@ -14,7 +14,7 @@
               {{ advertisement.user.displayName }}
             </div>
             <div>{{ "point" | t }}: {{ numberWithCommas(advertisement.user.point) }}</div>
-            <router-link class="btn btn-link d-block" :to="`/chat-message?uid=${user.firebaseUid}`">{{
+            <router-link class="btn btn-link d-block" :to="`/chat-message?uid=${advertisement.user.firebaseUid}`">{{
               "chat" | t
             }}</router-link>
             <router-link class="btn btn-link d-block" :to="`/user/${advertisement.user.idx}`">{{
