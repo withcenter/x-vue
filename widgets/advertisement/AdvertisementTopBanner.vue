@@ -7,13 +7,13 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import { Banner, CategoryBanners } from "@/x-vue/interfaces/advertisement.interface";
+import { Banner } from "@/x-vue/interfaces/advertisement.interface";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 
 @Component({})
 export default class AdvertisementTopBanner extends Vue {
   @Prop({ default: "right" }) position!: string;
-  @Prop() banners!: CategoryBanners;
+  @Prop() banners!: any; /// ! 여기서 부터. 수정
   @Prop() categoryId!: string;
   @Prop() countryCode!: string;
 
