@@ -20,7 +20,10 @@ export class ChatMessageModel {
   isMine = false;
   isImage = false;
   data: Record<string, unknown> = {};
+  extra: Record<string, unknown> = {};
   rendered = false;
+
+  longPress = false;
 
   get isMovie(): boolean {
     const t = this.text.toLowerCase();
@@ -45,12 +48,13 @@ export class ChatMessageModel {
     this.text = map.text;
 
     this.isMine = map.senderUid == ChatRoomService.instance.loginUserUid;
-
-    this.isMine = map.isMine;
-    this.isImage = map.isImage;
     this.data = map.data;
     if (map.text != null && isImageUrl(map.text)) {
       this.isImage = true;
+    }
+
+    if (map.extra != null) {
+      this.extra = map.extra;
     }
 
     return this;

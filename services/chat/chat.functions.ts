@@ -23,7 +23,8 @@ export function isImageUrl(t: string): boolean {
       t.includes("f=jpg") ||
       t.includes("f=jpeg") ||
       t.includes("f=gif") ||
-      t.includes("f=png")
+      t.includes("f=png") ||
+      t.includes("/etc/thumbnail.php")
     ) {
       return true;
     }

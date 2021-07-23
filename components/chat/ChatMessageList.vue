@@ -29,7 +29,6 @@
           <router-link class="p-2 pointer" :to="'/chat'">
             <font-awesome-icon :icon="['fas', 'list']" /> {{ "goto_room_list" | t }}
           </router-link>
-          <!-- <hr /> -->
           <div class="p-2 pointer" @click="leaveRoom">
             <font-awesome-icon :icon="['fas', 'sign-out-alt']" /> {{ "leave_room" | t }}
           </div>
@@ -47,12 +46,15 @@
       </div>
       <div
         :id="m.id"
-        class="chat-bubble mb-1 rounded-lg my-1 p-2 text-break"
+        class="chat-bubble mb-1 rounded-lg my-1 p-2 text-break white"
         v-for="m in room.messages"
         :key="m.id"
-        :class="m.senderUid == room.loginUserUid ? 'text-right bg-primary ml-auto' : 'text-left bg-info mr-auto'"
+        :class="m.isMine ? 'text-right my-chat ml-auto' : 'text-left other-chat mr-auto'"
+        @mousedown="onMouseDown(m)"
+        @mouseup="onMouseUp(m)"
       >
-        {{ m.text }}
+        <div v-if="!m.isImage">{{ m.text }}</div>
+        <b-img v-if="m.isImage" :src="m.text" fluid :alt="m.text" @load="room.onImageLoadComplete(m)"></b-img>
       </div>
     </div>
 
@@ -66,9 +68,16 @@
   </section>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .chat-message {
   height: 500px;
+
+  .my-chat {
+    background-color: #00bfff;
+  }
+  .other-chat {
+    background-color: #242526;
+  }
 }
 
 .chat-bubble {
@@ -89,6 +98,7 @@ import UserAvatar from "@/x-vue/components/user/UserAvatar.vue";
 import { isImageUrl } from "@/x-vue/services/chat/chat.functions";
 
 import PushNotificationIcon from "@/x-vue/components/push-notification/PushNotificationIcon.vue";
+import { ChatMessageModel } from "@/x-vue/services/chat/chat.interface";
 
 @Component({
   components: {
@@ -203,6 +213,25 @@ export default class ChatMessageList extends Vue {
 
       this.sending = false;
     }
+  }
+
+  onMouseDown(message: ChatMessageModel): void {
+    console.log(message.isImage);
+    if (!message.isMine) return;
+    message.longPress = true;
+    console.log("onMouseDown", message.longPress);
+    setTimeout(() => {
+      console.log("onMouseDown", message.longPress);
+      if (message.longPress) {
+        console.log("show edit");
+      }
+    }, 2000);
+  }
+
+  onMouseUp(message: ChatMessageModel): void {
+    if (!message.isMine) return;
+    message.longPress = false;
+    console.log("onMouseUp", message.longPress);
   }
 }
 </script>

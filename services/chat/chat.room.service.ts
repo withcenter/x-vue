@@ -329,6 +329,7 @@ export class ChatRoomService extends ChatBase {
     if (this.oldTop > top) {
       // console.log("↑");
       this.oldTop = top;
+      this.scrolledUp = true;
       // this.isScrollTop = true;
       return true;
     } else {
@@ -573,6 +574,8 @@ export class ChatRoomService extends ChatBase {
 
     if (extra != null) {
       Object.assign(message, extra);
+
+      message["extra"] = extra;
     }
 
     if (this.isCreate) {
@@ -875,20 +878,21 @@ export class ChatRoomService extends ChatBase {
     return height < 200;
   }
 
-  //   onImageLoadComplete(ChatMessage message) {
-  //     // If the user didn't scroll up the screen (which means, it is really very first time entering the chat room),
-  //     // then scroll to the bottom on every image load of the message(images).
-  //     if (scrolledUp == false) {
-  //       scrollToBottom();
-  //     }
+  /// The [scrolledUp] becomes true once the user scrolls up the chat room screen.
+  scrolledUp = false;
+  onImageLoadComplete(message: ChatMessageModel) {
+    // If the user didn't scroll up the screen (which means, it is really very first time entering the chat room),
+    // then scroll to the bottom on every image load of the message(images).
+    if (this.scrolledUp == false) {
+      this.scrollToBottom();
+    }
 
-  //     // If the last message is image and it is shown to screen for the first time (which means, new image has uploaded/come),
-  //     // then scroll to the bottom.
-  //     // Since the image has rendered once it has screen down, when user scrolls up, it will not interrupt the scroll.
-  //     bool lastMessage = message.id == messages.last.id;
-  //     if (lastMessage && message.rendered == false) {
-  //       message.rendered = true;
-  //       ChatRoom.instance.scrollToBottom();
-  //     }
-  //   }
+    // If the last message is image and it is shown to screen for the first time (which means, new image has uploaded/come),
+    // then scroll to the bottom.
+    // Since the image has rendered once it has screen down, when user scrolls up, it will not interrupt the scroll.
+    const lastMessage: boolean = message.id == this.messages[this.messages.length - 1].id;
+    if (lastMessage) {
+      this.scrollToBottom();
+    }
+  }
 }
