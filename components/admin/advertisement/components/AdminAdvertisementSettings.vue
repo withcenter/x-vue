@@ -26,30 +26,30 @@
             <tr>
               <th scope="row">Top banner</th>
               <td><input type="number" v-model="maxNoOnGlobalTopBanner" /></td>
-              <div>
+              <td>
                 <input type="number" v-model="maxNoOnCategoryTopBanner" />
-              </div>
+              </td>
             </tr>
             <tr>
               <th scope="row">Sidebar banner</th>
               <td><input type="number" v-model="maxNoOnGlobalSidebarBanner" /></td>
-              <div>
+              <td>
                 <input type="number" v-model="maxNoOnCategorySidebarBanner" />
-              </div>
+              </td>
             </tr>
             <tr>
               <th scope="row">Square banner</th>
               <td><input type="number" v-model="maxNoOnGlobalSquareBanner" /></td>
-              <div>
+              <td>
                 <input type="number" v-model="maxNoOnCategorySquareBanner" />
-              </div>
+              </td>
             </tr>
             <tr>
               <th scope="row">Line banner</th>
               <td><input type="number" v-model="maxNoOnGlobalLineBanner" /></td>
-              <div>
+              <td>
                 <input type="number" v-model="maxNoOnCategoryLineBanner" />
-              </div>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -210,7 +210,7 @@ export default class AdminAdvertisement extends Vue {
   async mounted(): Promise<void> {
     try {
       const settings = await AdvertisementService.instance.advertisementSettings();
-      console.log(settings);
+      // console.log(settings);
 
       // let re = await this.api.getConfig("maximumAdvertisementDays");
       // this.maximumAdvertisementDays = re.data ? re.data : 0;
@@ -254,7 +254,7 @@ export default class AdminAdvertisement extends Vue {
   }
 
   async onDelete(data: RequestData): Promise<void> {
-    console.log("onDelete::data", data);
+    // console.log("onDelete::data", data);
 
     const conf = await this.s.confirm("Confirm", `Delete point settings for ${data.countryCode}?`);
     if (!conf) return;
