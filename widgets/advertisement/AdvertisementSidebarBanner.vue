@@ -7,13 +7,13 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import { Banner, BannerCategories } from "@/x-vue/interfaces/advertisement.interface";
+import { Banner, AllCategoryBanners } from "@/x-vue/interfaces/advertisement.interface";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 import { advKey } from "@/service/functions";
 
 @Component({})
 export default class AdvertisementSidebarBanner extends Vue {
-  @Prop() banners!: BannerCategories;
+  @Prop() banners!: AllCategoryBanners;
   @Prop() categoryId!: string;
   @Prop() countryCode!: string;
 

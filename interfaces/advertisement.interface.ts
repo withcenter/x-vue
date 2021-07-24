@@ -63,6 +63,6 @@ export interface Banner {
 }
 type Banners = Banner[];
 
-export interface BannerCategories {
+export interface AllCategoryBanners {
   [x: string]: Banners;
 }

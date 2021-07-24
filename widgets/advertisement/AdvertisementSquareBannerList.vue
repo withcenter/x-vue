@@ -12,7 +12,7 @@
 <script lang="ts">
 import { Component, Prop } from "vue-property-decorator";
 import Vue from "vue";
-import { Banner, BannerCategories } from "@/x-vue/interfaces/advertisement.interface";
+import { Banner, AllCategoryBanners } from "@/x-vue/interfaces/advertisement.interface";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 import AdvertisementSquareBanner from "@/x-vue/widgets/advertisement/AdvertisementSquareBanner.vue";
 import { advKey } from "@/service/functions";
@@ -21,7 +21,7 @@ import { advKey } from "@/service/functions";
   components: { AdvertisementSquareBanner },
 })
 export default class AdvertisementSquareBannerList extends Vue {
-  @Prop() banners!: BannerCategories;
+  @Prop() banners!: AllCategoryBanners;
   @Prop() countryCode!: string;
   @Prop() categoryId!: string;
 
