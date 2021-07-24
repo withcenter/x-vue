@@ -62,5 +62,5 @@ export interface Banner {
   title?: string;
 }
 export interface Banners {
-  [x: string]: Banners[];
+  [x: string]: Banner[];
 }
