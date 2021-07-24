@@ -7,12 +7,13 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import { Banner, CategoryBanners } from "@/x-vue/interfaces/advertisement.interface";
+import { Banner, BannerCategories } from "@/x-vue/interfaces/advertisement.interface";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
+import { advKey } from "@/service/functions";
 
 @Component({})
 export default class AdvertisementSidebarBanner extends Vue {
-  @Prop() banners!: CategoryBanners;
+  @Prop() banners!: BannerCategories;
   @Prop() categoryId!: string;
   @Prop() countryCode!: string;
 
@@ -22,18 +23,22 @@ export default class AdvertisementSidebarBanner extends Vue {
     this.rotate();
   }
 
-  get _banners(): Banner[] {
-    if (!this.banners) return [];
-    if (!this.banners[this.categoryId]) return [];
-    if (!this.banners[this.categoryId]["sidebar"]) return [];
-    return this.banners[this.categoryId]["sidebar"];
-  }
+  // get _banners(): Banner[] {
+  //   return this.banners[advKey("line", this.categoryId)];
+
+  //   // const k = advKey("line", this.categoryId);
+  //   // if (!this.banners) return [];
+  //   // if (!this.banners[k]) return [];
+  //   // return this.banners[k];
+  // }
 
   get currentBanner(): Banner {
-    if (!this._banners.length) {
+    const items = this.banners[advKey("sidebar", this.categoryId)];
+
+    if (!items) {
       return {};
     }
-    return this._banners[this.index % this._banners.length];
+    return items[this.index % items.length];
   }
 
   rotate(): void {

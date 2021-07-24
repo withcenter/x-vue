@@ -61,6 +61,8 @@ export interface Banner {
   clickUrl?: string;
   title?: string;
 }
-export interface Banners {
-  [x: string]: Banner[];
+type Banners = Banner[];
+
+export interface BannerCategories {
+  [x: string]: Banners;
 }

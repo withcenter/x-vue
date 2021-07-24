@@ -12,12 +12,13 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import { Banner, CategoryBanners } from "@/x-vue/interfaces/advertisement.interface";
+import { Banner, BannerCategories } from "@/x-vue/interfaces/advertisement.interface";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
+import { advKey } from "@/service/functions";
 
 @Component({})
 export default class AdvertisementLineBanner extends Vue {
-  @Prop() banners!: CategoryBanners;
+  @Prop() banners!: BannerCategories;
   @Prop() countryCode!: string;
   @Prop() categoryId!: string;
 
@@ -28,10 +29,10 @@ export default class AdvertisementLineBanner extends Vue {
   }
 
   get _banners(): Banner[] {
+    const k = advKey("line", this.categoryId);
     if (!this.banners) return [];
-    if (!this.banners[this.categoryId]) return [];
-    if (!this.banners[this.categoryId]["line"]) return [];
-    return this.banners[this.categoryId]["line"];
+    if (!this.banners[k]) return [];
+    return this.banners[k];
   }
 
   get currentBanner(): Banner {
