@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-2 banner square pointer" @click="onClick(currentBanner)" v-if="currentBanner.bannerUrl">
+  <div class="mt-2 banner square pointer" @click="onClick(currentBanner)" v-if="currentBanner">
     <img class="w-100 h-100" :src="currentBanner.bannerUrl" />
   </div>
 </template>
@@ -23,22 +23,14 @@ export default class AdvertisementSidebarBanner extends Vue {
     this.rotate();
   }
 
-  // get _banners(): Banner[] {
-  //   return this.banners[advKey("line", this.categoryId)];
-
-  //   // const k = advKey("line", this.categoryId);
-  //   // if (!this.banners) return [];
-  //   // if (!this.banners[k]) return [];
-  //   // return this.banners[k];
-  // }
-
-  get currentBanner(): Banner {
+  get currentBanner(): Banner | undefined {
     const items = this.banners[advKey("sidebar", this.categoryId)];
 
-    if (!items) {
-      return {};
+    if (items) {
+      return items[this.index % items.length];
+    } else {
+      return undefined;
     }
-    return items[this.index % items.length];
   }
 
   rotate(): void {
@@ -46,7 +38,9 @@ export default class AdvertisementSidebarBanner extends Vue {
   }
 
   onClick(): void {
-    AdvertisementService.instance.openAdvertisement(this.currentBanner);
+    if (this.currentBanner) {
+      AdvertisementService.instance.openAdvertisement(this.currentBanner);
+    }
   }
 }
 </script>
