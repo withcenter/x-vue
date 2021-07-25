@@ -41,7 +41,7 @@
       ></pre-defined>
       <hr />
 
-      <h3>Reigster and login</h3>
+      <h3>User bonus point</h3>
 
       <pre-defined
         type="number"
@@ -58,6 +58,15 @@
         :data="settings"
         label="Login point"
         description="The point that user will get on every login. It must be 0 or bigger than 0."
+        @update="onChildUpdate"
+      ></pre-defined>
+
+      <pre-defined
+        type="number"
+        code="verification"
+        :data="settings"
+        label="User verification point"
+        description="When user verifiy himself with `PassLogin` or `Danal`, or any means, user will get this point. It must be 0 or bigger than 0."
         @update="onChildUpdate"
       ></pre-defined>
 

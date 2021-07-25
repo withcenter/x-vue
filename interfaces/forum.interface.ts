@@ -49,11 +49,15 @@ export class ForumInterface {
   subCategory = "";
   comments = 0;
 
+  /// 글을 특정 국가로 제한한다.
+  countryCode = "";
+
   get searchOptions(): PostSearchRequest {
     const opts: PostSearchRequest = {
       categoryId: this.categoryId,
       page: this.page,
       limit: this.limit,
+      countryCode: this.countryCode,
     };
 
     if (this.subCategory) opts.subcategory = this.subCategory;
