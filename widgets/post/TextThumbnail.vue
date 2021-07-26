@@ -18,7 +18,7 @@
         </div>
         <div class="mt-2 grey italic text-truncate" v-if="post.comments.length">{{ post.comments[0].content }}</div>
       </div>
-      <div class=""><img class="thumbnail-md" :src="post.files[0].thumbnailUrl" /></div>
+      <div class=""><b-img-lazy class="thumbnail-md" :src="post.files[0].thumbnailUrl"></b-img-lazy></div>
     </router-link>
   </div>
 </template>

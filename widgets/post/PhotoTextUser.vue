@@ -1,7 +1,7 @@
 <template>
   <div>
     <router-link class="post d-flex mt-3 round" :to="post.relativeUrl">
-      <div class="photo"><img :src="src" /></div>
+      <div class="photo"><b-img-lazy :src="src"></b-img-lazy></div>
       <div class="fs-sm ml-3 mt-1 overflow-hidden">
         <div class="title d-flex">
           <div class="bold">{{ post.title }}</div>

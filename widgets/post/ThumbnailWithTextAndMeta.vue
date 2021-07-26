@@ -1,7 +1,7 @@
 <template>
   <router-link class="thumbnail-with-text-and-meta row no-gutters" :to="story.relativeUrl" v-if="story && story.idx">
     <!-- <div class="col-3 image-holder"> -->
-    <b-img class="col-4 p-0 primary" :src="src"></b-img>
+    <b-img-lazy class="col-4 p-0 primary" :src="src"></b-img-lazy>
     <!-- </div> -->
     <div class="col-8 text-meta pl-2 overflow-hidden">
       <div class="category">{{ story.categoryId | t }}</div>
