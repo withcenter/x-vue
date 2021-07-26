@@ -24,6 +24,13 @@ import { MapStringAny } from "@/x-vue/interfaces/interfaces";
 import { ChatUserRoomListService } from "./chat.user_room_list.service";
 import Vue from "vue";
 
+export interface ChatRoomEnter {
+  id?: string | null;
+  users?: string[];
+  hatch?: boolean;
+  displayName: string;
+}
+
 /// You may rewrite your own helper class.
 export class ChatRoomService extends ChatBase {
   private static _instance: ChatRoomService;
@@ -119,6 +126,14 @@ export class ChatRoomService extends ChatBase {
     return `notifyChat-${this.id}`;
   }
 
+  get otherUserId(): string {
+    return this.global.otherUserId ?? "";
+  }
+
+  get isModerator(): boolean {
+    return this.moderators.includes(this.loginUserUid);
+  }
+
   textInput = "";
 
   //   /// When keyboard(keypad) is open, the app needs to adjust the scroll.
@@ -169,17 +184,7 @@ export class ChatRoomService extends ChatBase {
   /// Null or empty string in [users] will be wiped out.
   ///
   /// Whenever global room information changes, it is updated on [global].
-  async enter({
-    id = null,
-    users = [],
-    hatch = true,
-    displayName = "",
-  }: {
-    id?: string | null;
-    users?: string[];
-    hatch?: boolean;
-    displayName?: string;
-  }): Promise<void> {
+  async enter({ id = null, users = [], hatch = true, displayName }: ChatRoomEnter): Promise<void> {
     /// confusing with [this.id], so, it goes as `_id`.
     let _id: string | null = id;
     this._displayName = displayName;
@@ -458,9 +463,13 @@ export class ChatRoomService extends ChatBase {
             }
           }
         } else if (documentChange.type == DocumentChangeType.modified) {
+          console.log("modified", message);
           const i: number = this.messages.findIndex((r) => r.id == message.id);
+          console.log(i);
+          console.log(this.messages[i]);
           if (i > -1) {
-            this.messages[i] = message;
+            // this.messages[i] = message;
+            this.messages.splice(i, 1, message);
           }
         } else if (documentChange.type == DocumentChangeType.removed) {
           const i: number = this.messages.findIndex((r) => r.id == message.id);
@@ -829,10 +838,18 @@ export class ChatRoomService extends ChatBase {
       extra: { newTitle: title },
     });
   }
+  async updateGlobalRoomUsersInfo(info: Record<string, unknown>): Promise<void> {
+    const _globalRoom: ChatGlobalRoomModel = await this.getGlobalRoom(this.id);
+
+    if (_globalRoom.moderators.includes(this.loginUserUid) == false) throw YOU_ARE_NOT_MODERATOR;
+
+    // Update users photoProfile silently
+    await this.globalRoomDoc(_globalRoom.roomId).update({ usersInfo: info });
+  }
 
   editMessage(message: ChatMessageModel): void {
     console.log("editMessage");
-    // textController.text = message.text; // todo
+    this.textInput = message.text;
     this.isMessageEdit = message;
     this.changes.next(message);
   }
@@ -880,7 +897,9 @@ export class ChatRoomService extends ChatBase {
 
   /// The [scrolledUp] becomes true once the user scrolls up the chat room screen.
   scrolledUp = false;
-  onImageLoadComplete(message: ChatMessageModel) {
+  onImageLoadComplete(message: ChatMessageModel): void {
+    message.rendered = true;
+
     // If the user didn't scroll up the screen (which means, it is really very first time entering the chat room),
     // then scroll to the bottom on every image load of the message(images).
     if (this.scrolledUp == false) {
