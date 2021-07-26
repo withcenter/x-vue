@@ -100,12 +100,12 @@ export class ChatUserRoomListService extends ChatBase {
               },
             });
           } else if (documentChange.type == DocumentChangeType.modified) {
+            // console.log("_listenRoomList", DocumentChangeType.modified, roomInfo);
             const found: number = this.rooms.findIndex((r) => r.id == roomInfo.id);
             // If global room information exists, copy it to updated object to
             // maintain global room information.
-            const global: ChatGlobalRoomModel = this.rooms[found].global;
-            this.rooms[found] = roomInfo;
-            this.rooms[found].global = global;
+            roomInfo.global = this.rooms[found].global;
+            this.rooms.splice(found, 1, roomInfo);
           } else if (documentChange.type == DocumentChangeType.removed) {
             const i: number = this.rooms.findIndex((r) => r.id == roomInfo.id);
             if (i > -1) {
@@ -119,8 +119,11 @@ export class ChatUserRoomListService extends ChatBase {
 
         this.newMessages = 0;
         this.rooms.forEach((roomInfo) => {
+          console.log(roomInfo.newMessages);
           this.newMessages += parseInt(roomInfo.newMessages);
         });
+
+        console.log(this.newMessages);
 
         /// post event with last room
         const re =

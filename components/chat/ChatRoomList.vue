@@ -6,12 +6,15 @@
       :key="room.id"
       :to="{ path: 'chat-message', query: { id: room.id } }"
     >
-      {{ room }}
-      <b-avatar class="avatar mr-2" :src="room.otherUserPhotoUrl"></b-avatar>
+      <b-avatar class="avatar mr-2 mb-2" :src="room.otherUserPhotoUrl"></b-avatar>
       <div>
-        <div class="fs-lg">{{ room.title || room.otherUserDisplayName }}</div>
+        <div class="bold">
+          {{ room.getTitle || room.otherUserDisplayName }}
+          <span v-if="room.newMessages">({{ room.newMessages }})</span>
+        </div>
         <div>
-          {{ room.senderUid == roomsList.loginUserUid ? "You: " : room.senderDisplayName + ": " }}{{ room.text }}
+          {{ room.senderUid == roomsList.loginUserUid ? "You: " : room.senderDisplayName + ": "
+          }}{{ roomsList.text(room) }}
         </div>
       </div>
     </router-link>
@@ -25,13 +28,5 @@ import { Vue, Component } from "vue-property-decorator";
 @Component({})
 export default class ChatRoomList extends Vue {
   roomsList = ChatUserRoomListService.instance;
-
-  mounted(): void {
-    //
-  }
-
-  destroyed(): void {
-    //
-  }
 }
 </script>
