@@ -1,19 +1,20 @@
 <template>
   <div class="banner top pointer w-100 h-100" :class="position" @click="onClick">
-    <img class="w-100" :src="currentBanner.bannerUrl" />
+    <b-img-lazy class="w-100" :src="currentBanner.bannerUrl"></b-img-lazy>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import { Banner, CategoryBanners } from "@/x-vue/interfaces/advertisement.interface";
+import { Banner, AllCategoryBanners } from "@/x-vue/interfaces/advertisement.interface";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
+import { advKey } from "@/service/functions";
 
 @Component({})
-export default class AdvertisementTopBanner extends Vue {
+export default class extends Vue {
   @Prop({ default: "right" }) position!: string;
-  @Prop() banners!: CategoryBanners;
+  @Prop({ default: () => [] }) banners!: AllCategoryBanners;
   @Prop() categoryId!: string;
   @Prop() countryCode!: string;
 
@@ -24,11 +25,11 @@ export default class AdvertisementTopBanner extends Vue {
   }
 
   get _banners(): Banner[] {
+    const k = advKey("top", this.categoryId);
     if (!this.banners) return [];
-    if (!this.banners[this.categoryId]) return [];
-    if (!this.banners[this.categoryId]["top"]) return [];
+    if (!this.banners[k]) return [];
 
-    return this.banners[this.categoryId]["top"].filter((v, i) => {
+    return this.banners[k].filter((v, i) => {
       if (this.position == "left") return i % 2 == 0;
       else return i % 2 != 0;
     });
@@ -41,6 +42,9 @@ export default class AdvertisementTopBanner extends Vue {
     return this._banners[this.index % this._banners.length];
   }
 
+  /**
+   * @see readme.md of materix.
+   */
   get defaultUrl(): string {
     return `/tmp/${this.position}-banner.jpg`;
   }

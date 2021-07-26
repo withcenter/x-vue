@@ -12,23 +12,24 @@
 <script lang="ts">
 import { Component, Prop } from "vue-property-decorator";
 import Vue from "vue";
-import { Banner, CategoryBanners } from "@/x-vue/interfaces/advertisement.interface";
+import { Banner, AllCategoryBanners } from "@/x-vue/interfaces/advertisement.interface";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 import AdvertisementSquareBanner from "@/x-vue/widgets/advertisement/AdvertisementSquareBanner.vue";
+import { advKey } from "@/service/functions";
 
 @Component({
   components: { AdvertisementSquareBanner },
 })
 export default class AdvertisementSquareBannerList extends Vue {
-  @Prop() banners!: CategoryBanners;
+  @Prop() banners!: AllCategoryBanners;
   @Prop() countryCode!: string;
   @Prop() categoryId!: string;
 
   get bannerList(): Banner[] {
+    const k = advKey("square", this.categoryId);
     if (!this.banners) return [];
-    if (!this.banners[this.categoryId]) return [];
-    if (!this.banners[this.categoryId]["square"]) return [];
-    return this.banners[this.categoryId]["square"];
+    if (!this.banners[k]) return [];
+    return this.banners[k];
   }
 
   onClick(banner: Banner): void {

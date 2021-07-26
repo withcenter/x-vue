@@ -24,14 +24,13 @@
           triggers="click blur"
         >
           <div class="p-2 pointer" @click="changeRoomTitle">
-            <font-awesome-icon :icon="['fas', 'edit']" /> {{ "edit_room_title" | t }}
+            <font-awesome-icon class="mr-2" :icon="['fas', 'edit']" /> {{ "edit_room_title" | t }}
           </div>
           <router-link class="p-2 pointer" :to="'/chat'">
-            <font-awesome-icon :icon="['fas', 'list']" /> {{ "goto_room_list" | t }}
+            <font-awesome-icon class="mr-2" :icon="['fas', 'list']" /> {{ "goto_room_list" | t }}
           </router-link>
-          <!-- <hr /> -->
           <div class="p-2 pointer" @click="leaveRoom">
-            <font-awesome-icon :icon="['fas', 'sign-out-alt']" /> {{ "leave_room" | t }}
+            <font-awesome-icon class="mr-2" :icon="['fas', 'sign-out-alt']" /> {{ "leave_room" | t }}
           </div>
         </b-popover>
       </div>
@@ -46,14 +45,84 @@
         <b-spinner></b-spinner>
       </div>
       <div
-        :id="m.id"
-        class="chat-bubble mb-1 rounded-lg my-1 p-2 text-break"
+        :id="'chat-message-popover-' + m.id"
+        class="chat-bubble mb-1 rounded-lg my-1 p-2 text-break white"
         v-for="m in room.messages"
         :key="m.id"
-        :class="m.senderUid == room.loginUserUid ? 'text-right bg-primary ml-auto' : 'text-left bg-info mr-auto'"
+        :class="m.isMine ? 'text-right my-chat ml-auto' : 'text-left other-chat mr-auto'"
       >
-        {{ m.text }}
+        <b-popover
+          v-if="m.canEdit"
+          placement="left"
+          ref="popover"
+          :target="'chat-message-popover-' + m.id"
+          triggers="hover focus"
+        >
+          <div class="pointer" @click="room.editMessage(m)">
+            <font-awesome-icon class="mr-2" :icon="['fas', 'edit']" /> {{ "edit" | t }}
+          </div>
+        </b-popover>
+        <div v-if="m.isMine" @mousedown="onMouseDown(m)" @mouseup="onMouseUp(m)">
+          <div v-if="!m.isImage">{{ m.text }}</div>
+          <div v-if="m.isImage">
+            <b-spinner v-if="!m.rendered"></b-spinner>
+            <b-img
+              :src="m.text"
+              fluid
+              :alt="m.text"
+              @load="room.onImageLoadComplete(m)"
+              @click.prevent="showImagePreview(m)"
+            ></b-img>
+          </div>
+        </div>
+        <div v-else>
+          <div v-if="!m.isImage">{{ m.text }}</div>
+          <div v-if="m.isImage">
+            <b-spinner v-if="!m.rendered"></b-spinner>
+            <b-img
+              :src="m.text"
+              fluid
+              :alt="m.text"
+              @load="room.onImageLoadComplete(m)"
+              @click.prevent="showImagePreview(m)"
+            ></b-img>
+          </div>
+        </div>
       </div>
+
+      <!-- <div :id="m.id" v-for="m in room.messages" :key="m.id">
+        <div
+          v-if="m.isMine"
+          class="chat-bubble mine rounded-lg my-1 p-2 text-break white text-right my-chat ml-auto"
+          @mousedown="onMouseDown(m)"
+          @mouseup="onMouseUp(m)"
+        >
+          <div v-if="!m.isImage">{{ m.text }}</div>
+          <div v-if="m.isImage">
+            <b-spinner v-if="!m.rendered"></b-spinner>
+            <b-img
+              :src="m.text"
+              fluid
+              :alt="m.text"
+              @load="room.onImageLoadComplete(m)"
+              @click.prevent="showImagePreview(m)"
+            ></b-img>
+          </div>
+        </div>
+        <div v-if="m.isMine" other class="chat-bubble rounded-lg my-1 p-2 text-break white text-left other-chat mr-auto">
+          <div v-if="!m.isImage">{{ m.text }}</div>
+          <div v-if="m.isImage">
+            <b-spinner v-if="!m.rendered"></b-spinner>
+            <b-img
+              :src="m.text"
+              fluid
+              :alt="m.text"
+              @load="room.onImageLoadComplete(m)"
+              @click.prevent="showImagePreview(m)"
+            ></b-img>
+          </div>
+        </div>
+      </div> -->
     </div>
 
     <div class="d-flex">
@@ -63,12 +132,27 @@
       <input class="w-100" ref="testInput" type="text" v-model="room.textInput" @keypress.enter="sendMessage" />
       <button class="btn btn-sm btn-primary ml-2 px-5" @click="sendMessage">{{ "Send" | t }}</button>
     </div>
+
+    <b-modal :id="'file-preview-modal'" hide-footer>
+      <template #modal-title>{{ fileImagePreviewUrl }}</template>
+      <div>
+        <b-img :src="fileImagePreviewUrl" fluid :alt="fileImagePreviewUrl"></b-img>
+      </div>
+      <b-button class="mt-3" block @click="$bvModal.hide('file-preview-modal')">Close</b-button>
+    </b-modal>
   </section>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .chat-message {
   height: 500px;
+
+  .my-chat {
+    background-color: #00bfff;
+  }
+  .other-chat {
+    background-color: #242526;
+  }
 }
 
 .chat-bubble {
@@ -89,6 +173,7 @@ import UserAvatar from "@/x-vue/components/user/UserAvatar.vue";
 import { isImageUrl } from "@/x-vue/services/chat/chat.functions";
 
 import PushNotificationIcon from "@/x-vue/components/push-notification/PushNotificationIcon.vue";
+import { ChatMessageModel } from "@/x-vue/services/chat/chat.interface";
 
 @Component({
   components: {
@@ -105,6 +190,13 @@ export default class ChatMessageList extends Vue {
   chatRoomSubscription: Subscription = new Subscription();
 
   otherUser: UserModel = new UserModel();
+
+  fileImagePreviewUrl = "";
+
+  showImagePreview(m: ChatMessageModel): void {
+    this.fileImagePreviewUrl = "" + m.extra.url;
+    this.$bvModal.show("file-preview-modal");
+  }
 
   mounted(): void {
     this.chatRoomSubscription = ChatRoomService.instance.changes.subscribe(() => {
@@ -160,7 +252,7 @@ export default class ChatMessageList extends Vue {
   async changeRoomTitle(): Promise<void> {
     ComponentService.instance.promptToast({
       title: "Change Room Title",
-      message: this.room.title || this.room.id,
+      message: this.room.title,
       placement: PLACEMENT.TOP_CENTER,
       okCallback: async (title: string): Promise<void> => {
         console.log("title", title);
@@ -203,6 +295,26 @@ export default class ChatMessageList extends Vue {
 
       this.sending = false;
     }
+  }
+
+  onMouseDown(message: ChatMessageModel): void {
+    console.log(message.isImage);
+    if (!message.isMine) return;
+    message.longPress = true;
+    console.log("onMouseDown", message.longPress);
+    setTimeout(() => {
+      console.log("onMouseDown", message.longPress);
+      if (message.longPress) {
+        console.log("show edit");
+        // $('#chat-message-popover-' + message.id).popover('show')
+      }
+    }, 2000);
+  }
+
+  onMouseUp(message: ChatMessageModel): void {
+    if (!message.isMine) return;
+    message.longPress = false;
+    console.log("onMouseUp", message.longPress);
   }
 }
 </script>

@@ -61,14 +61,8 @@ export interface Banner {
   clickUrl?: string;
   title?: string;
 }
+type Banners = Banner[];
 
-export interface Banners {
-  [code: string]: Banner[];
-}
-export interface CategoryBanners {
-  [category: string]: Banners;
-}
-
-export interface CountryBanners {
-  [countryCode: string]: CategoryBanners;
+export interface AllCategoryBanners {
+  [x: string]: Banners;
 }

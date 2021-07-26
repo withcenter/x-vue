@@ -6,7 +6,7 @@
         <div class="left-top" v-if="posts[0]">
           <h1 class="title two-line-truncate">{{ posts[0].title }}</h1>
           <div class="content text-truncate">{{ posts[0].content }}</div>
-          <img class="mt-1 w-100" :src="api.thumbnailUrl(posts[0].files[0].idx, 400, 300)" />
+          <b-img-lazy class="mt-1 w-100" :src="api.thumbnailUrl(posts[0].files[0].idx, 400, 300)"></b-img-lazy>
         </div>
         <!-- 왼쪽 글 5 개 -->
         <div class="bottom-latest mt-3" v-if="leftStories.length">
@@ -28,7 +28,7 @@
         <!-- 오른쪽 썸네일 텍스트 -->
         <div class="stories" v-if="stories.length">
           <router-link class="d-flex align-items-center" :to="post.relativeUrl" v-for="post of stories" :key="post.idx">
-            <img :src="post.files[0].thumbnailUrl" />
+            <b-img-lazy :src="post.files[0].thumbnailUrl"></b-img-lazy>
             <div>
               <h1 class="title pl-2 normal overflow-hidden two-line-truncate">
                 {{ post.title }}

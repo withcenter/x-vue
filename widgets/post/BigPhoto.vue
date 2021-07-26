@@ -1,7 +1,7 @@
 <template>
   <div class="big-photo" v-if="story && story.idx">
     <router-link :to="story.relativeUrl">
-      <img class="primary" :src="src" />
+      <b-img-lazy class="primary" :src="src"></b-img-lazy>
       <div class="mt-2">
         <div class="category">{{ title }}</div>
         <div class="title text-truncate">{{ story.title }}</div>

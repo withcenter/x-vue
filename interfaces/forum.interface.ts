@@ -28,6 +28,7 @@ export interface PostSearchRequest {
   within?: number;
   betweenFrom?: number;
   betweenTo?: number;
+  fulltextSearch?: "Y" | "N";
 }
 
 /**
@@ -49,16 +50,28 @@ export class ForumInterface {
   subCategory = "";
   comments = 0;
 
+  /// 글을 특정 국가로 제한한다.
+  countryCode = "";
+
+  /// 글 검색
+  searchKey = "";
+
+  /// 풀텍스트 검색을 할 것인지 옵션 지정
+  fulltextSearch: "Y" | "N" = "N";
+
   get searchOptions(): PostSearchRequest {
     const opts: PostSearchRequest = {
       categoryId: this.categoryId,
       page: this.page,
       limit: this.limit,
+      countryCode: this.countryCode,
+      fulltextSearch: this.fulltextSearch,
     };
 
     if (this.subCategory) opts.subcategory = this.subCategory;
     if (this.comments) opts.comments = this.comments;
     if (this.userIdx) opts.userIdx = this.userIdx;
+    if (this.searchKey) opts.searchKey = this.searchKey;
 
     return opts;
   }

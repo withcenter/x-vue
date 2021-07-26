@@ -20,13 +20,18 @@ export class ChatMessageModel {
   isMine = false;
   isImage = false;
   data: Record<string, unknown> = {};
-  rendered = false;
+  extra: Record<string, unknown> = {};
+
+  rendered = false; // for image is complete rendered
+  longPress = false;
 
   get isMovie(): boolean {
     const t = this.text.toLowerCase();
     if (t.startsWith("http") && (t.endsWith(".mov") || t.endsWith(".mp4"))) return true;
     return false;
   }
+
+  canEdit = true;
 
   fromSnapshot(snapshot: firebase.firestore.DocumentSnapshot): ChatMessageModel {
     if (snapshot.exists == false) return new ChatMessageModel();
@@ -45,13 +50,16 @@ export class ChatMessageModel {
     this.text = map.text;
 
     this.isMine = map.senderUid == ChatRoomService.instance.loginUserUid;
-
-    this.isMine = map.isMine;
-    this.isImage = map.isImage;
     this.data = map.data;
     if (map.text != null && isImageUrl(map.text)) {
       this.isImage = true;
     }
+
+    if (map.extra != null) {
+      this.extra = map.extra;
+    }
+
+    if (map.text.startsWith("ChatProtocol.")) this.canEdit = false;
 
     return this;
   }
@@ -84,6 +92,24 @@ export class ChatUserRoomModel {
 
   global = {} as ChatGlobalRoomModel;
 
+  get otherUserPhotoUrl(): string {
+    if (!this.global.otherUserId) return "";
+    return this.global.usersInfo[this.global.otherUserId].photoUrl;
+  }
+
+  get title(): string {
+    return this.global.title;
+  }
+
+  get otherUserDisplayName(): string {
+    if (!this.global.otherUserId) return "";
+    return this.global.usersInfo[this.global.otherUserId].displayName;
+  }
+
+  // get userRoomTitle(): string {
+  //   return this.global.usersInfo[ChatRoomService.instance.loginUserUid].title;
+  // }
+
   fromSnapshot(snapshot: firebase.firestore.DocumentSnapshot): ChatUserRoomModel {
     if (snapshot.exists == false) return new ChatUserRoomModel();
     const info: firebase.firestore.DocumentData = snapshot.data() as firebase.firestore.DocumentData;
@@ -104,6 +130,7 @@ export class ChatUserRoomModel {
     this.createdAt = map.createdAt;
     this.newMessages = map.newMessages;
     this.isImage = map.isImage;
+    this.global = new ChatGlobalRoomModel().fromJson(map.global);
 
     if (map.isImage != null && isImageUrl(this.text)) {
       this.isImage = true;
@@ -127,6 +154,8 @@ export class ChatGlobalRoomModel {
     // If there is no other user.
     return this.users.find((el: string) => el != ChatRoomService.instance.loginUserUid);
   }
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  usersInfo: { [index: string]: any } = {};
 
   fromJson(map: firebase.firestore.DocumentData): ChatGlobalRoomModel {
     // console.log("ChatGlobalRoomModel::", map);
@@ -138,7 +167,7 @@ export class ChatGlobalRoomModel {
     this.blockedUsers = map.blockedUsers ?? [];
     this.createdAt = map.createdAt;
     this.updatedAt = map.updatedAt;
-    // console.log("ChatGlobalRoomModel::users", this.users);
+    this.usersInfo = map.usersInfo;
     return this;
   }
 

@@ -1,22 +1,30 @@
 <template>
   <section>
-    <div v-for="room in chat.userRoomList.rooms" :key="room.id">
-      <!-- <b-avatar class="avatar" :src="user.photoUrl"></b-avatar> -->
-      <router-link class="fs-lg" :to="{ path: 'chat-message', query: { id: room.id } }">{{
-        room.global.title || room.id
-      }}</router-link>
-      <div>{{ room.senderUid == chat.loginUserUid ? "you" : room.senderDisplayName }}{{ room.text }}</div>
-    </div>
+    <router-link
+      class="d-flex align-items-center"
+      v-for="room in roomsList.rooms"
+      :key="room.id"
+      :to="{ path: 'chat-message', query: { id: room.id } }"
+    >
+      {{ room }}
+      <b-avatar class="avatar mr-2" :src="room.otherUserPhotoUrl"></b-avatar>
+      <div>
+        <div class="fs-lg">{{ room.title || room.otherUserDisplayName }}</div>
+        <div>
+          {{ room.senderUid == roomsList.loginUserUid ? "You: " : room.senderDisplayName + ": " }}{{ room.text }}
+        </div>
+      </div>
+    </router-link>
   </section>
 </template>
 
 <script lang="ts">
-import { ChatService } from "@/x-vue/services/chat/chat.service";
+import { ChatUserRoomListService } from "@/x-vue/services/chat/chat.user_room_list.service";
 import { Vue, Component } from "vue-property-decorator";
 
 @Component({})
 export default class ChatRoomList extends Vue {
-  chat = ChatService.instance;
+  roomsList = ChatUserRoomListService.instance;
 
   mounted(): void {
     //
