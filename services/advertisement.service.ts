@@ -34,9 +34,15 @@ export class AdvertisementService {
    * @param options options for fetching banners
    * @returns banner data
    */
-  async loadBanners(options: { subcategory?: string; cafeDomain: string; code: string }): Promise<Banner[]> {
+  async loadBanners(bannerType: string, bannerCategory: string, cafeDomain: string) {
+    //  options: { subcategory?: string; cafeDomain: string; code: string }): Promise<Banner[]> {
     // console.log("loadBanners");
-    const res = await this.api.request("advertisement.loadBanners", options);
+
+    const res = await this.api.request("advertisement.loadBanners", {
+      subcategory: bannerCategory,
+      cafeDomain: cafeDomain,
+      code: bannerType,
+    });
     const banners: AdvertisementModel[] = res.map((post: JSON) => new AdvertisementModel().fromJson(post));
     return banners;
   }

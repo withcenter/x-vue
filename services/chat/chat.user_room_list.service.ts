@@ -23,7 +23,7 @@ export class ChatUserRoomListService extends ChatBase {
 
   private constructor() {
     super();
-    console.log("ChatUserRoomListService");
+    // console.log("ChatUserRoomListService");
     this.init();
   }
 
