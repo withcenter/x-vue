@@ -1,6 +1,6 @@
 <template>
   <router-link class="photo-text" v-if="story && story.idx" :to="post.relativeUrl">
-    <img class="primary" :src="src" />
+    <b-img-lazy class="primary" :src="src"></b-img-lazy>
     <div class="p-1 title">
       {{ story.title }}
     </div>

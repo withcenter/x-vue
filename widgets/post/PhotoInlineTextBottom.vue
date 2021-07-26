@@ -1,7 +1,7 @@
 <template>
   <router-link class="photo-inline-text-bottom d-block" :to="story.relativeUrl" v-if="story && story.idx">
     <div class="w-100 position-relative">
-      <b-img fluid-grow block class="primary" :src="src"> </b-img>
+      <b-img-lazy fluid-grow block class="primary" :src="src"> </b-img-lazy>
       <div class="title position-absolute w-100 text-white" :class="isMultiLine ? '' : 'text-truncate'">
         {{ story.title }}
       </div>
