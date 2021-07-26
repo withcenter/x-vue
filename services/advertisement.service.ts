@@ -34,7 +34,7 @@ export class AdvertisementService {
    * @param options options for fetching banners
    * @returns banner data
    */
-  async loadBanners(bannerType: string, bannerCategory: string, cafeDomain: string) {
+  async loadBanners(bannerType: string, bannerCategory: string, cafeDomain: string): Promise<Banner[]> {
     //  options: { subcategory?: string; cafeDomain: string; code: string }): Promise<Banner[]> {
     // console.log("loadBanners");
 
