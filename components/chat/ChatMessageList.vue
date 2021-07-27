@@ -158,6 +158,7 @@ import { isImageUrl } from "@/x-vue/services/chat/chat.functions";
 
 import PushNotificationIcon from "@/x-vue/components/push-notification/PushNotificationIcon.vue";
 import { ChatMessageModel } from "@/x-vue/services/chat/chat.interface";
+import { t } from "@/x-vue/services/functions";
 
 @Component({
   components: {
@@ -229,8 +230,9 @@ export default class ChatMessageList extends Vue {
         ApiService.instance.sendMessageToUsers({
           users: this.room.otherUserId,
           subscription: this.room.topic,
-          title: ApiService.instance._user.nicknameOrName, // + "님이 메시지를 보냈습니다.",
+          title: ApiService.instance._user.nicknameOrName + " " + t("sent_a_message"),
           body: tempText,
+          click_action: "chat-message?id=" + this.room.id,
           data: {
             type: "chat",
             roomId: this.room.id,
@@ -287,8 +289,9 @@ export default class ChatMessageList extends Vue {
       ApiService.instance.sendMessageToUsers({
         users: this.room.otherUserId,
         subscription: this.room.topic,
-        title: ApiService.instance._user.nicknameOrName, // + "님이 메시지를 보냈습니다.",
-        body: "사진을 보냈습니다.",
+        title: ApiService.instance._user.nicknameOrName + " " + t("sent_a_message"),
+        body: t("sent_a_file"),
+        click_action: "chat-message?id=" + this.room.id,
         data: {
           type: "chat",
           roomId: this.room.id,
