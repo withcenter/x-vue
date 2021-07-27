@@ -215,6 +215,7 @@ export default class ChatMessageList extends Vue {
     const tempText: string = this.room.textInput;
     this.room.textInput = "";
     try {
+      const isEdit = this.room.isMessageEdit;
       await this.room.sendMessage({
         text: tempText,
         displayName: ApiService.instance._user.nicknameOrName,
@@ -222,6 +223,20 @@ export default class ChatMessageList extends Vue {
       this.sending = false;
 
       (this.$refs.testInput as HTMLElement)?.focus();
+
+      if (isEdit == null) {
+        /// Send Push Notification Silently
+        ApiService.instance.sendMessageToUsers({
+          users: this.room.otherUserId,
+          subscription: this.room.topic,
+          title: ApiService.instance._user.nicknameOrName, // + "님이 메시지를 보냈습니다.",
+          body: tempText,
+          data: {
+            type: "chat",
+            roomId: this.room.id,
+          },
+        });
+      }
     } catch (e) {
       ComponentService.instance.error(e);
 
@@ -268,6 +283,17 @@ export default class ChatMessageList extends Vue {
         extra: { url: file.url },
       });
       this.sending = false;
+      /// Send Push Notification Silently
+      ApiService.instance.sendMessageToUsers({
+        users: this.room.otherUserId,
+        subscription: this.room.topic,
+        title: ApiService.instance._user.nicknameOrName, // + "님이 메시지를 보냈습니다.",
+        body: "사진을 보냈습니다.",
+        data: {
+          type: "chat",
+          roomId: this.room.id,
+        },
+      });
 
       (this.$refs.testInput as HTMLElement)?.focus();
     } catch (e) {
