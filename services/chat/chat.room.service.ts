@@ -842,10 +842,10 @@ export class ChatRoomService extends ChatBase {
   async updateGlobalRoomUsersInfo(info: Record<string, unknown>): Promise<void> {
     const _globalRoom: ChatGlobalRoomModel = await this.getGlobalRoom(this.id);
 
-    if (_globalRoom.moderators.includes(this.loginUserUid) == false) throw YOU_ARE_NOT_MODERATOR;
+    // if (_globalRoom.moderators.includes(this.loginUserUid) == false) throw YOU_ARE_NOT_MODERATOR;
 
     // Update users photoProfile silently
-    await this.globalRoomDoc(_globalRoom.roomId).update({ usersInfo: info });
+    await this.globalRoomDoc(_globalRoom.roomId).set({ usersInfo: info }, { merge: true });
   }
 
   editMessage(message: ChatMessageModel): void {

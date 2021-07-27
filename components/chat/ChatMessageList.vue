@@ -63,7 +63,6 @@
           </div>
         </b-popover>
         <div v-if="m.isMine" @mousedown="onMouseDown(m)" @mouseup="onMouseUp(m)">
-          <div v-if="!m.isImage">{{ room.text(m, true) }}</div>
           <div v-if="m.isImage">
             <b-spinner v-if="!m.rendered"></b-spinner>
             <b-img
@@ -74,9 +73,16 @@
               @click.prevent="showImagePreview(m)"
             ></b-img>
           </div>
+
+          <div v-else-if="m.isMovie">
+            <video width="320" height="240" controls>
+              <source :src="m.text" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div v-else>{{ room.text(m, true) }}</div>
         </div>
         <div v-else>
-          <div v-if="!m.isImage">{{ room.text(m, true) }}</div>
           <div v-if="m.isImage">
             <b-spinner v-if="!m.rendered"></b-spinner>
             <b-img
@@ -87,6 +93,13 @@
               @click.prevent="showImagePreview(m)"
             ></b-img>
           </div>
+          <div v-else-if="m.isMovie">
+            <video width="320" height="240" controls>
+              <source :src="m.text" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div v-else>{{ room.text(m, true) }}</div>
         </div>
       </div>
     </div>
@@ -202,6 +215,7 @@ export default class ChatMessageList extends Vue {
     const tempText: string = this.room.textInput;
     this.room.textInput = "";
     try {
+      const isEdit = this.room.isMessageEdit;
       await this.room.sendMessage({
         text: tempText,
         displayName: ApiService.instance._user.nicknameOrName,
@@ -209,6 +223,20 @@ export default class ChatMessageList extends Vue {
       this.sending = false;
 
       (this.$refs.testInput as HTMLElement)?.focus();
+
+      if (isEdit == null) {
+        /// Send Push Notification Silently
+        ApiService.instance.sendMessageToUsers({
+          users: this.room.otherUserId,
+          subscription: this.room.topic,
+          title: ApiService.instance._user.nicknameOrName, // + "님이 메시지를 보냈습니다.",
+          body: tempText,
+          data: {
+            type: "chat",
+            roomId: this.room.id,
+          },
+        });
+      }
     } catch (e) {
       ComponentService.instance.error(e);
 
@@ -255,6 +283,17 @@ export default class ChatMessageList extends Vue {
         extra: { url: file.url },
       });
       this.sending = false;
+      /// Send Push Notification Silently
+      ApiService.instance.sendMessageToUsers({
+        users: this.room.otherUserId,
+        subscription: this.room.topic,
+        title: ApiService.instance._user.nicknameOrName, // + "님이 메시지를 보냈습니다.",
+        body: "사진을 보냈습니다.",
+        data: {
+          type: "chat",
+          roomId: this.room.id,
+        },
+      });
 
       (this.$refs.testInput as HTMLElement)?.focus();
     } catch (e) {
