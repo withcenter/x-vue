@@ -119,7 +119,7 @@ export class ChatUserRoomListService extends ChatBase {
 
         this.newMessages = 0;
         this.rooms.forEach((roomInfo) => {
-          console.log(roomInfo.newMessages);
+          // console.log('newMessages',roomInfo.newMessages);
           this.newMessages += parseInt(roomInfo.newMessages);
         });
 

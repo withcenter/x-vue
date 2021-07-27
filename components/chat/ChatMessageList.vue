@@ -63,7 +63,6 @@
           </div>
         </b-popover>
         <div v-if="m.isMine" @mousedown="onMouseDown(m)" @mouseup="onMouseUp(m)">
-          <div v-if="!m.isImage">{{ room.text(m, true) }}</div>
           <div v-if="m.isImage">
             <b-spinner v-if="!m.rendered"></b-spinner>
             <b-img
@@ -74,9 +73,16 @@
               @click.prevent="showImagePreview(m)"
             ></b-img>
           </div>
+
+          <div v-else-if="m.isMovie">
+            <video width="320" height="240" controls>
+              <source :src="m.text" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div v-else>{{ room.text(m, true) }}</div>
         </div>
         <div v-else>
-          <div v-if="!m.isImage">{{ room.text(m, true) }}</div>
           <div v-if="m.isImage">
             <b-spinner v-if="!m.rendered"></b-spinner>
             <b-img
@@ -87,6 +93,13 @@
               @click.prevent="showImagePreview(m)"
             ></b-img>
           </div>
+          <div v-else-if="m.isMovie">
+            <video width="320" height="240" controls>
+              <source :src="m.text" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div v-else>{{ room.text(m, true) }}</div>
         </div>
       </div>
     </div>
