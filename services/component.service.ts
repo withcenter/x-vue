@@ -17,7 +17,7 @@ export interface PromptToast {
   title: string;
   message: string;
   okCallback: (input: string) => void;
-  cancelCallback: () => void;
+  cancelCallback?: () => void;
   placement?: string;
   variant?: string;
   hideDelay?: number;
@@ -126,7 +126,9 @@ export default class ComponentService {
     } else {
       const re = prompt(options.title, options.message);
       if (re) options.okCallback(re);
-      else options.cancelCallback();
+      else {
+        if (options.cancelCallback) options.cancelCallback();
+      }
     }
   }
   open(path: string): void {

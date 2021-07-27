@@ -58,7 +58,7 @@ export default class UploadButton extends Vue {
   }
 
   onProgress(progress: number): void {
-    // console.log(progress);
+    console.log(progress);
     this.$emit("progress", progress);
   }
 }

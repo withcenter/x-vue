@@ -4,7 +4,7 @@
       <div class="admin-user-avatar d-flex align-items-center text-nowrap">
         <UserAvatar class="mr-2" :user="otherUser"></UserAvatar>
         <div>
-          <div v-if="room.global.title">{{ room.global.title }}</div>
+          <div v-if="room.getTitle">{{ room.getTitle }}</div>
           <div v-else-if="otherUser.idx">({{ otherUser.idx }}) {{ otherUser.nicknameOrName }}</div>
         </div>
       </div>
@@ -63,7 +63,7 @@
           </div>
         </b-popover>
         <div v-if="m.isMine" @mousedown="onMouseDown(m)" @mouseup="onMouseUp(m)">
-          <div v-if="!m.isImage">{{ m.text }}</div>
+          <div v-if="!m.isImage">{{ room.text(m, true) }}</div>
           <div v-if="m.isImage">
             <b-spinner v-if="!m.rendered"></b-spinner>
             <b-img
@@ -76,7 +76,7 @@
           </div>
         </div>
         <div v-else>
-          <div v-if="!m.isImage">{{ m.text }}</div>
+          <div v-if="!m.isImage">{{ room.text(m, true) }}</div>
           <div v-if="m.isImage">
             <b-spinner v-if="!m.rendered"></b-spinner>
             <b-img
@@ -89,47 +89,18 @@
           </div>
         </div>
       </div>
-
-      <!-- <div :id="m.id" v-for="m in room.messages" :key="m.id">
-        <div
-          v-if="m.isMine"
-          class="chat-bubble mine rounded-lg my-1 p-2 text-break white text-right my-chat ml-auto"
-          @mousedown="onMouseDown(m)"
-          @mouseup="onMouseUp(m)"
-        >
-          <div v-if="!m.isImage">{{ m.text }}</div>
-          <div v-if="m.isImage">
-            <b-spinner v-if="!m.rendered"></b-spinner>
-            <b-img
-              :src="m.text"
-              fluid
-              :alt="m.text"
-              @load="room.onImageLoadComplete(m)"
-              @click.prevent="showImagePreview(m)"
-            ></b-img>
-          </div>
-        </div>
-        <div v-if="m.isMine" other class="chat-bubble rounded-lg my-1 p-2 text-break white text-left other-chat mr-auto">
-          <div v-if="!m.isImage">{{ m.text }}</div>
-          <div v-if="m.isImage">
-            <b-spinner v-if="!m.rendered"></b-spinner>
-            <b-img
-              :src="m.text"
-              fluid
-              :alt="m.text"
-              @load="room.onImageLoadComplete(m)"
-              @click.prevent="showImagePreview(m)"
-            ></b-img>
-          </div>
-        </div>
-      </div> -->
     </div>
-
+    <b-progress :value="progress" max="100" class="mb-3 ml-2 mr-2" v-if="progress && progress != 100"></b-progress>
     <div class="d-flex">
       <div>
-        <UploadButton @success="onSuccess"></UploadButton>
+        <UploadButton @success="onSuccess" @progress="progress = $event"></UploadButton>
       </div>
-      <input class="w-100" ref="testInput" type="text" v-model="room.textInput" @keypress.enter="sendMessage" />
+      <div class="w-100 position-relative">
+        <input class="w-100 py-1" ref="testInput" type="text" v-model="room.textInput" @keypress.enter="sendMessage" />
+        <div v-if="room.isMessageEdit" class="red position-absolute top right py-1 px-2" @click="room.cancelEdit()">
+          <font-awesome-icon :icon="['fas', 'times']" />
+        </div>
+      </div>
       <button class="btn btn-sm btn-primary ml-2 px-5" @click="sendMessage">{{ "Send" | t }}</button>
     </div>
 
@@ -192,6 +163,7 @@ export default class ChatMessageList extends Vue {
   otherUser: UserModel = new UserModel();
 
   fileImagePreviewUrl = "";
+  progress = 0;
 
   showImagePreview(m: ChatMessageModel): void {
     this.fileImagePreviewUrl = "" + m.extra.url;
@@ -200,8 +172,6 @@ export default class ChatMessageList extends Vue {
 
   mounted(): void {
     this.chatRoomSubscription = ChatRoomService.instance.changes.subscribe(() => {
-      // console.log("message::changes::", message);
-      // console.log("chatRoomSubscription", ChatRoomService.instance.atBottom, ChatRoomService.instance.page == 1);
       if (ChatRoomService.instance.atBottom || ChatRoomService.instance.page == 1) {
         ChatRoomService.instance.scrollToBottom();
       }
@@ -211,13 +181,10 @@ export default class ChatMessageList extends Vue {
   }
 
   async loadOtherUser(): Promise<void> {
+    if (!ChatRoomService.instance.global.otherUserId) return;
+    const otherUserId: string = ChatRoomService.instance.global.otherUserId;
     try {
-      // console.log("ChatRoomService.instance.global.otherUserId::", ChatRoomService.instance.global.otherUserId);
-      this.otherUser = await ApiService.instance.otherUserProfile(
-        ChatRoomService.instance.global.otherUserId as string
-      );
-
-      // console.log("loadOtherUser", this.otherUser);
+      this.otherUser = await ApiService.instance.otherUserProfile(otherUserId);
     } catch (error) {
       ComponentService.instance.error(error);
     }
@@ -252,7 +219,7 @@ export default class ChatMessageList extends Vue {
   async changeRoomTitle(): Promise<void> {
     ComponentService.instance.promptToast({
       title: "Change Room Title",
-      message: this.room.title,
+      message: this.room.getTitle,
       placement: PLACEMENT.TOP_CENTER,
       okCallback: async (title: string): Promise<void> => {
         console.log("title", title);
@@ -262,7 +229,7 @@ export default class ChatMessageList extends Vue {
           ComponentService.instance.error(error);
         }
       },
-      cancelCallback: () => console.log("no"),
+      // cancelCallback: () => console.log("no"),
     });
   }
 
@@ -301,9 +268,9 @@ export default class ChatMessageList extends Vue {
     console.log(message.isImage);
     if (!message.isMine) return;
     message.longPress = true;
-    console.log("onMouseDown", message.longPress);
+    // console.log("onMouseDown", message.longPress);
     setTimeout(() => {
-      console.log("onMouseDown", message.longPress);
+      // console.log("onMouseDown", message.longPress);
       if (message.longPress) {
         console.log("show edit");
         // $('#chat-message-popover-' + message.id).popover('show')
@@ -314,7 +281,7 @@ export default class ChatMessageList extends Vue {
   onMouseUp(message: ChatMessageModel): void {
     if (!message.isMine) return;
     message.longPress = false;
-    console.log("onMouseUp", message.longPress);
+    // console.log("onMouseUp", message.longPress);
   }
 }
 </script>

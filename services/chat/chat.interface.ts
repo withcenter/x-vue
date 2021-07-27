@@ -51,6 +51,7 @@ export class ChatMessageModel {
 
     this.isMine = map.senderUid == ChatRoomService.instance.loginUserUid;
     this.data = map.data;
+
     if (map.text != null && isImageUrl(map.text)) {
       this.isImage = true;
     }
@@ -85,23 +86,28 @@ export class ChatUserRoomModel {
   /// [newMessages] has the number of new messages for that room.
   newMessages = "";
 
-  /// [global] is the global room information
-  //   global: ChatGlobalRoom = new ChatGlobalRoom();
-
   isImage = false;
 
-  global = {} as ChatGlobalRoomModel;
+  /// [global] is the global room information
+  global = new ChatGlobalRoomModel();
+
+  extra: Record<string, unknown> = {};
+
+  /// user private title
+  title = "";
+
+  get getTitle(): string {
+    return this.title || this.global.title;
+  }
 
   get otherUserPhotoUrl(): string {
+    if (!this.global.roomId) return "";
     if (!this.global.otherUserId) return "";
     return this.global.usersInfo[this.global.otherUserId].photoUrl;
   }
 
-  get title(): string {
-    return this.global.title;
-  }
-
   get otherUserDisplayName(): string {
+    if (!this.global.roomId) return "";
     if (!this.global.otherUserId) return "";
     return this.global.usersInfo[this.global.otherUserId].displayName;
   }
@@ -130,10 +136,15 @@ export class ChatUserRoomModel {
     this.createdAt = map.createdAt;
     this.newMessages = map.newMessages;
     this.isImage = map.isImage;
+    this.title = map.title;
     this.global = new ChatGlobalRoomModel().fromJson(map.global);
 
     if (map.isImage != null && isImageUrl(this.text)) {
       this.isImage = true;
+    }
+
+    if (map.extra != null) {
+      this.extra = map.extra;
     }
     return this;
   }

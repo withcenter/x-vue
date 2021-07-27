@@ -71,38 +71,46 @@ export class ChatBase {
     return this.myRoomListCol.doc(roomId);
   }
 
-  text(message: ChatMessageModel): string {
+  text(message: ChatMessageModel, prefixName: false): string {
     let text = message.text ?? "";
 
-    if (text == ChatProtocol.roomCreated) {
-      text = message.senderDisplayName + "님이 채팅방을 개설했습니다.";
-    }
-    if (text == ChatProtocol.add) {
-      text = message.senderDisplayName + " added " + message.newUsers.join(",");
-    }
-    if (text == ChatProtocol.kickout) {
-      text = message.senderDisplayName + " kicked " + message.data["userName"];
-    }
-    if (text == ChatProtocol.block) {
-      text = message.senderDisplayName + " block  " + message.data["userName"];
+    if (text.startsWith("ChatProtocol.")) {
+      let newText = "";
+      if (prefixName) newText = message.senderDisplayName;
+
+      if (text == ChatProtocol.roomCreated) {
+        newText += " 님이 채팅방을 개설했습니다.";
+      }
+      if (text == ChatProtocol.leave) {
+        newText += " leave the room.";
+      }
+      if (text == ChatProtocol.add) {
+        newText += " added " + message.newUsers.join(",");
+      }
+      if (text == ChatProtocol.kickout) {
+        newText += " kicked " + message.data["userName"];
+      }
+      if (text == ChatProtocol.block) {
+        newText += " block  " + message.data["userName"];
+      }
+
+      if (text == ChatProtocol.addModerator) {
+        newText += " add moderator " + message.data["userName"];
+      }
+      if (text == ChatProtocol.removeModerator) {
+        newText += " remove moderator " + message.data["userName"];
+      }
+
+      if (text == ChatProtocol.titleChanged) {
+        newText += " change room title ";
+        newText += message.extra["newTitle"] != null ? "to " + message.extra["newTitle"] : "";
+      }
+      if (text == ChatProtocol.enter) {
+        newText += " invited ${message.newUsers}";
+      }
+      text = newText;
     }
 
-    if (text == ChatProtocol.addModerator) {
-      text = message.senderDisplayName + " add moderator " + message.data["userName"];
-    }
-    if (text == ChatProtocol.removeModerator) {
-      text = message.senderDisplayName + " remove moderator " + message.data["userName"];
-    }
-
-    if (text == ChatProtocol.titleChanged) {
-      text = message.senderDisplayName + " change room title ";
-      text += message.data["newTitle"] != null ? "to " + message.data["newTitle"] : "";
-    }
-
-    if (text == ChatProtocol.enter) {
-      // print(message);
-      text = "${message.senderDisplayName} invited ${message.newUsers}";
-    }
     return text;
   }
 

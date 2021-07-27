@@ -96,13 +96,15 @@ export class ChatRoomService extends ChatBase {
   /// Use this to dipplay title or other information of the current room.
   /// When `/chat/global-rooms/list/{roomId}` changes, it will be updated and calls render handler.
   global: ChatGlobalRoomModel = {} as ChatGlobalRoomModel;
+  current: ChatUserRoomModel = {} as ChatUserRoomModel;
 
   /// Chat room properties
   get id(): string {
     return this.global?.roomId ?? "";
   }
-  get title(): string {
-    return this.global?.title;
+
+  get getTitle(): string {
+    return this.current.title || this.global.title;
   }
 
   /// The [users] holds the firebase uid(s) of the global.users which will be loaded
@@ -292,8 +294,8 @@ export class ChatRoomService extends ChatBase {
 
         // If the user got a message from a chat room where the user is currently in,
         // then, set `newMessages` to 0.
-        const data = new ChatUserRoomModel().fromSnapshot(snapshot);
-        if (parseInt(data?.newMessages) > 0 && data?.createdAt != null) {
+        this.current = new ChatUserRoomModel().fromSnapshot(snapshot);
+        if (parseInt(this.current?.newMessages) > 0 && this.current?.createdAt != null) {
           this.currentRoom.update({ newMessages: 0 });
         }
       },
@@ -457,18 +459,13 @@ export class ChatRoomService extends ChatBase {
             if (snapshot.docs.length < this._limit) {
               if (message.text == ChatProtocol.roomCreated) {
                 this.noMoreMessage = true;
-
-                // console.log('-----> noMoreMessage: $noMoreMessage');
               }
             }
           }
         } else if (documentChange.type == DocumentChangeType.modified) {
           console.log("modified", message);
           const i: number = this.messages.findIndex((r) => r.id == message.id);
-          console.log(i);
-          console.log(this.messages[i]);
           if (i > -1) {
-            // this.messages[i] = message;
             this.messages.splice(i, 1, message);
           }
         } else if (documentChange.type == DocumentChangeType.removed) {
@@ -582,7 +579,7 @@ export class ChatRoomService extends ChatBase {
     };
 
     if (extra != null) {
-      Object.assign(message, extra);
+      // Object.assign(message, extra);
 
       message["extra"] = extra;
     }
@@ -681,7 +678,6 @@ export class ChatRoomService extends ChatBase {
     const i = users.indexOf(uid);
     if (i != -1) users.splice(i, 1);
 
-    // List<String> blocked = info.blocked ?? [];
     _globalRoom.blockedUsers.push(uid);
 
     /// Update users and blockedUsers first to inform by sending a message.
@@ -827,17 +823,22 @@ export class ChatRoomService extends ChatBase {
   async updateTitle(title: string): Promise<void> {
     const _globalRoom: ChatGlobalRoomModel = await this.getGlobalRoom(this.id);
 
-    if (_globalRoom.moderators.includes(this.loginUserUid) == false) throw YOU_ARE_NOT_MODERATOR;
+    // if (_globalRoom.moderators.includes(this.loginUserUid) == false) throw YOU_ARE_NOT_MODERATOR;
 
-    // Update users after removing himself.
-    await this.globalRoomDoc(_globalRoom.roomId).update({ title: title });
-
-    await this.sendMessage({
-      text: ChatProtocol.titleChanged,
-      displayName: this.displayName,
-      extra: { newTitle: title },
-    });
+    if (_globalRoom.moderators.includes(this.loginUserUid)) {
+      // update global room title
+      await this.globalRoomDoc(_globalRoom.roomId).update({ title: title });
+      // notify all users
+      await this.sendMessage({
+        text: ChatProtocol.titleChanged,
+        displayName: this.displayName,
+        extra: { newTitle: title },
+      });
+    }
+    // update own room title
+    this.userRoomDoc(this.loginUserUid, this.global.roomId).set({ title: title }, { merge: true });
   }
+
   async updateGlobalRoomUsersInfo(info: Record<string, unknown>): Promise<void> {
     const _globalRoom: ChatGlobalRoomModel = await this.getGlobalRoom(this.id);
 
@@ -848,7 +849,6 @@ export class ChatRoomService extends ChatBase {
   }
 
   editMessage(message: ChatMessageModel): void {
-    console.log("editMessage");
     this.textInput = message.text;
     this.isMessageEdit = message;
     this.changes.next(message);
@@ -861,7 +861,7 @@ export class ChatRoomService extends ChatBase {
   }
 
   cancelEdit(): void {
-    // textController.text = ''; // todo
+    this.textInput = "";
     this.isMessageEdit = null;
     this.changes.next(new ChatMessageModel());
   }
