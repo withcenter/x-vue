@@ -186,7 +186,7 @@ export class ChatRoomService extends ChatBase {
   /// Null or empty string in [users] will be wiped out.
   ///
   /// Whenever global room information changes, it is updated on [global].
-  async enter({ id = null, users = [], hatch = true, displayName }: ChatRoomEnter): Promise<void> {
+  async enter({ id = null, users = [], hatch = false, displayName }: ChatRoomEnter): Promise<void> {
     /// confusing with [this.id], so, it goes as `_id`.
     let _id: string | null = id;
     this._displayName = displayName;
@@ -195,6 +195,7 @@ export class ChatRoomService extends ChatBase {
       throw LOGIN_FIRST;
     }
 
+    // firebase ids
     if (users == null) users = [];
     // [users] has empty element, remove.
     users.filter((element) => element != null || element != "");
