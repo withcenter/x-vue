@@ -11,6 +11,7 @@ import { BehaviorSubject } from "rxjs";
 // import "firebase/firestore";
 import { DocumentChangeType } from "./chat.defines";
 import { DocumentChange, DocumentSnapshot, onSnapshot, orderBy, query } from "@firebase/firestore";
+import { Unsubscribe } from "firebase/messaging";
 
 /// You may rewrite your own helper class.
 export class ChatUserRoomListService extends ChatBase {
@@ -40,17 +41,15 @@ export class ChatUserRoomListService extends ChatBase {
     });
   }
 
-  //   // Function __render;  // needed?
-
-  //   /// This event is posted with a room info when
-  //   /// - gets all the room list of user when it first run. The last room will be passed over.
-  //   /// - and when there is new chat, user room will be modified, so, this event will be passed over again with the room that has chagned.
-  //   /// - When global room information changes. it will pass the user room of the global room.
-  //   ///
-  //   /// To get the whole list of room info, use [rooms].
+  /// This event is posted with a room info when
+  /// - gets all the room list of user when it first run. The last room will be passed over.
+  /// - and when there is new chat, user room will be modified, so, this event will be passed over again with the room that has chagned.
+  /// - When global room information changes. it will pass the user room of the global room.
+  ///
+  /// To get the whole list of room info, use [rooms].
   changes: BehaviorSubject<ChatUserRoomModel> = new BehaviorSubject(new ChatUserRoomModel());
 
-  _myRoomListSubscription: (() => void) | null = null;
+  _myRoomListSubscription: Unsubscribe | null = null;
 
   _roomSubscriptions: { [index: string]: () => void } = {} as { [index: string]: () => void };
 

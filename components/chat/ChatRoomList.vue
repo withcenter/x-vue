@@ -4,7 +4,7 @@
       class="d-flex align-items-center"
       v-for="room in roomsList.rooms"
       :key="room.id"
-      :to="{ path: 'chat-message', query: { id: room.id } }"
+      :to="{ path: 'chat-message', query: { roomId: room.id } }"
     >
       <b-avatar class="avatar mr-2 mb-2" :src="room.otherUserPhotoUrl"></b-avatar>
       <div>
