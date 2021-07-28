@@ -35,7 +35,7 @@ export default class FileUploadButton extends Vue {
   api = ApiService.instance;
 
   async onFileChange(event: HTMLInputEvent): Promise<void> {
-    if (!this.api._user.loggedIn) {
+    if (!this.api.user.loggedIn) {
       ComponentService.instance.error("error_login_first");
       return;
     }

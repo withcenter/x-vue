@@ -1,6 +1,9 @@
-import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/firestore";
+// import firebase from "firebase/app";
+// import "firebase/auth";
+// import "firebase/firestore";
+import { getApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 import { ChatRoomService } from "./chat.room.service";
 import { ChatUserRoomListService } from "./chat.user_room_list.service";
 
@@ -14,8 +17,8 @@ export class ChatService {
     return ChatService._instance;
   }
 
-  auth = firebase.auth();
-  firestore = firebase.firestore();
+  auth = getAuth(getApp());
+  firestore = getFirestore();
   room = ChatRoomService.instance;
   userRoomList = ChatUserRoomListService.instance;
 }

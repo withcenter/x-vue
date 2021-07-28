@@ -219,7 +219,7 @@ export default class ChatMessageList extends Vue {
       const isEdit = this.room.isMessageEdit;
       await this.room.sendMessage({
         text: tempText,
-        displayName: ApiService.instance._user.nicknameOrName,
+        displayName: ApiService.instance.user.nicknameOrName,
       });
       this.sending = false;
 
@@ -230,7 +230,7 @@ export default class ChatMessageList extends Vue {
         ApiService.instance.sendMessageToUsers({
           users: this.room.otherUserId,
           subscription: this.room.topic,
-          title: ApiService.instance._user.nicknameOrName + " " + t("sent_a_message"),
+          title: ApiService.instance.user.nicknameOrName + " " + t("sent_a_message"),
           body: tempText,
           click_action: "chat-message?id=" + this.room.id,
           data: {
@@ -281,7 +281,7 @@ export default class ChatMessageList extends Vue {
     try {
       await this.room.sendMessage({
         text: isImageUrl(file.url) ? file.thumbnailUrl : file.url,
-        displayName: ApiService.instance._user.nicknameOrName,
+        displayName: ApiService.instance.user.nicknameOrName,
         extra: { url: file.url },
       });
       this.sending = false;
@@ -289,7 +289,7 @@ export default class ChatMessageList extends Vue {
       ApiService.instance.sendMessageToUsers({
         users: this.room.otherUserId,
         subscription: this.room.topic,
-        title: ApiService.instance._user.nicknameOrName + " " + t("sent_a_message"),
+        title: ApiService.instance.user.nicknameOrName + " " + t("sent_a_message"),
         body: t("sent_a_file"),
         click_action: "chat-message?id=" + this.room.id,
         data: {
