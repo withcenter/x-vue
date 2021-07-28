@@ -1,5 +1,5 @@
 <template>
-  <div class="banner line pointer row no-gutters" @click="onClick" v-if="currentBanner.bannerUrl">
+  <div class="banner line pointer row no-gutters" @click="onClick" v-if="currentBanner">
     <div class="col-2 p-0 image-holder">
       <img :src="currentBanner.bannerUrl" />
     </div>
@@ -15,6 +15,7 @@ import { Component, Prop } from "vue-property-decorator";
 import { Banner, AllCategoryBanners } from "@/x-vue/interfaces/advertisement.interface";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 import { advKey } from "@/service/functions";
+import appConfig from "@/service/app.config";
 
 @Component({})
 export default class AdvertisementLineBanner extends Vue {
@@ -30,20 +31,19 @@ export default class AdvertisementLineBanner extends Vue {
 
   get _banners(): Banner[] {
     const k = advKey("line", this.categoryId);
-    if (!this.banners) return [];
-    if (!this.banners[k]) return [];
-    return this.banners[k];
+    return this.banners && this.banners[k] ? this.banners[k] : [];
+
+    // if (!this.banners) return [];
+    // if (!this.banners[k]) return [];
+    // return this.banners[k];
   }
 
   get currentBanner(): Banner {
-    if (!this._banners.length) {
-      return {};
-    }
     return this._banners[this.index % this._banners.length];
   }
 
   rotate(): void {
-    setInterval(() => this.index++, 7000);
+    setInterval(() => this.index++, appConfig.banner.rotationInterval);
   }
 
   onClick(): void {
