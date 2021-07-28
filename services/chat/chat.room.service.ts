@@ -355,7 +355,7 @@ export class ChatRoomService extends ChatBase {
   oldTop = 0;
   // isScrollTop = false;
   scrollUp(top: number): boolean {
-    // console.log("scrollUp::", this.oldTop, top);
+    console.log("scrollUp::", this.oldTop, top);
     if (this.oldTop > top) {
       // console.log("↑");
       this.oldTop = top;
@@ -509,6 +509,7 @@ export class ChatRoomService extends ChatBase {
         // After `throttle` time has passed, set the `loading` to false. Which means,
         // it can fetch next batch of message again.
         this.loading = false;
+        this.scrolledUp = false;
 
         // console.log("------ pageNo;", this.page, " has finished;");
 
@@ -926,10 +927,12 @@ export class ChatRoomService extends ChatBase {
   /// The [scrolledUp] becomes true once the user scrolls up the chat room screen.
   scrolledUp = false;
   onImageLoadComplete(message: ChatMessageModel): void {
+    console.log("onImageLoadComplete", message);
     message.rendered = true;
 
     // If the user didn't scroll up the screen (which means, it is really very first time entering the chat room),
     // then scroll to the bottom on every image load of the message(images).
+    console.log("onImageLoadComplete::this.scrolledUp", this.scrolledUp);
     if (this.scrolledUp == false) {
       this.scrollToBottom();
     }

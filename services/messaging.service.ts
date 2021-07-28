@@ -1,9 +1,9 @@
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { getMessaging, getToken, MessagePayload, onMessage } from "firebase/messaging";
 import { ApiService } from "./api.service";
 
 export class MessagingService {
   private static _instance: MessagingService;
-  private onMessage?: (payload: Record<string, Record<string, unknown>>) => void;
+  private onMessage?: (payload: MessagePayload) => void;
 
   public static get instance(): MessagingService {
     if (!MessagingService._instance) {
@@ -18,7 +18,7 @@ export class MessagingService {
 
   public token = "";
 
-  init(options: { onMessage: (payload: Record<string, Record<string, unknown>>) => void }): void {
+  init(options: { onMessage: (payload: MessagePayload) => void }): void {
     this.pushMessageInit();
     this.onMessage = options.onMessage;
   }
@@ -55,7 +55,7 @@ export class MessagingService {
         // console.log("data", data);
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         // ! @todo work for new sdk.
-        // this.onMessage!(payload);
+        this.onMessage!(payload);
       });
     }
   }

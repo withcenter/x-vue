@@ -1,10 +1,16 @@
 <template>
   <section class="chat-message d-flex flex-column">
     <ChatRoomHeader></ChatRoomHeader>
-    <ChatRoomMessageList class="flex-grow-1"></ChatRoomMessageList>
+    <ChatRoomMessageList></ChatRoomMessageList>
     <ChatRoomBottomActions></ChatRoomBottomActions>
   </section>
 </template>
+
+<style lang="scss" scoped>
+.chat-message {
+  height: 600px;
+}
+</style>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
