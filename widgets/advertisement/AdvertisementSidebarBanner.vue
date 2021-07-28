@@ -7,15 +7,16 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import { Banner, AllCategoryBanners } from "@/x-vue/interfaces/advertisement.interface";
+import { Banner } from "@/x-vue/interfaces/advertisement.interface";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
-import { advKey } from "@/service/functions";
+// import { advKey } from "@/service/functions";
 
 @Component({})
 export default class AdvertisementSidebarBanner extends Vue {
-  @Prop() banners!: AllCategoryBanners;
-  @Prop() categoryId!: string;
-  @Prop() countryCode!: string;
+  @Prop() banners!: Banner[];
+  // @Prop() banners!: AllCategoryBanners;
+  // @Prop() categoryId!: string;
+  // @Prop() countryCode!: string;
 
   index = 0;
 
@@ -24,10 +25,10 @@ export default class AdvertisementSidebarBanner extends Vue {
   }
 
   get currentBanner(): Banner | undefined {
-    const items = this.banners[advKey("sidebar", this.categoryId)];
+    // const items = this.banners[advKey("sidebar", this.categoryId)];
 
-    if (items) {
-      return items[this.index % items.length];
+    if (this.banners && this.banners.length) {
+      return this.banners[this.index % this.banners.length];
     } else {
       return undefined;
     }

@@ -12,15 +12,16 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import { Banner, AllCategoryBanners } from "@/x-vue/interfaces/advertisement.interface";
+import { Banner } from "@/x-vue/interfaces/advertisement.interface";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
-import { advKey } from "@/service/functions";
+// import { advKey } from "@/service/functions";
 
 @Component({})
 export default class AdvertisementLineBanner extends Vue {
-  @Prop() banners!: AllCategoryBanners;
-  @Prop() countryCode!: string;
-  @Prop() categoryId!: string;
+  @Prop() banners!: Banner[];
+  // @Prop() banners!: AllCategoryBanners;
+  // @Prop() countryCode!: string;
+  // @Prop() categoryId!: string;
 
   index = 0;
 
@@ -28,18 +29,22 @@ export default class AdvertisementLineBanner extends Vue {
     this.rotate();
   }
 
-  get _banners(): Banner[] {
-    const k = advKey("line", this.categoryId);
-    if (!this.banners) return [];
-    if (!this.banners[k]) return [];
-    return this.banners[k];
-  }
+  // get _banners(): Banner[] {
+  //   const k = advKey("line", this.categoryId);
+  //   if (!this.banners) return [];
+  //   if (!this.banners[k]) return [];
+  //   return this.banners[k];
+  // }
 
   get currentBanner(): Banner {
-    if (!this._banners.length) {
+    // if (!this._banners.length) {
+    //   return {};
+    // }
+    // return this._banners[this.index % this._banners.length];
+    if (!this.banners.length) {
       return {};
     }
-    return this._banners[this.index % this._banners.length];
+    return this.banners[this.index % this.banners.length];
   }
 
   rotate(): void {
