@@ -26,30 +26,30 @@
             <tr>
               <th scope="row">Top banner</th>
               <td><input type="number" v-model="maxNoOnGlobalTopBanner" /></td>
-              <div>
+              <td>
                 <input type="number" v-model="maxNoOnCategoryTopBanner" />
-              </div>
+              </td>
             </tr>
             <tr>
               <th scope="row">Sidebar banner</th>
               <td><input type="number" v-model="maxNoOnGlobalSidebarBanner" /></td>
-              <div>
+              <td>
                 <input type="number" v-model="maxNoOnCategorySidebarBanner" />
-              </div>
+              </td>
             </tr>
             <tr>
               <th scope="row">Square banner</th>
               <td><input type="number" v-model="maxNoOnGlobalSquareBanner" /></td>
-              <div>
+              <td>
                 <input type="number" v-model="maxNoOnCategorySquareBanner" />
-              </div>
+              </td>
             </tr>
             <tr>
               <th scope="row">Line banner</th>
               <td><input type="number" v-model="maxNoOnGlobalLineBanner" /></td>
-              <div>
+              <td>
                 <input type="number" v-model="maxNoOnCategoryLineBanner" />
-              </div>
+              </td>
             </tr>
           </tbody>
         </table>
