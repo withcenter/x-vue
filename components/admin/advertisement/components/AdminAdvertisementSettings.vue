@@ -24,24 +24,32 @@
           </thead>
           <tbody>
             <tr>
-              <th scope="row">{{ "top_banner" | t }}</th>
-              <td><input type="number" class="form-control" v-model="maxNoOnGlobalTopBanner" /></td>
-              <td><input type="number" class="form-control" v-model="maxNoOnCategoryTopBanner" /></td>
+              <th scope="row">Top banner</th>
+              <td><input type="number" v-model="maxNoOnGlobalTopBanner" /></td>
+              <td>
+                <input type="number" v-model="maxNoOnCategoryTopBanner" />
+              </td>
             </tr>
             <tr>
-              <th scope="row">{{ "sidebar_banner" | t }}</th>
-              <td><input type="number" class="form-control" v-model="maxNoOnGlobalSidebarBanner" /></td>
-              <td><input type="number" class="form-control" v-model="maxNoOnCategorySidebarBanner" /></td>
+              <th scope="row">Sidebar banner</th>
+              <td><input type="number" v-model="maxNoOnGlobalSidebarBanner" /></td>
+              <td>
+                <input type="number" v-model="maxNoOnCategorySidebarBanner" />
+              </td>
             </tr>
             <tr>
-              <th scope="row">{{ "square_banner" | t }}</th>
-              <td><input type="number" class="form-control" v-model="maxNoOnGlobalSquareBanner" /></td>
-              <td><input type="number" class="form-control" v-model="maxNoOnCategorySquareBanner" /></td>
+              <th scope="row">Square banner</th>
+              <td><input type="number" v-model="maxNoOnGlobalSquareBanner" /></td>
+              <td>
+                <input type="number" v-model="maxNoOnCategorySquareBanner" />
+              </td>
             </tr>
             <tr>
-              <th scope="row">{{ "line_banner" | t }}</th>
-              <td><input type="number" class="form-control" v-model="maxNoOnGlobalLineBanner" /></td>
-              <td><input type="number" class="form-control" v-model="maxNoOnCategoryLineBanner" /></td>
+              <th scope="row">Line banner</th>
+              <td><input type="number" v-model="maxNoOnGlobalLineBanner" /></td>
+              <td>
+                <input type="number" v-model="maxNoOnCategoryLineBanner" />
+              </td>
             </tr>
           </tbody>
         </table>

@@ -16,7 +16,7 @@
 
     <div class="pointer" @click="loginFirst" v-if="api.notLoggedIn">{{ "chat" | t }}</div>
     <div class="pointer" @click="emptyFirebaseUid" v-else-if="!user.firebaseUid">{{ "chat" | t }}</div>
-    <router-link class="d-block text-left" :to="`/chat-message?uid=${user.firebaseUid}`" v-else>{{
+    <router-link class="d-block text-left" :to="`/chat-message?firebaseUid=${user.firebaseUid}`" v-else>{{
       "chat" | t
     }}</router-link>
   </div>
@@ -53,10 +53,10 @@ import Component from "vue-class-component";
 export default class UserMenu extends Vue {
   user!: UserModel;
   api = ApiService.instance;
-  emptyFirebaseUid() {
+  emptyFirebaseUid(): void {
     ComponentService.instance.error("error_cant_chat_due_to_empty_firebase_uid");
   }
-  loginFirst() {
+  loginFirst(): void {
     ComponentService.instance.error(Err.login_first);
   }
 }

@@ -28,7 +28,56 @@ export class ChatMessageModel {
 
   get isMovie(): boolean {
     const t = this.text.toLowerCase();
-    if (t.startsWith("http") && (t.endsWith(".mov") || t.endsWith(".mp4"))) return true;
+    if (
+      t.startsWith("http") &&
+      (t.endsWith(".mov") ||
+        t.endsWith(".mp4") ||
+        t.endsWith(".m4v") ||
+        t.endsWith(".mpg") ||
+        t.endsWith(".mpeg") ||
+        t.endsWith(".mkv") ||
+        t.endsWith(".mov") ||
+        t.endsWith(".wmv") ||
+        t.endsWith(".avi") ||
+        t.endsWith(".webm"))
+    )
+      return true;
+    return false;
+  }
+
+  get isFile(): boolean {
+    const t = this.text.toLowerCase();
+    if (
+      t.startsWith("http") &&
+      (t.endsWith(".pdf") ||
+        t.endsWith(".mp3") ||
+        t.endsWith(".ogg") ||
+        t.endsWith(".wav") ||
+        t.endsWith(".txt") ||
+        t.endsWith(".htm") ||
+        t.endsWith(".html") ||
+        t.endsWith(".ppt") ||
+        t.endsWith(".pptx") ||
+        t.endsWith(".7z") ||
+        t.endsWith(".rar") ||
+        t.endsWith(".tar") ||
+        t.endsWith(".gz") ||
+        t.endsWith(".zip") ||
+        t.endsWith(".iso") ||
+        t.endsWith(".csv") ||
+        t.endsWith(".xml") ||
+        t.endsWith(".json") ||
+        t.endsWith(".apk") ||
+        t.endsWith(".ttf") ||
+        t.endsWith(".otf") ||
+        t.endsWith(".bmp") ||
+        t.endsWith(".psd") ||
+        t.endsWith(".svg") ||
+        t.endsWith(".doc") ||
+        t.endsWith(".docx") ||
+        t.endsWith(".rtf"))
+    )
+      return true;
     return false;
   }
 

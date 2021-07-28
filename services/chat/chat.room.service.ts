@@ -44,6 +44,7 @@ import {
   increment,
   deleteDoc,
 } from "firebase/firestore";
+import { Unsubscribe } from "firebase/messaging";
 
 export interface ChatRoomEnter {
   id?: string | null;
@@ -99,11 +100,11 @@ export class ChatRoomService extends ChatBase {
   ///
   globalRoomChanges: BehaviorSubject<ChatGlobalRoomModel> = new BehaviorSubject(new ChatGlobalRoomModel());
 
-  _chatRoomSubscriptions: Array<(() => void) | null> = [];
+  _chatRoomSubscriptions: Array<Unsubscribe | null> = [];
 
-  // _chatRoomSubscription: (() => void) | null = null;
-  _currentRoomSubscription: (() => void) | null = null;
-  _globalRoomSubscription: (() => void) | null = null;
+  // _chatRoomSubscription: Unsubscribe | null = null;
+  _currentRoomSubscription: Unsubscribe | null = null;
+  _globalRoomSubscription: Unsubscribe | null = null;
 
   //   /// Loaded the chat messages of current chat room.
   messages: ChatMessageModel[] = [];
@@ -207,7 +208,7 @@ export class ChatRoomService extends ChatBase {
   /// Null or empty string in [users] will be wiped out.
   ///
   /// Whenever global room information changes, it is updated on [global].
-  async enter({ id = null, users = [], hatch = true, displayName }: ChatRoomEnter): Promise<void> {
+  async enter({ id = null, users = [], hatch = false, displayName }: ChatRoomEnter): Promise<void> {
     /// confusing with [this.id], so, it goes as `_id`.
     let _id: string | null = id;
     this._displayName = displayName;
@@ -216,6 +217,7 @@ export class ChatRoomService extends ChatBase {
       throw LOGIN_FIRST;
     }
 
+    // firebase ids
     if (users == null) users = [];
     // [users] has empty element, remove.
     users.filter((element) => element != null || element != "");
@@ -353,7 +355,7 @@ export class ChatRoomService extends ChatBase {
   oldTop = 0;
   // isScrollTop = false;
   scrollUp(top: number): boolean {
-    // console.log("scrollUp::", this.oldTop, top);
+    console.log("scrollUp::", this.oldTop, top);
     if (this.oldTop > top) {
       // console.log("↑");
       this.oldTop = top;
@@ -452,7 +454,7 @@ export class ChatRoomService extends ChatBase {
         // message.id = documentChange.doc.id;
         // console.log('type: ${documentChange.type}. ${message['text']}');
         /// 새로 채팅을 하거나, 이전 글을 가져 올 때, 새 채팅(생성)뿐만 아니라, 이전 채팅 글을 가져올 때에도 added 이벤트 발생.
-        // console.log(documentChange.type);
+        console.log(documentChange.type);
         if (documentChange.type == DocumentChangeType.added) {
           // Two events will be fired on the sender's device.
           // First event has null on `createdAt` which should have FieldValue.serverTimestamp().
@@ -493,9 +495,10 @@ export class ChatRoomService extends ChatBase {
             this.messages.splice(i, 1, message);
           }
         } else if (documentChange.type == DocumentChangeType.removed) {
+          console.log("remove", message);
           const i: number = this.messages.findIndex((r) => r.id == message.id);
           if (i > -1) {
-            this.messages.splice(i, 0);
+            this.messages.splice(i, 1);
           }
         } else {
           console.log("This is error");
@@ -506,6 +509,7 @@ export class ChatRoomService extends ChatBase {
         // After `throttle` time has passed, set the `loading` to false. Which means,
         // it can fetch next batch of message again.
         this.loading = false;
+        this.scrolledUp = false;
 
         // console.log("------ pageNo;", this.page, " has finished;");
 
@@ -891,8 +895,8 @@ export class ChatRoomService extends ChatBase {
     this.changes.next(new ChatMessageModel());
   }
 
-  deleteMessage(message: ChatMessageModel): void {
-    deleteDoc(doc(this.messagesCol(this.id), message.id));
+  async deleteMessage(message: ChatMessageModel): Promise<void> {
+    return deleteDoc(doc(this.messagesCol(this.id), message.id));
   }
 
   /// Get the document of user's current chat room which has the last message.
@@ -923,10 +927,12 @@ export class ChatRoomService extends ChatBase {
   /// The [scrolledUp] becomes true once the user scrolls up the chat room screen.
   scrolledUp = false;
   onImageLoadComplete(message: ChatMessageModel): void {
+    console.log("onImageLoadComplete", message);
     message.rendered = true;
 
     // If the user didn't scroll up the screen (which means, it is really very first time entering the chat room),
     // then scroll to the bottom on every image load of the message(images).
+    console.log("onImageLoadComplete::this.scrolledUp", this.scrolledUp);
     if (this.scrolledUp == false) {
       this.scrollToBottom();
     }
