@@ -7,9 +7,10 @@ import { ChatGlobalRoomModel, ChatUserRoomModel } from "./chat.interface";
 
 import { BehaviorSubject } from "rxjs";
 
-import firebase from "firebase/app";
-import "firebase/firestore";
+// import firebase from "firebase/app";
+// import "firebase/firestore";
 import { DocumentChangeType } from "./chat.defines";
+import { DocumentChange, DocumentSnapshot, onSnapshot, orderBy, query } from "@firebase/firestore";
 
 /// You may rewrite your own helper class.
 export class ChatUserRoomListService extends ChatBase {
@@ -79,10 +80,11 @@ export class ChatUserRoomListService extends ChatBase {
   /// - and other properties change.
   _listenRoomList(): void {
     // console.log("_listenRoomList::");
-    this._myRoomListSubscription = this.myRoomListCol.orderBy(this._order, "asc").onSnapshot({
+    const q = query(this.myRoomListCol, orderBy(this._order, "asc"));
+    this._myRoomListSubscription = onSnapshot(q, {
       next: (snapshot) => {
         // console.log("_listenRoomList::snapshot::", snapshot.docs);
-        snapshot.docChanges().forEach((documentChange: firebase.firestore.DocumentChange) => {
+        snapshot.docChanges().forEach((documentChange: DocumentChange) => {
           const roomInfo = new ChatUserRoomModel().fromSnapshot(documentChange.doc);
           // console.log(roomInfo?.newMessages);
 
@@ -91,7 +93,7 @@ export class ChatUserRoomListService extends ChatBase {
 
             /// When room list is retreived for the first, it will be added to listener.
             /// This is where [changes] event happens many times when the app listens to room list.
-            this._roomSubscriptions[roomInfo.id] = this.globalRoomDoc(roomInfo.id).onSnapshot({
+            this._roomSubscriptions[roomInfo.id] = onSnapshot(this.globalRoomDoc(roomInfo.id), {
               next: (snapshot) => {
                 const found: number = this.rooms.findIndex((r) => r.id == roomInfo.id);
                 this.rooms[found].global = new ChatGlobalRoomModel().fromSnapshot(snapshot);
@@ -129,7 +131,7 @@ export class ChatUserRoomListService extends ChatBase {
         const re =
           snapshot.docChanges().length > 0
             ? new ChatUserRoomModel().fromSnapshot(
-                snapshot.docChanges()[snapshot.docChanges().length - 1].doc as firebase.firestore.DocumentSnapshot
+                snapshot.docChanges()[snapshot.docChanges().length - 1].doc as DocumentSnapshot
               )
             : new ChatUserRoomModel();
 

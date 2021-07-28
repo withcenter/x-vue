@@ -18,11 +18,32 @@ import { ChatGlobalRoomModel, ChatMessageModel, ChatUserRoomModel } from "./chat
 import md5 from "crypto-js/md5";
 import { BehaviorSubject, Subject } from "rxjs";
 
-import firebase from "firebase/app";
-import "firebase/firestore";
+// import firebase from "firebase/app";
+// import "firebase/firestore";
 import { MapStringAny } from "@/x-vue/interfaces/interfaces";
 import { ChatUserRoomListService } from "./chat.user_room_list.service";
 import Vue from "vue";
+import {
+  Timestamp,
+  onSnapshot,
+  DocumentData,
+  DocumentSnapshot,
+  DocumentReference,
+  serverTimestamp,
+  updateDoc,
+  addDoc,
+  doc,
+  setDoc,
+  getDoc,
+  Query,
+  orderBy,
+  query,
+  limit,
+  startAfter,
+  DocumentChange,
+  increment,
+  deleteDoc,
+} from "firebase/firestore";
 
 export interface ChatRoomEnter {
   id?: string | null;
@@ -119,7 +140,7 @@ export class ChatRoomService extends ChatBase {
   get blockedUsers(): string[] {
     return this.global?.blockedUsers;
   }
-  get createdAt(): firebase.firestore.Timestamp {
+  get createdAt(): Timestamp {
     return this.global?.createdAt;
   }
 
@@ -270,7 +291,7 @@ export class ChatRoomService extends ChatBase {
     // Listening current global room for changes and update.
     if (this._globalRoomSubscription != null) this._globalRoomSubscription();
 
-    this._globalRoomSubscription = this.globalRoomDoc(this.global.roomId).onSnapshot({
+    this._globalRoomSubscription = onSnapshot(this.globalRoomDoc(this.global.roomId), {
       next: (snapshot) => {
         this.global = new ChatGlobalRoomModel().fromSnapshot(snapshot);
         // console.log(" ------------> global updated; ");
@@ -286,18 +307,18 @@ export class ChatRoomService extends ChatBase {
 
     if (this._currentRoomSubscription != null) this._currentRoomSubscription();
 
-    this._currentRoomSubscription = this.currentRoom.onSnapshot({
+    this._currentRoomSubscription = onSnapshot(this.currentRoom, {
       next: (snapshot) => {
-        if (snapshot.exists == false) {
+        if (snapshot.exists() == false) {
           // User left the room. So the room does not exists.
           return;
         }
 
         // If the user got a message from a chat room where the user is currently in,
         // then, set `newMessages` to 0.
-        this.current = new ChatUserRoomModel().fromSnapshot(snapshot);
+        this.current = new ChatUserRoomModel().fromSnapshot(snapshot as DocumentSnapshot<DocumentData>);
         if (parseInt(this.current?.newMessages) > 0 && this.current?.createdAt != null) {
-          this.currentRoom.update({ newMessages: 0 });
+          updateDoc(this.currentRoom, { newMessages: 0 });
         }
       },
     });
@@ -349,7 +370,7 @@ export class ChatRoomService extends ChatBase {
   }
 
   /// Returns the current room in my room list.
-  get currentRoom(): firebase.firestore.DocumentReference {
+  get currentRoom(): DocumentReference {
     return this.myRoom(this.id);
   }
 
@@ -360,23 +381,23 @@ export class ChatRoomService extends ChatBase {
     const info = new ChatGlobalRoomModel().fromJson({
       users: users,
       moderators: [this.loginUserUid],
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      createdAt: serverTimestamp(),
     });
 
-    let doc: firebase.firestore.DocumentReference;
+    let _doc: DocumentReference;
     // console.log("info.data:: ", info.data);
     // console.log("ID:: ", id);
     if (id == null) {
       // console.log("ID:: is null");
-      doc = await this.globalRoomListCol.add(info.data);
+      _doc = await addDoc(this.globalRoomListCol, info.data);
     } else {
       // console.log("ID:: ", id);
-      doc = this.globalRoomListCol.doc(id);
+      _doc = doc(this.globalRoomListCol, id);
       // Cannot create if the document is already exists.
       // Cannot update if the user is not one of the room user.
-      await doc.set(info.data);
+      await setDoc(_doc, info.data);
     }
-    this.global = new ChatGlobalRoomModel().fromSnapshot(await doc.get());
+    this.global = new ChatGlobalRoomModel().fromSnapshot(await getDoc(_doc));
 
     await this.sendMessage({
       text: ChatProtocol.roomCreated,
@@ -401,16 +422,19 @@ export class ChatRoomService extends ChatBase {
     if (this.page == 1) {
       const ref = this.myRoom(this.global.roomId);
       // console.log('ref: ${ref.path}');
-      await ref.set({ newMessages: 0 }, { merge: true });
+      await setDoc(ref, { newMessages: 0 }, { merge: true });
     }
     /// Get messages for the chat room
-    let q: firebase.firestore.Query = this.messagesCol(this.global.roomId)
-      .orderBy("createdAt", "desc")
-      /// todo make it optional from firestore settings.
-      .limit(this._limit); // 몇 개만 가져온다.
+    // let q: firebase.firestore.Query = this.messagesCol(this.global.roomId)
+    // .orderBy("createdAt", "desc")
+    let q: Query = this.messagesCol(this.global.roomId);
+    // q = orderBy("createdAt", "desc")
+    q = query(q, orderBy("createdAt", "desc"), limit(this._limit));
+    /// todo make it optional from firestore settings.
     if (this.messages.length) {
+      q = query(q, orderBy("createdAt", "desc"), startAfter(this.messages[0].createdAt), limit(this._limit));
       // console.log("this.messages.length", this.messages.length, this.messages[0]);
-      q = q.startAfter(this.messages[0].createdAt);
+      // q = q.startAfter(this.messages[0].createdAt);
     }
     // Listens all the message for update/delete.
 
@@ -420,10 +444,10 @@ export class ChatRoomService extends ChatBase {
     // do `debounce` to fix this one.
 
     /// Listen NOT for the newly created or coming from DB, but for listening updates and deletes.
-    this._chatRoomSubscriptions[this.page] = q.onSnapshot((snapshot) => {
+    this._chatRoomSubscriptions[this.page] = onSnapshot(q, (snapshot) => {
       // console.log('fetchMessage() -> done: _page: $_page');
 
-      snapshot.docChanges().forEach((documentChange: firebase.firestore.DocumentChange) => {
+      snapshot.docChanges().forEach((documentChange: DocumentChange) => {
         // const message = new ChatMessageModel().fromData(documentChange.doc.data(), id: documentChange.doc.id);
         const message = new ChatMessageModel().fromSnapshot(documentChange.doc);
         // message.id = documentChange.doc.id;
@@ -588,11 +612,12 @@ export class ChatRoomService extends ChatBase {
     if (this.isCreate) {
       // console.log("create::sendMessage");
       // Time that this message(or last message) was created.
-      message["createdAt"] = firebase.firestore.FieldValue.serverTimestamp();
+      message["createdAt"] = serverTimestamp();
 
-      await this.messagesCol(this.global.roomId).add(message);
+      // await this.messagesCol(this.global.roomId).add(message);
+      await addDoc(this.messagesCol(this.global.roomId), message);
       // console.log(message);
-      message["newMessages"] = firebase.firestore.FieldValue.increment(1); // To increase, it must be an udpate.
+      message["newMessages"] = increment(1); // To increase, it must be an udpate.
 
       const messages: Promise<void>[] = []; // todo
 
@@ -605,14 +630,14 @@ export class ChatRoomService extends ChatBase {
       for (const uid in roomUsers) {
         // console.log(chatUserRoomDoc(uid, info['id']).path);
         // console.log("roomUsers[uid]", roomUsers[uid]);
-        messages.push(this.userRoomDoc(roomUsers[uid], this.global.roomId).set(message, { merge: true }));
+        messages.push(setDoc(this.userRoomDoc(roomUsers[uid], this.global.roomId), message, { merge: true }));
       }
       // console.log('send messages to: ${messages.length}');
       await Promise.all(messages); //Promise.allSettled()
     } else {
       // console.log("update::sendMessage");
-      message["updatedAt"] = firebase.firestore.FieldValue.serverTimestamp();
-      await this.messagesCol(this.global.roomId).doc(this.isMessageEdit?.id).update(message);
+      message["updatedAt"] = serverTimestamp();
+      await updateDoc(doc(this.messagesCol(this.global.roomId), this.isMessageEdit?.id), message);
       this.isMessageEdit = null;
     }
 
@@ -653,7 +678,7 @@ export class ChatRoomService extends ChatBase {
 
     /// Update users array with added user.
     const doc = this.globalRoomDoc(_globalRoom.roomId);
-    await doc.update({ users: newUsers });
+    await updateDoc(doc, { users: newUsers });
 
     /// Update last message of room users.
     await this.sendMessage({
@@ -667,8 +692,8 @@ export class ChatRoomService extends ChatBase {
 
   /// Returns a user's room (that has last message of the room) document
   /// reference.
-  userRoomDoc(uid: string, roomId: string): firebase.firestore.DocumentReference {
-    return this.userRoomListCol(uid).doc(roomId);
+  userRoomDoc(uid: string, roomId: string): DocumentReference {
+    return doc(this.userRoomListCol(uid), roomId);
   }
 
   /// Moderator removes a user
@@ -682,7 +707,7 @@ export class ChatRoomService extends ChatBase {
     _globalRoom.blockedUsers.push(uid);
 
     /// Update users and blockedUsers first to inform by sending a message.
-    await this.globalRoomDoc(this.id).update({ users: _globalRoom.users, blockedUsers: _globalRoom.blockedUsers });
+    await updateDoc(this.globalRoomDoc(this.id), { users: _globalRoom.users, blockedUsers: _globalRoom.blockedUsers });
 
     /// Inform all users.
     await this.sendMessage({
@@ -703,7 +728,7 @@ export class ChatRoomService extends ChatBase {
     if (moderators.includes(this.loginUserUid) == false) throw YOU_ARE_NOT_MODERATOR;
     if (_globalRoom.users.includes(uid) == false) throw MODERATOR_NOT_EXISTS_IN_USERS;
     moderators.push(uid);
-    await this.globalRoomDoc(this.id).update({ moderators: moderators });
+    await updateDoc(this.globalRoomDoc(this.id), { moderators: moderators });
     await this.sendMessage({
       text: ChatProtocol.addModerator,
       displayName: this.displayName,
@@ -721,7 +746,7 @@ export class ChatRoomService extends ChatBase {
     const i = moderators.indexOf(uid);
     if (i != -1) moderators.splice(i, 1);
 
-    await this.globalRoomDoc(this.id).update({ moderators: moderators });
+    await updateDoc(this.globalRoomDoc(this.id), { moderators: moderators });
     await this.sendMessage({
       text: ChatProtocol.removeModerator,
       displayName: this.displayName,
@@ -774,7 +799,7 @@ export class ChatRoomService extends ChatBase {
     }
 
     // Update users after removing loginUserUid himself.
-    await this.globalRoomDoc(_globalRoom.roomId).update({ users: _globalRoom.users });
+    await updateDoc(this.globalRoomDoc(_globalRoom.roomId), { users: _globalRoom.users });
 
     // unsubscribe first on room for both message and room list to avoid [Error in snapshot listener]
     // This will cause `null` for room existence check on currentRoom.snapshot().listener(...);
@@ -784,7 +809,7 @@ export class ChatRoomService extends ChatBase {
     ChatUserRoomListService.instance.unsubscribeUserRoom(_globalRoom);
 
     // Delete the room that the user is leaving from. (Not the global room.)
-    await this.myRoom(_globalRoom.roomId).delete();
+    await deleteDoc(this.myRoom(_globalRoom.roomId));
   }
 
   /// Kicks a user out of the room.
@@ -802,7 +827,7 @@ export class ChatRoomService extends ChatBase {
     if (i != -1) _globalRoom.users.splice(i, 1);
 
     // Update users after removing himself.
-    await this.globalRoomDoc(_globalRoom.roomId).update({ users: _globalRoom.users });
+    await updateDoc(this.globalRoomDoc(_globalRoom.roomId), { users: _globalRoom.users });
 
     await this.sendMessage({
       text: ChatProtocol.kickout,
@@ -813,8 +838,8 @@ export class ChatRoomService extends ChatBase {
 
   /// Returns a room of a user.
   async getMyRoomInfo(uid: string, roomId: string): Promise<ChatUserRoomModel> {
-    const snapshot: firebase.firestore.DocumentSnapshot = await this.userRoomDoc(uid, roomId).get();
-    if (snapshot.exists) {
+    const snapshot: DocumentSnapshot = await getDoc(this.userRoomDoc(uid, roomId));
+    if (snapshot.exists()) {
       return new ChatUserRoomModel().fromSnapshot(snapshot);
     } else {
       throw ROOM_NOT_EXISTS;
@@ -828,7 +853,7 @@ export class ChatRoomService extends ChatBase {
 
     if (_globalRoom.moderators.includes(this.loginUserUid)) {
       // update global room title
-      await this.globalRoomDoc(_globalRoom.roomId).update({ title: title });
+      await updateDoc(this.globalRoomDoc(_globalRoom.roomId), { title: title });
       // notify all users
       await this.sendMessage({
         text: ChatProtocol.titleChanged,
@@ -837,7 +862,7 @@ export class ChatRoomService extends ChatBase {
       });
     }
     // update own room title
-    this.userRoomDoc(this.loginUserUid, this.global.roomId).set({ title: title }, { merge: true });
+    setDoc(this.userRoomDoc(this.loginUserUid, this.global.roomId), { title: title }, { merge: true });
   }
 
   async updateGlobalRoomUsersInfo(info: Record<string, unknown>): Promise<void> {
@@ -846,7 +871,7 @@ export class ChatRoomService extends ChatBase {
     // if (_globalRoom.moderators.includes(this.loginUserUid) == false) throw YOU_ARE_NOT_MODERATOR;
 
     // Update users photoProfile silently
-    await this.globalRoomDoc(_globalRoom.roomId).set({ usersInfo: info }, { merge: true });
+    await setDoc(this.globalRoomDoc(_globalRoom.roomId), { usersInfo: info }, { merge: true });
   }
 
   editMessage(message: ChatMessageModel): void {
@@ -868,7 +893,7 @@ export class ChatRoomService extends ChatBase {
   }
 
   deleteMessage(message: ChatMessageModel): void {
-    this.messagesCol(this.id).doc(message.id).delete();
+    deleteDoc(doc(this.messagesCol(this.id), message.id));
   }
 
   /// Get the document of user's current chat room which has the last message.
