@@ -141,6 +141,7 @@ export class UserModel {
   name = "";
   nickname = "";
   photoUrl = "";
+
   admin = false;
 
   //extra user info
@@ -190,6 +191,7 @@ export class UserModel {
     this.name = map.name;
     this.nickname = map.nickname;
     this.photoUrl = map.photoUrl;
+
     this.admin = map.admin == "Y" ? true : false;
 
     this.point = map.point;

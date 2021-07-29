@@ -39,7 +39,7 @@ export default class PushNotificationIcon extends Vue {
   }
 
   async onChangeSubscribeOrUnsubscribeTopic(): Promise<void> {
-    if (!ApiService.instance._user.loggedIn) {
+    if (!ApiService.instance.user.loggedIn) {
       this.data[this.postTopic] = false;
       Service.instance.error("error_login_first");
       return;

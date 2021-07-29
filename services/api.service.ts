@@ -72,7 +72,7 @@ export class ApiService {
   //
   public serverUrl = "";
   //
-  public _user: UserModel = new UserModel();
+  private _user: UserModel = new UserModel();
 
   //
   private sessionId: string | undefined;
@@ -133,16 +133,16 @@ export class ApiService {
   /**
    * Sets `user` in store.state.
    */
-  private set user(user: UserModel) {
-    this._user = user;
-  }
+  // public set user(user: UserModel) {
+  //   this._user = user;
+  // }
 
   /**
    * Get `user` from store if existing.
    *
    * @returns null | UserModel
    */
-  private get user(): UserModel {
+  public get user(): UserModel {
     return this._user;
   }
 
@@ -246,7 +246,7 @@ export class ApiService {
    * @param sessionId string
    */
   setUserSessionId(res: ResponseData): UserModel {
-    this.user = new UserModel().fromJson(res);
+    this._user = new UserModel().fromJson(res);
     this.setCookie(Keys.sessionId, this.user.sessionId);
     this.sessionId = this.user.sessionId;
 
@@ -371,7 +371,7 @@ export class ApiService {
     // console.log("AppService::logout()", this);
     this.deleteUserSessionId();
     this.sessionId = undefined;
-    this.user = new UserModel();
+    this._user = new UserModel();
     if (this.userChanges != null) this.userChanges(this.user);
   }
 

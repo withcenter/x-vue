@@ -1,9 +1,10 @@
 import { isImageUrl } from "./chat.functions";
 import { MapStringAny, ResponseData } from "../../interfaces/interfaces";
 
-import firebase from "firebase/app";
-import "firebase/firestore";
+// import firebase from "firebase/app";
+// import "firebase/firestore";
 import { ChatRoomService } from "./chat.room.service";
+import { DocumentData, DocumentSnapshot, Timestamp } from "firebase/firestore";
 /// [ChatMessageModel] presents the chat message under
 /// `/chat/messages/{roomId}/{messageId}` collection.
 ///
@@ -11,7 +12,7 @@ import { ChatRoomService } from "./chat.room.service";
 /// [isImage] returns  if the message is image or not = false.
 export class ChatMessageModel {
   id = "";
-  createdAt: firebase.firestore.Timestamp = {} as firebase.firestore.Timestamp; //Timestamp
+  createdAt: Timestamp = {} as Timestamp; //Timestamp
   newUsers: string[] = [];
   senderDisplayName = "";
   senderPhotoURL = "";
@@ -27,15 +28,64 @@ export class ChatMessageModel {
 
   get isMovie(): boolean {
     const t = this.text.toLowerCase();
-    if (t.startsWith("http") && (t.endsWith(".mov") || t.endsWith(".mp4"))) return true;
+    if (
+      t.startsWith("http") &&
+      (t.endsWith(".mov") ||
+        t.endsWith(".mp4") ||
+        t.endsWith(".m4v") ||
+        t.endsWith(".mpg") ||
+        t.endsWith(".mpeg") ||
+        t.endsWith(".mkv") ||
+        t.endsWith(".mov") ||
+        t.endsWith(".wmv") ||
+        t.endsWith(".avi") ||
+        t.endsWith(".webm"))
+    )
+      return true;
+    return false;
+  }
+
+  get isFile(): boolean {
+    const t = this.text.toLowerCase();
+    if (
+      t.startsWith("http") &&
+      (t.endsWith(".pdf") ||
+        t.endsWith(".mp3") ||
+        t.endsWith(".ogg") ||
+        t.endsWith(".wav") ||
+        t.endsWith(".txt") ||
+        t.endsWith(".htm") ||
+        t.endsWith(".html") ||
+        t.endsWith(".ppt") ||
+        t.endsWith(".pptx") ||
+        t.endsWith(".7z") ||
+        t.endsWith(".rar") ||
+        t.endsWith(".tar") ||
+        t.endsWith(".gz") ||
+        t.endsWith(".zip") ||
+        t.endsWith(".iso") ||
+        t.endsWith(".csv") ||
+        t.endsWith(".xml") ||
+        t.endsWith(".json") ||
+        t.endsWith(".apk") ||
+        t.endsWith(".ttf") ||
+        t.endsWith(".otf") ||
+        t.endsWith(".bmp") ||
+        t.endsWith(".psd") ||
+        t.endsWith(".svg") ||
+        t.endsWith(".doc") ||
+        t.endsWith(".docx") ||
+        t.endsWith(".rtf"))
+    )
+      return true;
     return false;
   }
 
   canEdit = true;
 
-  fromSnapshot(snapshot: firebase.firestore.DocumentSnapshot): ChatMessageModel {
-    if (snapshot.exists == false) return new ChatMessageModel();
-    const info: firebase.firestore.DocumentData = snapshot.data() as firebase.firestore.DocumentData;
+  fromSnapshot(snapshot: DocumentSnapshot): ChatMessageModel {
+    if (snapshot.exists() == false) return new ChatMessageModel();
+    const info: DocumentData = snapshot.data() as DocumentData;
     info["id"] = snapshot.id;
     return this.fromJson(info);
   }
@@ -81,7 +131,7 @@ export class ChatUserRoomModel {
   /// [createAt] is the time that last message was sent by a user.
   /// It will be `FieldValue.serverTimestamp()` when it sends the
   /// message. And it will `Timestamp` when it read the room information.
-  createdAt: firebase.firestore.Timestamp = {} as firebase.firestore.Timestamp; //Timestamp
+  createdAt: Timestamp = {} as Timestamp; //Timestamp
 
   /// [newMessages] has the number of new messages for that room.
   newMessages = "";
@@ -116,14 +166,14 @@ export class ChatUserRoomModel {
   //   return this.global.usersInfo[ChatRoomService.instance.loginUserUid].title;
   // }
 
-  fromSnapshot(snapshot: firebase.firestore.DocumentSnapshot): ChatUserRoomModel {
-    if (snapshot.exists == false) return new ChatUserRoomModel();
-    const info: firebase.firestore.DocumentData = snapshot.data() as firebase.firestore.DocumentData;
+  fromSnapshot(snapshot: DocumentSnapshot): ChatUserRoomModel {
+    if (snapshot.exists() == false) return new ChatUserRoomModel();
+    const info: DocumentData = snapshot.data() as DocumentData;
     info["id"] = snapshot.id;
     return this.fromJson(info);
   }
 
-  fromJson(map: firebase.firestore.DocumentData): ChatUserRoomModel {
+  fromJson(map: DocumentData): ChatUserRoomModel {
     this.id = map.id;
     this.senderUid = map.senderUid;
     this.senderDisplayName = map.senderDisplayName;
@@ -158,8 +208,8 @@ export class ChatGlobalRoomModel {
   users: string[] = [];
   moderators: string[] = [];
   blockedUsers: string[] = [];
-  createdAt: firebase.firestore.Timestamp = {} as firebase.firestore.Timestamp; //Timestamp
-  updatedAt: firebase.firestore.Timestamp = {} as firebase.firestore.Timestamp; //Timestamp
+  createdAt: Timestamp = {} as Timestamp; //Timestamp
+  updatedAt: Timestamp = {} as Timestamp; //Timestamp
 
   get otherUserId(): string | undefined {
     // If there is no other user.
@@ -168,7 +218,7 @@ export class ChatGlobalRoomModel {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   usersInfo: { [index: string]: any } = {};
 
-  fromJson(map: firebase.firestore.DocumentData): ChatGlobalRoomModel {
+  fromJson(map: DocumentData): ChatGlobalRoomModel {
     // console.log("ChatGlobalRoomModel::", map);
     if (map == null) return new ChatGlobalRoomModel();
     this.roomId = map.roomId;
@@ -182,9 +232,9 @@ export class ChatGlobalRoomModel {
     return this;
   }
 
-  fromSnapshot(snapshot: firebase.firestore.DocumentSnapshot): ChatGlobalRoomModel {
-    if (snapshot.exists == false) return new ChatGlobalRoomModel();
-    const info: firebase.firestore.DocumentData = snapshot.data() as firebase.firestore.DocumentData;
+  fromSnapshot(snapshot: DocumentSnapshot): ChatGlobalRoomModel {
+    if (snapshot.exists() == false) return new ChatGlobalRoomModel();
+    const info: DocumentData = snapshot.data() as DocumentData;
     info["roomId"] = snapshot.id;
     return this.fromJson(info);
   }

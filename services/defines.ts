@@ -11,6 +11,7 @@ export enum Err {
   category_not_exists = "error_category_not_exists",
   user_has_no_firebase_uid = "error_user_has_no_firebase_uid",
   entity_not_found = "error_entity_not_found",
+  login_first = "error_login_first",
 }
 
 export const DEFAULT_TOPIC = "defaultTopic";
