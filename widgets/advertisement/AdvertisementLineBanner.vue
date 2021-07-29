@@ -14,18 +14,17 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { Banner } from "@/x-vue/interfaces/advertisement.interface";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
-import appConfig from "@/service/app.config";
 
 @Component({})
 export default class AdvertisementLineBanner extends Vue {
   @Prop() banners!: Banner[];
+  @Prop({ default: 9000 }) rotationInterval!: number;
 
   index = 0;
 
   mounted(): void {
     this.rotate();
   }
-
 
   get currentBanner(): Banner {
     if (!this.banners.length) {
@@ -35,7 +34,7 @@ export default class AdvertisementLineBanner extends Vue {
   }
 
   rotate(): void {
-    setInterval(() => this.index++, appConfig.banner.rotationInterval);
+    setInterval(() => this.index++, this.rotationInterval);
   }
 
   onClick(): void {

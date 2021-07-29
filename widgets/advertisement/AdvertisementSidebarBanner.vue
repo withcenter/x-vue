@@ -9,14 +9,11 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { Banner } from "@/x-vue/interfaces/advertisement.interface";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
-// import { advKey } from "@/service/functions";
 
 @Component({})
 export default class AdvertisementSidebarBanner extends Vue {
   @Prop() banners!: Banner[];
-  // @Prop() banners!: AllCategoryBanners;
-  // @Prop() categoryId!: string;
-  // @Prop() countryCode!: string;
+  @Prop({ default: 9000 }) rotationInterval!: number;
 
   index = 0;
 
@@ -25,8 +22,6 @@ export default class AdvertisementSidebarBanner extends Vue {
   }
 
   get currentBanner(): Banner | undefined {
-    // const items = this.banners[advKey("sidebar", this.categoryId)];
-
     if (this.banners && this.banners.length) {
       return this.banners[this.index % this.banners.length];
     } else {
@@ -35,7 +30,7 @@ export default class AdvertisementSidebarBanner extends Vue {
   }
 
   rotate(): void {
-    setInterval(() => this.index++, 7000);
+    setInterval(() => this.index++, this.rotationInterval);
   }
 
   onClick(): void {
