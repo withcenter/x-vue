@@ -103,8 +103,9 @@ export interface AdvertisementSettings {
   };
   categoryArray: string[];
   maximumAdvertisementDays: number;
-  maxNoOnGlobalTopBanner: number;
+  bannerRotationInterval: number;
 
+  maxNoOnGlobalTopBanner: number;
   maxNoOnCategoryTopBanner: number;
   maxNoOnGlobalSidebarBanner: number;
   maxNoOnCategorySidebarBanner: number;
