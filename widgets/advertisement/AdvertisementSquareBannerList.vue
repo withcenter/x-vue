@@ -1,5 +1,5 @@
 <template>
-  <div class="row no-gutters" v-if="bannerList.length">
+  <div class="row no-gutters" v-if="banners.length">
     <AdvertisementSquareBanner :banner="banners[0]" class="col-3 pr-1"></AdvertisementSquareBanner>
     <AdvertisementSquareBanner :banner="banners[1]" class="col-3 px-1"></AdvertisementSquareBanner>
     <AdvertisementSquareBanner :banner="banners[2]" class="col-3 px-1"></AdvertisementSquareBanner>
@@ -18,7 +18,7 @@ import AdvertisementSquareBanner from "@/x-vue/widgets/advertisement/Advertiseme
   components: { AdvertisementSquareBanner },
 })
 export default class AdvertisementSquareBannerList extends Vue {
-  @Prop() banners!: Banner[];
+  @Prop({ default: () => [] }) banners!: Banner[];
   onClick(banner: Banner): void {
     AdvertisementService.instance.openAdvertisement(banner);
   }
