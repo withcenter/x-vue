@@ -17,7 +17,7 @@ import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 
 @Component({})
 export default class AdvertisementLineBanner extends Vue {
-  @Prop() banners!: Banner[];
+  @Prop({ default: () => [] }) banners!: Banner[];
   @Prop({ default: 9000 }) rotationInterval!: number;
 
   index = 0;
