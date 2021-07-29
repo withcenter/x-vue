@@ -24,7 +24,7 @@ export default class extends Vue {
 
   get _banners(): Banner[] {
     return this.banners.filter((v, i) => {
-      if (this.position == "left") return i % 2 == 0;
+      if (this.position == "right") return i % 2 == 0;
       else return i % 2 != 0;
     });
   }
