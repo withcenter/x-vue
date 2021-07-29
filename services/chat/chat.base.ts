@@ -10,6 +10,7 @@ import {
   getDoc,
   doc,
 } from "firebase/firestore";
+import { t } from "../functions";
 
 import { ChatProtocol } from "./chat.defines";
 
@@ -70,8 +71,10 @@ export class ChatBase {
 
   /// Returns `/chat/global-rooms/list/{roomId}` document reference
   ///
-  globalRoomDoc(roomId: string): DocumentReference {
+  globalRoomDoc(roomId: string): DocumentReference | null {
     // return this.globalRoomListCol.doc(roomId);
+    if (!roomId) return null;
+    console.log("globalRoomDoc::", roomId);
     return doc(this.globalRoomListCol, roomId);
   }
 
@@ -88,37 +91,37 @@ export class ChatBase {
 
     if (text.startsWith("ChatProtocol.")) {
       let newText = "";
-      if (prefixName) newText = message.senderDisplayName;
+      if (prefixName) newText = message.senderDisplayName + " ";
 
       if (text == ChatProtocol.roomCreated) {
-        newText += " 님이 채팅방을 개설했습니다.";
+        newText += t("chat_room_create");
       }
       if (text == ChatProtocol.leave) {
-        newText += " leave the room.";
+        newText += t("chat_room_leave");
       }
       if (text == ChatProtocol.add) {
-        newText += " added " + message.newUsers.join(",");
+        newText += t("added") + " " + message.newUsers.join(",");
       }
       if (text == ChatProtocol.kickout) {
-        newText += " kicked " + message.data["userName"];
+        newText += t("kicked") + " " + message.data["userName"];
       }
       if (text == ChatProtocol.block) {
-        newText += " block  " + message.data["userName"];
+        newText += t("blocked") + " " + message.data["userName"];
       }
 
       if (text == ChatProtocol.addModerator) {
-        newText += " add moderator " + message.data["userName"];
+        newText += t("add_moderator") + " " + message.data["userName"];
       }
       if (text == ChatProtocol.removeModerator) {
-        newText += " remove moderator " + message.data["userName"];
+        newText += t("remove_moderator") + " " + message.data["userName"];
       }
 
       if (text == ChatProtocol.titleChanged) {
-        newText += " change room title ";
-        newText += message.extra["newTitle"] != null ? "to " + message.extra["newTitle"] : "";
+        newText += t("chat_room_title_changed");
+        newText += message.extra["newTitle"] != null ? " " + t("to") + " " + message.extra["newTitle"] : "";
       }
       if (text == ChatProtocol.enter) {
-        newText += " invited ${message.newUsers}";
+        newText += t("chat_room_enter") + " " + message.newUsers;
       }
       text = newText;
     }
@@ -133,7 +136,9 @@ export class ChatBase {
   ///
   /// Todo move this method to `ChatRoom`
   async getGlobalRoom(roomId: string): Promise<ChatGlobalRoomModel> {
-    const snapshot = await getDoc(this.globalRoomDoc(roomId));
+    const _globalRoomDoc = this.globalRoomDoc(roomId);
+    if (!_globalRoomDoc) return new ChatGlobalRoomModel();
+    const snapshot = await getDoc(_globalRoomDoc);
     return new ChatGlobalRoomModel().fromSnapshot(snapshot);
   }
 }

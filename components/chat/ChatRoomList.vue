@@ -13,8 +13,8 @@
           <span v-if="room.newMessages">({{ room.newMessages }})</span>
         </div>
         <div>
-          {{ room.senderUid == roomsList.loginUserUid ? "You: " : room.senderDisplayName + ": "
-          }}{{ roomsList.text(room) }}
+          {{ room.senderUid == roomsList.loginUserUid ? t("you") : room.senderDisplayName }}:
+          {{ roomsList.text(room) }}
         </div>
       </div>
     </router-link>
@@ -25,8 +25,11 @@
 import { ChatUserRoomListService } from "@/x-vue/services/chat/chat.user_room_list.service";
 import { Vue, Component } from "vue-property-decorator";
 
+import { translate } from "@/x-vue/services/functions";
+
 @Component({})
 export default class ChatRoomList extends Vue {
+  t = translate;
   roomsList = ChatUserRoomListService.instance;
 }
 </script>

@@ -12,10 +12,6 @@ export class MessagingService {
     return MessagingService._instance;
   }
 
-  // private constructor() {
-  //   // this.auth = firebase.auth();
-  // }
-
   public token = "";
 
   init(options: { onMessage: (payload: MessagePayload) => void }): void {
@@ -54,11 +50,9 @@ export class MessagingService {
         // console.log("notification", notification);
         // const data = payload.data ? payload.data : {};
         // console.log("data", data);
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        // ! @todo work for new sdk.
-        if (this.onMessage) {
-          this.onMessage(payload);
-        }
+        // // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        //
+        if (this.onMessage) this.onMessage(payload);
       });
     }
   }

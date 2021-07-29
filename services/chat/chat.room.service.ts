@@ -291,16 +291,19 @@ export class ChatRoomService extends ChatBase {
 
     // Listening current global room for changes and update.
     if (this._globalRoomSubscription != null) this._globalRoomSubscription();
-
-    this._globalRoomSubscription = onSnapshot(this.globalRoomDoc(this.global.roomId), {
-      next: (snapshot) => {
-        this.global = new ChatGlobalRoomModel().fromSnapshot(snapshot);
-        // console.log(" ------------> global updated; ");
-        // console.log(this.global);
-        this.globalRoomChanges.next(this.global);
-        this;
-      },
-    });
+    console.log("this._globalRoomSubscription = onSnapshot(::");
+    const _globalRoomDoc = this.globalRoomDoc(this.global.roomId);
+    if (_globalRoomDoc) {
+      this._globalRoomSubscription = onSnapshot(_globalRoomDoc, {
+        next: (snapshot) => {
+          this.global = new ChatGlobalRoomModel().fromSnapshot(snapshot);
+          // console.log(" ------------> global updated; ");
+          // console.log(this.global);
+          this.globalRoomChanges.next(this.global);
+          this;
+        },
+      });
+    }
 
     // Listening current room document change event (in my room list).
     //
@@ -355,7 +358,7 @@ export class ChatRoomService extends ChatBase {
   oldTop = 0;
   // isScrollTop = false;
   scrollUp(top: number): boolean {
-    console.log("scrollUp::", this.oldTop, top);
+    // console.log("scrollUp::", this.oldTop, top);
     if (this.oldTop > top) {
       // console.log("↑");
       this.oldTop = top;
@@ -433,7 +436,7 @@ export class ChatRoomService extends ChatBase {
     q = query(q, orderBy("createdAt", "desc"), limit(this._limit));
     /// todo make it optional from firestore settings.
     if (this.messages.length) {
-      q = query(q, orderBy("createdAt", "desc"), startAfter(this.messages[0].createdAt), limit(this._limit));
+      q = query(q, startAfter(this.messages[0].createdAt));
       // console.log("this.messages.length", this.messages.length, this.messages[0]);
       // q = q.startAfter(this.messages[0].createdAt);
     }
@@ -509,7 +512,6 @@ export class ChatRoomService extends ChatBase {
         // After `throttle` time has passed, set the `loading` to false. Which means,
         // it can fetch next batch of message again.
         this.loading = false;
-        this.scrolledUp = false;
 
         // console.log("------ pageNo;", this.page, " has finished;");
 
@@ -570,6 +572,8 @@ export class ChatRoomService extends ChatBase {
     this.messages = [];
     this.page = 0;
     this.noMoreMessage = false;
+    this.scrolledUp = false;
+    this.oldTop = 0;
   }
 
   /// Send chat message to the users in the room
@@ -680,8 +684,7 @@ export class ChatRoomService extends ChatBase {
     /// In this way, newly entered/added user(s) will have the room in the my-room-list
 
     /// Update users array with added user.
-    const doc = this.globalRoomDoc(_globalRoom.roomId);
-    await updateDoc(doc, { users: newUsers });
+    await updateDoc(this.globalRoomDoc(_globalRoom.roomId) as DocumentReference<DocumentData>, { users: newUsers });
 
     /// Update last message of room users.
     await this.sendMessage({
@@ -710,7 +713,10 @@ export class ChatRoomService extends ChatBase {
     _globalRoom.blockedUsers.push(uid);
 
     /// Update users and blockedUsers first to inform by sending a message.
-    await updateDoc(this.globalRoomDoc(this.id), { users: _globalRoom.users, blockedUsers: _globalRoom.blockedUsers });
+    await updateDoc(this.globalRoomDoc(this.id) as DocumentReference<DocumentData>, {
+      users: _globalRoom.users,
+      blockedUsers: _globalRoom.blockedUsers,
+    });
 
     /// Inform all users.
     await this.sendMessage({
@@ -731,7 +737,7 @@ export class ChatRoomService extends ChatBase {
     if (moderators.includes(this.loginUserUid) == false) throw YOU_ARE_NOT_MODERATOR;
     if (_globalRoom.users.includes(uid) == false) throw MODERATOR_NOT_EXISTS_IN_USERS;
     moderators.push(uid);
-    await updateDoc(this.globalRoomDoc(this.id), { moderators: moderators });
+    await updateDoc(this.globalRoomDoc(this.id) as DocumentReference<DocumentData>, { moderators: moderators });
     await this.sendMessage({
       text: ChatProtocol.addModerator,
       displayName: this.displayName,
@@ -749,7 +755,7 @@ export class ChatRoomService extends ChatBase {
     const i = moderators.indexOf(uid);
     if (i != -1) moderators.splice(i, 1);
 
-    await updateDoc(this.globalRoomDoc(this.id), { moderators: moderators });
+    await updateDoc(this.globalRoomDoc(this.id) as DocumentReference<DocumentData>, { moderators: moderators });
     await this.sendMessage({
       text: ChatProtocol.removeModerator,
       displayName: this.displayName,
@@ -802,7 +808,9 @@ export class ChatRoomService extends ChatBase {
     }
 
     // Update users after removing loginUserUid himself.
-    await updateDoc(this.globalRoomDoc(_globalRoom.roomId), { users: _globalRoom.users });
+    await updateDoc(this.globalRoomDoc(_globalRoom.roomId) as DocumentReference<DocumentData>, {
+      users: _globalRoom.users,
+    });
 
     // unsubscribe first on room for both message and room list to avoid [Error in snapshot listener]
     // This will cause `null` for room existence check on currentRoom.snapshot().listener(...);
@@ -830,7 +838,9 @@ export class ChatRoomService extends ChatBase {
     if (i != -1) _globalRoom.users.splice(i, 1);
 
     // Update users after removing himself.
-    await updateDoc(this.globalRoomDoc(_globalRoom.roomId), { users: _globalRoom.users });
+    await updateDoc(this.globalRoomDoc(_globalRoom.roomId) as DocumentReference<DocumentData>, {
+      users: _globalRoom.users,
+    });
 
     await this.sendMessage({
       text: ChatProtocol.kickout,
@@ -856,7 +866,7 @@ export class ChatRoomService extends ChatBase {
 
     if (_globalRoom.moderators.includes(this.loginUserUid)) {
       // update global room title
-      await updateDoc(this.globalRoomDoc(_globalRoom.roomId), { title: title });
+      await updateDoc(this.globalRoomDoc(_globalRoom.roomId) as DocumentReference<DocumentData>, { title: title });
       // notify all users
       await this.sendMessage({
         text: ChatProtocol.titleChanged,
@@ -874,7 +884,11 @@ export class ChatRoomService extends ChatBase {
     // if (_globalRoom.moderators.includes(this.loginUserUid) == false) throw YOU_ARE_NOT_MODERATOR;
 
     // Update users photoProfile silently
-    await setDoc(this.globalRoomDoc(_globalRoom.roomId), { usersInfo: info }, { merge: true });
+    await setDoc(
+      this.globalRoomDoc(_globalRoom.roomId) as DocumentReference<DocumentData>,
+      { usersInfo: info },
+      { merge: true }
+    );
   }
 
   editMessage(message: ChatMessageModel): void {
@@ -927,12 +941,12 @@ export class ChatRoomService extends ChatBase {
   /// The [scrolledUp] becomes true once the user scrolls up the chat room screen.
   scrolledUp = false;
   onImageLoadComplete(message: ChatMessageModel): void {
-    console.log("onImageLoadComplete", message);
+    // console.log("onImageLoadComplete::", message);
     message.rendered = true;
 
     // If the user didn't scroll up the screen (which means, it is really very first time entering the chat room),
     // then scroll to the bottom on every image load of the message(images).
-    console.log("onImageLoadComplete::this.scrolledUp", this.scrolledUp);
+    // console.log("onImageLoadComplete::this.scrolledUp", this.scrolledUp);
     if (this.scrolledUp == false) {
       this.scrollToBottom();
     }
@@ -940,9 +954,17 @@ export class ChatRoomService extends ChatBase {
     // If the last message is image and it is shown to screen for the first time (which means, new image has uploaded/come),
     // then scroll to the bottom.
     // Since the image has rendered once it has screen down, when user scrolls up, it will not interrupt the scroll.
+    if (!message.id || !this.messages.length || this.messages[this.messages.length - 1].id) return;
     const lastMessage: boolean = message.id == this.messages[this.messages.length - 1].id;
     if (lastMessage) {
       this.scrollToBottom();
     }
   }
+
+  // onVideoStateChange(event: unknown, m: ChatMessageModel) {
+  //   console.log("onVideoStateChange", event, m);
+  //   if (this.scrolledUp == false) {
+  //     this.scrollToBottom();
+  //   }
+  // }
 }
