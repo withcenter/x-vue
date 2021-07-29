@@ -21,12 +21,8 @@ export default class AdvertisementSidebarBanner extends Vue {
     this.rotate();
   }
 
-  get currentBanner(): Banner | undefined {
-    if (this.banners && this.banners.length) {
-      return this.banners[this.index % this.banners.length];
-    } else {
-      return undefined;
-    }
+  get currentBanner(): Banner {
+    return this.banners[this.index % this.banners.length];
   }
 
   rotate(): void {
