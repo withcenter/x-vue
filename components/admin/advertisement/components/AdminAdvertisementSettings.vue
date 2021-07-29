@@ -13,11 +13,11 @@
       </div>
 
       <div class="form-group">
-        <label for="maximum-advertisement-days">Banner Rotation Interval</label>
+        <label for="maximum-advertisement-days">Banner Rotation Interval (milliseconds)</label>
         <input type="number" class="form-control" id="banner-rotation-interval" v-model="bannerRotationInterval" />
         <small class="form-text text-muted">
           Banners with rotation will be displayed rotationally by this amount. <br />
-          Rotation is in seconds, so if you put 8, banners will rotate every 8 seconds.
+          Rotation is in seconds, so if you put 8000, banners will rotate every 8 seconds.
         </small>
       </div>
 
@@ -195,7 +195,7 @@ export default class AdminAdvertisement extends Vue {
   maximumAdvertisementDays = 0;
   advertisementCategories = "";
   globalBannerMultiplying = 0;
-  bannerRotationInterval = 9;
+  bannerRotationInterval = 9000;
 
   maxNoOnGlobalTopBanner = 0;
   maxNoOnCategoryTopBanner = 0;
@@ -283,7 +283,7 @@ export default class AdminAdvertisement extends Vue {
       await this.api.setConfig("maximumAdvertisementDays", this.maximumAdvertisementDays);
       await this.api.setConfig("advertisementCategories", this.advertisementCategories);
       await this.api.setConfig("globalBannerMultiplying", this.globalBannerMultiplying);
-      await this.api.setConfig("bannerRotationInterval", this.bannerRotationInterval * 1000);
+      await this.api.setConfig("bannerRotationInterval", this.bannerRotationInterval);
 
       await this.api.setConfig("maxNoOnGlobalTopBanner", this.maxNoOnGlobalTopBanner);
       await this.api.setConfig("maxNoOnCategoryTopBanner", this.maxNoOnCategoryTopBanner);
