@@ -1,6 +1,6 @@
 <template>
   <div class="banner top pointer w-100 h-100" :class="position" @click="onClick">
-    <b-img-lazy class="w-100 h-100" :src="currentBanner.bannerUrl"></b-img-lazy>
+    <b-img-lazy class="w-100" :src="currentBanner.bannerUrl"></b-img-lazy>
   </div>
 </template>
 
