@@ -24,7 +24,7 @@ export class ChatMessageModel {
   extra: Record<string, unknown> = {};
 
   rendered = false; // for image is complete rendered
-  longPress = false;
+  // longPress = false;
 
   get isMovie(): boolean {
     const t = this.text.toLowerCase();

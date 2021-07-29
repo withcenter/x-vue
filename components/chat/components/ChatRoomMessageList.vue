@@ -10,7 +10,7 @@
     </div> -->
     <div
       :id="'chat-message-popover-' + m.id"
-      class="chat-bubble mb-1 rounded-lg my-1 p-2 text-break white"
+      class="chat-bubble mb-1 rounded-lg my-1 py-2 px-3 text-break white"
       v-for="m in room.messages"
       :key="m.id"
       :class="m.isMine ? 'text-right my-chat ml-auto' : 'text-left other-chat mr-auto'"
@@ -44,7 +44,7 @@
           ></b-img>
         </div>
         <div class="video" v-else-if="m.isMovie">
-          <video controls>
+          <video controls @loadeddata="room.onVideoloaded($event, m)">
             <source :src="m.text" />
             Your browser does not support the video tag.
           </video>
@@ -94,10 +94,10 @@
 
 <style lang="scss" scoped>
 .my-chat {
-  background-color: #00bfff;
+  background-color: #28c9ff;
 }
 .other-chat {
-  background-color: #242526;
+  background-color: #393a3b;
 }
 
 .chat-message-bubble {

@@ -848,7 +848,7 @@ export class ApiService {
       subscribedByDefault: subscribedByDefault,
     };
     const res = await this.request("notification.isSubscribedToTopic", req);
-    console.log(res);
+    // console.log("isSubscribedToTopic::",res);
     return res;
   }
 

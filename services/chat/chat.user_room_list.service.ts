@@ -128,7 +128,7 @@ export class ChatUserRoomListService extends ChatBase {
           this.newMessages += parseInt(roomInfo.newMessages);
         });
 
-        console.log(this.newMessages);
+        // console.log("this.newMessages::", this.newMessages);
 
         /// post event with last room
         const re =

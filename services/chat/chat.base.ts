@@ -74,7 +74,7 @@ export class ChatBase {
   globalRoomDoc(roomId: string): DocumentReference | null {
     // return this.globalRoomListCol.doc(roomId);
     if (!roomId) return null;
-    console.log("globalRoomDoc::", roomId);
+    // console.log("globalRoomDoc::", roomId);
     return doc(this.globalRoomListCol, roomId);
   }
 

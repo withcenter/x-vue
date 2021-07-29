@@ -176,8 +176,9 @@ export class ChatRoomService extends ChatBase {
 
       const el = document.getElementById(this.messageListId);
       if (!el) return;
-      el.scrollTop = el.scrollHeight;
+      // el.scrollTop = el.scrollHeight;
 
+      el.scrollTo(el.scrollTop, el.scrollHeight);
       // const el: Element = document.getElementById(this.messageListId) as Element;
       // el.scrollTop = el.scrollHeight || 0;
 
@@ -457,7 +458,7 @@ export class ChatRoomService extends ChatBase {
         // message.id = documentChange.doc.id;
         // console.log('type: ${documentChange.type}. ${message['text']}');
         /// 새로 채팅을 하거나, 이전 글을 가져 올 때, 새 채팅(생성)뿐만 아니라, 이전 채팅 글을 가져올 때에도 added 이벤트 발생.
-        console.log(documentChange.type);
+        // console.log("documentChange.type::", documentChange.type);
         if (documentChange.type == DocumentChangeType.added) {
           // Two events will be fired on the sender's device.
           // First event has null on `createdAt` which should have FieldValue.serverTimestamp().
@@ -943,7 +944,15 @@ export class ChatRoomService extends ChatBase {
   onImageLoadComplete(message: ChatMessageModel): void {
     // console.log("onImageLoadComplete::", message);
     message.rendered = true;
+    this.onMediaLoaded(message);
+  }
 
+  onVideoloaded(m: ChatMessageModel): void {
+    // console.log("onVideoloaded::", m);
+    this.onMediaLoaded(m);
+  }
+
+  onMediaLoaded(message: ChatMessageModel): void {
     // If the user didn't scroll up the screen (which means, it is really very first time entering the chat room),
     // then scroll to the bottom on every image load of the message(images).
     // console.log("onImageLoadComplete::this.scrolledUp", this.scrolledUp);
@@ -960,11 +969,4 @@ export class ChatRoomService extends ChatBase {
       this.scrollToBottom();
     }
   }
-
-  // onVideoStateChange(event: unknown, m: ChatMessageModel) {
-  //   console.log("onVideoStateChange", event, m);
-  //   if (this.scrolledUp == false) {
-  //     this.scrollToBottom();
-  //   }
-  // }
 }
