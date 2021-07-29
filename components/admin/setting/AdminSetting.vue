@@ -240,6 +240,7 @@ export default class AdminSettings extends Vue {
     "maxNoOnGlobalSidebarBanner",
     "maxNoOnGlobalSquareBanner",
     "maxNoOnGlobalTopBanner",
+    "bannerRotationInterval",
   ];
   form = {
     code: "",
