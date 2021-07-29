@@ -27,9 +27,6 @@ export default class AdvertisementLineBanner extends Vue {
   }
 
   get currentBanner(): Banner {
-    if (!this.banners.length) {
-      return {};
-    }
     return this.banners[this.index % this.banners.length];
   }
 
