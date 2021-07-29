@@ -1,5 +1,5 @@
 <template>
-  <div class="banner top pointer w-100 h-100" :class="position" @click="onClick">
+  <div class="banner top pointer w-100 h-100" :class="position" @click="onClick" v-if="currentBanner">
     <b-img-lazy class="w-100" :src="currentBanner.bannerUrl"></b-img-lazy>
   </div>
 </template>
@@ -14,22 +14,31 @@ import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 export default class extends Vue {
   @Prop({ default: "right" }) position!: string;
   @Prop({ default: () => [] }) banners!: Banner[];
-  @Prop({ default: 9000 }) rotationInterval!: number;
+  @Prop({ default: 0 }) rotationInterval!: number;
 
   index = 0;
 
-  mounted(): void {
-    this.rotate();
-  }
+  _banners: Banner[] = [];
 
-  get _banners(): Banner[] {
-    return this.banners.filter((v, i) => {
+  timer = 0;
+
+  beforeMount(): void {
+    console.log("this.banners; ", this.banners);
+    this._banners = this.banners.filter((v, i) => {
       if (this.position == "left") return i % 2 == 0;
       else return i % 2 != 0;
     });
+
+    this.rotate();
   }
 
-  get currentBanner(): Banner {
+  destroyed(): void {
+    clearInterval(this.timer);
+  }
+
+  get currentBanner(): Banner | undefined {
+    console.log("index;", this.index);
+    if (!this._banners || !this._banners.length) return undefined;
     if (!this._banners.length) {
       return { bannerUrl: this.defaultUrl };
     }
@@ -44,11 +53,15 @@ export default class extends Vue {
   }
 
   rotate(): void {
-    setInterval(() => this.index++, this.rotationInterval);
+    if (this.timer) clearInterval(this.timer);
+    let interval = 9000;
+    if (this.rotationInterval) interval = this.rotationInterval;
+    console.log("this.rotationInterval", interval);
+    this.timer = setInterval(() => this.index++, interval);
   }
 
   onClick(): void {
-    AdvertisementService.instance.openAdvertisement(this.currentBanner);
+    if (this.currentBanner) AdvertisementService.instance.openAdvertisement(this.currentBanner);
   }
 }
 </script>

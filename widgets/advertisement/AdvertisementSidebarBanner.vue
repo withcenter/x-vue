@@ -16,9 +16,14 @@ export default class AdvertisementSidebarBanner extends Vue {
   @Prop({ default: 9000 }) rotationInterval!: number;
 
   index = 0;
+  timer = 0;
 
   mounted(): void {
     this.rotate();
+  }
+
+  destroyed(): void {
+    clearInterval(this.timer);
   }
 
   get currentBanner(): Banner {
@@ -26,7 +31,10 @@ export default class AdvertisementSidebarBanner extends Vue {
   }
 
   rotate(): void {
-    setInterval(() => this.index++, this.rotationInterval);
+    if (this.timer) clearInterval(this.timer);
+    let interval = 9000;
+    if (this.rotationInterval) interval = this.rotationInterval;
+    this.timer = setInterval(() => this.index++, interval);
   }
 
   onClick(): void {

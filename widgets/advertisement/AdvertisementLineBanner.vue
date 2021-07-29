@@ -22,17 +22,17 @@ export default class AdvertisementLineBanner extends Vue {
 
   index = 0;
 
-  mounted(): void {
-    this.rotate();
-  }
+  // mounted(): void {
+  //   this.rotate();
+  // }
 
   get currentBanner(): Banner {
     return this.banners[this.index % this.banners.length];
   }
 
-  rotate(): void {
-    setInterval(() => this.index++, this.rotationInterval);
-  }
+  // rotate(): void {
+  //   setInterval(() => this.index++, this.rotationInterval);
+  // }
 
   onClick(): void {
     AdvertisementService.instance.openAdvertisement(this.currentBanner);
