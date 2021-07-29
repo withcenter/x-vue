@@ -56,7 +56,9 @@ export class MessagingService {
         // console.log("data", data);
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         // ! @todo work for new sdk.
-        this.onMessage!(payload);
+        if (this.onMessage) {
+          this.onMessage(payload);
+        }
       });
     }
   }
