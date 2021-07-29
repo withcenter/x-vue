@@ -22,7 +22,7 @@
         :target="'chat-message-popover-' + m.id"
         triggers="hover focus"
       >
-        <div class="pointer" v-if="!m.isImage && !m.isMovie" @click="room.editMessage(m)">
+        <div class="pointer" v-if="!m.isImage && !m.isMovie && !m.isFile" @click="room.editMessage(m)">
           <font-awesome-icon class="mr-2" :icon="['fas', 'edit']" /> {{ "edit" | t }}
         </div>
 
@@ -30,8 +30,33 @@
           <font-awesome-icon class="mr-2" :icon="['fas', 'trash']" /> {{ "delete" | t }}
         </div>
       </b-popover>
-      <div v-if="m.isMine">
+      <div class="chat-message-bubble">
+        <!-- <div v-if="m.isMine"> -->
         <!-- @mousedown="onMouseDown(m)" @mouseup="onMouseUp(m)"> -->
+        <div class="image" v-if="m.isImage">
+          <b-spinner v-if="!m.rendered"></b-spinner>
+          <b-img
+            :src="m.text"
+            fluid
+            :alt="m.text"
+            @load="room.onImageLoadComplete(m)"
+            @click.prevent="showImagePreview(m)"
+          ></b-img>
+        </div>
+        <div class="video" v-else-if="m.isMovie">
+          <video controls>
+            <source :src="m.text" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <div class="file" v-else-if="m.isFile">
+          <a :href="m.text" download
+            >{{ m.extra.name || m.text }} <font-awesome-icon class="mr-2" :icon="['fas', 'download']"
+          /></a>
+        </div>
+        <div v-else>{{ room.text(m, true) }}</div>
+      </div>
+      <!-- <div v-else>
         <div v-if="m.isImage">
           <b-spinner v-if="!m.rendered"></b-spinner>
           <b-img
@@ -54,31 +79,7 @@
           /></a>
         </div>
         <div v-else>{{ room.text(m, true) }}</div>
-      </div>
-      <div v-else>
-        <div v-if="m.isImage">
-          <b-spinner v-if="!m.rendered"></b-spinner>
-          <b-img
-            :src="m.text"
-            fluid
-            :alt="m.text"
-            @load="room.onImageLoadComplete(m)"
-            @click.prevent="showImagePreview(m)"
-          ></b-img>
-        </div>
-        <div v-else-if="m.isMovie">
-          <video width="320" height="240" controls>
-            <source :src="m.text" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
-        <div v-else-if="m.isFile">
-          <a class="white" :href="m.text" download
-            >{{ m.text }} <font-awesome-icon class="mr-2" :icon="['fas', 'download']"
-          /></a>
-        </div>
-        <div v-else>{{ room.text(m, true) }}</div>
-      </div>
+      </div> -->
     </div>
 
     <b-modal :id="'file-preview-modal'" hide-footer>
@@ -99,8 +100,20 @@
   background-color: #242526;
 }
 
+.chat-message-bubble {
+  .file {
+    a {
+      color: white;
+      :hover {
+        color: white;
+      }
+    }
+  }
+}
+
 .chat-bubble {
   max-width: 70%;
+  min-width: 10%;
 }
 </style>
 
@@ -124,7 +137,7 @@ export default class ChatRoomMessageList extends Vue {
   mounted(): void {
     this.chatRoomSubscription = ChatRoomService.instance.changes.subscribe(() => {
       if (ChatRoomService.instance.atBottom || ChatRoomService.instance.page == 1) {
-        console.log("scroll to bottom", ChatRoomService.instance.atBottom, ChatRoomService.instance.page == 1);
+        // console.log("scroll to bottom::", ChatRoomService.instance.atBottom, ChatRoomService.instance.page == 1);
         ChatRoomService.instance.scrollToBottom();
       }
     });

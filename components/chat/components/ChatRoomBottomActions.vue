@@ -82,7 +82,7 @@ export default class ChatRoomBottomActions extends Vue {
       await this.room.sendMessage({
         text: isImageUrl(file.url) ? file.thumbnailUrl : file.url,
         displayName: ApiService.instance.user.nicknameOrName,
-        extra: { url: file.url, idx: file.idx },
+        extra: { url: file.url, idx: file.idx, name: file.name },
       });
       this.sending = false;
       /// Send Push Notification Silently

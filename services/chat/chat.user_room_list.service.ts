@@ -12,6 +12,7 @@ import { BehaviorSubject } from "rxjs";
 import { DocumentChangeType } from "./chat.defines";
 import { DocumentChange, DocumentSnapshot, onSnapshot, orderBy, query } from "@firebase/firestore";
 import { Unsubscribe } from "firebase/messaging";
+import { DocumentData, DocumentReference } from "firebase/firestore";
 
 /// You may rewrite your own helper class.
 export class ChatUserRoomListService extends ChatBase {
@@ -92,14 +93,17 @@ export class ChatUserRoomListService extends ChatBase {
 
             /// When room list is retreived for the first, it will be added to listener.
             /// This is where [changes] event happens many times when the app listens to room list.
-            this._roomSubscriptions[roomInfo.id] = onSnapshot(this.globalRoomDoc(roomInfo.id), {
-              next: (snapshot) => {
-                const found: number = this.rooms.findIndex((r) => r.id == roomInfo.id);
-                this.rooms[found].global = new ChatGlobalRoomModel().fromSnapshot(snapshot);
-                // console.log('global room has changed. ${rooms[found]}');
-                this.changes.next(this.rooms[found]);
-              },
-            });
+            this._roomSubscriptions[roomInfo.id] = onSnapshot(
+              this.globalRoomDoc(roomInfo.id) as DocumentReference<DocumentData>,
+              {
+                next: (snapshot) => {
+                  const found: number = this.rooms.findIndex((r) => r.id == roomInfo.id);
+                  this.rooms[found].global = new ChatGlobalRoomModel().fromSnapshot(snapshot);
+                  // console.log('global room has changed. ${rooms[found]}');
+                  this.changes.next(this.rooms[found]);
+                },
+              }
+            );
           } else if (documentChange.type == DocumentChangeType.modified) {
             // console.log("_listenRoomList", DocumentChangeType.modified, roomInfo);
             const found: number = this.rooms.findIndex((r) => r.id == roomInfo.id);
