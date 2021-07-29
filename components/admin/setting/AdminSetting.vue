@@ -231,6 +231,15 @@ export default class AdminSettings extends Vue {
     "voteDailyLimitCount",
     "voteHourlyLimit",
     "voteHourlyLimitCount",
+    "globalBannerMultiplying",
+    "maxNoOnCategoryLineBanner",
+    "maxNoOnCategorySidebarBanner",
+    "maxNoOnCategorySquareBanner",
+    "maxNoOnCategoryTopBanner",
+    "maxNoOnGlobalLineBanner",
+    "maxNoOnGlobalSidebarBanner",
+    "maxNoOnGlobalSquareBanner",
+    "maxNoOnGlobalTopBanner",
   ];
   form = {
     code: "",

@@ -17,9 +17,9 @@
         <table class="table">
           <thead>
             <tr>
-              <td>Banner</td>
-              <td>Global</td>
-              <td>Category</td>
+              <td>{{ "banner_type" | t }}</td>
+              <td>{{ "global" | t }}</td>
+              <td>{{ "category" | t }}</td>
             </tr>
           </thead>
           <tbody>
@@ -210,7 +210,7 @@ export default class AdminAdvertisement extends Vue {
   async mounted(): Promise<void> {
     try {
       const settings = await AdvertisementService.instance.advertisementSettings();
-      console.log(settings);
+      // console.log(settings);
 
       // let re = await this.api.getConfig("maximumAdvertisementDays");
       // this.maximumAdvertisementDays = re.data ? re.data : 0;
@@ -254,7 +254,7 @@ export default class AdminAdvertisement extends Vue {
   }
 
   async onDelete(data: RequestData): Promise<void> {
-    console.log("onDelete::data", data);
+    // console.log("onDelete::data", data);
 
     const conf = await this.s.confirm("Confirm", `Delete point settings for ${data.countryCode}?`);
     if (!conf) return;

@@ -222,17 +222,18 @@ export default class extends Vue {
 
   countries: ResponseData = {};
 
-  // banner points of current cafe country ( or country selection )
-  bannerPoints: ResponseData = {};
   // Global advertisement settings
   settings: AdvertisementSettings = {} as AdvertisementSettings;
 
   // Returns country name based on banner's country code or current cafe's country code.
   get countryName(): string {
-    if (this.banner.countryCode) {
-      if (this.banner.countryCode === "AC") return translate("all_country");
-      return this.countries[this.banner.countryCode];
-    } else return this.countries[this.cafeCountryCode];
+    if (this.banner.countryCode === "AC") return translate("all_country");
+    return this.countries[this.banner.countryCode];
+  }
+
+  get bannerPoints(): ResponseData {
+    if (!this.settings.point) return {};
+    return this.settings.point[this.banner.countryCode];
   }
 
   async mounted(): Promise<void> {
@@ -247,6 +248,8 @@ export default class extends Vue {
       await this.loadAdvertisement();
     } else {
       this.banner.categoryId = "advertisement";
+      if (this.cafeCountryCode == "") this.banner.countryCode = "AC";
+      else this.banner.countryCode = this.cafeCountryCode;
     }
 
     this.loading = false;
@@ -264,11 +267,7 @@ export default class extends Vue {
   async loadGlobalSettings(): Promise<void> {
     try {
       const _globalSettings = await AdvertisementService.instance.advertisementSettings();
-
       this.settings = _globalSettings;
-      this.bannerPoints = _globalSettings.point[this.cafeCountryCode];
-      if (!this.bannerPoints) this.bannerPoints = _globalSettings.point["default"];
-      if (!this.bannerPoints) this.bannerPoints = {};
     } catch (e) {
       ComponentService.instance.error(e);
     }

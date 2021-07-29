@@ -12,16 +12,13 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import { Banner, AllCategoryBanners } from "@/x-vue/interfaces/advertisement.interface";
+import { Banner } from "@/x-vue/interfaces/advertisement.interface";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
-import { advKey } from "@/service/functions";
-import appConfig from "@/service/app.config";
 
 @Component({})
 export default class AdvertisementLineBanner extends Vue {
-  @Prop() banners!: AllCategoryBanners;
-  @Prop() countryCode!: string;
-  @Prop() categoryId!: string;
+  @Prop({ default: () => [] }) banners!: Banner[];
+  @Prop({ default: 9000 }) rotationInterval!: number;
 
   index = 0;
 
@@ -29,21 +26,12 @@ export default class AdvertisementLineBanner extends Vue {
     this.rotate();
   }
 
-  get _banners(): Banner[] {
-    const k = advKey("line", this.categoryId);
-    return this.banners && this.banners[k] ? this.banners[k] : [];
-
-    // if (!this.banners) return [];
-    // if (!this.banners[k]) return [];
-    // return this.banners[k];
-  }
-
   get currentBanner(): Banner {
-    return this._banners[this.index % this._banners.length];
+    return this.banners[this.index % this.banners.length];
   }
 
   rotate(): void {
-    setInterval(() => this.index++, appConfig.banner.rotationInterval);
+    setInterval(() => this.index++, this.rotationInterval);
   }
 
   onClick(): void {

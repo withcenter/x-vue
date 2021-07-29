@@ -5,16 +5,14 @@
 </template>
 
 <script lang="ts">
-import Component from "vue-class-component";
+import { Component, Prop } from "vue-property-decorator";
 import Vue from "vue";
 import { Banner } from "@/x-vue/interfaces/advertisement.interface";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 
-@Component({
-  props: ["banner"],
-})
+@Component({})
 export default class AdvertisementSquareBanner extends Vue {
-  banner!: Banner;
+  @Prop() banner!: Banner;
 
   onClick(): void {
     AdvertisementService.instance.openAdvertisement(this.banner);

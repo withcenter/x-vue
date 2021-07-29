@@ -7,16 +7,14 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import { Banner, AllCategoryBanners } from "@/x-vue/interfaces/advertisement.interface";
+import { Banner } from "@/x-vue/interfaces/advertisement.interface";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
-import { advKey } from "@/service/functions";
 
 @Component({})
 export default class extends Vue {
   @Prop({ default: "right" }) position!: string;
-  @Prop({ default: () => [] }) banners!: AllCategoryBanners;
-  @Prop() categoryId!: string;
-  @Prop() countryCode!: string;
+  @Prop({ default: () => [] }) banners!: Banner[];
+  @Prop({ default: 9000 }) rotationInterval!: number;
 
   index = 0;
 
@@ -25,11 +23,7 @@ export default class extends Vue {
   }
 
   get _banners(): Banner[] {
-    const k = advKey("top", this.categoryId);
-    if (!this.banners) return [];
-    if (!this.banners[k]) return [];
-
-    return this.banners[k].filter((v, i) => {
+    return this.banners.filter((v, i) => {
       if (this.position == "left") return i % 2 == 0;
       else return i % 2 != 0;
     });
@@ -50,7 +44,7 @@ export default class extends Vue {
   }
 
   rotate(): void {
-    setInterval(() => this.index++, 7000);
+    setInterval(() => this.index++, this.rotationInterval);
   }
 
   onClick(): void {
