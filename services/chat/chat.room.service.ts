@@ -214,7 +214,7 @@ export class ChatRoomService extends ChatBase {
     let _id: string | null = id;
     this._displayName = displayName;
 
-    if (this.loginUserUid == null) {
+    if (!this.loginUserUid) {
       throw LOGIN_FIRST;
     }
 
@@ -256,6 +256,8 @@ export class ChatRoomService extends ChatBase {
         // User id must be sorted to generate same room id with same user.
         users.sort();
         const uids = users.join("");
+
+        console.log("uids:::", uids);
         _id = md5(unescape(encodeURIComponent(uids))).toString();
 
         // console.log("same room: id", _id);

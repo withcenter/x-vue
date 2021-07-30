@@ -26,10 +26,39 @@ import { ChatUserRoomListService } from "@/x-vue/services/chat/chat.user_room_li
 import { Vue, Component } from "vue-property-decorator";
 
 import { translate } from "@/x-vue/services/functions";
+import { UserModel } from "@/x-vue/interfaces/interfaces";
+import { ApiService } from "@/x-vue/services/api.service";
 
 @Component({})
 export default class ChatRoomList extends Vue {
   t = translate;
   roomsList = ChatUserRoomListService.instance;
+
+  otherUsersInfo: UserModel[] = [];
+
+  mounted(): void {
+    // console.log("getOtherUserInformation::");
+    // setTimeout(() => this.getOtherUserInformation(), 10000);
+  }
+
+  // async getOtherUserInformation(): Promise<void> {
+  //   console.log("this.roomsList.rooms.length", this.roomsList.rooms);
+  //   if (!this.roomsList.rooms.length) return;
+  //   const uid: string[] = [];
+  //   for (const room of this.roomsList.rooms) {
+  //     console.log("room.global.otherUserId", room.global.otherUserId);
+  //     uid.push(room.global.otherUserId as string);
+  //   }
+  //   console.log("this.roomsList.rooms", uid);
+  //   if (!uid.length) return;
+
+  //   try {
+  //     this.otherUsersInfo = await ApiService.instance.otherUsersProfile(uid.join(","));
+  //   } catch (e) {
+  //     this.$app.error(e);
+  //   }
+
+  //   console.log("getOtherUserInformation::uid:::", uid, this.otherUsersInfo);
+  // }
 }
 </script>
