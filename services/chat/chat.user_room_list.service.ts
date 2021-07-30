@@ -100,7 +100,7 @@ export class ChatUserRoomListService extends ChatBase {
                 next: (snapshot) => {
                   const found: number = this.rooms.findIndex((r) => r.id == roomInfo.id);
                   this.rooms[found].global = new ChatGlobalRoomModel().fromSnapshot(snapshot);
-                  // console.log('global room has changed. ${rooms[found]}');
+                  console.log("global room has changed. ${rooms[found]}");
                   this.changes.next(this.rooms[found]);
                 },
               }
