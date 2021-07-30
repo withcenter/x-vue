@@ -48,7 +48,7 @@ export default class FileDisplay extends Vue {
 
   onFileDelete(idx: number): void {
     const index = this.post.files.findIndex((file) => file.idx == idx);
-    console.log("index; ", index);
+    // console.log("index; ", index);
     this.post.files.splice(index, 1);
     this.post.fileIdxes = deleteByComma(this.post.fileIdxes, idx);
   }

@@ -347,3 +347,40 @@ ApiService.instance
 
 - to see information of the app, access `/info`.
 
+
+
+
+# Chat logic
+
+
+## 1:1 Chat
+
+
+
+
+For chat functionality, the important part is the inform the update in realtime.
+
+We don't use Firebase.
+We use Backend.
+
+- When user chat, the message goes to backend database and update /chat/userIdx in realtime database in firebase. ( Not firestore because firestore is expensive ).
+
+
+
+Your user idx is 3.
+
+
+- Your app will listen to /chat/3
+- Your app will connect to backend to get no of new message.
+- Your app will display room list from backend displaying user info, new messages.
+- You can search chat messages from chat room list.
+
+- When User no. 1 is sending you a message, then,
+ - save the messages into database
+ - and update the /chat/3 from backend.
+
+- your app will get notification from /chat/3
+  - and your app needs to display there is a new message.
+  - and update no of new messages from backend.
+
+

@@ -152,7 +152,7 @@ export class ApiService {
    *
    * @returns boolean
    */
-  private get loggedIn(): boolean {
+  public get loggedIn(): boolean {
     return !!this.sessionId;
   }
 
@@ -959,5 +959,10 @@ export class ApiService {
   async latestUserByProfilePhoto(limit = 5): Promise<UserModel[]> {
     const res = await this.request("user.latestByProfilePhoto", { limit: limit });
     return res.map((user: JSON) => new UserModel().fromJson(user));
+  }
+
+  async chatSendMessage(data: { otherUserIdx: number; message: string }): Promise<any> {
+    const res = await this.request("chat.sendMessage", data);
+    return res;
   }
 }

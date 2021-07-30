@@ -37,7 +37,7 @@ export default class ChatRoomList extends Vue {
 
   otherUsersInfo: UserModel[] = [];
 
-  getUserName(room: ChatUserRoomModel) {
+  getUserName(room: ChatUserRoomModel): string {
     const user = this.otherUsersInfo.filter((v) => {
       // console.log("v.firebaseUid == room.global.otherUserId", v.firebaseUid, room.global.otherUserId);
       return v.firebaseUid == room.global.otherUserId;
@@ -45,7 +45,7 @@ export default class ChatRoomList extends Vue {
 
     // console.log("getUserName::", user);
     if (!user.length) return "";
-    return user[0].nicknameOrName;
+    return user[0].displayName;
   }
 
   mounted(): void {
