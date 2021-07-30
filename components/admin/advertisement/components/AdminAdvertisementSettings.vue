@@ -34,31 +34,23 @@
           <tbody>
             <tr>
               <th scope="row">Top banner</th>
-              <td><input type="number" v-model="maxNoOnGlobalTopBanner" /></td>
-              <td>
-                <input type="number" v-model="maxNoOnCategoryTopBanner" />
-              </td>
+              <td><input class="w-100" type="number" v-model="maxNoOnGlobalTopBanner" /></td>
+              <td><input class="w-100" type="number" v-model="maxNoOnCategoryTopBanner" /></td>
             </tr>
             <tr>
               <th scope="row">Sidebar banner</th>
-              <td><input type="number" v-model="maxNoOnGlobalSidebarBanner" /></td>
-              <td>
-                <input type="number" v-model="maxNoOnCategorySidebarBanner" />
-              </td>
+              <td><input class="w-100" type="number" v-model="maxNoOnGlobalSidebarBanner" /></td>
+              <td><input class="w-100" type="number" v-model="maxNoOnCategorySidebarBanner" /></td>
             </tr>
             <tr>
               <th scope="row">Square banner</th>
-              <td><input type="number" v-model="maxNoOnGlobalSquareBanner" /></td>
-              <td>
-                <input type="number" v-model="maxNoOnCategorySquareBanner" />
-              </td>
+              <td><input class="w-100" type="number" v-model="maxNoOnGlobalSquareBanner" /></td>
+              <td><input class="w-100" type="number" v-model="maxNoOnCategorySquareBanner" /></td>
             </tr>
             <tr>
               <th scope="row">Line banner</th>
-              <td><input type="number" v-model="maxNoOnGlobalLineBanner" /></td>
-              <td>
-                <input type="number" v-model="maxNoOnCategoryLineBanner" />
-              </td>
+              <td><input class="w-100" type="number" v-model="maxNoOnGlobalLineBanner" /></td>
+              <td><input class="w-100" type="number" v-model="maxNoOnCategoryLineBanner" /></td>
             </tr>
           </tbody>
         </table>
