@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
+import { Component, Prop, Watch } from "vue-property-decorator";
 import { Banner } from "@/x-vue/interfaces/advertisement.interface";
 import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 
@@ -18,8 +18,10 @@ export default class AdvertisementSidebarBanner extends Vue {
   index = 0;
   timer = 0;
 
-  mounted(): void {
-    this.rotate();
+  @Watch("banners")
+  watchBanners(_n: []): void {
+    if (_n.length > 1) this.rotate();
+    else clearInterval(this.timer);
   }
 
   destroyed(): void {

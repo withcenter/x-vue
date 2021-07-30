@@ -1,10 +1,10 @@
 <template>
-  <div class="banner line pointer row no-gutters" @click="onClick" v-if="currentBanner">
+  <div class="banner line pointer row no-gutters" @click="onClick" v-if="banner">
     <div class="col-2 p-0 image-holder">
-      <img :src="currentBanner.bannerUrl" />
+      <img :src="banner.bannerUrl" />
     </div>
     <div class="col-10 title">
-      {{ currentBanner.title }}
+      {{ banner.title }}
     </div>
   </div>
 </template>
@@ -17,25 +17,10 @@ import { AdvertisementService } from "@/x-vue/services/advertisement.service";
 
 @Component({})
 export default class AdvertisementLineBanner extends Vue {
-  @Prop({ default: () => [] }) banners!: Banner[];
-  @Prop({ default: 9000 }) rotationInterval!: number;
-
-  index = 0;
-
-  // mounted(): void {
-  //   this.rotate();
-  // }
-
-  get currentBanner(): Banner {
-    return this.banners[this.index % this.banners.length];
-  }
-
-  // rotate(): void {
-  //   setInterval(() => this.index++, this.rotationInterval);
-  // }
+  @Prop({ default: () => [] }) banner!: Banner;
 
   onClick(): void {
-    AdvertisementService.instance.openAdvertisement(this.currentBanner);
+    AdvertisementService.instance.openAdvertisement(this.banner);
   }
 }
 </script>
