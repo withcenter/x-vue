@@ -361,6 +361,10 @@ export class ApiService {
     const res = await this.request("user.get", { uid: uid });
     return new UserModel().fromJson(res);
   }
+  async otherUsersProfile(uids: string): Promise<UserModel[]> {
+    const res = await this.request("user.gets", { uids: uids });
+    return res.map((user: JSON) => new UserModel().fromJson(user));
+  }
 
   /**
    * Logouts user.

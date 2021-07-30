@@ -32,7 +32,7 @@ export class ChatUserRoomListService extends ChatBase {
 
   init(): void {
     this.auth.onAuthStateChanged((user) => {
-      console.log("onAuthStateChanged::", user);
+      console.log("ChatUserRoomListService::onAuthStateChanged::", user);
       if (user == null) {
         this._unsubscribe();
       } else {
@@ -52,10 +52,11 @@ export class ChatUserRoomListService extends ChatBase {
 
   _myRoomListSubscription: Unsubscribe | null = null;
 
-  _roomSubscriptions: { [index: string]: () => void } = {} as { [index: string]: () => void };
+  _roomSubscriptions: { [index: string]: Unsubscribe } = {} as { [index: string]: Unsubscribe };
 
   /// Login user's whole room list including room id.
   rooms: ChatUserRoomModel[] = [];
+  otherUids: string[] = [];
   _order = "createdAt";
 
   newMessages = 0;
@@ -87,7 +88,7 @@ export class ChatUserRoomListService extends ChatBase {
         snapshot.docChanges().forEach((documentChange: DocumentChange) => {
           const roomInfo = new ChatUserRoomModel().fromSnapshot(documentChange.doc);
           // console.log(roomInfo?.newMessages);
-
+          console.log("documentChange.type::", documentChange.type);
           if (documentChange.type == DocumentChangeType.added) {
             this.rooms.unshift(roomInfo);
 
@@ -110,7 +111,8 @@ export class ChatUserRoomListService extends ChatBase {
             // If global room information exists, copy it to updated object to
             // maintain global room information.
             roomInfo.global = this.rooms[found].global;
-            this.rooms.splice(found, 1, roomInfo);
+            this.rooms.splice(found, 1); // remove the old room
+            this.rooms.splice(0, 0, roomInfo); // add the new room on the front stack
           } else if (documentChange.type == DocumentChangeType.removed) {
             const i: number = this.rooms.findIndex((r) => r.id == roomInfo.id);
             if (i > -1) {
