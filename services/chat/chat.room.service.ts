@@ -361,7 +361,8 @@ export class ChatRoomService extends ChatBase {
   oldTop = 0;
   // isScrollTop = false;
   scrollUp(top: number): boolean {
-    // console.log("scrollUp::", this.oldTop, top);
+    console.log("scrollUp::", this.oldTop, top);
+
     if (this.oldTop > top) {
       // console.log("↑");
       this.oldTop = top;
