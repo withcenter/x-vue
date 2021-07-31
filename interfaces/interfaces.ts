@@ -35,6 +35,14 @@ export interface ResponseData {
   [index: string]: any;
 }
 
+export interface Translations {
+  [index: string]: {
+    en: string;
+    ko: string;
+    [index: string]: string;
+  };
+}
+
 export interface FileUploadRequest {
   taxonomy?: string;
   entity?: number;

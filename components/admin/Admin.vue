@@ -21,6 +21,9 @@
       <router-link class="btn btn-link" to="/admin/setting">
         {{ "setting" | t }}
       </router-link>
+      <router-link class="btn btn-link" to="/admin/translation">
+        {{ "translation" | t }}
+      </router-link>
       <router-link class="btn btn-link" to="/admin/advertisement">
         {{ "advertisement" | t }}
       </router-link>

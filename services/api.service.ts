@@ -19,6 +19,8 @@ import {
   PassloginResponse,
   CategoryGetsResponse,
   UserStats,
+  MapStringString,
+  Translations,
 } from "../interfaces/interfaces";
 
 import Cookies from "js-cookie";
@@ -26,6 +28,8 @@ import { Keys, Err } from "./defines";
 import { getRootDomain, translate } from "./functions";
 import Vue from "vue";
 import { CommentModel, PostModel, PostSearchRequest } from "../interfaces/forum.interface";
+import { DataSnapshot, getDatabase, onValue, ref } from "firebase/database";
+import { getApp } from "firebase/app";
 
 /**
  * Api Interface.
@@ -80,7 +84,8 @@ export class ApiService {
   //
   private countries?: ResponseData;
 
-  // 관리자 전체 설정
+  // 설정
+  // 백엔드의 관리자 설정 페이지에서 설정한 것과 기타 시스템 설정이 보관
   // 앱이 실행 될 때마다 다운로드를 해야 한다.
   private _settings?: Settings;
 
@@ -88,6 +93,11 @@ export class ApiService {
   // 한번만 카페 전체 설정을 가져오고, 그 다음 부터는 메모리에 캐시를 한다.
   private _cafeSettings?: CafeSettings;
 
+  // Translation text
+  // This must be set on init and can be updated at anytime.
+  // 관리자페이지에서 수정을 하면, ApiService 에서 내부적으로 자동 업데이트를 한다.
+  // 먼저, App 에서 texts 가 넘어오고, ApiService 에서 Firebase Realtime Database 를 listen 하고
+  // 자동 업데이트를 한다.
   public texts: MapStringAny = {};
 
   // User change callback
@@ -120,6 +130,16 @@ export class ApiService {
     this.userChanges = options.userChanges;
     this.texts = options.texts ?? {};
     this.initUserAuth();
+  }
+
+  /**
+   * Firebase ready.
+   *
+   * Do whatever for firebase work.
+   * Firebase 가 초기화되면 이 함수가 호출된다.
+   */
+  firebaseReady() {
+    this.initTranslation();
   }
 
   // Return server url. If it is not initiallized, then, use current url.
@@ -943,6 +963,60 @@ export class ApiService {
     return this._settings;
   }
 
+  /**
+   * 번역
+   *
+   * 1. 앱이 부팅 할 때, 앱에서 기본 texts 를 ApiService.init() 에 지정.
+   * 2. 그 직후, 서버로 접속해서 서버의 texts 를 가져와서 texts 업데이트.
+   * 3. Firebase realtime database 가 초기화 되면, texts 가 업데이트되는지 listen 해서 업데이트 될 때마다 texts 업데이트.
+   *
+   * 참고, 여기서 texts 를 업데이트하면, reactive 하게 모든 템플릿이 업데이트 된다.
+   */
+  initTranslation(): void {
+    const db = getDatabase(getApp());
+    const translationRef = ref(db, "/notifications/translations");
+
+    // 이 함수는 부팅 시, 처음(자동으로) 한번 호출이 된다.
+    onValue(
+      translationRef,
+      (snapshot: DataSnapshot) => {
+        const data = snapshot.val();
+        console.log("글 업데이트 시작;", data);
+        this.updateTranslationTexts();
+      },
+      (e) => {
+        console.log("transl; error; ", e);
+      }
+    );
+  }
+
+  async updateTranslationTexts(): Promise<void> {
+    try {
+      const newTexts = await this.loadTranslation();
+      this.texts = Object.assign({}, this.texts, newTexts);
+      console.log("글 업데이트 완료;");
+    } catch (e) {
+      console.error("updateTranslationTexts; error; ", e);
+    }
+  }
+
+  /**
+   *
+   * @param form
+   * @returns
+   */
+  async editTranslation(form: MapStringString): Promise<ResponseData> {
+    return this.request("translation.update", form);
+  }
+  async deleteTranslation(code: string): Promise<ResponseData> {
+    return this.request("translation.delete", { code: code });
+  }
+
+  async loadTranslation(): Promise<Translations> {
+    return this.request("translation.load");
+  }
+
+  //
   thumbnailUrl(idx: number, width: number, height: number, quality = 95): string {
     return this.serverUrl.replace("index.php", "") + `etc/thumbnail.php?idx=${idx}&w=${width}&h=${height}&q=${quality}`;
   }
