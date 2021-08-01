@@ -33,7 +33,7 @@ export class MessagingService {
           // console.log("Token", token);
           /** SAVE TOKEN::From here you need to store the TOKEN by AJAX request to your server */
           MessagingService.instance.token = token;
-          console.log(token);
+          console.log("messaging.service.ts::getToken() => token;", token);
           await ApiService.instance.saveToken(token, location.hostname);
           // store.commit("onFirebaseMessageTokenSave");
         })

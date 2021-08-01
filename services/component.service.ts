@@ -98,6 +98,27 @@ export default class ComponentService {
       else return Promise.resolve(false);
     }
   }
+  /**
+   * Show a toast
+   * @param options Toast options
+   * @returns void
+   * 
+   * @example
+        ComponentService.instance.toast({
+          title: notification?.title || "",
+          message: notification?.body || "",
+          placement: PLACEMENT.BOTTOM_RIGHT,
+          hideDelay: 10000,
+          clickCallback: () => {
+            const path = store.state.router.currentRoute.path;
+            if (path == url || (data["type"] === "chat" && path == "/chat-message")) {
+              store.commit("contentViewKey");
+            }
+            store.state.router.push(url);
+          },
+        });
+   *
+   */
   async toast(options: Toast): Promise<void> {
     if (this.options.toast) {
       return this.options.toast(options);
